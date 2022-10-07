@@ -4,6 +4,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -75,24 +77,34 @@
         {
           "kind" : "Terminal",
           "name" : "'.'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 46
           }
         },
         {
           "kind" : "Terminal",
           "name" : "'a'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 97
           }
         },
         {
           "kind" : "Return",
           "name" : "{0}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Integer",
             "value" : 0
@@ -101,6 +113,10 @@
       ],
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 3,
       "precedenceLevel" : {
@@ -114,6 +130,7 @@
           1
         ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 4,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -124,6 +141,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -195,16 +214,24 @@
         {
           "kind" : "Terminal",
           "name" : "'.['",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "symbols" : [
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 46
               },
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 91
               }
             ]
@@ -213,6 +240,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Integer",
@@ -223,15 +252,21 @@
         {
           "kind" : "Terminal",
           "name" : "']'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 93
           }
         },
         {
           "kind" : "Return",
           "name" : "{0}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Integer",
             "value" : 0
@@ -240,6 +275,10 @@
       ],
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 3,
       "precedenceLevel" : {
@@ -253,6 +292,7 @@
           1
         ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 4,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -263,6 +303,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -334,15 +376,21 @@
         {
           "kind" : "Terminal",
           "name" : "'+'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 43
           }
         },
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "variable" : "r",
           "arguments" : [
             {
@@ -354,6 +402,8 @@
         {
           "kind" : "Return",
           "name" : "{(r <= 0)? 2 : min(r,2)}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "IfThenElse",
             "condition" : {
@@ -392,6 +442,10 @@
       ],
       "recursion" : "LEFT_RIGHT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 2,
       "precedenceLevel" : {
@@ -405,6 +459,7 @@
           1
         ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 3,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -415,6 +470,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -423,16 +480,24 @@
         {
           "kind" : "Terminal",
           "name" : "'if'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "symbols" : [
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 105
               },
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 102
               }
             ]
@@ -441,6 +506,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Integer",
@@ -451,24 +518,36 @@
         {
           "kind" : "Terminal",
           "name" : "'then'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "regex.Seq",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "symbols" : [
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 116
               },
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 104
               },
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 101
               },
               {
                 "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
                 "val" : 110
               }
             ]
@@ -477,6 +556,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Integer",
@@ -487,6 +568,8 @@
         {
           "kind" : "Return",
           "name" : "{1}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Integer",
             "value" : 1
@@ -495,6 +578,10 @@
       ],
       "recursion" : "RIGHT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 1,
       "precedenceLevel" : {
@@ -504,7 +591,9 @@
         "hasPrefixUnary" : true,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 2,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -515,6 +604,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -523,15 +614,21 @@
         {
           "kind" : "Terminal",
           "name" : "'('",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 40
           }
         },
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Integer",
@@ -542,15 +639,21 @@
         {
           "kind" : "Terminal",
           "name" : "')'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 41
           }
         },
         {
           "kind" : "Return",
           "name" : "{0}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Integer",
             "value" : 0
@@ -559,6 +662,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -568,7 +675,9 @@
         "hasPrefixUnary" : true,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 2,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -579,6 +688,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "p"
         ]
@@ -587,15 +698,21 @@
         {
           "kind" : "Terminal",
           "name" : "'a'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 97
           }
         },
         {
           "kind" : "Return",
           "name" : "{0}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Integer",
             "value" : 0
@@ -604,6 +721,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -613,7 +734,9 @@
         "hasPrefixUnary" : true,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 2,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -624,6 +747,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Start(E)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Start"
       },
       "body" : [
@@ -631,6 +756,8 @@
           "kind" : "Nonterminal",
           "name" : "E",
           "label" : "top",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Integer",
@@ -641,6 +768,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -650,7 +781,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -659,13 +792,30 @@
       "definition" : {
         "kind" : "Start",
         "name" : "Start(E)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "startSymbol" : "E"
       }
     }
   ],
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(E)",
-    "startSymbol" : "E"
-  }
+  "regularExpressionDefinitions" : { },
+  "ebnfLefts" : { },
+  "ebnfRights" : { },
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(E)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "E"
+    },
+    {
+      "kind" : "Start",
+      "name" : "Start(E)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "E"
+    }
+  ],
+  "globals" : { }
 }

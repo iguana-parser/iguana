@@ -33,7 +33,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
-    private String start;
+    private List<String> startSymbols = new ArrayList<>();
     private Identifier layout;
 
     @Override
@@ -61,8 +61,8 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         for (Map.Entry<String, RegularExpression> entry : literals.entrySet()) {
             builder.addLiteral(entry.getKey(), entry.getValue());
         }
-        if (start != null) {
-            builder.setStartSymbol(Start.from(start));
+        for (String start : startSymbols) {
+            builder.addStartSymbol(Start.from(start));
         }
         builder.setLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
@@ -86,7 +86,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         if (node.modifier().hasChildren()) { // start symbol
             String text = node.modifier().getText();
             if (text.equals("start")) {
-                start = nonterminalName.getName();
+                startSymbols.add(nonterminalName.getName());
             } else if (text.equals("lexical")) {
                 layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"

@@ -34,7 +34,7 @@ public class Grammar {
     private final List<Rule> rules;
     private final Map<String, RegularExpression> regularExpressionDefinitions;
     private final Map<String, RegularExpression> literals;
-    private final Start startSymbol;
+    private final List<Start> startSymbols;
     private final Symbol layout;
     private final Map<String, Expression> globals;
     private final String name;
@@ -45,7 +45,7 @@ public class Grammar {
         this.rules = builder.rules;
         this.regularExpressionDefinitions = builder.regularExpressionDefinitions;
         this.literals = builder.literals;
-        this.startSymbol = builder.startSymbol;
+        this.startSymbols = builder.startSymbols;
         this.layout = builder.layout;
         this.globals = builder.globals;
         this.name = builder.name;
@@ -63,8 +63,8 @@ public class Grammar {
         return literals;
     }
 
-    public Start getStartSymbol() {
-        return startSymbol;
+    public List<Start> getStartSymbols() {
+        return startSymbols;
     }
 
     public Symbol getLayout() {
@@ -97,7 +97,7 @@ public class Grammar {
             for (Rule rule : rules) {
                 grammarBuilder.addRules(getRules(rule, resolveIdentifiers, leftEnds, rightEnds, ebnfs));
             }
-            grammarBuilder.setStartSymbol(startSymbol);
+            grammarBuilder.setStartSymbols(startSymbols);
 
             // Resolve the layout symbol
             Symbol newLayout = null;
@@ -216,12 +216,12 @@ public class Grammar {
         if (!(obj instanceof Grammar)) return false;
         Grammar other = (Grammar) obj;
         return this.rules.equals(other.rules) && Objects.equals(this.layout, other.layout)
-                && Objects.equals(this.startSymbol, other.startSymbol);
+                && Objects.equals(this.startSymbols, other.startSymbols);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rules, layout, startSymbol);
+        return Objects.hash(rules, layout, startSymbols);
     }
 
     @Override
@@ -239,7 +239,7 @@ public class Grammar {
         private Map<String, RegularExpression> regularExpressionDefinitions = new LinkedHashMap<>();
         private Map<String, RegularExpression> literals = new LinkedHashMap<>();
         private String name;
-        private Start startSymbol;
+        private List<Start> startSymbols = new ArrayList<>();
         private Symbol layout;
         private Map<String, Expression> globals = new HashMap<>();
 
@@ -248,8 +248,8 @@ public class Grammar {
             return this;
         }
 
-        public Builder setStartSymbol(Start startSymbol) {
-            this.startSymbol = startSymbol;
+        public Builder addStartSymbol(Start startSymbol) {
+            this.startSymbols.add(startSymbol);
             return this;
         }
 
@@ -284,6 +284,7 @@ public class Grammar {
             regularExpressionDefinitions = buildMap(regularExpressionDefinitions);
             literals = buildMap(literals);
             globals = buildMap(globals);
+            startSymbols = buildList(startSymbols);
             return new Grammar(this);
         }
     }

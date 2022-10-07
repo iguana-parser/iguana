@@ -3,6 +3,8 @@
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
+    "preConditions" : [ ],
+    "postConditions" : [ ],
     "startSymbol" : "S"
   },
   "children" : [
@@ -11,18 +13,23 @@
       "rule" : {
         "head" : {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         "body" : [
           {
             "kind" : "Nonterminal",
             "name" : "Label",
+            "preConditions" : [ ],
             "postConditions" : [
               {
                 "kind" : "RegularExpressionCondition",
                 "type" : "NOT_FOLLOW",
                 "regularExpression" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 51
                 }
               }
@@ -31,12 +38,18 @@
           {
             "kind" : "Terminal",
             "name" : "Nums",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "nodeType" : "Regex",
             "regex" : {
               "kind" : "regex.Alt",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
               "symbols" : [
                 {
                   "kind" : "CharRange",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "start" : 48,
                   "end" : 57
                 }
@@ -46,6 +59,10 @@
         ],
         "recursion" : "NON_REC",
         "irecursion" : "NON_REC",
+        "leftEnd" : "",
+        "rightEnd" : "",
+        "leftEnds" : [ ],
+        "rightEnds" : [ ],
         "associativity" : "UNDEFINED",
         "precedence" : -1,
         "precedenceLevel" : {
@@ -55,7 +72,9 @@
           "hasPrefixUnary" : false,
           "hasPostfixUnary" : false,
           "hasPrefixUnaryBelow" : false,
+          "prefixUnaryBelow" : [ ],
           "hasPostfixUnaryBelow" : false,
+          "postfixUnaryBelow" : [ ],
           "index" : 1,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -68,21 +87,28 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "Label"
+              "name" : "Label",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             "body" : [
               {
                 "kind" : "Nonterminal",
                 "name" : "Char+",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
                     "type" : "NOT_FOLLOW",
                     "regularExpression" : {
                       "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "symbols" : [
                         {
                           "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "start" : 97,
                           "end" : 122
                         }
@@ -95,6 +121,10 @@
             ],
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
+            "leftEnd" : "",
+            "rightEnd" : "",
+            "leftEnds" : [ ],
+            "rightEnds" : [ ],
             "associativity" : "UNDEFINED",
             "precedence" : -1,
             "precedenceLevel" : {
@@ -104,7 +134,9 @@
               "hasPrefixUnary" : false,
               "hasPostfixUnary" : false,
               "hasPrefixUnaryBelow" : false,
+              "prefixUnaryBelow" : [ ],
               "hasPostfixUnaryBelow" : false,
+              "postfixUnaryBelow" : [ ],
               "index" : 1,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -117,15 +149,20 @@
               "symbol" : {
                 "kind" : "Plus",
                 "name" : "Char+",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "RegularExpressionCondition",
                     "type" : "NOT_FOLLOW",
                     "regularExpression" : {
                       "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "symbols" : [
                         {
                           "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "start" : 97,
                           "end" : 122
                         }
@@ -136,18 +173,25 @@
                 "s" : {
                   "kind" : "Terminal",
                   "name" : "Char",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
                   "nodeType" : "Regex",
                   "regex" : {
                     "kind" : "regex.Alt",
+                    "lookaheads" : [ ],
+                    "lookbehinds" : [ ],
                     "symbols" : [
                       {
                         "kind" : "CharRange",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "start" : 97,
                         "end" : 122
                       }
                     ]
                   }
-                }
+                },
+                "separators" : [ ]
               },
               "children" : [
                 {
@@ -155,12 +199,18 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "Char",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "symbols" : [
                         {
                           "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "start" : 97,
                           "end" : 122
                         }
@@ -175,12 +225,18 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "Char",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "symbols" : [
                         {
                           "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "start" : 97,
                           "end" : 122
                         }
@@ -195,12 +251,18 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "Char",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "symbols" : [
                         {
                           "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "start" : 97,
                           "end" : 122
                         }
@@ -223,12 +285,18 @@
           "terminal" : {
             "kind" : "Terminal",
             "name" : "Nums",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "nodeType" : "Regex",
             "regex" : {
               "kind" : "regex.Alt",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
               "symbols" : [
                 {
                   "kind" : "CharRange",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "start" : 48,
                   "end" : 57
                 }

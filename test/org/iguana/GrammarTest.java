@@ -2,6 +2,7 @@ package org.iguana;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.parser.*;
 import org.iguana.parsetree.ParseTreeNode;
@@ -110,22 +111,24 @@ public class GrammarTest {
                 throw new RuntimeException(e);
             }
 
+            Start start = grammar.getStartSymbols().get(0);
+
             String parserTestName = "Parser test " + category + " " + testName;
             IguanaParser parser = new IguanaParser(runtimeGrammar);
-            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input));
+            DynamicTest dynamicParserTest = DynamicTest.dynamicTest(parserTestName, getParserTest(testPath, parser, i, input, start));
 
             String recognizerTestName = "Recognizer test " + category + " " + testName;
             IguanaRecognizer recognizer = new IguanaRecognizer(runtimeGrammar);
-            DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input));
+            DynamicTest dynamicRecognizerTest = DynamicTest.dynamicTest(recognizerTestName, getRecognizerTest(testPath, recognizer, i, input, start));
 
             grammarTests.add(dynamicParserTest);
             grammarTests.add(dynamicRecognizerTest);
         }
     }
 
-    private Executable getRecognizerTest(String testPath, IguanaRecognizer recognizer, int j, Input input) {
+    private Executable getRecognizerTest(String testPath, IguanaRecognizer recognizer, int j, Input input, Start start) {
         return () -> {
-            if (recognizer.recognize(input)) {
+            if (recognizer.recognize(input, start)) {
                 String statisticsPath = testPath + "/statistics" + j + ".json";
                 RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
 
@@ -134,7 +137,7 @@ public class GrammarTest {
         };
     }
 
-    private Executable getParserTest(String testPath, IguanaParser parser, int j, Input input) {
+    private Executable getParserTest(String testPath, IguanaParser parser, int j, Input input, Start start) {
         return () -> {
 
             ParseTreeNode actualParseTree = null;
@@ -143,7 +146,7 @@ public class GrammarTest {
             String resultPath = testPath + "/result" + j + ".json";
 
             try {
-                parser.parse(input);
+                parser.parse(input, start);
             } catch (ParseErrorException e) {
                 Assertions.assertNotNull(parser.getParseError());
                 if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {

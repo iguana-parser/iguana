@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -14,7 +16,10 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
                   ],
                   "associativity" : "UNDEFINED"
@@ -30,7 +35,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "E"
+        "name" : "E",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -41,20 +48,30 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Terminal",
                       "name" : "'+'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 43
                       }
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
                   ],
                   "associativity" : "LEFT"
@@ -73,16 +90,24 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'if'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "symbols" : [
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 105
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 102
                           }
                         ]
@@ -90,29 +115,44 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Terminal",
                       "name" : "'then'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "symbols" : [
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 116
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 104
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 101
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 110
                           }
                         ]
@@ -120,29 +160,44 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Terminal",
                       "name" : "'else'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "regex.Seq",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "symbols" : [
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 101
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 108
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 115
                           },
                           {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 101
                           }
                         ]
@@ -150,7 +205,10 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "E"
+                      "name" : "E",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
                   ],
                   "associativity" : "UNDEFINED"
@@ -165,9 +223,13 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'a'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 97
                       }
                     }
@@ -186,101 +248,152 @@
   "regularExpressionDefinitions" : {
     "Whitespaces" : {
       "kind" : "regex.Star",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "regex" : {
         "kind" : "regex.Alt",
+        "lookaheads" : [ ],
+        "lookbehinds" : [ ],
         "symbols" : [
           {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 9
           },
           {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 10
           },
           {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 13
           },
           {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 32
           }
         ]
-      }
+      },
+      "separators" : [ ]
     }
   },
   "literals" : {
     "+" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 43
     },
     "if" : {
       "kind" : "regex.Seq",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "symbols" : [
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 105
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 102
         }
       ]
     },
     "then" : {
       "kind" : "regex.Seq",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "symbols" : [
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 116
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 104
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 101
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 110
         }
       ]
     },
     "else" : {
       "kind" : "regex.Seq",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "symbols" : [
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 101
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 108
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 115
         },
         {
           "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "val" : 101
         }
       ]
     },
     "a" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 97
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  },
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
   "layout" : {
     "kind" : "Identifier",
-    "name" : "Whitespaces"
-  }
+    "name" : "Whitespaces",
+    "preConditions" : [ ],
+    "postConditions" : [ ],
+    "excepts" : [ ]
+  },
+  "globals" : { }
 }

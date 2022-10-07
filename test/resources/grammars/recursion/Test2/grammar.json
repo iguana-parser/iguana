@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A"
+        "name" : "A",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -14,18 +16,28 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "B"
+                      "name" : "B",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "A"
+                      "name" : "A",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Terminal",
                       "name" : "'a'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 97
                       }
                     }
@@ -41,18 +53,28 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "D"
+                      "name" : "D",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "A"
+                      "name" : "A",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Terminal",
                       "name" : "'b'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 98
                       }
                     }
@@ -69,9 +91,13 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'c'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 99
                       }
                     }
@@ -89,7 +115,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "B"
+        "name" : "B",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -101,9 +129,13 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'x'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 120
                       }
                     }
@@ -116,6 +148,7 @@
             {
               "seqs" : [
                 {
+                  "symbols" : [ ],
                   "associativity" : "UNDEFINED"
                 }
               ],
@@ -129,7 +162,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "D"
+        "name" : "D",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -141,9 +176,13 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'y'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 121
                       }
                     }
@@ -156,6 +195,7 @@
             {
               "seqs" : [
                 {
+                  "symbols" : [ ],
                   "associativity" : "UNDEFINED"
                 }
               ],
@@ -167,31 +207,47 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
+  "regularExpressionDefinitions" : { },
   "literals" : {
     "a" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 97
     },
     "b" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 98
     },
     "c" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 99
     },
     "x" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 120
     },
     "y" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 121
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(A)",
-    "startSymbol" : "A"
-  }
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(A)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "A"
+    }
+  ],
+  "globals" : { }
 }

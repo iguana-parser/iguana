@@ -3,6 +3,8 @@
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
+    "preConditions" : [ ],
+    "postConditions" : [ ],
     "startSymbol" : "S"
   },
   "children" : [
@@ -12,6 +14,8 @@
         "head" : {
           "kind" : "Nonterminal",
           "name" : "S",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "parameters" : [
             "x",
             "y"
@@ -21,9 +25,13 @@
           {
             "kind" : "Code",
             "name" : "_:x:y=E(0,x,y) {assert(x == 1,y == 2)}",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "symbol" : {
               "kind" : "Nonterminal",
               "name" : "E",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "state" : [
                 "_",
                 "x",
@@ -85,6 +93,10 @@
         ],
         "recursion" : "NON_REC",
         "irecursion" : "NON_REC",
+        "leftEnd" : "",
+        "rightEnd" : "",
+        "leftEnds" : [ ],
+        "rightEnds" : [ ],
         "associativity" : "UNDEFINED",
         "precedence" : -1,
         "precedenceLevel" : {
@@ -94,7 +106,9 @@
           "hasPrefixUnary" : false,
           "hasPostfixUnary" : false,
           "hasPrefixUnaryBelow" : false,
+          "prefixUnaryBelow" : [ ],
           "hasPostfixUnaryBelow" : false,
+          "postfixUnaryBelow" : [ ],
           "index" : 1,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -108,6 +122,8 @@
             "head" : {
               "kind" : "Nonterminal",
               "name" : "E",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "parameters" : [
                 "p",
                 "x",
@@ -118,6 +134,8 @@
               {
                 "kind" : "Nonterminal",
                 "name" : "A",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "state" : [
                   "x",
                   "y"
@@ -138,6 +156,8 @@
               {
                 "kind" : "Return",
                 "name" : "{(0,x,y)}",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "expression" : {
                   "kind" : "Tuple",
                   "elements" : [
@@ -162,6 +182,10 @@
             ],
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
+            "leftEnd" : "",
+            "rightEnd" : "",
+            "leftEnds" : [ ],
+            "rightEnds" : [ ],
             "associativity" : "UNDEFINED",
             "precedence" : -1,
             "precedenceLevel" : {
@@ -171,7 +195,9 @@
               "hasPrefixUnary" : false,
               "hasPostfixUnary" : false,
               "hasPrefixUnaryBelow" : false,
+              "prefixUnaryBelow" : [ ],
               "hasPostfixUnaryBelow" : false,
+              "postfixUnaryBelow" : [ ],
               "index" : 2,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -185,6 +211,8 @@
                 "head" : {
                   "kind" : "Nonterminal",
                   "name" : "A",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
                   "parameters" : [
                     "x",
                     "y"
@@ -194,12 +222,18 @@
                   {
                     "kind" : "Code",
                     "name" : "'a' {x = 1;y = 2}",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "symbol" : {
                       "kind" : "Terminal",
                       "name" : "'a'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 97
                       }
                     },
@@ -233,6 +267,8 @@
                   {
                     "kind" : "Return",
                     "name" : "{(x,y)}",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "expression" : {
                       "kind" : "Tuple",
                       "elements" : [
@@ -253,6 +289,10 @@
                 ],
                 "recursion" : "NON_REC",
                 "irecursion" : "NON_REC",
+                "leftEnd" : "",
+                "rightEnd" : "",
+                "leftEnds" : [ ],
+                "rightEnds" : [ ],
                 "associativity" : "UNDEFINED",
                 "precedence" : -1,
                 "precedenceLevel" : {
@@ -262,7 +302,9 @@
                   "hasPrefixUnary" : false,
                   "hasPostfixUnary" : false,
                   "hasPrefixUnaryBelow" : false,
+                  "prefixUnaryBelow" : [ ],
                   "hasPostfixUnaryBelow" : false,
+                  "postfixUnaryBelow" : [ ],
                   "index" : 1,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -275,9 +317,13 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "'a'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "val" : 97
                     }
                   },

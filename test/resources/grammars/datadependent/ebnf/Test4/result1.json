@@ -3,6 +3,8 @@
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
+    "preConditions" : [ ],
+    "postConditions" : [ ],
     "startSymbol" : "S"
   },
   "children" : [
@@ -11,16 +13,24 @@
       "rule" : {
         "head" : {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "X"
+            "name" : "X",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           }
         ],
         "recursion" : "NON_REC",
         "irecursion" : "NON_REC",
+        "leftEnd" : "",
+        "rightEnd" : "",
+        "leftEnds" : [ ],
+        "rightEnds" : [ ],
         "associativity" : "UNDEFINED",
         "precedence" : -1,
         "precedenceLevel" : {
@@ -30,7 +40,9 @@
           "hasPrefixUnary" : false,
           "hasPostfixUnary" : false,
           "hasPrefixUnaryBelow" : false,
+          "prefixUnaryBelow" : [ ],
           "hasPostfixUnaryBelow" : false,
+          "postfixUnaryBelow" : [ ],
           "index" : 1,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -43,18 +55,24 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "X"
+              "name" : "X",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             "body" : [
               {
                 "kind" : "Nonterminal",
                 "name" : "A",
-                "label" : "a"
+                "label" : "a",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               {
                 "kind" : "Nonterminal",
                 "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
                 "label" : "b",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "parameters" : [
                   "a",
                   "b.lExt"
@@ -76,6 +94,10 @@
             ],
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
+            "leftEnd" : "",
+            "rightEnd" : "",
+            "leftEnds" : [ ],
+            "rightEnds" : [ ],
             "associativity" : "UNDEFINED",
             "precedence" : -1,
             "precedenceLevel" : {
@@ -85,7 +107,9 @@
               "hasPrefixUnary" : false,
               "hasPostfixUnary" : false,
               "hasPrefixUnaryBelow" : false,
+              "prefixUnaryBelow" : [ ],
               "hasPostfixUnaryBelow" : false,
+              "postfixUnaryBelow" : [ ],
               "index" : 1,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -98,21 +122,31 @@
               "rule" : {
                 "head" : {
                   "kind" : "Nonterminal",
-                  "name" : "A"
+                  "name" : "A",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 "body" : [
                   {
                     "kind" : "Terminal",
                     "name" : "'a'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "val" : 97
                     }
                   }
                 ],
                 "recursion" : "NON_REC",
                 "irecursion" : "NON_REC",
+                "leftEnd" : "",
+                "rightEnd" : "",
+                "leftEnds" : [ ],
+                "rightEnds" : [ ],
                 "associativity" : "UNDEFINED",
                 "precedence" : -1,
                 "precedenceLevel" : {
@@ -122,7 +156,9 @@
                   "hasPrefixUnary" : false,
                   "hasPostfixUnary" : false,
                   "hasPrefixUnaryBelow" : false,
+                  "prefixUnaryBelow" : [ ],
                   "hasPostfixUnaryBelow" : false,
+                  "postfixUnaryBelow" : [ ],
                   "index" : 1,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -135,9 +171,13 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "'a'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "val" : 97
                     }
                   },
@@ -154,16 +194,23 @@
                 "kind" : "Star",
                 "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*",
                 "label" : "b",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "s" : {
                   "kind" : "Sequence",
                   "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
                   "symbols" : [
                     {
                       "kind" : "Code",
                       "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "symbol" : {
                         "kind" : "Nonterminal",
                         "name" : "B",
+                        "preConditions" : [ ],
                         "postConditions" : [
                           {
                             "kind" : "DataDependentCondition",
@@ -208,10 +255,14 @@
                     {
                       "kind" : "Code",
                       "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "symbol" : {
                         "kind" : "Nonterminal",
                         "name" : "C",
-                        "label" : "b"
+                        "label" : "b",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ]
                       },
                       "statements" : [
                         {
@@ -265,7 +316,8 @@
                       ]
                     }
                   ]
-                }
+                },
+                "separators" : [ ]
               },
               "children" : [
                 {
@@ -273,13 +325,18 @@
                   "symbol" : {
                     "kind" : "Sequence",
                     "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "symbols" : [
                       {
                         "kind" : "Code",
                         "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "B",
+                          "preConditions" : [ ],
                           "postConditions" : [
                             {
                               "kind" : "DataDependentCondition",
@@ -324,10 +381,14 @@
                       {
                         "kind" : "Code",
                         "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "C",
-                          "label" : "b"
+                          "label" : "b",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "statements" : [
                           {
@@ -388,21 +449,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "B"
+                          "name" : "B",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -412,7 +483,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -425,9 +498,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           },
@@ -443,21 +520,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "C"
+                          "name" : "C",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -467,7 +554,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -480,9 +569,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           },
@@ -502,13 +595,18 @@
                   "symbol" : {
                     "kind" : "Sequence",
                     "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "symbols" : [
                       {
                         "kind" : "Code",
                         "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "B",
+                          "preConditions" : [ ],
                           "postConditions" : [
                             {
                               "kind" : "DataDependentCondition",
@@ -553,10 +651,14 @@
                       {
                         "kind" : "Code",
                         "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "C",
-                          "label" : "b"
+                          "label" : "b",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "statements" : [
                           {
@@ -617,21 +719,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "B"
+                          "name" : "B",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -641,7 +753,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -654,9 +768,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           },
@@ -672,21 +790,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "C"
+                          "name" : "C",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -696,7 +824,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -709,9 +839,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           },
@@ -731,13 +865,18 @@
                   "symbol" : {
                     "kind" : "Sequence",
                     "name" : "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "symbols" : [
                       {
                         "kind" : "Code",
                         "name" : "B[a.rExt == b.lExt] {assert(b.lExt == 1)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "B",
+                          "preConditions" : [ ],
                           "postConditions" : [
                             {
                               "kind" : "DataDependentCondition",
@@ -782,10 +921,14 @@
                       {
                         "kind" : "Code",
                         "name" : "b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Nonterminal",
                           "name" : "C",
-                          "label" : "b"
+                          "label" : "b",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "statements" : [
                           {
@@ -846,21 +989,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "B"
+                          "name" : "B",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -870,7 +1023,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -883,9 +1038,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'b'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 98
                             }
                           },
@@ -901,21 +1060,31 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "C"
+                          "name" : "C",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ]
                         },
                         "body" : [
                           {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           }
                         ],
                         "recursion" : "NON_REC",
                         "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
                         "associativity" : "UNDEFINED",
                         "precedence" : -1,
                         "precedenceLevel" : {
@@ -925,7 +1094,9 @@
                           "hasPrefixUnary" : false,
                           "hasPostfixUnary" : false,
                           "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
                           "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
                           "index" : 1,
                           "containsAssociativityGroup" : false,
                           "assoc_lhs" : -1,
@@ -938,9 +1109,13 @@
                           "terminal" : {
                             "kind" : "Terminal",
                             "name" : "'c'",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
                             "nodeType" : "Literal",
                             "regex" : {
                               "kind" : "Char",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
                               "val" : 99
                             }
                           },

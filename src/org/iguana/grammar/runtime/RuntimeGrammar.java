@@ -42,6 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.iguana.utils.collections.CollectionsUtil.buildMap;
 import static org.iguana.utils.string.StringUtil.listToString;
 
 
@@ -65,7 +66,7 @@ public class RuntimeGrammar {
 	private final Map<String, Set<String>> ebnfLefts;
 	private final Map<String, Set<String>> ebnfRights;
 
-	private final Start startSymbol;
+	private final List<Start> startSymbols;
 
 	private final Map<String, Expression> globals;
 
@@ -78,7 +79,7 @@ public class RuntimeGrammar {
 	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
 		this.layout = builder.layout;
-		this.startSymbol = builder.startSymbol;
+		this.startSymbols = builder.startSymbols;
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
 		this.ebnfRights = builder.ebnfRights;
@@ -112,8 +113,8 @@ public class RuntimeGrammar {
 		return this.ebnfRights;
 	}
 
-    public Start getStartSymbol() {
-        return startSymbol;
+    public List<Start> getStartSymbols() {
+        return startSymbols;
     }
 	
 	public int sizeRules() {
@@ -205,11 +206,11 @@ public class RuntimeGrammar {
 
 	public static class Builder {
 		
-		private final Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
-		private final List<RuntimeRule> rules = new ArrayList<>();
+		private Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
+		private List<RuntimeRule> rules = new ArrayList<>();
 		public String name;
 		private Symbol layout;
-		private Start startSymbol;
+		private List<Start> startSymbols;
 		private Map<String, RegularExpression> regularExpressionDefinitions;
 		private Map<String, RegularExpression> literals;
 
@@ -220,14 +221,14 @@ public class RuntimeGrammar {
         public Builder() { }
 
         public Builder(RuntimeGrammar grammar) {
-            definitions.putAll(grammar.definitions);
-            rules.addAll(grammar.rules);
+            definitions = new HashMap<>(grammar.definitions);
+            rules = new ArrayList<>(grammar.rules);
             layout = grammar.layout;
-            ebnfLefts.putAll(grammar.ebnfLefts);
-            ebnfRights.putAll(grammar.ebnfRights);
-            startSymbol = grammar.startSymbol;
-			regularExpressionDefinitions = grammar.getRegularExpressionDefinitions();
-			globals = grammar.globals;
+            ebnfLefts = new HashMap<>(grammar.ebnfLefts);
+            ebnfRights = new HashMap<>(grammar.ebnfRights);
+            startSymbols = new ArrayList<>(grammar.startSymbols);
+			regularExpressionDefinitions = new HashMap<>(grammar.getRegularExpressionDefinitions());
+			globals = new HashMap<>(grammar.globals);
 			name = grammar.name;
         }
 		
@@ -242,6 +243,8 @@ public class RuntimeGrammar {
 			if (!exceptions.isEmpty()) {
 				throw new GrammarValidationException(exceptions);
 			}
+
+			if (regularExpressionDefinitions == null) throw new RuntimeException("regularExpressionDefinitions is null");
 
             return new RuntimeGrammar(this);
 		}
@@ -277,8 +280,13 @@ public class RuntimeGrammar {
 			return this;
 		}
 
-		public Builder setStartSymbol(Start startSymbol) {
-		    this.startSymbol = startSymbol;
+		public Builder setStartSymbols(List<Start> startSymbols) {
+			this.startSymbols = startSymbols;
+			return this;
+		}
+
+		public Builder addStartSymbol(Start startSymbol) {
+		    this.startSymbols.add(startSymbol);
 		    return this;
         }
 		

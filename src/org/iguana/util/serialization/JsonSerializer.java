@@ -48,7 +48,6 @@ public class JsonSerializer {
             .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
         mapper.addMixIn(RuntimeGrammar.class, RuntimeGrammarMixIn.class);
         mapper.addMixIn(RuntimeRule.class, RuntimeRuleMixIn.class);

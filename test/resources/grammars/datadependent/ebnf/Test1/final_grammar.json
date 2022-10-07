@@ -3,16 +3,24 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "X"
+          "name" : "X",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -22,7 +30,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -33,22 +43,32 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(C D)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Seq"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "C",
-          "label" : "c"
+          "label" : "c",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         {
           "kind" : "Nonterminal",
           "name" : "D",
-          "label" : "d"
+          "label" : "d",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -58,7 +78,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -67,16 +89,22 @@
       "definition" : {
         "kind" : "Sequence",
         "name" : "(C D)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "symbols" : [
           {
             "kind" : "Nonterminal",
             "name" : "C",
-            "label" : "c"
+            "label" : "c",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           },
           {
             "kind" : "Nonterminal",
             "name" : "D",
-            "label" : "d"
+            "label" : "d",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           }
         ]
       }
@@ -85,17 +113,25 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Alt"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "B",
-          "label" : "b"
+          "label" : "b",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -105,7 +141,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -114,25 +152,35 @@
       "definition" : {
         "kind" : "Alt",
         "name" : "(B | (C D))",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "symbols" : [
           {
             "kind" : "Nonterminal",
             "name" : "B",
-            "label" : "b"
+            "label" : "b",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           },
           {
             "kind" : "Sequence",
             "name" : "(C D)",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "symbols" : [
               {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               {
                 "kind" : "Nonterminal",
                 "name" : "D",
-                "label" : "d"
+                "label" : "d",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               }
             ]
           }
@@ -143,17 +191,25 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Alt"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "(C D)",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Seq"
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -163,7 +219,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -172,25 +230,35 @@
       "definition" : {
         "kind" : "Alt",
         "name" : "(B | (C D))",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "symbols" : [
           {
             "kind" : "Nonterminal",
             "name" : "B",
-            "label" : "b"
+            "label" : "b",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           },
           {
             "kind" : "Sequence",
             "name" : "(C D)",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "symbols" : [
               {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               {
                 "kind" : "Nonterminal",
                 "name" : "D",
-                "label" : "d"
+                "label" : "d",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               }
             ]
           }
@@ -201,22 +269,32 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "(B | (C D))+",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Plus"
         },
         {
           "kind" : "Nonterminal",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Alt"
         }
       ],
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 1,
       "precedenceLevel" : {
@@ -226,7 +304,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -235,50 +315,71 @@
       "definition" : {
         "kind" : "Plus",
         "name" : "(B | (C D))+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Alt",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Nonterminal",
               "name" : "B",
-              "label" : "b"
+              "label" : "b",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             {
               "kind" : "Sequence",
               "name" : "(C D)",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbols" : [
                 {
                   "kind" : "Nonterminal",
                   "name" : "C",
-                  "label" : "c"
+                  "label" : "c",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 {
                   "kind" : "Nonterminal",
                   "name" : "D",
-                  "label" : "d"
+                  "label" : "d",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 }
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Plus"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Alt"
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -288,7 +389,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -297,50 +400,71 @@
       "definition" : {
         "kind" : "Plus",
         "name" : "(B | (C D))+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Alt",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Nonterminal",
               "name" : "B",
-              "label" : "b"
+              "label" : "b",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             {
               "kind" : "Sequence",
               "name" : "(C D)",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbols" : [
                 {
                   "kind" : "Nonterminal",
                   "name" : "C",
-                  "label" : "c"
+                  "label" : "c",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 {
                   "kind" : "Nonterminal",
                   "name" : "D",
-                  "label" : "d"
+                  "label" : "d",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 }
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))*",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Star"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "(B | (C D))+",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Plus"
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -350,7 +474,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -360,43 +486,63 @@
         "kind" : "Star",
         "name" : "(B | (C D))*",
         "label" : "s",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Alt",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Nonterminal",
               "name" : "B",
-              "label" : "b"
+              "label" : "b",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             {
               "kind" : "Sequence",
               "name" : "(C D)",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbols" : [
                 {
                   "kind" : "Nonterminal",
                   "name" : "C",
-                  "label" : "c"
+                  "label" : "c",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 {
                   "kind" : "Nonterminal",
                   "name" : "D",
-                  "label" : "d"
+                  "label" : "d",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 }
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(B | (C D))*",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Star"
       },
+      "body" : [ ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -406,7 +552,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -416,54 +564,77 @@
         "kind" : "Star",
         "name" : "(B | (C D))*",
         "label" : "s",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Alt",
           "name" : "(B | (C D))",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Nonterminal",
               "name" : "B",
-              "label" : "b"
+              "label" : "b",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             {
               "kind" : "Sequence",
               "name" : "(C D)",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbols" : [
                 {
                   "kind" : "Nonterminal",
                   "name" : "C",
-                  "label" : "c"
+                  "label" : "c",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 {
                   "kind" : "Nonterminal",
                   "name" : "D",
-                  "label" : "d"
+                  "label" : "d",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 }
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "X"
+        "name" : "X",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "A"
+          "name" : "A",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         {
           "kind" : "Nonterminal",
           "name" : "(B | (C D))*",
           "label" : "s",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Star"
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -473,7 +644,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -483,21 +656,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A"
+        "name" : "A",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'a'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 97
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -507,7 +690,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -517,21 +702,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "B"
+        "name" : "B",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'b'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 98
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -541,7 +736,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -551,21 +748,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "C"
+        "name" : "C",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'c'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 99
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -575,7 +782,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -585,21 +794,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "D"
+        "name" : "D",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'d'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 100
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -609,7 +828,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -620,17 +841,25 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Start(S)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "nodeType" : "Start"
       },
       "body" : [
         {
           "kind" : "Nonterminal",
           "name" : "S",
-          "label" : "top"
+          "label" : "top",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -640,7 +869,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -649,10 +880,13 @@
       "definition" : {
         "kind" : "Start",
         "name" : "Start(S)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "startSymbol" : "S"
       }
     }
   ],
+  "regularExpressionDefinitions" : { },
   "ebnfLefts" : {
     "*" : [
       "+"
@@ -670,9 +904,21 @@
       ""
     ]
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  }
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    },
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
+  "globals" : { }
 }

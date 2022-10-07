@@ -757,10 +757,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			rules.add(transform(rule));
 		
 		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout())
-			.setStartSymbol(grammar.getStartSymbol())
+			.setStartSymbols(grammar.getStartSymbols())
 			.setEbnfLefts(grammar.getEBNFLefts())
 			.setEbnfRights(grammar.getEBNFRights())
 			.setGlobals(grammar.getGlobals())
+			.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
 			.build();
 	}
 	

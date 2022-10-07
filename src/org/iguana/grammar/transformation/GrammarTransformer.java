@@ -1,7 +1,6 @@
 package org.iguana.grammar.transformation;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.symbol.Start;
 
 public class GrammarTransformer {
 
@@ -12,10 +11,7 @@ public class GrammarTransformer {
         grammar = new EBNFToBNF().transform(grammar);
         desugarAlignAndOffside.doOffside();
         grammar = desugarAlignAndOffside.transform(grammar);
-        Start startSymbol = runtimeGrammar.getStartSymbol();
-        if (startSymbol != null) {
-            grammar = new DesugarStartSymbol(startSymbol).transform(grammar);
-        }
+        grammar = new DesugarStartSymbol(runtimeGrammar.getStartSymbols()).transform(grammar);
         DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();
         precedenceAndAssociativity.setOP2();
         grammar = precedenceAndAssociativity.transform(grammar);
