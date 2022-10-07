@@ -248,6 +248,11 @@ public class Grammar {
             return this;
         }
 
+        public Builder setStartSymbols(List<Start> startSymbols) {
+            this.startSymbols = startSymbols;
+            return this;
+        }
+
         public Builder addStartSymbol(Start startSymbol) {
             this.startSymbols.add(startSymbol);
             return this;
