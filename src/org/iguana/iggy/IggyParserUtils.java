@@ -21,7 +21,8 @@ public class IggyParserUtils {
         try {
             input = Input.fromFile(new File(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);        }
+            throw new RuntimeException(e);
+        }
         return createGrammar(input);
     }
 

@@ -24,7 +24,7 @@ public class IggyGrammar {
 
     private static Grammar loadGrammar() {
         String grammarJsonFile = grammarName + ".json";
-        try (InputStream in = IggyParser.class.getResourceAsStream(grammarJsonFile)) {
+        try (InputStream in = IggyParser.class.getResourceAsStream("/" + grammarJsonFile)) {
             if (in == null) throw new RuntimeException("Grammar json file " + grammarJsonFile + " is not found.");
             String content = readFile(in);
             return JsonSerializer.deserialize(content, Grammar.class);

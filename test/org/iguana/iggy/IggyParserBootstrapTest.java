@@ -28,7 +28,7 @@ public class IggyParserBootstrapTest {
     public void testJsonGrammar() throws Exception {
         Grammar grammar = IggyGrammar.getGrammar();
 
-        String expectedJson = getFileContent(Paths.get("src/org/iguana/iggy/gen/iggy.json"));
+        String expectedJson = getFileContent(Paths.get("src/resources/iggy.json"));
         ObjectMapper om = new ObjectMapper();
         Map<String, Object> expected = (Map<String, Object>)(om.readValue(expectedJson, Map.class));
         Map<String, Object> actual = (Map<String, Object>)(om.readValue(JsonSerializer.serialize(grammar), Map.class));

@@ -40,7 +40,7 @@ public class ParserGenerator extends Generator {
             "\n" +
             "    private static Grammar loadGrammar() {\n" +
             "        String grammarJsonFile = grammarName + \".json\";\n" +
-            "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(grammarJsonFile)) {\n" +
+            "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(\"/\" + " + "grammarJsonFile)) {\n" +
             "            if (in == null) throw new RuntimeException(\"Grammar json file \" + grammarJsonFile + \" is not found.\");\n" +
             "            String content = readFile(in);\n" +
             "            return JsonSerializer.deserialize(content, Grammar.class);\n" +
@@ -50,7 +50,7 @@ public class ParserGenerator extends Generator {
             "    }\n" +
             "}\n";
         writeToJavaFile(content, genDirectory, className + "Grammar");
-        System.out.println(className + "Grammar" + " has been generated.");
+        System.out.println(className + "Grammar" + " has been generated in " + genDirectory + "/" + className + "Grammar.java");
     }
 
     public void generateParser() {
@@ -86,6 +86,6 @@ public class ParserGenerator extends Generator {
             "    }\n" +
             "}\n";
         writeToJavaFile(content, genDirectory, className + "Parser");
-        System.out.println(className + "Parser" + " has been generated.");
+        System.out.println(className + "Parser" + " has been generated in " + genDirectory + "/" + className + "Parser.java");
     }
 }
