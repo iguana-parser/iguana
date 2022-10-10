@@ -30,18 +30,18 @@ package org.iguana.grammar.transformation;
 import org.iguana.datadependent.ast.AST;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.runtime.AssociativityGroup;
 import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.*;
 import java.util.Map;
 import java.util.Set;
+import java.util.*;
 
 import static org.iguana.datadependent.ast.AST.*;
 import static org.iguana.grammar.condition.DataDependentCondition.predicate;
@@ -757,10 +757,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			rules.add(transform(rule));
 		
 		return RuntimeGrammar.builder().addRules(rules).setLayout(grammar.getLayout())
-			.setStartSymbol(grammar.getStartSymbol())
+			.setStartSymbols(grammar.getStartSymbols())
 			.setEbnfLefts(grammar.getEBNFLefts())
 			.setEbnfRights(grammar.getEBNFRights())
 			.setGlobals(grammar.getGlobals())
+			.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
 			.build();
 	}
 	
@@ -1945,8 +1946,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			
 			if (assoc_group == null && prec_level.getLhs() != prec_level.getRhs()) {
 				
-				if (rule.isILeftRecursive() || rule.isIRightRecursive())
-					throw new RuntimeException("Not yet implemented: indirect recursion inside a group of the same precedence with multiple rules");
+				if (rule.isILeftRecursive() || rule.isIRightRecursive()) {
+					System.out.println("Warning: not yet implemented: indirect recursion inside a group of the same precedence with multiple rules: " + rule);
+				}
 				
 				// Local to an associativity group
 				int arity = config.groups.get(prec_level.getLhs()) == null? 1 : config.groups.get(prec_level.getLhs());
@@ -2608,9 +2610,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 						}
 					}
-					
+
 					if (isRecursiveUseOfLeftOrRight && isFirst && isLast) // E ::= E
-						throw new RuntimeException("Cyclic use where precedence applies.");
+						throw new RuntimeException("Cyclic use where precedence applies:" + rule);
 					
 					if (isRecursiveUseOfLeftOrRight && isFirst) { // E ::= E alpha
 						variable = "l";

@@ -23,8 +23,6 @@ public class ParserGenerator extends Generator {
             "import java.io.IOException;\n" +
             "import java.io.InputStream;\n" +
             "\n" +
-            "import static org.iguana.utils.io.FileUtils.readFile;\n" +
-            "\n" +
             "public class " + className + "Grammar {\n" +
             "\n" +
             "    private static final String grammarName = \"" + grammarName + "\";\n" +
@@ -40,17 +38,16 @@ public class ParserGenerator extends Generator {
             "\n" +
             "    private static Grammar loadGrammar() {\n" +
             "        String grammarJsonFile = grammarName + \".json\";\n" +
-            "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(grammarJsonFile)) {\n" +
+            "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(\"/\" + " + "grammarJsonFile)) {\n" +
             "            if (in == null) throw new RuntimeException(\"Grammar json file \" + grammarJsonFile + \" is not found.\");\n" +
-            "            String content = readFile(in);\n" +
-            "            return JsonSerializer.deserialize(content, Grammar.class);\n" +
+            "            return JsonSerializer.deserialize(in, Grammar.class);\n" +
             "        } catch (IOException e) {\n" +
             "            throw new RuntimeException(e);\n" +
             "        }\n" +
             "    }\n" +
             "}\n";
         writeToJavaFile(content, genDirectory, className + "Grammar");
-        System.out.println(className + "Grammar" + " has been generated.");
+        System.out.println(className + "Grammar" + " has been generated in " + genDirectory + "/" + className + "Grammar.java");
     }
 
     public void generateParser() {
@@ -86,6 +83,6 @@ public class ParserGenerator extends Generator {
             "    }\n" +
             "}\n";
         writeToJavaFile(content, genDirectory, className + "Parser");
-        System.out.println(className + "Parser" + " has been generated.");
+        System.out.println(className + "Parser" + " has been generated in " + genDirectory + "/" + className + "Parser.java");
     }
 }

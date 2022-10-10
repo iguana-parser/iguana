@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -14,9 +16,13 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "Id"
+                      "name" : "Id",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -29,7 +35,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Id"
+        "name" : "Id",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -41,60 +49,87 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Chars",
+                      "preConditions" : [ ],
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
                           "type" : "NOT_MATCH",
                           "regularExpression" : {
                             "kind" : "regex.Alt",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "symbols" : [
                               {
                                 "kind" : "regex.Seq",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
                                 "symbols" : [
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 105
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 102
                                   }
                                 ]
                               },
                               {
                                 "kind" : "regex.Seq",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
                                 "symbols" : [
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 119
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 104
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 105
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 108
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 101
                                   }
                                 ]
                               },
                               {
                                 "kind" : "regex.Seq",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
                                 "symbols" : [
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 100
                                   },
                                   {
                                     "kind" : "Char",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
                                     "val" : 111
                                   }
                                 ]
@@ -102,9 +137,11 @@
                             ]
                           }
                         }
-                      ]
+                      ],
+                      "excepts" : [ ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -118,21 +155,34 @@
   "regularExpressionDefinitions" : {
     "Chars" : {
       "kind" : "regex.Plus",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "regex" : {
         "kind" : "regex.Alt",
+        "lookaheads" : [ ],
+        "lookbehinds" : [ ],
         "symbols" : [
           {
             "kind" : "CharRange",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "start" : 97,
             "end" : 122
           }
         ]
-      }
+      },
+      "separators" : [ ]
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  }
+  "literals" : { },
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
+  "globals" : { }
 }

@@ -1,6 +1,8 @@
 package org.iguana.iggy;
 
 import org.iguana.grammar.Grammar;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.iggy.gen.IggyGrammar;
 import org.iguana.iggy.gen.IggyParser;
 import org.iguana.parser.IguanaParser;
 import org.iguana.parser.ParseErrorException;
@@ -9,7 +11,6 @@ import org.iguana.utils.input.Input;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IggyParserUtils {
@@ -20,7 +21,8 @@ public class IggyParserUtils {
         try {
             input = Input.fromFile(new File(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);        }
+            throw new RuntimeException(e);
+        }
         return createGrammar(input);
     }
 
@@ -31,9 +33,10 @@ public class IggyParserUtils {
     }
 
     private static Grammar createGrammar(Input input) {
+        Start start = IggyGrammar.getGrammar().getStartSymbols().get(0);
         IguanaParser parser = IggyParser.getInstance();
         try {
-            parser.parse(input);
+            parser.parse(input, start);
         } catch (ParseErrorException e) {
             System.out.println(parser.getParseError());
             throw new RuntimeException(parser.getParseError().toString());

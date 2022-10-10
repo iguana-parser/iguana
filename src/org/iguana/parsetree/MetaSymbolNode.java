@@ -83,6 +83,11 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         }
 
         @Override
+        public boolean hasChildren() {
+            return child != null;
+        }
+
+        @Override
         public List<ParseTreeNode> children() {
             if (child == null) return Collections.emptyList();
             else return Collections.singletonList(child);
@@ -103,6 +108,11 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         public MultiChildMetaSymbolNode(Symbol symbol, List<ParseTreeNode> children, int start, int end) {
             super(symbol, start, end);
             this.children = children == null ? Collections.emptyList() : children;
+        }
+
+        @Override
+        public boolean hasChildren() {
+            return !children.isEmpty();
         }
 
         @Override

@@ -3,6 +3,8 @@
   "symbol" : {
     "kind" : "Start",
     "name" : "Start(S)",
+    "preConditions" : [ ],
+    "postConditions" : [ ],
     "startSymbol" : "S"
   },
   "children" : [
@@ -11,27 +13,36 @@
       "rule" : {
         "head" : {
           "kind" : "Nonterminal",
-          "name" : "S"
+          "name" : "S",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         "body" : [
           {
             "kind" : "Terminal",
             "name" : "'a'",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
               "val" : 97
             }
           },
           {
             "kind" : "Nonterminal",
             "name" : "S",
+            "preConditions" : [ ],
             "postConditions" : [
               {
                 "kind" : "RegularExpressionCondition",
                 "type" : "NOT_FOLLOW",
                 "regularExpression" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 98
                 }
               }
@@ -40,6 +51,10 @@
         ],
         "recursion" : "RIGHT_REC",
         "irecursion" : "NON_REC",
+        "leftEnd" : "",
+        "rightEnd" : "",
+        "leftEnds" : [ ],
+        "rightEnds" : [ ],
         "associativity" : "UNDEFINED",
         "precedence" : 1,
         "precedenceLevel" : {
@@ -49,7 +64,9 @@
           "hasPrefixUnary" : true,
           "hasPostfixUnary" : false,
           "hasPrefixUnaryBelow" : false,
+          "prefixUnaryBelow" : [ ],
           "hasPostfixUnaryBelow" : false,
+          "postfixUnaryBelow" : [ ],
           "index" : 2,
           "containsAssociativityGroup" : false,
           "assoc_lhs" : -1,
@@ -62,9 +79,13 @@
           "terminal" : {
             "kind" : "Terminal",
             "name" : "'a'",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "nodeType" : "Literal",
             "regex" : {
               "kind" : "Char",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
               "val" : 97
             }
           },
@@ -76,34 +97,50 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "S"
+              "name" : "S",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             "body" : [
               {
                 "kind" : "Terminal",
                 "name" : "'a'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 97
                 }
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "S"
+                "name" : "S",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               {
                 "kind" : "Terminal",
                 "name" : "'b'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 98
                 }
               }
             ],
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
+            "leftEnd" : "",
+            "rightEnd" : "",
+            "leftEnds" : [ ],
+            "rightEnds" : [ ],
             "associativity" : "UNDEFINED",
             "precedence" : -1,
             "precedenceLevel" : {
@@ -113,7 +150,9 @@
               "hasPrefixUnary" : true,
               "hasPostfixUnary" : false,
               "hasPrefixUnaryBelow" : false,
+              "prefixUnaryBelow" : [ ],
               "hasPostfixUnaryBelow" : false,
+              "postfixUnaryBelow" : [ ],
               "index" : 2,
               "containsAssociativityGroup" : false,
               "assoc_lhs" : -1,
@@ -126,9 +165,13 @@
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : "'a'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 97
                 }
               },
@@ -140,21 +183,31 @@
               "rule" : {
                 "head" : {
                   "kind" : "Nonterminal",
-                  "name" : "S"
+                  "name" : "S",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ]
                 },
                 "body" : [
                   {
                     "kind" : "Terminal",
                     "name" : "'s'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "val" : 115
                     }
                   }
                 ],
                 "recursion" : "NON_REC",
                 "irecursion" : "NON_REC",
+                "leftEnd" : "",
+                "rightEnd" : "",
+                "leftEnds" : [ ],
+                "rightEnds" : [ ],
                 "associativity" : "UNDEFINED",
                 "precedence" : -1,
                 "precedenceLevel" : {
@@ -164,7 +217,9 @@
                   "hasPrefixUnary" : true,
                   "hasPostfixUnary" : false,
                   "hasPrefixUnaryBelow" : false,
+                  "prefixUnaryBelow" : [ ],
                   "hasPostfixUnaryBelow" : false,
+                  "postfixUnaryBelow" : [ ],
                   "index" : 2,
                   "containsAssociativityGroup" : false,
                   "assoc_lhs" : -1,
@@ -177,9 +232,13 @@
                   "terminal" : {
                     "kind" : "Terminal",
                     "name" : "'s'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
                     "nodeType" : "Literal",
                     "regex" : {
                       "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
                       "val" : 115
                     }
                   },
@@ -195,9 +254,13 @@
               "terminal" : {
                 "kind" : "Terminal",
                 "name" : "'b'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
                 "nodeType" : "Literal",
                 "regex" : {
                   "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
                   "val" : 98
                 }
               },

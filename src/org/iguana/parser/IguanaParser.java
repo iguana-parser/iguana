@@ -30,6 +30,8 @@ package org.iguana.parser;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -64,12 +66,18 @@ public class IguanaParser extends IguanaRecognizer {
         super(grammar, config);
     }
 
-    public void parse(Input input) {
+    public void parse(Input input, Symbol symbol) {
+        if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol);
+        else if (symbol instanceof Start) parse(input, (Start) symbol);
+        else throw new RuntimeException("Symbol should be a nonterminal or start, but was: " + symbol.getClass());
+    }
+
+    public void parse(Input input, Start start) {
         parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), new ParseOptions.Builder().setGlobal(false).build());
     }
 
-    public void parse(Input input, Nonterminal start) {
-        parse(input, start, new ParseOptions.Builder().setGlobal(false).build());
+    public void parse(Input input, Nonterminal nonterminal) {
+        parse(input, nonterminal, new ParseOptions.Builder().setGlobal(false).build());
     }
 
     public void parse(Input input, Nonterminal start, ParseOptions options) {

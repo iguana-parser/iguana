@@ -27,17 +27,16 @@
 
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.iguana.grammar.symbol.LayoutStrategy.INHERITED;
 
@@ -47,7 +46,7 @@ public class LayoutWeaver implements GrammarTransformation {
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Symbol layout = grammar.getLayout();
 
-		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbol(grammar.getStartSymbol());
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(grammar.getStartSymbols());
 		
 		for (RuntimeRule rule : grammar.getRules()) {
 			RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
@@ -113,7 +112,7 @@ public class LayoutWeaver implements GrammarTransformation {
 		builder.setGlobals(grammar.getGlobals());
 		builder.setEbnfLefts(grammar.getEBNFLefts());
 		builder.setEbnfRights(grammar.getEBNFRights());
-
+		builder.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions());
 		return builder.build();
 	}
 

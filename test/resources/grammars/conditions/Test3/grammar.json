@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -15,20 +17,27 @@
                     {
                       "kind" : "Identifier",
                       "name" : "Label",
+                      "preConditions" : [ ],
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
                           "type" : "NOT_FOLLOW",
                           "regularExpression" : {
                             "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "val" : 51
                           }
                         }
-                      ]
+                      ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Nums"
+                      "name" : "Nums",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
                   ],
                   "associativity" : "UNDEFINED"
@@ -44,7 +53,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "Label"
+        "name" : "Label",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -56,15 +67,20 @@
                     {
                       "kind" : "Plus",
                       "name" : "Char+",
+                      "preConditions" : [ ],
                       "postConditions" : [
                         {
                           "kind" : "RegularExpressionCondition",
                           "type" : "NOT_FOLLOW",
                           "regularExpression" : {
                             "kind" : "regex.Alt",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
                             "symbols" : [
                               {
                                 "kind" : "CharRange",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
                                 "start" : 97,
                                 "end" : 122
                               }
@@ -74,10 +90,15 @@
                       ],
                       "s" : {
                         "kind" : "Identifier",
-                        "name" : "Char"
-                      }
+                        "name" : "Char",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
+                        "excepts" : [ ]
+                      },
+                      "separators" : [ ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -91,9 +112,13 @@
   "regularExpressionDefinitions" : {
     "Char" : {
       "kind" : "regex.Alt",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "symbols" : [
         {
           "kind" : "CharRange",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "start" : 97,
           "end" : 122
         }
@@ -101,18 +126,28 @@
     },
     "Nums" : {
       "kind" : "regex.Alt",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "symbols" : [
         {
           "kind" : "CharRange",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
           "start" : 48,
           "end" : 57
         }
       ]
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  }
+  "literals" : { },
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
+  "globals" : { }
 }

@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -15,6 +17,8 @@
                     {
                       "kind" : "Nonterminal",
                       "name" : "AB",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "arguments" : [
                         {
                           "kind" : "Integer",
@@ -26,7 +30,8 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -40,6 +45,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "AB",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "b"
@@ -55,12 +62,18 @@
                     {
                       "kind" : "Code",
                       "name" : "'c' {var x = a;var y = b}",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "'c'",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "val" : 99
                         }
                       },
@@ -94,6 +107,8 @@
                     {
                       "kind" : "IfThenElse",
                       "name" : "if (x == 5) A {assert(x == 5)} else B {assert(y == 6)};",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "expression" : {
                         "kind" : "Equal",
                         "lhs" : {
@@ -109,9 +124,14 @@
                       "thenPart" : {
                         "kind" : "Code",
                         "name" : "A {assert(x == 5)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Identifier",
-                          "name" : "A"
+                          "name" : "A",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ],
+                          "excepts" : [ ]
                         },
                         "statements" : [
                           {
@@ -140,9 +160,14 @@
                       "elsePart" : {
                         "kind" : "Code",
                         "name" : "B {assert(y == 6)}",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
                         "symbol" : {
                           "kind" : "Identifier",
-                          "name" : "B"
+                          "name" : "B",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ],
+                          "excepts" : [ ]
                         },
                         "statements" : [
                           {
@@ -183,7 +208,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A"
+        "name" : "A",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -195,13 +222,18 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'a'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 97
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -214,7 +246,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "B"
+        "name" : "B",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -226,13 +260,18 @@
                     {
                       "kind" : "Terminal",
                       "name" : "'b'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "nodeType" : "Literal",
                       "regex" : {
                         "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
                         "val" : 98
                       }
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -243,23 +282,35 @@
       "layoutStrategy" : "INHERITED"
     }
   ],
+  "regularExpressionDefinitions" : { },
   "literals" : {
     "c" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 99
     },
     "a" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 97
     },
     "b" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 98
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  }
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
+  "globals" : { }
 }

@@ -44,6 +44,11 @@ public class NonterminalNode implements ParseTreeNode {
     }
 
     @Override
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
+
+    @Override
     public <T> T accept(ParseTreeVisitor<T> visitor) {
         return visitor.visitNonterminalNode(this);
     }

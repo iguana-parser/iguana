@@ -33,7 +33,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
-    private String start;
+    private List<String> startSymbols = new ArrayList<>();
     private Identifier layout;
 
     @Override
@@ -61,8 +61,8 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         for (Map.Entry<String, RegularExpression> entry : literals.entrySet()) {
             builder.addLiteral(entry.getKey(), entry.getValue());
         }
-        if (start != null) {
-            builder.setStartSymbol(Start.from(start));
+        for (String start : startSymbols) {
+            builder.addStartSymbol(Start.from(start));
         }
         builder.setLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
@@ -86,7 +86,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         if (node.modifier().hasChildren()) { // start symbol
             String text = node.modifier().getText();
             if (text.equals("start")) {
-                start = nonterminalName.getName();
+                startSymbols.add(nonterminalName.getName());
             } else if (text.equals("lexical")) {
                 layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"
@@ -167,11 +167,12 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public Sequence visitMoreThanOneElemSequence(IggyParseTree.MoreThanOneElemSequence node) {
-        Associativity associativity = null;
-        if (node.hasChildren()) {
-            associativity = getAssociativity(node.assoc());
-        }
         Sequence.Builder builder = new Sequence.Builder();
+
+        if (node.assoc().hasChildren()) {
+            builder.setAssociativity(getAssociativity(node.assoc()));
+        }
+
         Optional<List<Expression>> expressions = (Optional<List<Expression>>) node.cond().accept(this);
         List<Symbol> symbols = new ArrayList<>();
         Symbol symbol = (Symbol) node.first().accept(this);
@@ -189,7 +190,6 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
             builder.addSymbol(Return.ret(returnExpression.get()));
         }
         Optional<String> label = (Optional<String>) node.label().accept(this);
-        builder.setAssociativity(associativity);
         if (label.isPresent()) {
             builder.setLabel(label.get());
         }

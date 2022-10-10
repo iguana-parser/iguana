@@ -25,7 +25,7 @@ public class AttributesTest {
         Rule rule = ruleBuilder.build();
 
         Grammar.Builder grammarBuilder = new Grammar.Builder();
-        grammarBuilder.setStartSymbol(Start.from("A"));
+        grammarBuilder.addStartSymbol(Start.from("A"));
         grammarBuilder.addRule(rule);
         Grammar grammar = grammarBuilder.build();
 

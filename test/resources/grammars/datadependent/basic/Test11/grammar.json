@@ -3,7 +3,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "X"
+        "name" : "X",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -14,9 +16,13 @@
                   "symbols" : [
                     {
                       "kind" : "Identifier",
-                      "name" : "S"
+                      "name" : "S",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
-                  ]
+                  ],
+                  "associativity" : "UNDEFINED"
                 }
               ],
               "associativity" : "UNDEFINED"
@@ -29,7 +35,9 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "S"
+        "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "priorityLevels" : [
         {
@@ -41,10 +49,13 @@
                     {
                       "kind" : "Code",
                       "name" : "'a' {assert(a.rExt == 1,indent(a.rExt) == 2)}",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "'a'",
                         "label" : "a",
+                        "preConditions" : [ ],
                         "postConditions" : [
                           {
                             "kind" : "DataDependentCondition",
@@ -65,6 +76,8 @@
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "val" : 97
                         }
                       },
@@ -110,15 +123,21 @@
                     },
                     {
                       "kind" : "Identifier",
-                      "name" : "Layout"
+                      "name" : "Layout",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     },
                     {
                       "kind" : "Code",
                       "name" : "'b' {assert(b.lExt == 5,b.rExt == 6,indent(b.rExt) == 7)}",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
                       "symbol" : {
                         "kind" : "Terminal",
                         "name" : "'b'",
                         "label" : "b",
+                        "preConditions" : [ ],
                         "postConditions" : [
                           {
                             "kind" : "DataDependentCondition",
@@ -139,6 +158,8 @@
                         "nodeType" : "Literal",
                         "regex" : {
                           "kind" : "Char",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
                           "val" : 98
                         }
                       },
@@ -208,30 +229,46 @@
   "regularExpressionDefinitions" : {
     "Layout" : {
       "kind" : "regex.Star",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "regex" : {
         "kind" : "regex.Alt",
+        "lookaheads" : [ ],
+        "lookbehinds" : [ ],
         "symbols" : [
           {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 32
           }
         ]
-      }
+      },
+      "separators" : [ ]
     }
   },
   "literals" : {
     "a" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 97
     },
     "b" : {
       "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
       "val" : 98
     }
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(X)",
-    "startSymbol" : "X"
-  }
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(X)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "X"
+    }
+  ],
+  "globals" : { }
 }

@@ -150,10 +150,11 @@ public class DesugarState implements GrammarTransformation {
 			}
 		}
 		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout())
-			.setStartSymbol(grammar.getStartSymbol())
+			.setStartSymbols(grammar.getStartSymbols())
 			.setEbnfLefts(grammar.getEBNFLefts())
 			.setEbnfRights(grammar.getEBNFRights())
 			.setGlobals(grammar.getGlobals())
+			.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
 			.build();
 	}
 	

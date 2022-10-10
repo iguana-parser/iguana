@@ -4,6 +4,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "S",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "bCounter",
           "cCounter"
@@ -13,6 +15,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "X",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Name",
@@ -29,6 +33,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -38,7 +46,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -49,6 +59,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "bCounter",
@@ -60,10 +72,13 @@
         {
           "kind" : "Code",
           "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbol" : {
             "kind" : "Nonterminal",
             "name" : "B",
             "label" : "b",
+            "preConditions" : [ ],
             "postConditions" : [
               {
                 "kind" : "DataDependentCondition",
@@ -129,10 +144,14 @@
         {
           "kind" : "Code",
           "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbol" : {
             "kind" : "Nonterminal",
             "name" : "C",
-            "label" : "c"
+            "label" : "c",
+            "preConditions" : [ ],
+            "postConditions" : [ ]
           },
           "statements" : [
             {
@@ -181,6 +200,8 @@
         {
           "kind" : "Return",
           "name" : "{(bCounter,cCounter)}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Tuple",
             "elements" : [
@@ -201,6 +222,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -210,7 +235,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -219,14 +246,19 @@
       "definition" : {
         "kind" : "Sequence",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "symbols" : [
           {
             "kind" : "Code",
             "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "symbol" : {
               "kind" : "Nonterminal",
               "name" : "B",
               "label" : "b",
+              "preConditions" : [ ],
               "postConditions" : [
                 {
                   "kind" : "DataDependentCondition",
@@ -292,10 +324,14 @@
           {
             "kind" : "Code",
             "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+            "preConditions" : [ ],
+            "postConditions" : [ ],
             "symbol" : {
               "kind" : "Nonterminal",
               "name" : "C",
-              "label" : "c"
+              "label" : "c",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
             },
             "statements" : [
               {
@@ -348,6 +384,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "bCounter",
@@ -359,6 +397,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "state" : [
             "bCounter",
             "cCounter"
@@ -390,6 +430,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "state" : [
             "bCounter",
             "cCounter"
@@ -421,6 +463,8 @@
         {
           "kind" : "Return",
           "name" : "{(bCounter,cCounter)}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Tuple",
             "elements" : [
@@ -441,6 +485,10 @@
       ],
       "recursion" : "LEFT_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : 1,
       "precedenceLevel" : {
@@ -450,7 +498,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -459,17 +509,24 @@
       "definition" : {
         "kind" : "Plus",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Sequence",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Code",
               "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "B",
                 "label" : "b",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "DataDependentCondition",
@@ -535,10 +592,14 @@
             {
               "kind" : "Code",
               "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               "statements" : [
                 {
@@ -585,13 +646,16 @@
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "bCounter",
@@ -603,6 +667,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "state" : [
             "bCounter",
             "cCounter"
@@ -634,6 +700,8 @@
         {
           "kind" : "Return",
           "name" : "{(bCounter,cCounter)}",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "expression" : {
             "kind" : "Tuple",
             "elements" : [
@@ -654,6 +722,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -663,7 +735,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -672,17 +746,24 @@
       "definition" : {
         "kind" : "Plus",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Sequence",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Code",
               "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "B",
                 "label" : "b",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "DataDependentCondition",
@@ -748,10 +829,14 @@
             {
               "kind" : "Code",
               "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               "statements" : [
                 {
@@ -798,13 +883,16 @@
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "bCounter",
@@ -816,6 +904,8 @@
         {
           "kind" : "Nonterminal",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "state" : [
             "_"
           ],
@@ -846,6 +936,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -855,7 +949,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -865,17 +961,24 @@
         "kind" : "Star",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
         "label" : "b",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Sequence",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Code",
               "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "B",
                 "label" : "b",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "DataDependentCondition",
@@ -941,10 +1044,14 @@
             {
               "kind" : "Code",
               "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               "statements" : [
                 {
@@ -991,13 +1098,16 @@
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "a",
           "bCounter",
@@ -1005,8 +1115,13 @@
         ],
         "nodeType" : "Star"
       },
+      "body" : [ ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1016,7 +1131,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1026,17 +1143,24 @@
         "kind" : "Star",
         "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
         "label" : "b",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "s" : {
           "kind" : "Sequence",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "symbols" : [
             {
               "kind" : "Code",
               "name" : "b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "B",
                 "label" : "b",
+                "preConditions" : [ ],
                 "postConditions" : [
                   {
                     "kind" : "DataDependentCondition",
@@ -1102,10 +1226,14 @@
             {
               "kind" : "Code",
               "name" : "c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2}",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
               "symbol" : {
                 "kind" : "Nonterminal",
                 "name" : "C",
-                "label" : "c"
+                "label" : "c",
+                "preConditions" : [ ],
+                "postConditions" : [ ]
               },
               "statements" : [
                 {
@@ -1152,13 +1280,16 @@
               ]
             }
           ]
-        }
+        },
+        "separators" : [ ]
       }
     },
     {
       "head" : {
         "kind" : "Nonterminal",
         "name" : "X",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "bCounter",
           "cCounter"
@@ -1168,12 +1299,16 @@
         {
           "kind" : "Nonterminal",
           "name" : "A",
-          "label" : "a"
+          "label" : "a",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
         },
         {
           "kind" : "Nonterminal",
           "name" : "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*",
           "label" : "b",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "parameters" : [
             "a",
             "bCounter",
@@ -1201,6 +1336,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1210,7 +1349,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1220,21 +1361,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "A"
+        "name" : "A",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'a'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 97
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1244,7 +1395,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1254,21 +1407,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "B"
+        "name" : "B",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'b'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 98
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1278,7 +1441,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1288,21 +1453,31 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "C"
+        "name" : "C",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
       },
       "body" : [
         {
           "kind" : "Terminal",
           "name" : "'c'",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "nodeType" : "Literal",
           "regex" : {
             "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
             "val" : 99
           }
         }
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1312,7 +1487,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1323,6 +1500,8 @@
       "head" : {
         "kind" : "Nonterminal",
         "name" : "Start(S)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "parameters" : [
           "bCounter",
           "cCounter"
@@ -1334,6 +1513,8 @@
           "kind" : "Nonterminal",
           "name" : "S",
           "label" : "top",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
           "arguments" : [
             {
               "kind" : "Name",
@@ -1350,6 +1531,10 @@
       ],
       "recursion" : "NON_REC",
       "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
       "associativity" : "UNDEFINED",
       "precedence" : -1,
       "precedenceLevel" : {
@@ -1359,7 +1544,9 @@
         "hasPrefixUnary" : false,
         "hasPostfixUnary" : false,
         "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
         "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
         "index" : 1,
         "containsAssociativityGroup" : false,
         "assoc_lhs" : -1,
@@ -1368,10 +1555,13 @@
       "definition" : {
         "kind" : "Start",
         "name" : "Start(S)",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
         "startSymbol" : "S"
       }
     }
   ],
+  "regularExpressionDefinitions" : { },
   "ebnfLefts" : {
     "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})" : [
       "C"
@@ -1400,11 +1590,22 @@
       "$C"
     ]
   },
-  "startSymbol" : {
-    "kind" : "Start",
-    "name" : "Start(S)",
-    "startSymbol" : "S"
-  },
+  "startSymbols" : [
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    },
+    {
+      "kind" : "Start",
+      "name" : "Start(S)",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "startSymbol" : "S"
+    }
+  ],
   "globals" : {
     "bCounter" : {
       "kind" : "Integer",
