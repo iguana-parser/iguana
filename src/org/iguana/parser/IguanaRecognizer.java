@@ -6,6 +6,7 @@ import org.iguana.grammar.GrammarGraphBuilder;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
@@ -43,6 +44,12 @@ public class IguanaRecognizer {
         this.grammarGraph = GrammarGraphBuilder.from(grammar, config);
         this.config = config;
         this.finalGrammar = grammar;
+    }
+
+    public boolean recognize(Input input, Symbol symbol) {
+        if (symbol instanceof Nonterminal) return recognize(input, (Nonterminal) symbol);
+        else if (symbol instanceof Start) return recognize(input, (Start) symbol);
+        else throw new RuntimeException("Symbol should be a nonterminal or start, but was: " + symbol.getClass());
     }
 
     public boolean recognize(Input input, Nonterminal nonterminal) {

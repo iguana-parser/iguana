@@ -2610,9 +2610,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}
 						}
 					}
-					
+
 					if (isRecursiveUseOfLeftOrRight && isFirst && isLast) // E ::= E
-						throw new RuntimeException("Cyclic use where precedence applies.");
+						throw new RuntimeException("Cyclic use where precedence applies:" + rule);
 					
 					if (isRecursiveUseOfLeftOrRight && isFirst) { // E ::= E alpha
 						variable = "l";
