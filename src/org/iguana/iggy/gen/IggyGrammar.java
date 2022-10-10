@@ -7,8 +7,6 @@ import org.iguana.util.serialization.JsonSerializer;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.iguana.utils.io.FileUtils.readFile;
-
 public class IggyGrammar {
 
     private static final String grammarName = "iggy";
@@ -26,8 +24,7 @@ public class IggyGrammar {
         String grammarJsonFile = grammarName + ".json";
         try (InputStream in = IggyParser.class.getResourceAsStream("/" + grammarJsonFile)) {
             if (in == null) throw new RuntimeException("Grammar json file " + grammarJsonFile + " is not found.");
-            String content = readFile(in);
-            return JsonSerializer.deserialize(content, Grammar.class);
+            return JsonSerializer.deserialize(in, Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

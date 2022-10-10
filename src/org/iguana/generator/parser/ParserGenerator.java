@@ -23,8 +23,6 @@ public class ParserGenerator extends Generator {
             "import java.io.IOException;\n" +
             "import java.io.InputStream;\n" +
             "\n" +
-            "import static org.iguana.utils.io.FileUtils.readFile;\n" +
-            "\n" +
             "public class " + className + "Grammar {\n" +
             "\n" +
             "    private static final String grammarName = \"" + grammarName + "\";\n" +
@@ -42,8 +40,7 @@ public class ParserGenerator extends Generator {
             "        String grammarJsonFile = grammarName + \".json\";\n" +
             "        try (InputStream in = " + className + "Parser.class.getResourceAsStream(\"/\" + " + "grammarJsonFile)) {\n" +
             "            if (in == null) throw new RuntimeException(\"Grammar json file \" + grammarJsonFile + \" is not found.\");\n" +
-            "            String content = readFile(in);\n" +
-            "            return JsonSerializer.deserialize(content, Grammar.class);\n" +
+            "            return JsonSerializer.deserialize(in, Grammar.class);\n" +
             "        } catch (IOException e) {\n" +
             "            throw new RuntimeException(e);\n" +
             "        }\n" +
