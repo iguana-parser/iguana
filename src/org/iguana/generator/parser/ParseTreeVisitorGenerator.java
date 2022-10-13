@@ -69,17 +69,17 @@ public class ParseTreeVisitorGenerator extends Generator {
 
             sb.append("            case \"" + nonterminalName + "\":\n");
             if (alternatives.size() == 0) {
-                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
             } else if (alternatives.size() == 1) {
-                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + nonterminalName + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." + toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
             } else {
                 sb.append("                switch (label) {\n");
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
                     sb.append("                    case \"" + alternative.getLabel() + "\":\n");
-                    String className = toFirstUpperCase(grammarName) + "ParseTree" + "." + alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
-                    sb.append("                        return new " + className + "(rule, children, leftExtent, rightExtent);\n");
+                    String className = toFirstUpperCase(grammarName) + "ParseTree" + "." + toFirstUpperCase(alternative.getLabel()) + toFirstUpperCase(nonterminalName);
+                    sb.append("                        return new " + toFirstUpperCase(className) + "(rule, children, leftExtent, rightExtent);\n");
                 }
                 sb.append("                    default:\n");
                 sb.append("                        throw new RuntimeException(\"Unexpected label:\" + label);\n");
@@ -95,7 +95,6 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.*;\n\n");
         sb.append("import java.util.List;\n\n");
-        sb.append("import static org.iguana.parsetree.MetaSymbolNode.*;\n\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -165,13 +164,13 @@ public class ParseTreeVisitorGenerator extends Generator {
 
     private String generateVisitorMethod(String name) {
         String className = toFirstUpperCase(grammarName) + "ParseTree";
-        return "    T visit" + name + "(" + className + "." +  name + " node);\n\n";
+        return "    T visit" + toFirstUpperCase(name) + "(" + className + "." +  toFirstUpperCase(name) + " node);\n\n";
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
         return
-            "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass + " extends " + superType + " {\n" +
-            "        public " + symbolClass + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
+            "    public static " + (isAbstract ? "abstract " : "") + "class " + toFirstUpperCase(symbolClass) + " extends " + toFirstUpperCase(superType) + " {\n" +
+            "        public " + toFirstUpperCase(symbolClass) + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
             "            super(rule, children, start, end);\n" +
             "        }\n\n" +
             generateSymbols(symbols) +
@@ -185,7 +184,7 @@ public class ParseTreeVisitorGenerator extends Generator {
             "        @Override\n" +
             "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
             "            if (visitor instanceof " + visitorName + ") {\n" +
-            "                return ((" + visitorName + "<T>) visitor).visit" + symbolClass + "(this);\n" +
+            "                return ((" + visitorName + "<T>) visitor).visit" + toFirstUpperCase(symbolClass) + "(this);\n" +
             "            }\n" +
             "            return visitor.visitNonterminalNode(this);\n" +
             "        }\n";
