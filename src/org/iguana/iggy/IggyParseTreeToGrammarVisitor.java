@@ -496,12 +496,14 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public org.iguana.regex.Alt<?> visitAlternationRegex(IggyParseTree.AlternationRegex node) {
-        List<List<RegularExpression>> listOfList = (List<List<RegularExpression>>) node.regs().accept(this);
-        List<RegularExpression> list = listOfList.stream().map(l -> {
+        List<RegularExpression> first = (List<RegularExpression>) node.first().accept(this);
+        List<List<RegularExpression>> rest = (List<List<RegularExpression>>) node.rest().accept(this);
+        List<RegularExpression> res = new ArrayList<>(first);
+        res.addAll(rest.stream().map(l -> {
             if (l.size() == 1) return l.get(0);
             else return Seq.from(l);
-        }).collect(Collectors.toList());
-        return org.iguana.regex.Alt.from(list);
+        }).collect(Collectors.toList()));
+        return org.iguana.regex.Alt.from(res);
     }
 
     @Override

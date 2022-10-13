@@ -1139,14 +1139,18 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' regs:{Regex+ '|'}+ ')'
+    // Regex = '(' first:Regex+ '|' rest:{Regex+ '|'}+ ')'
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        public PlusNode regs() {
+        public PlusNode first() {
            return (PlusNode) childAt(1);
+        }
+
+        public PlusNode rest() {
+           return (PlusNode) childAt(3);
         }
 
         @Override
