@@ -95,6 +95,7 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.*;\n\n");
         sb.append("import java.util.List;\n\n");
+        sb.append("import static org.iguana.parsetree.MetaSymbolNode.*;\n\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -199,8 +200,8 @@ public class ParseTreeVisitorGenerator extends Generator {
             if (type != null) {
                 String label = getLabel(symbol);
                 if (label != null) {
-                    sb.append("        public " + type + " " + label + "() {\n");
-                    sb.append("           return (" + type + ") childAt(" + i + ");\n");
+                    sb.append("        public " + toFirstUpperCase(type) + " " + label + "() {\n");
+                    sb.append("           return (" + toFirstUpperCase(type) + ") childAt(" + i + ");\n");
                     sb.append("        }\n\n");
                 }
             }
