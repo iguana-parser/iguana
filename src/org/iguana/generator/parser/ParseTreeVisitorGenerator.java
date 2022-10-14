@@ -34,6 +34,7 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
+        sb.append("import org.iguana.grammar.symbol.Nonterminal;\n");
         sb.append("import org.iguana.parsetree.DefaultParseTreeBuilder;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n");
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
@@ -48,13 +49,18 @@ public class ParseTreeVisitorGenerator extends Generator {
 
         sb.append("    @Override\n");
         sb.append("    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {\n");
-        sb.append("        java.lang.String name = rule.getHead().getName();\n");
+        sb.append("        java.lang.String name = getNonterminalName(rule.getHead());\n");
         sb.append("        java.lang.String label = rule.getLabel();\n\n");
         sb.append("        switch (name) {\n");
         generateBuilderCases(grammar, sb);
         sb.append("            default:\n");
         sb.append("                throw new RuntimeException(\"Unexpected nonterminal:\" + name);\n");
         sb.append("        }\n");
+        sb.append("    }\n");
+        sb.append("\n");
+        sb.append("    private static String getNonterminalName(Nonterminal nonterminal) {\n");
+        sb.append("        if (nonterminal.getName().startsWith(\"$\")) return nonterminal.getName().substring(1);\n");
+        sb.append("        return nonterminal.getName();\n");
         sb.append("    }\n");
         sb.append("}\n");
 

@@ -10,7 +10,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "arguments" : [
@@ -52,7 +52,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E '*'}+",
+        "name" : "${E '*'}+",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -63,7 +63,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "{E '*'}+",
+          "name" : "${E '*'}+",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "arguments" : [
@@ -89,7 +89,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "variable" : "r",
@@ -179,7 +179,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "{E '*'}+",
+        "name" : "${E '*'}+",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -190,7 +190,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "variable" : "r",
@@ -280,7 +280,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "E",
+        "name" : "$E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -291,7 +291,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [
             {
               "kind" : "DataDependentCondition",
@@ -430,7 +430,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "{E '*'}+",
+          "name" : "${E '*'}+",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "variable" : "r",
@@ -555,7 +555,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "E",
+        "name" : "$E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -566,7 +566,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [
             {
               "kind" : "DataDependentCondition",
@@ -718,7 +718,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "variable" : "r",
@@ -846,7 +846,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "E",
+        "name" : "$E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -870,7 +870,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "E",
+          "name" : "$E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "arguments" : [
@@ -932,7 +932,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "E",
+        "name" : "$E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [

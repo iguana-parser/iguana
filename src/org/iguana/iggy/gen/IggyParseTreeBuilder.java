@@ -2,6 +2,7 @@
 package org.iguana.iggy.gen;
 
 import org.iguana.grammar.runtime.RuntimeRule;
+import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.ParseTreeNode;
@@ -17,7 +18,7 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
 
     @Override
     public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
-        java.lang.String name = rule.getHead().getName();
+        java.lang.String name = getNonterminalName(rule.getHead());
         java.lang.String label = rule.getLabel();
 
         switch (name) {
@@ -263,5 +264,10 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
             default:
                 throw new RuntimeException("Unexpected nonterminal:" + name);
         }
+    }
+
+    private static String getNonterminalName(Nonterminal nonterminal) {
+        if (nonterminal.getName().startsWith("$")) return nonterminal.getName().substring(1);
+        return nonterminal.getName();
     }
 }
