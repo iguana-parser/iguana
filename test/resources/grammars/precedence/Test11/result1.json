@@ -20,7 +20,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "$E",
+            "name" : "E",
             "preConditions" : [ ],
             "postConditions" : [ ],
             "arguments" : [
@@ -61,7 +61,7 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "$E",
+              "name" : "E",
               "preConditions" : [ ],
               "postConditions" : [ ],
               "parameters" : [
@@ -71,7 +71,7 @@
             "body" : [
               {
                 "kind" : "Nonterminal",
-                "name" : "$E",
+                "name" : "E",
                 "preConditions" : [
                   {
                     "kind" : "DataDependentCondition",
@@ -191,7 +191,7 @@
               "rule" : {
                 "head" : {
                   "kind" : "Nonterminal",
-                  "name" : "$E",
+                  "name" : "E",
                   "preConditions" : [ ],
                   "postConditions" : [ ],
                   "parameters" : [
@@ -201,7 +201,7 @@
                 "body" : [
                   {
                     "kind" : "Nonterminal",
-                    "name" : "$E",
+                    "name" : "E",
                     "preConditions" : [
                       {
                         "kind" : "DataDependentCondition",
@@ -318,7 +318,7 @@
                   "rule" : {
                     "head" : {
                       "kind" : "Nonterminal",
-                      "name" : "$E",
+                      "name" : "E",
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "parameters" : [
@@ -341,7 +341,7 @@
                       },
                       {
                         "kind" : "Nonterminal",
-                        "name" : "$E",
+                        "name" : "E",
                         "preConditions" : [ ],
                         "postConditions" : [ ],
                         "variable" : "r",
@@ -445,7 +445,7 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "$E",
+                          "name" : "E",
                           "preConditions" : [ ],
                           "postConditions" : [ ],
                           "parameters" : [

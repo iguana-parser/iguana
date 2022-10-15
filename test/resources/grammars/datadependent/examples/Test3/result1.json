@@ -13,7 +13,7 @@
       "rule" : {
         "head" : {
           "kind" : "Nonterminal",
-          "name" : "$expr",
+          "name" : "expr",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "parameters" : [
@@ -23,7 +23,7 @@
         "body" : [
           {
             "kind" : "Nonterminal",
-            "name" : "$expr",
+            "name" : "expr",
             "preConditions" : [
               {
                 "kind" : "DataDependentCondition",
@@ -199,7 +199,7 @@
           },
           {
             "kind" : "Nonterminal",
-            "name" : "$expr",
+            "name" : "expr",
             "preConditions" : [ ],
             "postConditions" : [ ],
             "variable" : "r",
@@ -357,7 +357,7 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "$expr",
+              "name" : "expr",
               "preConditions" : [ ],
               "postConditions" : [ ],
               "parameters" : [
@@ -619,7 +619,7 @@
           "rule" : {
             "head" : {
               "kind" : "Nonterminal",
-              "name" : "$expr",
+              "name" : "expr",
               "preConditions" : [ ],
               "postConditions" : [ ],
               "parameters" : [
@@ -692,7 +692,7 @@
               },
               {
                 "kind" : "Nonterminal",
-                "name" : "$expr",
+                "name" : "expr",
                 "preConditions" : [ ],
                 "postConditions" : [ ],
                 "variable" : "r",
@@ -844,7 +844,7 @@
               "rule" : {
                 "head" : {
                   "kind" : "Nonterminal",
-                  "name" : "$expr",
+                  "name" : "expr",
                   "preConditions" : [ ],
                   "postConditions" : [ ],
                   "parameters" : [
@@ -930,7 +930,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "$expr",
+                    "name" : "expr",
                     "preConditions" : [ ],
                     "postConditions" : [ ],
                     "arguments" : [
@@ -1080,7 +1080,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "$expr",
+                    "name" : "expr",
                     "preConditions" : [ ],
                     "postConditions" : [ ],
                     "arguments" : [
@@ -1230,7 +1230,7 @@
                   },
                   {
                     "kind" : "Nonterminal",
-                    "name" : "$expr",
+                    "name" : "expr",
                     "preConditions" : [ ],
                     "postConditions" : [ ],
                     "arguments" : [
@@ -1362,7 +1362,7 @@
                   "rule" : {
                     "head" : {
                       "kind" : "Nonterminal",
-                      "name" : "$expr",
+                      "name" : "expr",
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "parameters" : [
@@ -1649,7 +1649,7 @@
                   "rule" : {
                     "head" : {
                       "kind" : "Nonterminal",
-                      "name" : "$expr",
+                      "name" : "expr",
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "parameters" : [
@@ -1936,7 +1936,7 @@
                   "rule" : {
                     "head" : {
                       "kind" : "Nonterminal",
-                      "name" : "$expr",
+                      "name" : "expr",
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "parameters" : [
@@ -1946,7 +1946,7 @@
                     "body" : [
                       {
                         "kind" : "Nonterminal",
-                        "name" : "$expr",
+                        "name" : "expr",
                         "preConditions" : [
                           {
                             "kind" : "DataDependentCondition",
@@ -2122,7 +2122,7 @@
                       },
                       {
                         "kind" : "Nonterminal",
-                        "name" : "$expr",
+                        "name" : "expr",
                         "preConditions" : [ ],
                         "postConditions" : [ ],
                         "variable" : "r",
@@ -2280,7 +2280,7 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "$expr",
+                          "name" : "expr",
                           "preConditions" : [ ],
                           "postConditions" : [ ],
                           "parameters" : [
@@ -2542,7 +2542,7 @@
                       "rule" : {
                         "head" : {
                           "kind" : "Nonterminal",
-                          "name" : "$expr",
+                          "name" : "expr",
                           "preConditions" : [ ],
                           "postConditions" : [ ],
                           "parameters" : [

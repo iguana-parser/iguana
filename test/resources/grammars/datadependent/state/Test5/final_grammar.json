@@ -14,12 +14,12 @@
       "body" : [
         {
           "kind" : "Code",
-          "name" : "_:x:y=$E(0,0,x,y) {assert(x == 1,y == 2)}",
+          "name" : "_:x:y=E(0,0,x,y) {assert(x == 1,y == 2)}",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "symbol" : {
             "kind" : "Nonterminal",
-            "name" : "$E",
+            "name" : "E",
             "preConditions" : [ ],
             "postConditions" : [ ],
             "state" : [
@@ -112,7 +112,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "$E",
+        "name" : "E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -138,7 +138,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "$E",
+          "name" : "E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "state" : [
@@ -234,7 +234,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "$E",
+        "name" : "E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [
@@ -247,7 +247,7 @@
       "body" : [
         {
           "kind" : "Nonterminal",
-          "name" : "$E",
+          "name" : "E",
           "preConditions" : [
             {
               "kind" : "DataDependentCondition",
@@ -415,7 +415,7 @@
         },
         {
           "kind" : "Nonterminal",
-          "name" : "$E",
+          "name" : "E",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "state" : [
@@ -509,7 +509,7 @@
     {
       "head" : {
         "kind" : "Nonterminal",
-        "name" : "$E",
+        "name" : "E",
         "preConditions" : [ ],
         "postConditions" : [ ],
         "parameters" : [

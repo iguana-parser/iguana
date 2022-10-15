@@ -191,11 +191,6 @@ public class Nonterminal extends AbstractSymbol {
 			this.index = index;
 			return this;
 		}
-
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
 		
 		public Builder setVariable(String variable) {
 			this.variable = variable;
