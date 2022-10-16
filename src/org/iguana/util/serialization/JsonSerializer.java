@@ -266,7 +266,7 @@ public class JsonSerializer {
     @JsonDeserialize(builder = Grammar.Builder.class)
     abstract static class GrammarMixIn {
         @JsonIgnore
-        RuntimeGrammar grammar;
+        RuntimeGrammar runtimeGrammar;
     }
 
     @JsonDeserialize(builder = Rule.Builder.class)

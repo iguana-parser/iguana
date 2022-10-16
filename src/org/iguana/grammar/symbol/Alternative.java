@@ -32,6 +32,10 @@ public class Alternative {
         return seqs.subList(1, seqs.size());
     }
 
+    public Builder copy() {
+        return new Builder(this);
+    }
+
     public Associativity getAssociativity() {
         return associativity;
     }
@@ -78,6 +82,11 @@ public class Alternative {
 
         public Builder() { }
 
+        public Builder(Alternative alternative) {
+            this.seqs = new ArrayList<>(alternative.seqs);
+            this.associativity = alternative.associativity;
+        }
+
         public Builder(List<Sequence> sequences, Associativity associativity) {
             if (sequences == null) throw new RuntimeException("Sequences cannot be null.");
             if (associativity == null) throw new RuntimeException("Sequences cannot be null.");
@@ -92,6 +101,11 @@ public class Alternative {
 
         public Builder addSequences(List<Sequence> seqs) {
             this.seqs.addAll(seqs);
+            return this;
+        }
+
+        public Builder clearSequences() {
+            this.seqs.clear();
             return this;
         }
 

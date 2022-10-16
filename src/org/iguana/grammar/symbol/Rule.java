@@ -74,12 +74,22 @@ public class Rule {
         return sb.toString();
     }
 
+    public Builder copy() {
+        return new Builder(this);
+    }
+
     public static class Builder {
         private Nonterminal head;
-        private final List<PriorityLevel> priorityLevels = new ArrayList<>();
+        private List<PriorityLevel> priorityLevels = new ArrayList<>();
         private LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
 
         private Builder() { }
+
+        public Builder(Rule rule) {
+            this.head = rule.head;
+            this.priorityLevels = new ArrayList<>(rule.priorityLevels);
+            this.layoutStrategy = rule.layoutStrategy;
+        }
 
         public Builder(Nonterminal head) {
             this.head = head;
@@ -92,6 +102,11 @@ public class Rule {
 
         public Builder addPriorityLevels(List<PriorityLevel> priorityLevels) {
             this.priorityLevels.addAll(priorityLevels);
+            return this;
+        }
+
+        public Builder clearPriorityLevels() {
+            this.priorityLevels.clear();
             return this;
         }
 

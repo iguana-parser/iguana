@@ -106,14 +106,19 @@ public class Sequence {
         public Builder() { }
 
         public Builder(Sequence seq) {
-            this.attributes = seq.getAttributes();
-            this.symbols = seq.symbols;
+            this.attributes = new HashMap<>(seq.getAttributes());
+            this.symbols = new ArrayList<>(seq.symbols);
             this.associativity = seq.associativity;
             this.label = seq.label;
         }
 
         public Builder addSymbol(Symbol symbol) {
             this.symbols.add(symbol);
+            return this;
+        }
+
+        public Builder clearSymbols() {
+            this.symbols.clear();
             return this;
         }
 
