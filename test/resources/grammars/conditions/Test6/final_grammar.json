@@ -699,6 +699,9 @@
   "ebnfLefts" : {
     "Char+" : [
       "Char"
+    ],
+    "$Id+" : [
+      "$Id"
     ]
   },
   "ebnfRights" : {

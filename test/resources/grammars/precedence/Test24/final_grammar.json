@@ -2694,6 +2694,95 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "$_E",
+        "preConditions" : [ ],
+        "postConditions" : [ ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            }
+          ]
+        }
+      ],
+      "layout" : {
+        "kind" : "Terminal",
+        "name" : "Whitespaces",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
+        "nodeType" : "Layout",
+        "regex" : {
+          "kind" : "regex.Star",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "regex" : {
+            "kind" : "regex.Alt",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
+            "symbols" : [
+              {
+                "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
+                "val" : 9
+              },
+              {
+                "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
+                "val" : 10
+              },
+              {
+                "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
+                "val" : 13
+              },
+              {
+                "kind" : "Char",
+                "lookaheads" : [ ],
+                "lookbehinds" : [ ],
+                "val" : 32
+              }
+            ]
+          },
+          "separators" : [ ]
+        }
+      },
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
+        "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Start(S)",
         "preConditions" : [ ],
         "postConditions" : [ ],

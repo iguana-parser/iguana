@@ -10,8 +10,8 @@ public class PriorityLevel {
 
     private final List<Alternative> alternatives;
 
-    public static PriorityLevel from(List<Alternative> alternatives) {
-        return new PriorityLevel.Builder().addAlternatives(alternatives).build();
+    public static PriorityLevel from(Alternative ...alternatives) {
+        return new PriorityLevel.Builder().addAlternatives(List.of(alternatives)).build();
     }
 
     public PriorityLevel(Builder builder) {

@@ -15,6 +15,10 @@ public class Sequence {
 
     private final Map<String, Object> attributes;
 
+    public static Sequence from(Symbol ...symbols) {
+        return new Builder().addSymbols(List.of(symbols)).build();
+    }
+
     public Sequence(Builder builder) {
         this.symbols = builder.symbols;
         this.associativity = builder.associativity;

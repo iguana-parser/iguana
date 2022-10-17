@@ -583,6 +583,68 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "$_E",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
+        "parameters" : [
+          "x",
+          "y"
+        ]
+      },
+      "body" : [
+        {
+          "kind" : "Nonterminal",
+          "name" : "E",
+          "preConditions" : [ ],
+          "postConditions" : [ ],
+          "state" : [
+            "_"
+          ],
+          "arguments" : [
+            {
+              "kind" : "Integer",
+              "value" : 0
+            },
+            {
+              "kind" : "Name",
+              "name" : "x",
+              "i" : -1
+            },
+            {
+              "kind" : "Name",
+              "name" : "y",
+              "i" : -1
+            }
+          ]
+        }
+      ],
+      "recursion" : "NON_REC",
+      "irecursion" : "NON_REC",
+      "leftEnd" : "",
+      "rightEnd" : "",
+      "leftEnds" : [ ],
+      "rightEnds" : [ ],
+      "associativity" : "UNDEFINED",
+      "precedence" : -1,
+      "precedenceLevel" : {
+        "lhs" : 1,
+        "rhs" : 1,
+        "undefined" : -1,
+        "hasPrefixUnary" : false,
+        "hasPostfixUnary" : false,
+        "hasPrefixUnaryBelow" : false,
+        "prefixUnaryBelow" : [ ],
+        "hasPostfixUnaryBelow" : false,
+        "postfixUnaryBelow" : [ ],
+        "index" : 1,
+        "containsAssociativityGroup" : false,
+        "assoc_lhs" : -1,
+        "assoc_rhs" : -1
+      }
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Start(S)",
         "preConditions" : [ ],
         "postConditions" : [ ],

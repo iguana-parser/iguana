@@ -1974,4 +1974,42 @@ public class IggyParseTree {
         }
     }
 
+    // $_Symbol = child:Symbol
+    public static class $_Symbol extends NonterminalNode {
+        public $_Symbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol child() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visit$_Symbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // $_Expression = child:Expression
+    public static class $_Expression extends NonterminalNode {
+        public $_Expression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Expression child() {
+           return (Expression) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visit$_Expression(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
 }

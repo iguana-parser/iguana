@@ -1321,14 +1321,14 @@
   ],
   "regularExpressionDefinitions" : { },
   "ebnfLefts" : {
-    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
+    "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})" : [
       "C"
     ],
-    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
-      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})"
+    "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+" : [
+      "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})"
     ],
-    "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
-      "(B [a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+"
+    "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})*" : [
+      "(B[a.rExt == b.lExt] {assert(b.lExt == 1)} b:C {assert(b.lExt == 2 || b.lExt == 4 || b.lExt == 6)})+"
     ]
   },
   "ebnfRights" : {

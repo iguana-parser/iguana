@@ -1,7 +1,6 @@
 package org.iguana.grammar.symbol;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,11 +9,11 @@ import static org.iguana.utils.collections.CollectionsUtil.buildList;
 public class Alternative {
 
     private final List<Sequence> seqs;
-    
+
     public final Associativity associativity;
 
-    public Alternative from(List<Sequence> seqs) {
-        return new Builder().addSequences(seqs).build();
+    public static Alternative from(Sequence... seqs) {
+        return new Builder().addSequences(List.of(seqs)).build();
     }
 
     public Alternative(Builder builder) {
@@ -80,7 +79,8 @@ public class Alternative {
         private List<Sequence> seqs = new ArrayList<>();
         private Associativity associativity = Associativity.UNDEFINED;
 
-        public Builder() { }
+        public Builder() {
+        }
 
         public Builder(Alternative alternative) {
             this.seqs = new ArrayList<>(alternative.seqs);

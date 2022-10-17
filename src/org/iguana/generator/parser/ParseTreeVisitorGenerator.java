@@ -165,7 +165,13 @@ public class ParseTreeVisitorGenerator extends Generator {
 
     private String generateVisitorMethod(String name) {
         String className = toFirstUpperCase(grammarName) + "ParseTree";
-        return "    T visit" + toFirstUpperCase(name) + "(" + className + "." +  toFirstUpperCase(name) + " node);\n\n";
+        if (name.startsWith("$_")) {
+            return "    default T visit" + toFirstUpperCase(name) + "(" + className + "." +  toFirstUpperCase(name) + " node) {\n" +
+                   "        return node.child().accept(this);\n" +
+                   "    }\n\n";
+        } else {
+            return "    T visit" + toFirstUpperCase(name) + "(" + className + "." +  toFirstUpperCase(name) + " node);\n\n";
+        }
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {

@@ -1,39 +1,25 @@
 package org.iguana.grammar.transformation;
 
 import org.iguana.grammar.symbol.*;
-import org.iguana.traversal.SymbolToSymbolVisitor;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public class RenamePrecedenceNonterminals {
+public class TopLevelPrecedenceNonterminals {
 
-    public List<Rule> transformPrecedenceRule(List<Rule> rules) {
-        Set<String> renamingMap = new HashSet<>();
+    public static List<Rule> addTopLevelPrecedenceRules(List<Rule> rules) {
+        List<Rule> newRules = new ArrayList<>();
         for (Rule rule : rules) {
             if (isPrecedenceRule(rule)) {
-                renamingMap.add(rule.getHead().getName());
+                Rule newRule = new Rule.Builder(rule.getHead().copy().setName("$_" + rule.getHead().getName()).build())
+                    .addPriorityLevel(PriorityLevel.from(Alternative.from(Sequence.from(
+                        rule.getHead().copy().setLabel("child").build()
+                    )))).build();
+                newRules.add(newRule);
             }
         }
-        return null;
-    }
 
-    static class RenamingVisitor implements SymbolToSymbolVisitor {
-
-        private final Set<String> renamingMap;
-
-        RenamingVisitor(Set<String> renamingMap) {
-            this.renamingMap = renamingMap;
-        }
-
-        @Override
-        public Symbol visit(Nonterminal symbol) {
-            if (renamingMap.contains(symbol.getName())) {
-                return symbol.copy().setName("$" + symbol.getName()).build();
-            }
-            return symbol;
-        }
+        return newRules;
     }
 
     /**
@@ -41,7 +27,7 @@ public class RenamePrecedenceNonterminals {
      * - has more than one priority level
      * - has one priority level and there is associativity defined for the alternative or individual sequences
      */
-    private boolean isPrecedenceRule(Rule rule) {
+    private static boolean isPrecedenceRule(Rule rule) {
         int numPriorityLevels = rule.getPriorityLevels().size();
         if (numPriorityLevels == 0) return false;
         if (numPriorityLevels > 1) return true;

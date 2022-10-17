@@ -14,6 +14,7 @@ import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
 import org.iguana.grammar.transformation.GrammarVisitor;
+import org.iguana.grammar.transformation.TopLevelPrecedenceNonterminals;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
@@ -87,6 +88,7 @@ public class Grammar {
             ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
             GrammarVisitor grammarVisitor = new GrammarVisitor(resolveIdentifiers);
             List<Rule> newRules = grammarVisitor.transform(rules);
+            newRules.addAll(TopLevelPrecedenceNonterminals.addTopLevelPrecedenceRules(newRules));
 
             Map<String, Set<String>> leftEnds = new HashMap<>();
             Map<String, Set<String>> rightEnds = new HashMap<>();

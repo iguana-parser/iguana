@@ -33,7 +33,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
-    private List<String> startSymbols = new ArrayList<>();
+    private final List<String> startSymbols = new ArrayList<>();
     private Identifier layout;
 
     @Override
