@@ -58,7 +58,7 @@ public interface Input {
 	}
 
 	static Input fromFile(File file, Charset charset) throws IOException {
-		return createInput(new String(Files.readAllBytes(Paths.get(file.toURI())), charset), file.toURI());
+		return createInput(Files.readString(Paths.get(file.toURI()), charset), file.toURI());
 	}
 
 	static Input empty() {

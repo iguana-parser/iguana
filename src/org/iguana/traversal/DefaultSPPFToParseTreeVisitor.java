@@ -251,6 +251,7 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
                 e.printStackTrace();
             }
         }
+
         throw new AmbiguityException(node, input);
     }
 

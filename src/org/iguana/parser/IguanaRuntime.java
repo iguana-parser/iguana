@@ -69,11 +69,13 @@ public class IguanaRuntime<T extends Result> {
         if (global)
             map.forEach(ctx::declareGlobalVariable);
 
-        NonterminalGrammarSlot startSymbol = grammarGraph.getStartSlot(start);
-
         int inputLength = input.length() - 1;
 
         Environment env = ctx.getEmptyEnvironment();
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            env = env._declare(entry.getKey(), entry.getValue());
+        }
 
         for (Map.Entry<String, Expression> entry : grammarGraph.getGlobals().entrySet()) {
             env = env._declare(entry.getKey(), entry.getValue().interpret(ctx, input));
@@ -81,23 +83,35 @@ public class IguanaRuntime<T extends Result> {
 
         StartGSSNode<T> startGSSNode;
 
-        if (!global && !map.isEmpty() && startSymbol.getParameters() != null) { // TODO: Make parameters an empty list by default
-            Object[] arguments = new Object[map.size()];
+        NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
+        List<String> parameters = startSlot.getParameters();
+        // TODO: Make parameters an empty list by default
+        if (parameters != null && !parameters.isEmpty()) {
+            if (!global && !env.isEmpty()) {
+                Object[] arguments = new Object[parameters.size()];
 
-            int i = 0;
-            for (String parameter : startSymbol.getParameters())
-                arguments[i++] = map.get(parameter);
+                int i = 0;
+                for (String parameter : startSlot.getParameters()) {
+                    arguments[i++] = env.lookup(parameter);
+                }
 
-            startGSSNode = new StartGSSNode<>(startSymbol, 0, arguments);
-            env = ctx.getEmptyEnvironment().declare(startSymbol.getParameters().toArray(new String[0]), arguments);
+                startGSSNode = new StartGSSNode<>(startSlot, 0, arguments);
+                env = env.declare(startSlot.getParameters().toArray(new String[0]), arguments);
+            } else {
+                startSlot = grammarGraph.getStartSlot(Nonterminal.withName("$_" + start.getName()));
+                if (startSlot == null) {
+                    throw new RuntimeException("No top level definition exists for " + start.getName() + " " + parameters);
+                }
+                startGSSNode = new StartGSSNode<>(startSlot, 0);
+            }
         } else {
-            startGSSNode = new StartGSSNode<>(startSymbol, 0);
+            startGSSNode = new StartGSSNode<>(startSlot, 0);
         }
 
         ParserLogger logger = ParserLogger.getInstance();
         logger.reset();
 
-        for (BodyGrammarSlot slot : startSymbol.getFirstSlots()) {
+        for (BodyGrammarSlot slot : startSlot.getFirstSlots()) {
             scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
         }
 

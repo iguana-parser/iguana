@@ -1836,7 +1836,7 @@
   },
   "ebnfLefts" : {
     "(Element CharData)" : [
-      "CharData"
+      "$Content"
     ],
     "(Element CharData)+" : [
       "(Element CharData)"

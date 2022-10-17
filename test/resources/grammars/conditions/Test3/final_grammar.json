@@ -423,6 +423,9 @@
   "ebnfLefts" : {
     "Char+" : [
       "Char"
+    ],
+    "$Label+" : [
+      "$Label"
     ]
   },
   "ebnfRights" : {

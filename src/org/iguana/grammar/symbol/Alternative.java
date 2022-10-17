@@ -1,7 +1,6 @@
 package org.iguana.grammar.symbol;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,11 +9,11 @@ import static org.iguana.utils.collections.CollectionsUtil.buildList;
 public class Alternative {
 
     private final List<Sequence> seqs;
-    
+
     public final Associativity associativity;
 
-    public Alternative from(List<Sequence> seqs) {
-        return new Builder().addSequences(seqs).build();
+    public static Alternative from(Sequence... seqs) {
+        return new Builder().addSequences(List.of(seqs)).build();
     }
 
     public Alternative(Builder builder) {
@@ -30,6 +29,10 @@ public class Alternative {
     public List<Sequence> rest() {
         if (seqs.size() < 2) return null;
         return seqs.subList(1, seqs.size());
+    }
+
+    public Builder copy() {
+        return new Builder(this);
     }
 
     public Associativity getAssociativity() {
@@ -76,7 +79,13 @@ public class Alternative {
         private List<Sequence> seqs = new ArrayList<>();
         private Associativity associativity = Associativity.UNDEFINED;
 
-        public Builder() { }
+        public Builder() {
+        }
+
+        public Builder(Alternative alternative) {
+            this.seqs = new ArrayList<>(alternative.seqs);
+            this.associativity = alternative.associativity;
+        }
 
         public Builder(List<Sequence> sequences, Associativity associativity) {
             if (sequences == null) throw new RuntimeException("Sequences cannot be null.");
@@ -92,6 +101,11 @@ public class Alternative {
 
         public Builder addSequences(List<Sequence> seqs) {
             this.seqs.addAll(seqs);
+            return this;
+        }
+
+        public Builder clearSequences() {
+            this.seqs.clear();
             return this;
         }
 

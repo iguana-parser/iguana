@@ -195,4 +195,12 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitLayout(IggyParseTree.Layout node);
 
+    default T visit$_Symbol(IggyParseTree.$_Symbol node) {
+        return node.child().accept(this);
+    }
+
+    default T visit$_Expression(IggyParseTree.$_Expression node) {
+        return node.child().accept(this);
+    }
+
 }

@@ -3283,8 +3283,36 @@
                     },
                     {
                       "kind" : "Plus",
+                      "name" : "Regex+",
+                      "label" : "first",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "s" : {
+                        "kind" : "Identifier",
+                        "name" : "Regex",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
+                        "excepts" : [ ]
+                      },
+                      "separators" : [ ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "'|'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
+                        "val" : 124
+                      }
+                    },
+                    {
+                      "kind" : "Plus",
                       "name" : "{Regex+ '|'}+",
-                      "label" : "regs",
+                      "label" : "rest",
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "s" : {

@@ -13,6 +13,8 @@ import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.transformation.EBNFToBNF;
+import org.iguana.grammar.transformation.GrammarVisitor;
+import org.iguana.grammar.transformation.TopLevelPrecedenceNonterminals;
 import org.iguana.grammar.transformation.ResolveIdentifiers;
 import org.iguana.regex.*;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
@@ -39,7 +41,7 @@ public class Grammar {
     private final Map<String, Expression> globals;
     private final String name;
 
-    private RuntimeGrammar grammar;
+    private RuntimeGrammar runtimeGrammar;
 
     Grammar(Builder builder) {
         this.rules = builder.rules;
@@ -80,22 +82,25 @@ public class Grammar {
     }
 
     public RuntimeGrammar toRuntimeGrammar() {
-        if (grammar == null) {
+        if (runtimeGrammar == null) {
+            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressionDefinitions);
+            Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
+            ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
+            GrammarVisitor grammarVisitor = new GrammarVisitor(resolveIdentifiers);
+            List<Rule> newRules = grammarVisitor.transform(rules);
+            newRules.addAll(TopLevelPrecedenceNonterminals.addTopLevelPrecedenceRules(newRules));
+
             Map<String, Set<String>> leftEnds = new HashMap<>();
             Map<String, Set<String>> rightEnds = new HashMap<>();
             Set<String> ebnfs = new HashSet<>();
 
             computeEnds(leftEnds, rightEnds, ebnfs);
 
-            // TODO: make these transformations explicit
-            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressionDefinitions);
             Set<String> topLevelRegularExpressions = getTopLevelRegularExpressions(this);
-            Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
-            ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
 
             RuntimeGrammar.Builder grammarBuilder = new RuntimeGrammar.Builder();
-            for (Rule rule : rules) {
-                grammarBuilder.addRules(getRules(rule, resolveIdentifiers, leftEnds, rightEnds, ebnfs));
+            for (Rule rule : newRules) {
+                grammarBuilder.addRules(getRules(rule, leftEnds, rightEnds, ebnfs));
             }
             grammarBuilder.setStartSymbols(startSymbols);
 
@@ -140,10 +145,10 @@ public class Grammar {
 
             grammarBuilder.addEBNFl(ebnfLefts);
             grammarBuilder.addEBNFr(ebnfRights);
-            grammar = grammarBuilder.build();
+            runtimeGrammar = grammarBuilder.build();
         }
 
-        return grammar;
+        return runtimeGrammar;
     }
 
     private void computeEnds(Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
@@ -273,14 +278,29 @@ public class Grammar {
             return this;
         }
 
+        public Builder setLiterals(Map<String, RegularExpression> literals) {
+            this.literals = literals;
+            return this;
+        }
+
         public Builder addLiteral(String name, RegularExpression regularExpression) {
             literals.put(name, regularExpression);
+            return this;
+        }
+
+        public Builder setGlobals(Map<String, Expression> globals) {
+            this.globals = globals;
             return this;
         }
 
         // TODO: differentiate between global variables and top-level variables
         public Builder addGlobal(String key, Expression value) {
             this.globals.put(key, value);
+            return this;
+        }
+
+        public Builder setRegularExpressionDefinitions(Map<String, RegularExpression> regularExpressionDefinitions) {
+            this.regularExpressionDefinitions = regularExpressionDefinitions;
             return this;
         }
 
@@ -294,7 +314,7 @@ public class Grammar {
         }
     }
 
-    private List<RuntimeRule> getRules(Rule highLevelRule, ResolveIdentifiers resolveIdentifiers, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
+    private List<RuntimeRule> getRules(Rule highLevelRule, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -314,7 +334,7 @@ public class Grammar {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -331,7 +351,7 @@ public class Grammar {
                     if (alternative.first().isEmpty()) { // Empty alternative
                         Sequence sequence = alternative.first();
                         String label = sequence.label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -344,7 +364,7 @@ public class Grammar {
                         symbols.add(sequence.first());
                         if (sequence.rest() != null)
                             addAll(symbols, sequence.rest());
-                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label, resolveIdentifiers, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -363,7 +383,7 @@ public class Grammar {
         return rules;
     }
 
-    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label, ResolveIdentifiers resolveIdentifiers,
+    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label,
                                 LayoutStrategy layoutStrategy, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
         boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs));
         boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs));
@@ -411,10 +431,8 @@ public class Grammar {
             associativity = Associativity.UNDEFINED;
         }
 
-        List<Symbol> newSymbols = body.stream().map(symbol -> symbol.accept(resolveIdentifiers)).collect(Collectors.toList());
-
         return RuntimeRule.withHead(head)
-            .addSymbols(newSymbols)
+            .addSymbols(body)
             .setRecursion(recursion)
             .setiRecursion(irecursion)
             .setLeftEnd(leftEnd)

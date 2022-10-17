@@ -1563,14 +1563,14 @@
   ],
   "regularExpressionDefinitions" : { },
   "ebnfLefts" : {
-    "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})" : [
+    "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})" : [
       "C"
     ],
-    "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+" : [
-      "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})"
+    "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+" : [
+      "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})"
     ],
-    "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*" : [
-      "(b:B [b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+"
+    "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})*" : [
+      "(b:B[b.lExt == a.rExt] {assert(bCounter == b.lExt);bCounter = bCounter + 2} c:C {assert(cCounter == c.lExt);cCounter = cCounter + 2})+"
     ]
   },
   "ebnfRights" : {

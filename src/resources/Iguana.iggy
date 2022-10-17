@@ -77,15 +77,15 @@ Binding
   | "var" decls:{(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
 
 Regex
-  = reg:Regex "*"                     %Star
-  | reg:Regex "+"                     %Plus
-  | reg:Regex "?"                     %Option
-  | "(" reg:Regex ")"                 %Bracket
-  | "(" first:Regex rest:Regex+ ")"   %Sequence
-  | "(" regs:{ Regex+ "|" }+ ")"      %Alternation
-  | name:Name                         %Nont
-  | charClass:CharClass               %CharClass
-  | string:String                     %String
+  = reg:Regex "*"                                       %Star
+  | reg:Regex "+"                                       %Plus
+  | reg:Regex "?"                                       %Option
+  | "(" reg:Regex ")"                                   %Bracket
+  | "(" first:Regex rest:Regex+ ")"                     %Sequence
+  | "(" first:Regex+ "|" rest:{ Regex+ "|" }+ ")"       %Alternation
+  | name:Name                                           %Nont
+  | charClass:CharClass                                 %CharClass
+  | string:String                                       %String
 
 CharClass
   = "[" ranges:Range* "]"      %Chars

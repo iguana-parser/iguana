@@ -43,6 +43,9 @@ public class Iguana implements Callable<Integer> {
     @Option(names = "--package", description = "package name for the generated code")
     private String packageName;
 
+    @Option(names = {"--grammar-output"}, description = "The location where the grammar.json file will be generated.", required = true)
+    private Path grammarOutputDirectory;
+
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Iguana()).execute(args);
         System.exit(exitCode);
@@ -56,7 +59,7 @@ public class Iguana implements Callable<Integer> {
         Grammar grammar = IggyParserUtils.fromIggyGrammarPath(grammarFile.getAbsolutePath());
 
         if (command.generateGrammar || command.generateTypes) {
-            String jsonPath = outputDirectory.resolve("resources").resolve(grammarName + ".json").toAbsolutePath().toString();
+            String jsonPath = grammarOutputDirectory.resolve(grammarName + ".json").toAbsolutePath().toString();
             JsonSerializer.serialize(grammar, jsonPath);
             System.out.println("grammar.json file has been generated in " + jsonPath);
             Path typesOutputDirectory = outputDirectory.resolve(packageName.replace(".", "/"));

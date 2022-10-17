@@ -15,6 +15,10 @@ public class Sequence {
 
     private final Map<String, Object> attributes;
 
+    public static Sequence from(Symbol ...symbols) {
+        return new Builder().addSymbols(List.of(symbols)).build();
+    }
+
     public Sequence(Builder builder) {
         this.symbols = builder.symbols;
         this.associativity = builder.associativity;
@@ -106,14 +110,19 @@ public class Sequence {
         public Builder() { }
 
         public Builder(Sequence seq) {
-            this.attributes = seq.getAttributes();
-            this.symbols = seq.symbols;
+            this.attributes = new HashMap<>(seq.getAttributes());
+            this.symbols = new ArrayList<>(seq.symbols);
             this.associativity = seq.associativity;
             this.label = seq.label;
         }
 
         public Builder addSymbol(Symbol symbol) {
             this.symbols.add(symbol);
+            return this;
+        }
+
+        public Builder clearSymbols() {
+            this.symbols.clear();
             return this;
         }
 

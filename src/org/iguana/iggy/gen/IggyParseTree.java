@@ -1139,14 +1139,18 @@ public class IggyParseTree {
         }
     }
 
-    // Regex = '(' regs:{Regex+ '|'}+ ')'
+    // Regex = '(' first:Regex+ '|' rest:{Regex+ '|'}+ ')'
     public static class AlternationRegex extends Regex {
         public AlternationRegex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
 
-        public PlusNode regs() {
+        public PlusNode first() {
            return (PlusNode) childAt(1);
+        }
+
+        public PlusNode rest() {
+           return (PlusNode) childAt(3);
         }
 
         @Override
@@ -1965,6 +1969,44 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitLayout(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // $_Symbol = child:Symbol
+    public static class $_Symbol extends NonterminalNode {
+        public $_Symbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Symbol child() {
+           return (Symbol) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visit$_Symbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // $_Expression = child:Expression
+    public static class $_Expression extends NonterminalNode {
+        public $_Expression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        public Expression child() {
+           return (Expression) childAt(0);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visit$_Expression(this);
             }
             return visitor.visitNonterminalNode(this);
         }
