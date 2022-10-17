@@ -28,6 +28,7 @@
 package org.iguana.traversal;
 
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 
 public interface ISymbolVisitor<T> {
 	
@@ -38,6 +39,8 @@ public interface ISymbolVisitor<T> {
 	T visit(Code code);
 
 	default T visit(CodeHolder codeHolder) { return null; }
+
+	default T visit(Error error) { return null; }
 
 	T visit(Conditional conditional);
 	

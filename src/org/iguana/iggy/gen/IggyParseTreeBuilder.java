@@ -120,6 +120,8 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
                         return new IggyParseTree.StarSepSymbol(rule, children, leftExtent, rightExtent);
                     case "PlusSep":
                         return new IggyParseTree.PlusSepSymbol(rule, children, leftExtent, rightExtent);
+                    case "Error":
+                        return new IggyParseTree.ErrorSymbol(rule, children, leftExtent, rightExtent);
                     default:
                         throw new RuntimeException("Unexpected label:" + label);
                 }
