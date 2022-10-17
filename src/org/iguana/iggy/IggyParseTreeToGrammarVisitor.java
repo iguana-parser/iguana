@@ -131,7 +131,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public List<Identifier> visitParameters(IggyParseTree.Parameters node) {
-        return (List<Identifier>) visitChildren(node);
+        return visitChildren(node);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     @Override
     public PriorityLevel visitPriorityLevels(IggyParseTree.PriorityLevels node) {
         PriorityLevel.Builder builder = new PriorityLevel.Builder();
-        builder.addAlternatives((List<Alternative>) visitChildren(node));
+        builder.addAlternatives(visitChildren(node));
         return builder.build();
     }
 
@@ -431,7 +431,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public List<Expression> visitArguments(IggyParseTree.Arguments node) {
-        return (List<Expression>) visitChildren(node);
+        return visitChildren(node);
     }
 
     @Override

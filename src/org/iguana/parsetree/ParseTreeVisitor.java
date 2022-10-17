@@ -93,17 +93,17 @@ public interface ParseTreeVisitor<T> {
         return result;
     }
 
-    default List<? extends T> visitChildren(ParseTreeNode node) {
+    default <U extends T> List<U> visitChildren(ParseTreeNode node) {
         int size = node.children().size();
 
-        List<T> result = new ArrayList<>(size);
+        List<U> result = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
             ParseTreeNode child = node.childAt(i);
-            T childResult = (T) child.accept(this);
+            U childResult = (U) child.accept(this);
             if (childResult != null) {
                 if (childResult instanceof List<?>) {
-                    result.addAll((List<T>) childResult);
+                    result.addAll((List<U>) childResult);
                 } else {
                     result.add(childResult);
                 }
