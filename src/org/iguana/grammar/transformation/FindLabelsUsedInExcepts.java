@@ -3,6 +3,7 @@ package org.iguana.grammar.transformation;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.HashMap;
@@ -46,6 +47,11 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	@Override
 	public Void visit(Code symbol) {
 		symbol.getSymbol().accept(this);
+		return null;
+	}
+
+	@Override
+	public Void visit(Error error) {
 		return null;
 	}
 

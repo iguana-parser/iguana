@@ -40,7 +40,7 @@ public interface ISymbolVisitor<T> {
 
 	default T visit(CodeHolder codeHolder) { return null; }
 
-	default T visit(Error error) { return null; }
+	T visit(Error error);
 
 	T visit(Conditional conditional);
 	

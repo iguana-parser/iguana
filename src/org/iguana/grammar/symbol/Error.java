@@ -11,17 +11,15 @@ import java.util.Map;
 public class Error implements Symbol {
     @Override
     public Set.Immutable<String> getEnv() {
-        throw new UnsupportedOperationException();
+        return Set.Immutable.of();
     }
 
     @Override
     public void setEnv(Set.Immutable<String> env) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setEmpty() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -41,7 +39,7 @@ public class Error implements Symbol {
 
     @Override
     public String getLabel() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override

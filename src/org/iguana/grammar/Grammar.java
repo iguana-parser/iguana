@@ -8,6 +8,7 @@ import org.iguana.grammar.runtime.*;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
@@ -542,6 +543,11 @@ public class Grammar {
         }
 
         @Override
+        public Void visit(Error error) {
+            return null;
+        }
+
+        @Override
         public Void visit(Conditional conditional) {
             return visitChildren(conditional);
         }
@@ -746,6 +752,11 @@ public class Grammar {
         @Override
         public Boolean visit(Code symbol) {
             return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public Boolean visit(Error error) {
+            return false;
         }
 
         @Override

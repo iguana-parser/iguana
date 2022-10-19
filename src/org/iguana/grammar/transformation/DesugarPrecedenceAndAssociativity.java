@@ -37,6 +37,7 @@ import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.Map;
@@ -2382,6 +2383,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				return symbol;
 			
 			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(Error error) {
+			return error;
 		}
 
 		@Override

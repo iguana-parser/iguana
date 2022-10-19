@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.operations;
 
+import org.iguana.grammar.symbol.Error;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
@@ -372,6 +373,11 @@ public class FirstFollowSets {
 		public Set<CharRange> visit(Code symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
+		public Set<CharRange> visit(Error error) {
+			return Collections.emptySet();
+		}
+
+		@Override
 		public Set<CharRange> visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
 
 		@Override
@@ -383,13 +389,18 @@ public class FirstFollowSets {
         }
 
         @Override
-		public Set<CharRange> visit(Return symbol) { return new HashSet<>(); }
+		public Set<CharRange> visit(Return symbol) { return Collections.emptySet(); }
 
     }
 
     private static class NonterminalVisitor extends AbstractGrammarGraphSymbolVisitor<Nonterminal> {
 		@Override
 		public Nonterminal visit(Code symbol) { return symbol.getSymbol().accept(this); }
+
+		@Override
+		public Nonterminal visit(Error error) {
+			return null;
+		}
 
 		@Override
 		public Nonterminal visit(Conditional symbol) { return symbol.getSymbol().accept(this); }
@@ -417,6 +428,11 @@ public class FirstFollowSets {
     	
 		@Override
 		public Boolean visit(Code symbol) { return symbol.getSymbol().accept(this); }
+
+		@Override
+		public Boolean visit(Error error) {
+			return true;
+		}
 
 		@Override
 		public Boolean visit(Conditional symbol) { return symbol.getSymbol().accept(this); }

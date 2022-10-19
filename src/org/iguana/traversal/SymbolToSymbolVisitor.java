@@ -5,6 +5,7 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
@@ -187,6 +188,11 @@ public interface SymbolToSymbolVisitor extends ISymbolVisitor<Symbol>, IConditio
     @Override
     default Symbol visit(CodeHolder symbol) {
         return symbol;
+    }
+
+    @Override
+    default Symbol visit(Error error) {
+        return error;
     }
 
     default Symbol visitSymbol(Symbol symbol) {

@@ -18,6 +18,7 @@ import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.exception.UndeclaredVariableException;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
@@ -130,6 +131,11 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             statements[i++] = (Statement) statement.accept(this);
 
         return Code.code(sym, statements);
+    }
+
+    @Override
+    public Symbol visit(Error error) {
+        return error;
     }
 
     @Override

@@ -37,6 +37,7 @@ import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Nonterminal.Builder;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -529,6 +530,11 @@ public class EBNFToBNF implements GrammarTransformation {
 				return symbol;
 			
 			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(Error error) {
+			return error;
 		}
 
 		@Override

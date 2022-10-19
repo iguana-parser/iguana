@@ -33,6 +33,7 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.operations.ReachabilityGraph;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
@@ -280,6 +281,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 				return symbol;
 			
 			return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol).build();
+		}
+
+		@Override
+		public Symbol visit(Error error) {
+			return error;
 		}
 
 		@Override
@@ -610,6 +616,11 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 		@Override
 		public Void visit(Code symbol) {
 			return symbol.getSymbol().accept(this);
+		}
+
+		@Override
+		public Void visit(Error error) {
+			return null;
 		}
 
 		@Override

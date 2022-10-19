@@ -27,6 +27,7 @@
 
 package org.iguana.traversal.idea;
 
+import org.iguana.grammar.symbol.Error;
 import org.iguana.regex.RegularExpression;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
@@ -76,6 +77,11 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
     @Override
     public Void visit(Code symbol) {
         return symbol.getSymbol().accept(this);
+    }
+
+    @Override
+    public Void visit(Error error) {
+        return null;
     }
 
     @Override
