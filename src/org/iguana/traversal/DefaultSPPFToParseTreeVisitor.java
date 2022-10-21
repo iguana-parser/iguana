@@ -115,6 +115,11 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
         throw new RuntimeException("Should not visit packed nodes.");
     }
 
+    @Override
+    public T visit(ErrorNode node) {
+        return parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent());
+    }
+
     private T convertBasicAndLayout(BodyGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {
         int bodySize = slot.getRule().getBody().size();
         if (ignoreLayout) { // Layout is insert between symbols in the body of a rule

@@ -250,7 +250,16 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public Iterable<GSSEdge<T>> getGSSEdges() {
-		return restGSSEdges;
+		int size = countGSSEdges();
+		if (size == 0) return Collections.emptyList();
+		List<GSSEdge<T>> gssEdges = new ArrayList<>(size);
+		if (firstGSSEdge != null) {
+			gssEdges.add(firstGSSEdge);
+		}
+		if (restGSSEdges != null) {
+			gssEdges.addAll(restGSSEdges);
+		}
+		return gssEdges;
 	}
 
 	public boolean equals(Object obj) {
@@ -266,7 +275,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public int hashCode() {
-		return Objects.hash(getGrammarSlot().hashCode(), getInputIndex(), getData());
+		return Objects.hash(getGrammarSlot().hashCode(), getInputIndex(), Arrays.hashCode(getData()));
 	}
 
 	public Iterable<T> getPoppedElements() {

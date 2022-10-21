@@ -327,7 +327,7 @@ public class GrammarGraphBuilder {
          */
         private void visitSymbol(Symbol symbol) {
 
-            if (symbol instanceof Nonterminal || symbol instanceof Terminal || symbol instanceof Return) { // TODO: I think this can be unified
+            if (symbol instanceof Nonterminal || symbol instanceof Terminal || symbol instanceof Error || symbol instanceof Return) { // TODO: I think this can be unified
                 symbol.accept(this);
                 return;
             }

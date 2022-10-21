@@ -1,6 +1,8 @@
 package org.iguana.parser;
 
+import org.iguana.grammar.slot.*;
 import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.util.Tuple;
 import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
@@ -8,10 +10,6 @@ import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.gss.*;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.ParserResultOps;
@@ -137,12 +135,34 @@ public class IguanaRuntime<T extends Result> {
      * the next position of input.
      *
      */
-    public void recordParseError(int i, GrammarSlot slot, GSSNode<T> u, String description) {
+    public void recordParseError(int i, GrammarSlot slot, GSSNode<T> gssNode, String description) {
+        List<GSSEdge<T>> errorSlots = new ArrayList<>();
+        getErrorSlot(gssNode, errorSlots);
+        for (GSSEdge<T> edge : errorSlots) {
+            BodyGrammarSlot returnSlot = edge.getReturnSlot();
+            T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
+            Environment env = edge.getEnv();
+            ErrorTransition errorTransition = (ErrorTransition) returnSlot.getOutTransition();
+            errorTransition.handleError(input, edge.getDestination(), result, env, this);
+        }
         if (i >= this.errorIndex) {
             this.errorIndex = i;
             this.errorSlot = slot;
             this.errorDescription = description;
             logger.error(errorSlot, errorIndex, errorDescription);
+        }
+    }
+
+    private void getErrorSlot(GSSNode<T> gssNode, List<GSSEdge<T>> result) {
+        if (gssNode == null) return;
+        for (GSSEdge<T> edge : gssNode.getGSSEdges()) {
+            if (edge.getReturnSlot() != null) {
+                if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {
+                    result.add(edge);
+                    return;
+                }
+            }
+            getErrorSlot(edge.getDestination(), result);
         }
     }
 

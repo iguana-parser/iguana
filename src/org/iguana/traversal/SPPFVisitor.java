@@ -27,10 +27,7 @@
 
 package org.iguana.traversal;
 
-import org.iguana.sppf.IntermediateNode;
-import org.iguana.sppf.NonterminalNode;
-import org.iguana.sppf.PackedNode;
-import org.iguana.sppf.TerminalNode;
+import org.iguana.sppf.*;
 
 /**
  * Provides a standard interface based on the command pattern for
@@ -49,5 +46,7 @@ public interface SPPFVisitor<T> {
 	Object visit(IntermediateNode node);
 
 	Object visit(PackedNode node);
+
+	T visit(ErrorNode node);
 
 }

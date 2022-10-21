@@ -20,6 +20,8 @@ public interface ParseTreeVisitor<T> {
         return null;
     }
 
+    default T visitErrorNode(ErrorNode node) { return null; }
+
     default List<T> visitStarNode(MetaSymbolNode.StarNode node) {
         return visitStarOrPlusNode(node);
     }

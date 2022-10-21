@@ -66,4 +66,9 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     public ParseTreeNode startNode(Start symbol, List<ParseTreeNode> children, int leftExtent, int rightExtent) {
         return new StartNode(symbol, children, leftExtent, rightExtent);
     }
+
+    @Override
+    public ParseTreeNode errorNode(int leftExtent, int rightExtent) {
+        return new ErrorNode(leftExtent, rightExtent, input);
+    }
 }
