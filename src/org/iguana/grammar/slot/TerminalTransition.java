@@ -76,7 +76,7 @@ public class TerminalTransition extends AbstractTransition {
 		T cr = terminalSlot.getResult(input, i, origin, u, runtime);
 		
 		if (cr == null) {
-			runtime.recordParseError(i, origin, u, "Match failed");
+			runtime.recordParseError(i, input, origin, u, "Match failed");
 			return;
 		}
 

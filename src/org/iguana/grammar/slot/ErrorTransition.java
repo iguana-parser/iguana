@@ -24,7 +24,7 @@ public class ErrorTransition extends AbstractTransition {
             i++;
         }
         if (i == input.length()) {
-            runtime.recordParseError(rightExtent, this.origin, u, "Could not recover from the error");
+            runtime.recordParseError(rightExtent, input, this.origin, u, "Could not recover from the error");
         } else {
             T cr = runtime.getResultOps().error(this.dest, rightExtent, i);
             T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);

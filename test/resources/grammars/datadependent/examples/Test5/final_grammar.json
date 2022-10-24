@@ -5133,6 +5133,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "Expression",
+          "label" : "child",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "arguments" : [

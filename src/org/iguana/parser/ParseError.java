@@ -28,24 +28,28 @@
 package org.iguana.parser;
 
 import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.gss.GSSNode;
+import org.iguana.result.Result;
 
 import java.util.Objects;
 
 
-public class ParseError {
+public class ParseError<T extends Result> {
 
 	private final GrammarSlot slot;
 	private final int inputIndex;
 	private final int lineNumber;
 	private final int columnNumber;
+	private final GSSNode<T> gssNode;
 	private final String description;
 
-    public ParseError(GrammarSlot slot, int inputIndex, int lineNumber, int columnNumber, String description) {
+    public ParseError(GrammarSlot slot, GSSNode<T> gssNode, int inputIndex, int lineNumber, int columnNumber, String description) {
 		this.slot = slot;
 		this.inputIndex = inputIndex;
 		this.lineNumber = lineNumber;
 		this.columnNumber = columnNumber;
 		this.description = description;
+		this.gssNode = gssNode;
     }
 	
 	public int getInputIndex() {
@@ -64,14 +68,22 @@ public class ParseError {
 		return columnNumber;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof ParseError)) return false;
-		ParseError other = (ParseError) obj;
+		ParseError<?> other = (ParseError<?>) obj;
 		return inputIndex == other.inputIndex &&
 			   lineNumber == other.lineNumber &&
 			   columnNumber == other.columnNumber;
+	}
+
+	public GSSNode<T> getGssNode() {
+		return gssNode;
 	}
 
 	@Override

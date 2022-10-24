@@ -59,7 +59,7 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 		if (followTest.test(nextChar)) {
 			u.pop(input, this, epsilonSlot.getResult(input, i, this, u, runtime), value, runtime);
 		} else {
-			runtime.recordParseError(i, this, u, "Expected " + followTest + " but was " + (char) nextChar);
+			runtime.recordParseError(i, input, this, u, "Expected " + followTest + " but was " + (char) nextChar);
 		}
 	}
 

@@ -23,7 +23,7 @@ public class IguanaRecognizer {
     protected final GrammarGraph grammarGraph;
     protected final Configuration config;
 
-    protected ParseError parseError;
+    protected ParseError<?> parseError;
     protected RecognizerStatistics statistics;
 
     protected final RuntimeGrammar finalGrammar;
@@ -63,18 +63,20 @@ public class IguanaRecognizer {
     public boolean recognize(Input input, Nonterminal start, Map<String, Object> map, boolean global) {
         clear();
         IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
-        RecognizerResult root = (RecognizerResult) runtime.run(input, start, grammarGraph, map, global);
-        this.parseError = runtime.getParseError();
+        RecognizerResult result = runtime.run(input, start, grammarGraph, map, global);
         this.statistics = runtime.getStatistics();
-        if (root == null) return false;
-        return root.getRightExtent() == input.length() - 1;
+        if (result == null) {
+            this.parseError = runtime.getParseError();
+            return false;
+        }
+        return true;
     }
 
     public RecognizerStatistics getStatistics() {
         return statistics;
     }
 
-    public ParseError getParseError() {
+    public ParseError<?> getParseError() {
         return parseError;
     }
 

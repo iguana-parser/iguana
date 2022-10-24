@@ -27,6 +27,7 @@ import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.*;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParseError;
 import org.iguana.parsetree.*;
 import org.iguana.regex.*;
@@ -964,10 +965,12 @@ public class JsonSerializer {
         @JsonIgnore GrammarSlot slot;
         ParseErrorMixIn(
             @JsonProperty("slot") GrammarSlot slot,
+            @JsonProperty("gssNode") GSSNode<?> gssNode,
             @JsonProperty("inputIndex") int inputIndex,
             @JsonProperty("lineNumber") int lineNumber,
             @JsonProperty("columnNumber") int columnNumber,
             @JsonProperty("description") String description) { }
+        @JsonIgnore GSSNode<?> gssNode;
     }
 
     abstract static class PrecedenceLevelMixIn {

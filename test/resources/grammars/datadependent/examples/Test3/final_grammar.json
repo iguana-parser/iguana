@@ -3029,6 +3029,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "expr",
+          "label" : "child",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "arguments" : [

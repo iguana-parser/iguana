@@ -36,6 +36,8 @@ import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
+import org.iguana.result.Result;
+import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
@@ -83,13 +85,13 @@ public class IguanaParser extends IguanaRecognizer {
     public void parse(Input input, Nonterminal start, ParseOptions options) {
         clear();
         this.input = input;
-        IguanaRuntime<?> runtime = new IguanaRuntime<>(config, parserResultOps);
+        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps);
         long startTime = System.nanoTime();
         this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
         long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
-        this.parseError = runtime.getParseError();
-        if (parseError != null) {
+        if (sppf == null) {
+            this.parseError = runtime.getParseError();
             throw new ParseErrorException(parseError);
         } else {
             System.out.println("Parsing finished in " + (endTime - startTime) / 1000_000 + "ms.");
