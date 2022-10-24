@@ -137,7 +137,7 @@ public class IguanaRuntime<T extends Result> {
      */
     public void recordParseError(int i, GrammarSlot slot, GSSNode<T> gssNode, String description) {
         List<GSSEdge<T>> errorSlots = new ArrayList<>();
-        getErrorSlot(gssNode, errorSlots);
+        getErrorSlot(gssNode, errorSlots, new HashSet<>());
         for (GSSEdge<T> edge : errorSlots) {
             BodyGrammarSlot returnSlot = edge.getReturnSlot();
             T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
@@ -153,7 +153,9 @@ public class IguanaRuntime<T extends Result> {
         }
     }
 
-    private void getErrorSlot(GSSNode<T> gssNode, List<GSSEdge<T>> result) {
+    private void getErrorSlot(GSSNode<T> gssNode, List<GSSEdge<T>> result, Set<GSSNode<T>> visited) {
+        if (visited.contains(gssNode)) return;
+        visited.add(gssNode);
         if (gssNode == null) return;
         for (GSSEdge<T> edge : gssNode.getGSSEdges()) {
             if (edge.getReturnSlot() != null) {
@@ -162,7 +164,7 @@ public class IguanaRuntime<T extends Result> {
                     return;
                 }
             }
-            getErrorSlot(edge.getDestination(), result);
+            getErrorSlot(edge.getDestination(), result, visited);
         }
     }
 
