@@ -4,6 +4,7 @@ import org.iguana.utils.input.Input;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ErrorNode implements ParseTreeNode {
 
@@ -55,5 +56,18 @@ public class ErrorNode implements ParseTreeNode {
     @Override
     public boolean hasChildren() {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ErrorNode)) return false;
+        ErrorNode errorNode = (ErrorNode) o;
+        return start == errorNode.start && end == errorNode.end;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end);
     }
 }

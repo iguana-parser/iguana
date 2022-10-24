@@ -432,7 +432,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
 
     @Override
     public Object visitErrorSymbol(IggyParseTree.ErrorSymbol node) {
-        return new Error();
+        return Error.getInstance();
     }
 
     @Override

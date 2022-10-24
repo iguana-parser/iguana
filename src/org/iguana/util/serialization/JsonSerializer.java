@@ -22,6 +22,7 @@ import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalNodeType;
 import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Opt;
 import org.iguana.grammar.symbol.Plus;
 import org.iguana.grammar.symbol.Star;
@@ -75,6 +76,7 @@ public class JsonSerializer {
         mapper.addMixIn(Offside.class, OffsideMixIn.class);
         mapper.addMixIn(Align.class, AlignMixIn.class);
         mapper.addMixIn(Ignore.class, IgnoreMixIn.class);
+        mapper.addMixIn(Error.class, ErrorMixIn.class);
 
         mapper.addMixIn(AbstractAttrs.class, AbstractAttrsMixIn.class);
 
@@ -177,6 +179,7 @@ public class JsonSerializer {
         mapper.addMixIn(MetaSymbolNode.StartNode.class, StartNodeMixIn.class);
         mapper.addMixIn(DefaultTerminalNode.class, DefaultTerminalNodeMixIn.class);
         mapper.addMixIn(KeywordTerminalNode.class, KeywordTerminalNodeMixIn.class);
+        mapper.addMixIn(ErrorNode.class, ErrorNodeMixIn.class);
 
         mapper.addMixIn(ParseError.class, ParseErrorMixIn.class);
 
@@ -312,7 +315,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=IfThenElse.class, name="IfThenElse"),
         @JsonSubTypes.Type(value=Offside.class, name="Offside"),
         @JsonSubTypes.Type(value=Align.class, name="Align"),
-        @JsonSubTypes.Type(value=Ignore.class, name="Ignore")
+        @JsonSubTypes.Type(value=Ignore.class, name="Ignore"),
+        @JsonSubTypes.Type(value=Error.class, name="Error")
     })
     abstract static class SymbolMixIn { }
 
@@ -350,7 +354,8 @@ public class JsonSerializer {
         @JsonSubTypes.Type(value=MetaSymbolNode.GroupNode.class, name="GroupNode"),
         @JsonSubTypes.Type(value=MetaSymbolNode.OptionNode.class, name="OptionNode"),
         @JsonSubTypes.Type(value=MetaSymbolNode.AltNode.class, name="AltNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.StartNode.class, name="StartNode")
+        @JsonSubTypes.Type(value=MetaSymbolNode.StartNode.class, name="StartNode"),
+        @JsonSubTypes.Type(value=ErrorNode.class, name="ErrorNode")
     })
     abstract static class ParseTreeNodeMixIn { }
 
@@ -359,7 +364,7 @@ public class JsonSerializer {
             @JsonProperty("terminal") Terminal terminal,
             @JsonProperty("start") int start,
             @JsonProperty("end") int end,
-            @JsonProperty("ignore") Input input
+            @JsonProperty("input") Input input
         ) { }
         @JsonIgnore
         Input input;
@@ -371,6 +376,16 @@ public class JsonSerializer {
             @JsonProperty("start") int start,
             @JsonProperty("end") int end
         ) { }
+    }
+
+    abstract static class ErrorNodeMixIn {
+        ErrorNodeMixIn(
+            @JsonProperty("start") int start,
+            @JsonProperty("end") int end,
+            @JsonProperty("input") Input input
+        ) { }
+        @JsonIgnore
+        Input input;
     }
 
     abstract static class NonterminalNodeMixIn {
@@ -500,6 +515,11 @@ public class JsonSerializer {
 
     @JsonDeserialize(builder = Ignore.Builder.class)
     abstract static class IgnoreMixIn extends AbstractSymbolMixIn { }
+
+    abstract static class ErrorMixIn extends AbstractAttrsMixIn {
+        @JsonCreator
+        public abstract Error getInstance();
+    }
 
     @JsonDeserialize(builder = org.iguana.regex.Seq.Builder.class)
     abstract static class SeqMixIn extends AbstractRegularExpressionMixIn { }

@@ -1,6 +1,6 @@
 package org.iguana.grammar.symbol;
 
-import io.usethesource.capsule.Set;
+import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -8,23 +8,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Error implements Symbol {
-    @Override
-    public Set.Immutable<String> getEnv() {
-        return Set.Immutable.of();
+public class Error extends AbstractAttrs implements Symbol {
+
+    private static final Error instance = new Error();
+
+    public static Error getInstance() {
+        return instance;
     }
 
-    @Override
-    public void setEnv(Set.Immutable<String> env) {
-    }
-
-    @Override
-    public void setEmpty() {
-    }
+    private Error() { }
 
     @Override
     public String getName() {
-        return "empty";
+        return "Error";
     }
 
     @Override
@@ -64,6 +60,16 @@ public class Error implements Symbol {
 
     @Override
     public String toString() {
-        return "error";
+        return "Error";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == instance;
+    }
+
+    @Override
+    public int hashCode() {
+        return System.identityHashCode(instance);
     }
 }

@@ -32,7 +32,7 @@ import io.usethesource.capsule.Set;
 
 public abstract class AbstractAttrs implements Attr {
 	
-	private transient Set.Immutable<String> env;
+	private Set.Immutable<String> env;
 
 	@Override
 	public Set.Immutable<String> getEnv() {

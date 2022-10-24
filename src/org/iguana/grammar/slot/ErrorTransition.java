@@ -18,14 +18,13 @@ public class ErrorTransition extends AbstractTransition {
     }
 
     public <T extends Result> void handleError(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
-        System.out.println(">>>>> Motherfucker we're here!!!");
         int rightExtent = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
         int i = rightExtent;
         while (i < input.length() && !dest.testFollow(input.charAt(i))) {
             i++;
         }
         if (i == input.length()) {
-            runtime.recordParseError(result.getRightExtent(), this.origin, u, "Could not recover from the error");
+            runtime.recordParseError(rightExtent, this.origin, u, "Could not recover from the error");
         } else {
             T cr = runtime.getResultOps().error(this.dest, rightExtent, i);
             T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
