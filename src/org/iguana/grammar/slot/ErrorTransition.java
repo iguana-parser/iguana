@@ -23,12 +23,12 @@ public class ErrorTransition extends AbstractTransition {
         while (i < input.length() && !dest.testFollow(input.charAt(i))) {
             i++;
         }
-        if (i == input.length()) {
-            runtime.recordParseError(rightExtent, input, this.origin, u, "Could not recover from the error");
-        } else {
+        if (i < input.length()) {
             T cr = runtime.getResultOps().error(this.dest, rightExtent, i);
             T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
             dest.execute(input, u, n, env, runtime);
+        } else {
+            System.out.println("Warning: could not recover from the parse error: " + origin);
         }
     }
 

@@ -5,12 +5,13 @@ import org.iguana.grammar.Grammar;
 import org.iguana.iggy.IggyParserUtils;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.util.serialization.JsonSerializer;
+import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.utils.input.Input;
+import org.iguana.utils.visualization.DotGraph;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -56,22 +57,29 @@ public abstract class ParserTestRunner {
             throw e;
         }
         if (parserTest.verifyParseTree()) {
-            verifyParseTree(parser.getParseTree());
+            verifyParseTree(parser.getParseTree(), input);
         }
     }
 
-    private void verifyParseTree(ParseTreeNode actualParseTreeNode) {
+    private void verifyParseTree(ParseTreeNode actualParseTree, Input input) {
         Path parseTreePath = getTestDirectory().resolve("parse_tree.json");
         if (REGENERATE_FILES || !Files.exists(parseTreePath)) {
-            record(actualParseTreeNode, parseTreePath);
-        } else {
-            ParseTreeNode expectedParseTreeNode;
+            DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
+            Path pdfPath = getTestDirectory().resolve("parse_tree.pdf");
             try {
-                expectedParseTreeNode = JsonSerializer.deserialize(Files.readString(parseTreePath), ParseTreeNode.class);
+                dotGraph.generate(pdfPath.toAbsolutePath().toString());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            record(actualParseTree, parseTreePath);
+        } else {
+            ParseTreeNode expectedParseTree;
+            try {
+                expectedParseTree = JsonSerializer.deserialize(Files.readString(parseTreePath), ParseTreeNode.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            assertEquals(expectedParseTreeNode, actualParseTreeNode);
+            assertEquals(expectedParseTree, actualParseTree);
         }
     }
 

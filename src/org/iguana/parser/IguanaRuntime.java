@@ -104,10 +104,15 @@ public class IguanaRuntime<T extends Result> {
 
         PriorityQueue<ParseError<T>> copyParseErrors = new PriorityQueue<>(parseErrors);
         while (!copyParseErrors.isEmpty()) {
-            recoverFromError(copyParseErrors.poll(), input);
-            T recoveryResult = runParserLoop(startGSSNode, input);
-            if (recoveryResult != null) {
-                return recoveryResult;
+            List<GSSEdge<T>> errorSlots = new ArrayList<>();
+            GSSNode<T> gssNode = copyParseErrors.poll().getGssNode();
+            getErrorSlot(gssNode, errorSlots, new HashSet<>());
+            for (GSSEdge<T> edge : errorSlots) {
+                recoverFromError(edge, input);
+                T recoveryResult = runParserLoop(startGSSNode, input);
+                if (recoveryResult != null) {
+                    return recoveryResult;
+                }
             }
         }
 
@@ -138,24 +143,24 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public void recordParseError(int inputIndex, Input input, GrammarSlot slot, GSSNode<T> gssNode, String description) {
-        // GrammarSlot slot, int inputIndex, int lineNumber, int columnNumber, String description
         ParseError<T> error = new ParseError<>(slot, gssNode, inputIndex, input.getLineNumber(inputIndex), input.getColumnNumber(inputIndex), description);
         parseErrors.add(error);
         logger.error(error);
     }
 
-    private void recoverFromError(ParseError<T> error, Input input) {
-        List<GSSEdge<T>> errorSlots = new ArrayList<>();
-        getErrorSlot(error.getGssNode(), errorSlots, new HashSet<>());
-        for (GSSEdge<T> edge : errorSlots) {
-            BodyGrammarSlot returnSlot = edge.getReturnSlot();
-            T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
-            Environment env = edge.getEnv();
-            ErrorTransition errorTransition = (ErrorTransition) returnSlot.getOutTransition();
-            errorTransition.handleError(input, edge.getDestination(), result, env, this);
-        }
+    /*
+     * Tries to recover the error from an error edge, i.e., of the form X = alpha . Error beta
+     */
+    private void recoverFromError(GSSEdge<T> edge, Input input) {
+        BodyGrammarSlot returnSlot = edge.getReturnSlot();
+        T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
+        Environment env = edge.getEnv();
+        ErrorTransition errorTransition = (ErrorTransition) returnSlot.getOutTransition();
+        errorTransition.handleError(input, edge.getDestination(), result, env, this);
     }
 
+    // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
+    // from the current GSS node to the start symbol GSS node.
     private void getErrorSlot(GSSNode<T> gssNode, List<GSSEdge<T>> result, Set<GSSNode<T>> visited) {
         if (visited.contains(gssNode)) return;
         visited.add(gssNode);
@@ -164,7 +169,6 @@ public class IguanaRuntime<T extends Result> {
             if (edge.getReturnSlot() != null) {
                 if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {
                     result.add(edge);
-                    return;
                 }
             }
             getErrorSlot(edge.getDestination(), result, visited);
