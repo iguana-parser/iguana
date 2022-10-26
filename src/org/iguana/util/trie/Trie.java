@@ -42,9 +42,9 @@ public class Trie<T> {
 	public Node<T> get(Iterable<T> prefix) {
 		Node<T> node = root;
 		
-		for(T label : prefix) {
+		for (T label : prefix) {
 			node = getNodeWithEdgeLabel(node, label);
-			if(node == null) {
+			if (node == null) {
 				return null;
 			}
 		}
@@ -60,12 +60,12 @@ public class Trie<T> {
 	}
 	
 	public Node<T> add(Node<T> node, T label) {
-		if(node.size() == 0) {
+		if (node.size() == 0) {
 			return insert(node, label);
 		}
 		
 		Node<T> dest = getNodeWithEdgeLabel(node, label);
-		if(dest == null) {
+		if (dest == null) {
 			return insert(node, label);
 		} else {
 			return dest;
@@ -73,8 +73,8 @@ public class Trie<T> {
 	}
 	
 	private Node<T> getNodeWithEdgeLabel(Node<T> node, T label) {
-		for(Edge<T> edge : node.getEdges()) {
-			if(edge.getLabel().equals(label)) {
+		for (Edge<T> edge : node.getEdges()) {
+			if (edge.getLabel().equals(label)) {
 				return edge.getDestination();
 			}
 		}

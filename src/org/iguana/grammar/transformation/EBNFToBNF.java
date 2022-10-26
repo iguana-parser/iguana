@@ -89,7 +89,7 @@ public class EBNFToBNF implements GrammarTransformation {
 		
 		EBNFVisitor ebnf_visitor = new EBNFVisitor(state, newRules, rule.getLayout(), rule.getLayoutStrategy(), ebnfLefts, ebnfRights);
 		
-		for(Symbol s : rule.getBody())
+		for (Symbol s : rule.getBody())
 			builder.addSymbol(s.accept(ebnf_visitor));
 		
 		return builder.setLayout(rule.getLayout())

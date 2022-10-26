@@ -89,7 +89,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 		} 
 		else {
 			
-			while(entry.next != null) entry = entry.next;
+			while (entry.next != null) entry = entry.next;
 			
 			Entry<T> newEntry = new Entry<>(key, f.apply(key));
 			entry.next = newEntry;

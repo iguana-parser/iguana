@@ -122,13 +122,13 @@ public class Automaton {
 			newState.setStateType(state.getStateType());
 			newState.addRegularExpressions(state.getRegularExpressions());
 			
-			if(state == startState) {
+			if (state == startState) {
 				newStartState[0] = newState;
 			}
 		});
 		
 		AutomatonVisitor.visit(startState, state -> {
-				for(Transition transition : state.getTransitions()) {
+				for (Transition transition : state.getTransitions()) {
 					State newState = newStates.get(state);
 					newState.addTransition(new Transition(transition.getStart(), 
 														  transition.getEnd(), 
@@ -207,8 +207,8 @@ public class Automaton {
 		 */
 		
 		// Covers the case of the automaton for the empty regular expression
-		if(startState.getStateType() == StateType.FINAL) {
-			if(startState.getCountTransitions() == 1 && 
+		if (startState.getStateType() == StateType.FINAL) {
+			if (startState.getCountTransitions() == 1 &&
 			   startState.getTransitions().iterator().next().isEpsilonTransition()) {
 				return true;
 			}

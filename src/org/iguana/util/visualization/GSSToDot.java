@@ -27,9 +27,9 @@
 
 package org.iguana.util.visualization;
 
-import org.iguana.utils.visualization.DotGraph;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
+import org.iguana.utils.visualization.DotGraph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,15 +39,15 @@ import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class GSSToDot {
 
-	private Map<GSSNode<?>, Integer> ids = new HashMap<>();
+	private final Map<GSSNode<?>, Integer> ids = new HashMap<>();
 
 	public DotGraph execute(Iterable<GSSNode<?>> set) {
 		DotGraph dotGraph = new DotGraph();
 		
-		for(GSSNode<?> gssNode : set) {
+		for (GSSNode<?> gssNode : set) {
 			dotGraph.addNode(newNode(getId(gssNode), gssNode.toString()));
 
-			for(GSSEdge<?> edge : gssNode.getGSSEdges()) {
+			for (GSSEdge<?> edge : gssNode.getGSSEdges()) {
 				DotGraph.Edge dotEdge = newEdge(getId(gssNode), getId(edge.getDestination()));
 				if (edge.getReturnSlot() != null) {
 					dotEdge.setLabel(edge.getReturnSlot().toString());
@@ -59,7 +59,7 @@ public class GSSToDot {
 		return dotGraph;
 	}
 
-	private int getId(GSSNode node) {
+	private int getId(GSSNode<?> node) {
 		return ids.computeIfAbsent(node, k -> ids.size() + 1);
 	}
 	

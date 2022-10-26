@@ -69,7 +69,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 
 	@Override
 	public Void visit(TerminalNode node) {
-		if(!visited.contains(node)) {
+		if (!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
 			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
@@ -81,7 +81,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 
 	@Override
 	public Void visit(NonterminalNode node) {
-		if(!visited.contains(node)) {
+		if (!visited.contains(node)) {
 			visited.add(node);
 			
 			String label;
@@ -109,7 +109,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 
 	@Override
 	public Void visit(IntermediateNode node) {
-		if(!visited.contains(node)) {
+		if (!visited.contains(node)) {
 			visited.add(node);
 			
 			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
@@ -142,7 +142,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 
 	@Override
 	public Void visit(ErrorNode node) {
-		if(!visited.contains(node)) {
+		if (!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
 			String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(), matchedInput);

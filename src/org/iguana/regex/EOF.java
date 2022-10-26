@@ -43,7 +43,7 @@ public class EOF extends AbstractRegularExpression {
 	private static EOF instance;
 	
 	public static EOF getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new EOF();
 		}
 		return instance;

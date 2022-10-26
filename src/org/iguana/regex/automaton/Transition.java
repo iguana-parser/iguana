@@ -99,10 +99,10 @@ public class Transition implements Comparable<Transition>, Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj)
+		if (this == obj)
 			return true;
 		
-		if(!(obj instanceof Transition))
+		if (!(obj instanceof Transition))
 			return false;
 		
 		Transition other = (Transition) obj;

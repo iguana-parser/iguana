@@ -172,7 +172,7 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
         sb.append("{");
 
 
-        for (Entry<K,T> entry : entrySet()) {
+        for (Entry<K, T> entry : entrySet()) {
             if (entry.getKey() != null) {
                 sb.append("(" + entry.getKey() + ", " + entry.getValue() + ")");
                 sb.append(", ");

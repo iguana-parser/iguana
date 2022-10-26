@@ -140,10 +140,10 @@ public class CharacterRanges {
 
     public static Alt<CharRange> reverse(CharRange range) {
         List<CharRange> ranges = new ArrayList<>();
-        if(range.getStart() >= 1) {
+        if (range.getStart() >= 1) {
             ranges.add(CharRange.in(1, range.getStart() - 1));
         }
-        if(range.getEnd() < MAX_UTF32_VAL) {
+        if (range.getEnd() < MAX_UTF32_VAL) {
             ranges.add(CharRange.in(range.getEnd() + 1, MAX_UTF32_VAL));
         }
         return Alt.from(ranges);

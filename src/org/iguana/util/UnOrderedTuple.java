@@ -39,11 +39,11 @@ public class UnOrderedTuple<T, K> extends Tuple<T, K>{
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj) {
 			return true;
 		}
 		
-		if(!(obj instanceof Tuple)) {
+		if (!(obj instanceof Tuple)) {
 			return false;
 		}
 		

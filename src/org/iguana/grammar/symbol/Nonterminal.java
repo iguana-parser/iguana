@@ -124,10 +124,10 @@ public class Nonterminal extends AbstractSymbol {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
+		if (this == obj)
 			return true;
 		
-		if(!(obj instanceof Nonterminal))
+		if (!(obj instanceof Nonterminal))
 			return false;
 		
 		Nonterminal other = (Nonterminal) obj;

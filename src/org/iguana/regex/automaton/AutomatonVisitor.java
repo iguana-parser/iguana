@@ -50,7 +50,7 @@ public class AutomatonVisitor {
 		action.accept(state);
 		visitedStates.add(state);
 
-		for(Transition transition : state.getTransitions()) {
+		for (Transition transition : state.getTransitions()) {
 			State destination = transition.getDestination();
 			if (!visitedStates.contains(destination)) {
 				visit(destination, action, visitedStates);

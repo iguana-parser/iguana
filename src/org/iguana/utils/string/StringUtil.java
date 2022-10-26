@@ -50,7 +50,7 @@ public class StringUtil {
 	
 	public static <T> String listToString(Iterable<T> elements, String sep) {
 		
-		if(elements == null) throw new IllegalArgumentException("elements cannot be null.");
+		if (elements == null) throw new IllegalArgumentException("elements cannot be null.");
 		
 		Stream<T> stream = StreamSupport.stream(elements.spliterator(), false);
 		

@@ -118,7 +118,7 @@ public class RuntimeGrammar {
 	
 	public int sizeRules() {
 		int num = 0;
-		for(Nonterminal head : definitions.keySet()) {
+		for (Nonterminal head : definitions.keySet()) {
 			num += definitions.get(head).size();
 		}
 		return num;
@@ -179,7 +179,7 @@ public class RuntimeGrammar {
 			List<RuntimeRule> rules = definitions.get(nonterminal);
 			
 			boolean found = true;
-			while(found) {
+			while (found) {
 				found = false;
 				for (RuntimeRule rule : rules) {
 					if (rule.getPrecedence() == precedence) {
