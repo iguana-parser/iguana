@@ -139,7 +139,19 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		visitChildren(node);
 		return null;
 	}
-	
+
+	@Override
+	public Void visit(ErrorNode node) {
+		if(!visited.contains(node)) {
+			visited.add(node);
+			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
+			String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			dotGraph.addNode(newNode(getId(node), label));
+		}
+
+		return null;
+	}
+
 	private void addEdgesToChildren(SPPFNode node) {
 	    for (int i = 0; i < node.childrenCount(); i++) {
             addEdgeToChild(node, node.getChildAt(i));

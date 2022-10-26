@@ -460,6 +460,8 @@ public class RuntimeRule {
 
         public RuntimeRule build() {
             if (body == null) body = Collections.emptyList();
+            if (body.stream().anyMatch(Objects::isNull))
+                throw new IllegalArgumentException("symbols cannot be null: " + body);
             return new RuntimeRule(this);
         }
     }

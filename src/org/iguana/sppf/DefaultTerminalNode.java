@@ -4,18 +4,18 @@ import org.iguana.grammar.slot.TerminalGrammarSlot;
 
 public class DefaultTerminalNode extends TerminalNode {
 
-    private final int righExtent;
+    private final int rightExtent;
     private final TerminalGrammarSlot slot;
 
-    public DefaultTerminalNode(TerminalGrammarSlot slot, int leftExtent, int righExtent) {
+    public DefaultTerminalNode(TerminalGrammarSlot slot, int leftExtent, int rightExtent) {
         super(leftExtent);
         this.slot = slot;
-        this.righExtent = righExtent;
+        this.rightExtent = rightExtent;
     }
 
     @Override
     public int getRightExtent() {
-        return righExtent;
+        return rightExtent;
     }
 
     @Override

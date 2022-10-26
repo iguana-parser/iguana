@@ -64,6 +64,7 @@ Symbol
   | charClass:CharClass                                          %CharClass
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
   | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
+  | "error"                                                      %Error
 
 Arguments
   = "(" {Expression ","}* ")"
@@ -209,3 +210,4 @@ regex Keywords
   | "lexical"
   | "grammar"
   | "global"
+  | "error"

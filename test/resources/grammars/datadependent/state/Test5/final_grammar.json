@@ -722,6 +722,7 @@
         {
           "kind" : "Nonterminal",
           "name" : "E",
+          "label" : "child",
           "preConditions" : [ ],
           "postConditions" : [ ],
           "state" : [

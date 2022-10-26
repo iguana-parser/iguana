@@ -2,5 +2,5 @@
   "inputIndex" : 6,
   "lineNumber" : 1,
   "columnNumber" : 7,
-  "description" : "[1 >= p]"
+  "description" : "[p != 2 && 2 >= p]"
 }

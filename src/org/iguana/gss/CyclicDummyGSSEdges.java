@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GSSEdge that has the dummy node as its result, but in contract to DummyGSSEdge, represents the special case of a
+ * GSSEdge that has the dummy node as its result, but in contrast to DummyGSSEdge, represents the special case of a
  * direct cycle due to left recursion.
  */
 public class CyclicDummyGSSEdges<T extends Result> implements GSSEdge<T> {
@@ -31,7 +31,7 @@ public class CyclicDummyGSSEdges<T extends Result> implements GSSEdge<T> {
 
     @Override
     public BodyGrammarSlot getReturnSlot() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override

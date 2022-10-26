@@ -11,8 +11,8 @@ import org.iguana.result.ParserResultOps;
 import org.iguana.sppf.*;
 import org.iguana.traversal.exception.CyclicGrammarException;
 
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static java.util.Collections.singletonList;
 import static org.iguana.parsetree.VisitResult.*;
@@ -23,7 +23,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
     private final Set<NonterminalNode> visitedNodes;
     private final Map<NonPackedNode, VisitResult> convertedNodes;
     private final boolean ignoreLayout;
-    private ParserResultOps resultOps;
+    private final ParserResultOps resultOps;
 
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
@@ -180,6 +180,11 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
         }
 
         return left.merge(right);
+    }
+
+    @Override
+    public VisitResult visit(ErrorNode node) {
+        return VisitResult.single(parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent()));
     }
 
 }

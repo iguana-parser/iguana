@@ -29,6 +29,7 @@ package org.iguana.traversal.idea;
 
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.io.File;
@@ -247,6 +248,11 @@ public class GenerateElements {
         @Override
         public String visit(Code symbol) {
             return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Error error) {
+            return null;
         }
 
         @Override
@@ -715,6 +721,11 @@ public class GenerateElements {
         @Override
         public String visit(Code symbol) {
             return symbol.getSymbol().accept(this);
+        }
+
+        @Override
+        public String visit(Error error) {
+            return null;
         }
 
         @Override

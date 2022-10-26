@@ -42,6 +42,7 @@ import org.iguana.grammar.slot.EpsilonTransition.Type;
 import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.transformation.VarToInt;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.matcher.DFAMatcherFactory;
@@ -269,6 +270,21 @@ public class GrammarGraphBuilder {
             return null;
         }
 
+        @Override
+        public Void visit(Error error) {
+            BodyGrammarSlot slot;
+
+            if (i == rule.size() - 1 && j == -1)
+                slot = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);
+            else
+                slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);
+
+            ErrorTransition transition = new ErrorTransition(currentSlot, slot);
+            setTransition(transition);
+            currentSlot = slot;
+            return null;
+        }
+
         public Void visit(Return symbol) {
             BodyGrammarSlot done;
             if (i != rule.size() - 1)
@@ -311,7 +327,7 @@ public class GrammarGraphBuilder {
          */
         private void visitSymbol(Symbol symbol) {
 
-            if (symbol instanceof Nonterminal || symbol instanceof Terminal || symbol instanceof Return) { // TODO: I think this can be unified
+            if (symbol instanceof Nonterminal || symbol instanceof Terminal || symbol instanceof Error || symbol instanceof Return) { // TODO: I think this can be unified
                 symbol.accept(this);
                 return;
             }

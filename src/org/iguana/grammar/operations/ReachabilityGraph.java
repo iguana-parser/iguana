@@ -29,6 +29,7 @@ package org.iguana.grammar.operations;
 
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.ISymbolVisitor;
 
@@ -147,6 +148,11 @@ public class ReachabilityGraph {
 		@Override
 		public Boolean visit(Code symbol) {
 			return symbol.getSymbol().accept(this);
+		}
+
+		@Override
+		public Boolean visit(Error error) {
+			return false;
 		}
 
 		@Override

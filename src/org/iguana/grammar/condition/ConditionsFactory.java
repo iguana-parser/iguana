@@ -81,7 +81,7 @@ public class ConditionsFactory {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
 					    if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
-                            runtime.recordParseError(rightExtent, slot, gssNode, slotAction.toString());
+                            runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
 			                return true;
 			            }
 			        }
@@ -103,7 +103,7 @@ public class ConditionsFactory {
                 for (int j = 0; j < actions.size(); j++) {
                     SlotAction slotAction = actions.get(j);
                     if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
-                        runtime.recordParseError(rightExtent, slot, gssNode, slotAction.toString());
+                        runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
                         return true;
                     }
                 }

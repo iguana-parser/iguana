@@ -30,7 +30,7 @@ class SimpleRecognizerResult implements RecognizerResult {
         return start;
     }
 
-        @Override
+    @Override
     public boolean isDummy() {
         return false;
     }

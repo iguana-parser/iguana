@@ -13,6 +13,7 @@ import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.exception.UnexpectedSymbolException;
 import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.traversal.IConditionVisitor;
 import org.iguana.traversal.ISymbolVisitor;
@@ -57,6 +58,11 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
 		for (Statement stat : symbol.getStatements())
 			stat.accept(this);
 		
+		return null;
+	}
+
+	@Override
+	public Void visit(Error error) {
 		return null;
 	}
 

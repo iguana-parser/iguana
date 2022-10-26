@@ -920,6 +920,21 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = 'error'
+    public static class ErrorSymbol extends Symbol {
+        public ErrorSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitErrorSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Arguments = '(' {Expression ','}* ')'
     public static class Arguments extends NonterminalNode {
         public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {

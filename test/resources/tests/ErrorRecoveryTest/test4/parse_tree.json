@@ -1,0 +1,184 @@
+{
+  "kind" : "NonterminalNode",
+  "rule" : {
+    "head" : {
+      "kind" : "Nonterminal",
+      "name" : "program",
+      "preConditions" : [ ],
+      "postConditions" : [ ]
+    },
+    "body" : [
+      {
+        "kind" : "Nonterminal",
+        "name" : "stmt+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
+        "nodeType" : "Plus"
+      }
+    ],
+    "recursion" : "NON_REC",
+    "irecursion" : "NON_REC",
+    "leftEnd" : "",
+    "rightEnd" : "",
+    "leftEnds" : [ ],
+    "rightEnds" : [ ],
+    "associativity" : "UNDEFINED",
+    "precedence" : -1,
+    "precedenceLevel" : {
+      "lhs" : 1,
+      "rhs" : 1,
+      "undefined" : -1,
+      "hasPrefixUnary" : false,
+      "hasPostfixUnary" : false,
+      "hasPrefixUnaryBelow" : false,
+      "prefixUnaryBelow" : [ ],
+      "hasPostfixUnaryBelow" : false,
+      "postfixUnaryBelow" : [ ],
+      "index" : 1,
+      "containsAssociativityGroup" : false,
+      "assoc_lhs" : -1,
+      "assoc_rhs" : -1
+    }
+  },
+  "children" : [
+    {
+      "kind" : "PlusNode",
+      "symbol" : {
+        "kind" : "Plus",
+        "name" : "stmt+",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
+        "s" : {
+          "kind" : "Nonterminal",
+          "name" : "stmt",
+          "preConditions" : [ ],
+          "postConditions" : [ ]
+        },
+        "separators" : [ ]
+      },
+      "children" : [
+        {
+          "kind" : "NonterminalNode",
+          "rule" : {
+            "head" : {
+              "kind" : "Nonterminal",
+              "name" : "stmt",
+              "preConditions" : [ ],
+              "postConditions" : [ ]
+            },
+            "body" : [
+              {
+                "kind" : "Terminal",
+                "name" : "'{'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 123
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "stmt+",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Plus"
+              },
+              {
+                "kind" : "Error"
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "'}'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 125
+                }
+              }
+            ],
+            "recursion" : "NON_REC",
+            "irecursion" : "NON_REC",
+            "leftEnd" : "",
+            "rightEnd" : "",
+            "leftEnds" : [ ],
+            "rightEnds" : [ ],
+            "associativity" : "UNDEFINED",
+            "precedence" : -1,
+            "precedenceLevel" : {
+              "lhs" : 1,
+              "rhs" : 1,
+              "undefined" : -1,
+              "hasPrefixUnary" : false,
+              "hasPostfixUnary" : false,
+              "hasPrefixUnaryBelow" : false,
+              "prefixUnaryBelow" : [ ],
+              "hasPostfixUnaryBelow" : false,
+              "postfixUnaryBelow" : [ ],
+              "index" : 1,
+              "containsAssociativityGroup" : false,
+              "assoc_lhs" : -1,
+              "assoc_rhs" : -1
+            }
+          },
+          "children" : [
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'{'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 123
+                }
+              },
+              "start" : 0,
+              "end" : 1
+            },
+            {
+              "kind" : "ErrorNode",
+              "start" : 1,
+              "end" : 7
+            },
+            {
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'}'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 125
+                }
+              },
+              "start" : 7,
+              "end" : 8
+            }
+          ],
+          "start" : 0,
+          "end" : 8
+        }
+      ],
+      "start" : 0,
+      "end" : 8
+    }
+  ],
+  "start" : 0,
+  "end" : 8
+}

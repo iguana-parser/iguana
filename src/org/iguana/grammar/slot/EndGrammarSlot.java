@@ -79,7 +79,7 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		if (followTest.test(nextChar)) {
 			u.pop(input, this, result, value, runtime);
 		} else {
-			runtime.recordParseError(rightExtent, this, u, "Expected " + followTest + " but was " + (char) nextChar);
+			runtime.recordParseError(rightExtent, input, this, u, "Expected " + followTest + " but was " + (char) nextChar);
 		}
 	}
 

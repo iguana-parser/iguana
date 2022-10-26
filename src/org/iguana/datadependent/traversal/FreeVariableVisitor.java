@@ -39,6 +39,7 @@ import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.runtime.RuntimeRule;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.IfThenElse;
 import org.iguana.grammar.symbol.*;
 import org.iguana.traversal.IConditionVisitor;
@@ -522,7 +523,12 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
 		
 		return null;
 	}
-	
+
+	@Override
+	public Void visit(Error error) {
+		return null;
+	}
+
 	@Override
 	public Void visit(Conditional symbol) {
 		

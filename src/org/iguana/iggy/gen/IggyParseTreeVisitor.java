@@ -93,6 +93,8 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitPlusSepSymbol(IggyParseTree.PlusSepSymbol node);
 
+    T visitErrorSymbol(IggyParseTree.ErrorSymbol node);
+
     T visitArguments(IggyParseTree.Arguments node);
 
     T visitCallStatement(IggyParseTree.CallStatement node);

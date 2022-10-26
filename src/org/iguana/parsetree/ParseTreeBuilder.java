@@ -25,6 +25,8 @@ public interface ParseTreeBuilder<T> {
 
     T startNode(Start symbol, List<T> children, int leftExtent, int rightExtent);
 
+    T errorNode(int leftExtent, int rightExtent);
+
     default T metaSymbolNode(Symbol symbol, List<T> children, int leftExtent, int rightExtent) {
         if (symbol instanceof Star) {
             return starNode((Star) symbol, children, leftExtent, rightExtent);

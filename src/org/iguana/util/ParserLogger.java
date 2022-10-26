@@ -1,20 +1,20 @@
 package org.iguana.util;
 
-import org.iguana.utils.logging.IguanaLogger;
-import org.iguana.utils.logging.JavaUtilIguanaLogger;
-import org.iguana.utils.logging.LogLevel;
-import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
+import org.iguana.parser.ParseError;
 import org.iguana.parser.descriptor.Descriptor;
 import org.iguana.result.Result;
 import org.iguana.sppf.*;
+import org.iguana.utils.logging.IguanaLogger;
+import org.iguana.utils.logging.JavaUtilIguanaLogger;
+import org.iguana.utils.logging.LogLevel;
 
 import java.util.Arrays;
 
 public class ParserLogger {
 
-    private static ParserLogger instance = new ParserLogger();
+    private static final ParserLogger instance = new ParserLogger();
 
     public static ParserLogger getInstance() {
         return instance;
@@ -114,8 +114,8 @@ public class ParserLogger {
         if (logEnabled) logger.log("Pop %s, %d, %s, %s", gssNode, inputIndex, child, value);
     }
 
-    public void error(GrammarSlot slot, int i, String errorDescription) {
-        if (logEnabled) logger.log("Error recorded at %s %d %s", slot, i, errorDescription);
+    public void error(ParseError error) {
+        if (logEnabled) logger.log("Error recorded at %s %d %s", error.getGrammarSlot(), error.getInputIndex(), error.getDescription());
     }
 
     public <T extends Result> void processDescriptor(Descriptor<T> descriptor) {
