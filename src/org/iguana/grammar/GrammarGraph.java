@@ -9,7 +9,6 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.matcher.DFAMatcherFactory;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

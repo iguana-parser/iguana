@@ -49,7 +49,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
 
     @Override
     public ParseTreeNode optNode(Opt symbol, ParseTreeNode child, int leftExtent, int rightExtent) {
-        return new OptionNode(symbol,child, leftExtent, rightExtent);
+        return new OptionNode(symbol, child, leftExtent, rightExtent);
     }
 
     @Override

@@ -83,7 +83,7 @@ public class CollectionsUtil {
 		
 		Builder<C> builder = Stream.builder();
 		
-		while(asIterator.hasNext() && bsIterator.hasNext()) {
+		while (asIterator.hasNext() && bsIterator.hasNext()) {
 			builder.add(f.apply(asIterator.next(), bsIterator.next()));
 		}
 		

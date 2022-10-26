@@ -27,9 +27,9 @@
 
 package org.iguana.util.visualization;
 
-import org.iguana.utils.visualization.DotGraph;
 import org.iguana.grammar.GrammarGraph;
 import org.iguana.grammar.slot.*;
+import org.iguana.utils.visualization.DotGraph;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,7 +91,7 @@ public class GrammarGraphToDot {
 
 			// TODO: improve this code
 			Transition t = slot.getOutTransition();
-			if(t instanceof ConditionalTransition) {
+			if (t instanceof ConditionalTransition) {
 				dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
 
 				BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();
@@ -107,7 +107,7 @@ public class GrammarGraphToDot {
 	}
 
 
-    private static Map<GrammarSlot, Integer> ids = new HashMap<>();
+    private static final Map<GrammarSlot, Integer> ids = new HashMap<>();
 
     private static int getId(GrammarSlot slot) {
         return ids.computeIfAbsent(slot, k -> ids.size() + 1);

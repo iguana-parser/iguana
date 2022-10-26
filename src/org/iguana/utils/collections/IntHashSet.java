@@ -38,7 +38,7 @@ public class IntHashSet {
  	@SafeVarargs
 	public static IntHashSet from(int...elements) {
  		IntHashSet set = new IntHashSet();
-		for(int e : elements) {
+		for (int e : elements) {
 			set.add(e);
 		}
 		return set;
@@ -79,7 +79,7 @@ public class IntHashSet {
 		int index = hash(key);
 
 		do {
-			if(table[index] == -1) {
+			if (table[index] == -1) {
 				table[index] = key;
 				size++;
 				if (size >= threshold) {
@@ -88,7 +88,7 @@ public class IntHashSet {
 				return -1;
 			}
 			
-			else if(table[index] == key) {
+			else if (table[index] == key) {
 				return table[index];
 			}
 			
@@ -96,7 +96,7 @@ public class IntHashSet {
 			
 			index = (index + 1) & bitMask;
 			
-		} while(true);
+		} while (true);
 	}
 	
 	private void rehash() {
@@ -109,20 +109,20 @@ public class IntHashSet {
 		Arrays.fill(newTable, -1);
 		
 		label:
-		for(int key : table) {
-			if(key != -1) {
+		for (int key : table) {
+			if (key != -1) {
 				
 				int index = hash(key);
 
 				do {
-					if(newTable[index] == -1) {
+					if (newTable[index] == -1) {
 						newTable[index] = key;
 						continue label;
 					}
 					
 					index = (index + 1) & bitMask;
 					
-				} while(true);
+				} while (true);
 			}
 		}
 		
@@ -161,7 +161,7 @@ public class IntHashSet {
 	}
 
 	public void clear() {
-		for(int i = 0; i < table.length; i++) {
+		for (int i = 0; i < table.length; i++) {
 			table[i] = -1;
 		}
 		size = 0;
@@ -174,11 +174,11 @@ public class IntHashSet {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		for(int t : table)
-			if(t != -1)
+		for (int t : table)
+			if (t != -1)
 				sb.append(t).append(", ");
 
-		if(sb.length() > 2)
+		if (sb.length() > 2)
 			sb.delete(sb.length() - 2, sb.length());
 
 		sb.append("}");

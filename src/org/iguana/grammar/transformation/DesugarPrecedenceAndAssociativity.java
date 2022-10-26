@@ -333,7 +333,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 				}
 				
 				if (labels != null) {
-					if(!labels.containsKey(rule.getLabel()))
+					if (!labels.containsKey(rule.getLabel()))
 						labels.put(rule.getLabel(), labels.size());
 				} else {
 					labels = new HashMap<>();
@@ -499,7 +499,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			nonterminals.addAll(leftOrRightRecursiveNonterminals);
 			
 			boolean changed = true;
-			while(changed) {
+			while (changed) {
 				changed = false;
 				int size = nonterminals.size();
 				Set<String> delta = new HashSet<>();
@@ -660,7 +660,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					if (rule.getAssociativity() != Associativity.UNDEFINED) {
 						
-						if(isBinary && (rule.getAssociativity() == Associativity.LEFT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
+						if (isBinary && (rule.getAssociativity() == Associativity.LEFT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
 							// As associatvity is defined, rule.getPrecedence() is unique;
 							// therefore, maintaining <_>_rules as precedence sets, for each precedence level
 							// should sufficient
@@ -673,7 +673,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 							}	
 						}
 						
-						if(isBinary && (rule.getAssociativity() == Associativity.RIGHT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
+						if (isBinary && (rule.getAssociativity() == Associativity.RIGHT || rule.getAssociativity() == Associativity.NON_ASSOC)) {
 							if (right_rec + iright_rec >= 2) {
 								Integer n = config.groups.get(prec_level.getLhs());
 								if (n == null)
@@ -2151,7 +2151,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 		private static Expression minimum(int precedence, Expression rprec) {
 			return ifThenElse(lessEq(rprec, integer(0)), 
 		     		  		  integer(precedence), 
-		     		  		  min(rprec,integer(precedence)));
+		     		  		  min(rprec, integer(precedence)));
 		}
 		
 		public RuntimeRule transform() {
@@ -2170,9 +2170,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 			switch(config_op) {
 				case _1: 
 					if (isLeftOrRightRecursiveNonterminal && isHeadWithLabeledRules)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r", "_not").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l", "r", "_not").build());
 					else if (isLeftOrRightRecursiveNonterminal)
-						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l","r").build());
+						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("l", "r").build());
 					else if (isHeadWithLabeledRules)
 						builder = rule.copyBuilderButWithHead(rule.getHead().copy().addParameters("_not").build());
 					else builder = rule.copy();
@@ -2181,7 +2181,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					
 					int i = 0;
 					for (Symbol symbol : rule.getBody()) {
-						
+
 						if (i == 0) isFirst = true;
 						else isFirst = false;
 						
@@ -2321,14 +2321,14 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 					}
 
 					if (ret != null && xret != null)
-						symbols.add(Return.ret(tuple(ret,xret)));
+						symbols.add(Return.ret(tuple(ret, xret)));
 					else if (ret != null)
 						symbols.add(Return.ret(ret));
 					else if (xret != null && iret == null)
 						symbols.add(Return.ret(xret));
 					
 					if (iret != null && xret != null)
-						symbols.add(Return.ret(tuple(iret,xret)));
+						symbols.add(Return.ret(tuple(iret, xret)));
 					else if (iret != null)
 						symbols.add(Return.ret(iret));
 					

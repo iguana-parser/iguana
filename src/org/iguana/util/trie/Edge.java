@@ -37,8 +37,8 @@ public class Edge<T> {
 	
 	public Edge(T label, Node<T> destination) {
 		
-		if(label == null) throw new IllegalArgumentException("Label cannot be null.");
-		if(destination == null) throw new IllegalArgumentException("Destination cannot be null.");
+		if (label == null) throw new IllegalArgumentException("Label cannot be null.");
+		if (destination == null) throw new IllegalArgumentException("Destination cannot be null.");
 		
 		this.label = label;
 		this.destination = destination;
@@ -65,9 +65,9 @@ public class Edge<T> {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(obj == this) return true;
+		if (obj == this) return true;
 		
-		if(!(obj instanceof Edge)) return false;
+		if (!(obj instanceof Edge)) return false;
 		
 		@SuppressWarnings("unchecked")
 		Edge<T> other = (Edge<T>) obj;

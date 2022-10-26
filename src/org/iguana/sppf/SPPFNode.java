@@ -31,8 +31,6 @@ import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.result.Result;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.List;
-
 public interface SPPFNode extends Result {
 	
 	SPPFNode getChildAt(int index);

@@ -127,7 +127,7 @@ public class EpsilonTransition extends AbstractTransition {
 
                 Integer lhs;
                 if (!(value instanceof Tuple)) {
-                    lhs = (Integer) ((Tuple<?,?>) value).getFirst();
+                    lhs = (Integer) ((Tuple<?, ?>) value).getFirst();
                 } else {
                     throw new UnexpectedRuntimeTypeException(AST.var(label));
                 }

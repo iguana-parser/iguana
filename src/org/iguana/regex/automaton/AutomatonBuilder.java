@@ -172,7 +172,7 @@ public class AutomatonBuilder {
 		final BitSet bitSet = new BitSet();
 
 		AutomatonVisitor.visit(automaton.getStartState(), state -> {
-				for(Transition transition : state.getTransitions()) {
+				for (Transition transition : state.getTransitions()) {
 					bitSet.set(transition.getStart(), transition.getEnd() + 1);
 				}
 			});
@@ -183,17 +183,17 @@ public class AutomatonBuilder {
 	public static int[] merge(int[] i1, int[] i2) {
 		Set<Integer> set = new HashSet<>();
 
-		for(int i = 0; i < i1.length; i++) {
+		for (int i = 0; i < i1.length; i++) {
 			set.add(i1[i]);
 		}
 
-		for(int i = 0; i < i2.length; i++) {
+		for (int i = 0; i < i2.length; i++) {
 			set.add(i2[i]);
 		}
 
 		int i = 0;
 		int[] merged = new int[set.size()];
-		for(int c : set) {
+		for (int c : set) {
 			merged[i++] = c;
 		}
 

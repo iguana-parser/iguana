@@ -48,9 +48,9 @@ public class PositionalCondition extends Condition {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) return true;
+		if (this == obj) return true;
 		
-		if(!(obj instanceof PositionalCondition)) return false;
+		if (!(obj instanceof PositionalCondition)) return false;
 		
 		PositionalCondition other = (PositionalCondition) obj;
 		

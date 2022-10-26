@@ -60,10 +60,10 @@ public class Alt extends AbstractSymbol {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == this)
+		if (obj == this)
 			return true;
 		
-		if(!(obj instanceof Alt))
+		if (!(obj instanceof Alt))
 			return false;
 		
 		Alt other = (Alt) obj;

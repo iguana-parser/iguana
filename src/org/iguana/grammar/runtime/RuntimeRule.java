@@ -213,7 +213,7 @@ public class RuntimeRule {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(head).append(" = ");
-		for(Symbol s : body) {
+		for (Symbol s : body) {
 			sb.append(s).append(" ");
 		}
 

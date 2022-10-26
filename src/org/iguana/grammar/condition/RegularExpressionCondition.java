@@ -58,10 +58,10 @@ public class RegularExpressionCondition extends Condition {
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(this == obj) 
+		if (this == obj)
 			return true;
 		
-		if(!(obj instanceof RegularExpressionCondition)) 
+		if (!(obj instanceof RegularExpressionCondition))
 			return false;
 		
 		RegularExpressionCondition other = (RegularExpressionCondition) obj;

@@ -66,10 +66,10 @@ public class Group extends AbstractSymbol {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == this)
+		if (obj == this)
 			return true;
 		
-		if(!(obj instanceof Group))
+		if (!(obj instanceof Group))
 			return false;
 		
 		Group other = (Group) obj;

@@ -29,8 +29,6 @@ package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Collections;
 import java.util.Set;
 
@@ -45,7 +43,7 @@ public class EOF extends AbstractRegularExpression {
 	private static EOF instance;
 	
 	public static EOF getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new EOF();
 		}
 		return instance;

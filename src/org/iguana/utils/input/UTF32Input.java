@@ -57,16 +57,16 @@ class UTF32Input extends AbstractInput {
     public String subString(int start, int end) {
         List<Character> charList = new ArrayList<>();
 
-        for(int i = start; i < end; i++) {
+        for (int i = start; i < end; i++) {
             if (characters[i] == -1) continue;
             char[] chars = Character.toChars(characters[i]);
-            for(char c : chars) {
+            for (char c : chars) {
                 charList.add(c);
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        for(char c : charList) {
+        for (char c : charList) {
             sb.append(c);
         }
 

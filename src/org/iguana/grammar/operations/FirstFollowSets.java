@@ -160,9 +160,9 @@ public class FirstFollowSets {
 
 		boolean changed = false;
 		
-		if(alternative == null) return false;
+		if (alternative == null) return false;
 		 		
-		for(int i = index; i < alternative.size(); i++) {
+		for (int i = index; i < alternative.size(); i++) {
 			Symbol symbol = alternative.get(i);
 			changed |= firstSet.addAll(symbol.accept(firstSetVisitor));
 			if (!isNullable(symbol)) break;
@@ -183,9 +183,9 @@ public class FirstFollowSets {
 	 *   
 	 */
 	private boolean isChainNullable(List<Symbol> alternate, int index) {
-		if(index >= alternate.size()) return true;
+		if (index >= alternate.size()) return true;
 		
-		for(int i = index; i < alternate.size(); i++) {
+		for (int i = index; i < alternate.size(); i++) {
 			if (!isNullable(alternate.get(i))) return false;
 		}
 
@@ -207,9 +207,9 @@ public class FirstFollowSets {
 				for (RuntimeRule rule : definitions.get(head)) {
 					List<Symbol> alternative = rule.getBody();
 					
-					if(alternative == null || alternative.size() == 0) continue;
+					if (alternative == null || alternative.size() == 0) continue;
 					
-					for(int i = 0; i < alternative.size(); i++) {
+					for (int i = 0; i < alternative.size(); i++) {
 					
 						Symbol symbol = alternative.get(i);
 						
@@ -342,16 +342,16 @@ public class FirstFollowSets {
     	int size = definitions.get(nonterminal).size();
     	
     	// If there is only one alternate
-		if(size == 1) {
+		if (size == 1) {
         	return true;
         }
         
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-            	if(i != j) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+            	if (i != j) {
             		HashSet<Integer> intersection = new HashSet<>(predictions.get(Tuple.of(nonterminal, i)));
             		intersection.retainAll(predictions.get(Tuple.of(nonterminal, j)));
-        			if(!intersection.isEmpty()) {
+        			if (!intersection.isEmpty()) {
         				return false;
                     }
             	}

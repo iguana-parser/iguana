@@ -222,7 +222,7 @@ public class Grammar {
         if (!(obj instanceof Grammar)) return false;
         Grammar other = (Grammar) obj;
         return this.rules.equals(other.rules) && Objects.equals(this.layout, other.layout)
-                && Objects.equals(this.startSymbols, other.startSymbols);
+            && Objects.equals(this.startSymbols, other.startSymbols);
     }
 
     @Override
@@ -454,7 +454,7 @@ public class Grammar {
 
             IsRecursive isLeft = new IsRecursive(head, Recursion.LEFT_REC, ebnfs);
 
-            if(!first.accept(isLeft) && !isLeft.getEnd().isEmpty()) {
+            if (!first.accept(isLeft) && !isLeft.getEnd().isEmpty()) {
                 Set<String> ends = leftEnds.get(head.getName());
                 if (ends == null) {
                     ends = new HashSet<>();
@@ -467,7 +467,7 @@ public class Grammar {
 
             IsRecursive isRight = new IsRecursive(head, Recursion.RIGHT_REC, ebnfs);
 
-            if(!last.accept(isRight) && !isRight.getEnd().isEmpty()) {
+            if (!last.accept(isRight) && !isRight.getEnd().isEmpty()) {
                 Set<String> ends = rightEnds.get(head.getName());
                 if (ends == null) {
                     ends = new HashSet<>();
@@ -807,7 +807,7 @@ public class Grammar {
             return false;
         }
 
-            @Override
+        @Override
         public Boolean visit(Nonterminal symbol) {
 
             end = symbol.getName();

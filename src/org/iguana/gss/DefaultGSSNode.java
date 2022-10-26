@@ -263,15 +263,15 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 	}
 
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
+		if (this == obj) return true;
 
 		if (!(obj instanceof GSSNode)) return false;
 
 		GSSNode<?> other = (GSSNode<?>) obj;
 
-		return  getGrammarSlot() == other.getGrammarSlot() &&
-				getInputIndex() == other.getInputIndex() &&
-				Arrays.equals(getData(), other.getData());
+		return getGrammarSlot() == other.getGrammarSlot() &&
+			   getInputIndex() == other.getInputIndex() &&
+			   Arrays.equals(getData(), other.getData());
 	}
 
 	public int hashCode() {

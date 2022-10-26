@@ -54,8 +54,8 @@ import static org.iguana.utils.string.StringUtil.listToString;
  */
 public class DesugarState implements GrammarTransformation {
 	
-	private final Map<Nonterminal,Set<String>> uses = new HashMap<>();
-	private final Map<Nonterminal,Set<String>> updates = new HashMap<>();
+	private final Map<Nonterminal, Set<String>> uses = new HashMap<>();
+	private final Map<Nonterminal, Set<String>> updates = new HashMap<>();
 	
 	private final Map<Nonterminal, Set<String>> returns = new HashMap<>();
 	private final Map<Nonterminal, List<Map<Nonterminal, Set<String>>>> bindings = new HashMap<>();

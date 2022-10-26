@@ -27,7 +27,7 @@ public class Stack<T> {
 		int[] hs = new int[this.size];
 		Stack<T> root = this;
 		int i = 0;
-		while(root != null) {
+		while (root != null) {
 			hs[i++] = root.top.hashCode();
 			root = root.parent;
 		}

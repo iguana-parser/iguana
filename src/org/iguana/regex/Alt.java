@@ -53,7 +53,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	
 	@Override
 	public boolean isNullable() {
-		return symbols.stream().anyMatch(e -> ((RegularExpression)e).isNullable()); 
+		return symbols.stream().anyMatch(e -> ((RegularExpression) e).isNullable());
 	}
 	
 	@Override
@@ -81,10 +81,10 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 	@Override
 	public boolean equals(Object obj) {
 	
-		if(obj == this)
+		if (obj == this)
 			return true;
 		
-		if(!(obj instanceof Alt))
+		if (!(obj instanceof Alt))
 			return false;
 		
 		Alt<?> other = (Alt<?>) obj;
@@ -160,12 +160,12 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 			CharRange r1 = ranges.get(i);
 			CharRange r2 = ranges.get(i + 1);
 			
-			if(r2.getStart() > r1.getEnd() + 1) {
+			if (r2.getStart() > r1.getEnd() + 1) {
 				newRanges.add(CharRange.in(r1.getEnd() + 1, r2.getStart() - 1));
 			}
 		}
 		
-		if(ranges.get(i).getEnd() < org.iguana.regex.CharacterRanges.MAX_UTF32_VAL) {
+		if (ranges.get(i).getEnd() < org.iguana.regex.CharacterRanges.MAX_UTF32_VAL) {
 			newRanges.add(CharRange.in(ranges.get(i).getEnd() + 1, CharacterRanges.MAX_UTF32_VAL));
 		}
 		

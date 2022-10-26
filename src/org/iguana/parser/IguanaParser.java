@@ -36,7 +36,6 @@ import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
-import org.iguana.result.Result;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;

@@ -371,7 +371,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     }
 
     private String getChar(int c) {
-        if(org.iguana.regex.CharacterRanges.isPrintableAscii(c))
+        if (org.iguana.regex.CharacterRanges.isPrintableAscii(c))
             return escape((char) c + "");
         else
             return escape(String.format("\\u%04X", c));
