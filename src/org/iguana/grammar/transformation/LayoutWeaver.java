@@ -32,6 +32,7 @@ import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Symbol;
 
@@ -87,8 +88,12 @@ public class LayoutWeaver implements GrammarTransformation {
 					ruleBuilder.addSymbol(s);
 				else
 					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
-				
-				addLayout(layout, rule, ruleBuilder, s);
+
+				boolean nextSymbolError = i < rule.size() - 1 && rule.symbolAt(i + 1) instanceof Error;
+				// Do not insert layout before the Error symbol
+				if (!nextSymbolError) {
+					addLayout(layout, rule, ruleBuilder, s);
+				}
 			}
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);

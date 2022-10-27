@@ -16,6 +16,13 @@
         "nodeType" : "Plus"
       }
     ],
+    "layout" : {
+      "kind" : "Nonterminal",
+      "name" : "whitespace",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "nodeType" : "Layout"
+    },
     "recursion" : "NON_REC",
     "irecursion" : "NON_REC",
     "leftEnd" : "",
@@ -82,6 +89,13 @@
               },
               {
                 "kind" : "Nonterminal",
+                "name" : "whitespace",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout"
+              },
+              {
+                "kind" : "Nonterminal",
                 "name" : "stmt+",
                 "preConditions" : [ ],
                 "postConditions" : [ ],
@@ -89,6 +103,13 @@
               },
               {
                 "kind" : "Error"
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "whitespace",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout"
               },
               {
                 "kind" : "Terminal",
@@ -104,6 +125,13 @@
                 }
               }
             ],
+            "layout" : {
+              "kind" : "Nonterminal",
+              "name" : "whitespace",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
+              "nodeType" : "Layout"
+            },
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
             "leftEnd" : "",
