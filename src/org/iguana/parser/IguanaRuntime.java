@@ -154,7 +154,7 @@ public class IguanaRuntime<T extends Result> {
     private void recoverFromError(GSSEdge<T> edge, Input input) {
         BodyGrammarSlot returnSlot = edge.getReturnSlot();
         T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
-        Environment env = edge.getEnv() == null ? getEmptyEnvironment() : edge.getEnv();
+        Environment env = edge.getEnv();
         ErrorTransition errorTransition = (ErrorTransition) returnSlot.getOutTransition();
         errorTransition.handleError(input, edge.getDestination(), result, env, this);
     }
