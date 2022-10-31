@@ -181,7 +181,9 @@ public class IguanaRuntime<T extends Result> {
         }
         // This covers cases where the layout is inserted.
         // X = alpha . Layout Error
-        if (edge.getReturnSlot().getOutTransition() != null && edge.getReturnSlot().getOutTransition().destination() != null) {
+        if (edge.getReturnSlot().getOutTransition() != null &&
+            edge.getReturnSlot().getOutTransition().destination() != null &&
+            edge.getReturnSlot().getOutTransition().destination().getOutTransition() instanceof ErrorTransition) {
             return (ErrorTransition) edge.getReturnSlot().getOutTransition().destination().getOutTransition();
         }
         return null;

@@ -96,4 +96,16 @@ public class ErrorRecoveryTest extends ParserTestRunner {
 
         run(test);
     }
+
+    @Test
+    public void test8() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("1 / 3 ;")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
 }
