@@ -10,7 +10,8 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     String grammar =
         "program = stmt+\n" +
         "stmt = expr error ';' | '{' stmt+ error '}' \n" +
-        "expr = expr '*' expr > expr '+' expr | [0-9]+\n";
+        "expr = expr '*' expr > expr '+' expr | [0-9]+\n" +
+        "layout l = ' '*\n";
 
     @Test
     public void test1() {

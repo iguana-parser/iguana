@@ -16,6 +16,13 @@
         "nodeType" : "Plus"
       }
     ],
+    "layout" : {
+      "kind" : "Nonterminal",
+      "name" : "l",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "nodeType" : "Layout"
+    },
     "recursion" : "NON_REC",
     "irecursion" : "NON_REC",
     "leftEnd" : "",
@@ -80,6 +87,13 @@
                 ]
               },
               {
+                "kind" : "Nonterminal",
+                "name" : "l",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout"
+              },
+              {
                 "kind" : "Error"
               },
               {
@@ -96,6 +110,13 @@
                 }
               }
             ],
+            "layout" : {
+              "kind" : "Nonterminal",
+              "name" : "l",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
+              "nodeType" : "Layout"
+            },
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
             "leftEnd" : "",
@@ -198,6 +219,13 @@
                     ]
                   },
                   {
+                    "kind" : "Nonterminal",
+                    "name" : "l",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "nodeType" : "Layout"
+                  },
+                  {
                     "kind" : "Terminal",
                     "name" : "'+'",
                     "preConditions" : [ ],
@@ -209,6 +237,13 @@
                       "lookbehinds" : [ ],
                       "val" : 43
                     }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "l",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "nodeType" : "Layout"
                   },
                   {
                     "kind" : "Nonterminal",
@@ -233,6 +268,13 @@
                     }
                   }
                 ],
+                "layout" : {
+                  "kind" : "Nonterminal",
+                  "name" : "l",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
+                  "nodeType" : "Layout"
+                },
                 "recursion" : "LEFT_RIGHT_REC",
                 "irecursion" : "NON_REC",
                 "leftEnd" : "",
@@ -289,6 +331,13 @@
                         }
                       }
                     ],
+                    "layout" : {
+                      "kind" : "Nonterminal",
+                      "name" : "l",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Layout"
+                    },
                     "recursion" : "NON_REC",
                     "irecursion" : "NON_REC",
                     "leftEnd" : "",
@@ -428,6 +477,13 @@
                         }
                       }
                     ],
+                    "layout" : {
+                      "kind" : "Nonterminal",
+                      "name" : "l",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Layout"
+                    },
                     "recursion" : "NON_REC",
                     "irecursion" : "NON_REC",
                     "leftEnd" : "",
@@ -567,6 +623,13 @@
                 ]
               },
               {
+                "kind" : "Nonterminal",
+                "name" : "l",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout"
+              },
+              {
                 "kind" : "Error"
               },
               {
@@ -583,6 +646,13 @@
                 }
               }
             ],
+            "layout" : {
+              "kind" : "Nonterminal",
+              "name" : "l",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
+              "nodeType" : "Layout"
+            },
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
             "leftEnd" : "",
@@ -658,6 +728,13 @@
                 ]
               },
               {
+                "kind" : "Nonterminal",
+                "name" : "l",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout"
+              },
+              {
                 "kind" : "Error"
               },
               {
@@ -674,6 +751,13 @@
                 }
               }
             ],
+            "layout" : {
+              "kind" : "Nonterminal",
+              "name" : "l",
+              "preConditions" : [ ],
+              "postConditions" : [ ],
+              "nodeType" : "Layout"
+            },
             "recursion" : "NON_REC",
             "irecursion" : "NON_REC",
             "leftEnd" : "",
@@ -776,6 +860,13 @@
                     ]
                   },
                   {
+                    "kind" : "Nonterminal",
+                    "name" : "l",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "nodeType" : "Layout"
+                  },
+                  {
                     "kind" : "Terminal",
                     "name" : "'*'",
                     "preConditions" : [ ],
@@ -787,6 +878,13 @@
                       "lookbehinds" : [ ],
                       "val" : 42
                     }
+                  },
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "l",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "nodeType" : "Layout"
                   },
                   {
                     "kind" : "Nonterminal",
@@ -811,6 +909,13 @@
                     }
                   }
                 ],
+                "layout" : {
+                  "kind" : "Nonterminal",
+                  "name" : "l",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
+                  "nodeType" : "Layout"
+                },
                 "recursion" : "LEFT_RIGHT_REC",
                 "irecursion" : "NON_REC",
                 "leftEnd" : "",
@@ -867,6 +972,13 @@
                         }
                       }
                     ],
+                    "layout" : {
+                      "kind" : "Nonterminal",
+                      "name" : "l",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Layout"
+                    },
                     "recursion" : "NON_REC",
                     "irecursion" : "NON_REC",
                     "leftEnd" : "",
@@ -1006,6 +1118,13 @@
                         }
                       }
                     ],
+                    "layout" : {
+                      "kind" : "Nonterminal",
+                      "name" : "l",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Layout"
+                    },
                     "recursion" : "NON_REC",
                     "irecursion" : "NON_REC",
                     "leftEnd" : "",

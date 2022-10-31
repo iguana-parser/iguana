@@ -32,6 +32,7 @@ import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.symbol.Error;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Symbol;
 
@@ -75,6 +76,7 @@ public class LayoutWeaver implements GrammarTransformation {
 			
 			for (int i = 0; i < rule.size() - 1; i++) {
 				Symbol s = rule.symbolAt(i);
+
 				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
 				
 				if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
@@ -87,8 +89,10 @@ public class LayoutWeaver implements GrammarTransformation {
 					ruleBuilder.addSymbol(s);
 				else
 					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
-				
-				addLayout(layout, rule, ruleBuilder, s);
+
+				if (!(s instanceof Error)) {
+					addLayout(layout, rule, ruleBuilder, s);
+				}
 			}
 			
 			Symbol last = rule.symbolAt(rule.size() - 1);
