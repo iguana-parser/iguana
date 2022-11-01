@@ -8,4 +8,8 @@
         <module name="UnusedImports"/>
         <module name="WhitespaceAfter"/>
     </module>
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
 </module>
