@@ -26,11 +26,35 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     }
 
     @Test
+    public void test1WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("1 / 3 ;")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
     public void test2() {
         ParserTest test = ParserTest.newTest()
             .setGrammar(grammar)
             .setStartSymbol(Nonterminal.withName("program"))
             .setInput("1+2;1/3;1*3;")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test2WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("1 + 2   ;  1 /  3 ; 1   *3;")
             .verifyParseTree()
             .build();
 
@@ -50,11 +74,35 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     }
 
     @Test
+    public void test3WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{  1    +    2        }")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
     public void test4() {
         ParserTest test = ParserTest.newTest()
             .setGrammar(grammar)
             .setStartSymbol(Nonterminal.withName("program"))
             .setInput("{1+21/3}")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test4WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{1  +   21   /3        }")
             .verifyParseTree()
             .build();
 
@@ -74,11 +122,36 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     }
 
     @Test
+    public void test5WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{1   /   2     ;     }")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+
+    @Test
     public void test6() {
         ParserTest test = ParserTest.newTest()
             .setGrammar(grammar)
             .setStartSymbol(Nonterminal.withName("program"))
             .setInput("{1/2;3*4;}")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test6WithLayout() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{1 / 2   ;   3 *       4;      }")
             .verifyParseTree()
             .build();
 
@@ -98,11 +171,11 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     }
 
     @Test
-    public void test8() {
+    public void test7withLayout() {
         ParserTest test = ParserTest.newTest()
             .setGrammar(grammar)
             .setStartSymbol(Nonterminal.withName("program"))
-            .setInput("1 / 3 ;")
+            .setInput("{1  /   2   ;     3 +         4}")
             .verifyParseTree()
             .build();
 
