@@ -90,6 +90,8 @@ public class LayoutWeaver implements GrammarTransformation {
 				else
 					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
 
+				// Do not insert layout after the layout symbol because we rely on the first set of the next
+				// non-layout symbol for synchronization.
 				if (!(s instanceof Error)) {
 					addLayout(layout, rule, ruleBuilder, s);
 				}
