@@ -152,7 +152,7 @@ public class GrammarTest {
                 if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                     record(parser.getParseError(), resultPath);
                 } else {
-                    ParseError expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
+                    ParseError<?> expectedParseError = JsonSerializer.deserialize(readFile(resultPath), ParseError.class);
                     assertEquals(expectedParseError, parser.getParseError());
                 }
             }
@@ -169,7 +169,7 @@ public class GrammarTest {
                 actualParseTree = parser.getParseTree();
                 // No parse error
                 String pdfPath = testPath + "/tree" + j + ".pdf";
-                if (actualParseTree != null && !Files.exists(Paths.get(pdfPath))) {
+                if (REGENERATE_FILES || actualParseTree != null && !Files.exists(Paths.get(resultPath))) {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
                     dotGraph.generate(pdfPath);
                 }
@@ -178,7 +178,7 @@ public class GrammarTest {
                     if (parser.getStatistics().getAmbiguousNodesCount() < 20) {
                         actualParseTree = parser.getParseTree(true, true);
                         String pdfPath = testPath + "/tree" + j + ".pdf";
-                        if (!Files.exists(Paths.get(pdfPath))) {
+                        if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                             DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
                             dotGraph.generate(pdfPath);
                         }
