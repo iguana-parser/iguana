@@ -270,9 +270,137 @@
                   },
                   "children" : [
                     {
-                      "kind" : "ErrorNode",
+                      "kind" : "NonterminalNode",
+                      "rule" : {
+                        "head" : {
+                          "kind" : "Nonterminal",
+                          "name" : "expr",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ],
+                          "parameters" : [
+                            "p"
+                          ]
+                        },
+                        "body" : [
+                          {
+                            "kind" : "Nonterminal",
+                            "name" : "(0-9)+",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "nodeType" : "Plus"
+                          },
+                          {
+                            "kind" : "Return",
+                            "name" : "{0}",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "expression" : {
+                              "kind" : "Integer",
+                              "value" : 0
+                            }
+                          }
+                        ],
+                        "layout" : {
+                          "kind" : "Nonterminal",
+                          "name" : "l",
+                          "preConditions" : [ ],
+                          "postConditions" : [ ],
+                          "nodeType" : "Layout"
+                        },
+                        "recursion" : "NON_REC",
+                        "irecursion" : "NON_REC",
+                        "leftEnd" : "",
+                        "rightEnd" : "",
+                        "leftEnds" : [ ],
+                        "rightEnds" : [ ],
+                        "associativity" : "UNDEFINED",
+                        "precedence" : -1,
+                        "precedenceLevel" : {
+                          "lhs" : 1,
+                          "rhs" : 1,
+                          "undefined" : 1,
+                          "hasPrefixUnary" : false,
+                          "hasPostfixUnary" : false,
+                          "hasPrefixUnaryBelow" : false,
+                          "prefixUnaryBelow" : [ ],
+                          "hasPostfixUnaryBelow" : false,
+                          "postfixUnaryBelow" : [ ],
+                          "index" : 2,
+                          "containsAssociativityGroup" : false,
+                          "assoc_lhs" : -1,
+                          "assoc_rhs" : -1
+                        }
+                      },
+                      "children" : [
+                        {
+                          "kind" : "PlusNode",
+                          "symbol" : {
+                            "kind" : "Plus",
+                            "name" : "(0-9)+",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "s" : {
+                              "kind" : "Terminal",
+                              "name" : "(0-9)",
+                              "preConditions" : [ ],
+                              "postConditions" : [ ],
+                              "nodeType" : "Regex",
+                              "regex" : {
+                                "kind" : "regex.Alt",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
+                                "symbols" : [
+                                  {
+                                    "kind" : "CharRange",
+                                    "lookaheads" : [ ],
+                                    "lookbehinds" : [ ],
+                                    "start" : 48,
+                                    "end" : 57
+                                  }
+                                ]
+                              }
+                            },
+                            "separators" : [ ]
+                          },
+                          "children" : [
+                            {
+                              "kind" : "TerminalNode",
+                              "terminal" : {
+                                "kind" : "Terminal",
+                                "name" : "(0-9)",
+                                "preConditions" : [ ],
+                                "postConditions" : [ ],
+                                "nodeType" : "Regex",
+                                "regex" : {
+                                  "kind" : "regex.Alt",
+                                  "lookaheads" : [ ],
+                                  "lookbehinds" : [ ],
+                                  "symbols" : [
+                                    {
+                                      "kind" : "CharRange",
+                                      "lookaheads" : [ ],
+                                      "lookbehinds" : [ ],
+                                      "start" : 48,
+                                      "end" : 57
+                                    }
+                                  ]
+                                }
+                              },
+                              "start" : 1,
+                              "end" : 2
+                            }
+                          ],
+                          "start" : 1,
+                          "end" : 2
+                        }
+                      ],
                       "start" : 1,
-                      "end" : 4
+                      "end" : 2
+                    },
+                    {
+                      "kind" : "ErrorNode",
+                      "start" : 2,
+                      "end" : 9
                     },
                     {
                       "kind" : "KeywordTerminalNode",
@@ -289,12 +417,12 @@
                           "val" : 59
                         }
                       },
-                      "start" : 4,
-                      "end" : 5
+                      "start" : 9,
+                      "end" : 10
                     }
                   ],
                   "start" : 1,
-                  "end" : 5
+                  "end" : 10
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -649,16 +777,16 @@
                                       ]
                                     }
                                   },
-                                  "start" : 5,
-                                  "end" : 6
+                                  "start" : 13,
+                                  "end" : 14
                                 }
                               ],
-                              "start" : 5,
-                              "end" : 6
+                              "start" : 13,
+                              "end" : 14
                             }
                           ],
-                          "start" : 5,
-                          "end" : 6
+                          "start" : 13,
+                          "end" : 14
                         },
                         {
                           "kind" : "KeywordTerminalNode",
@@ -675,8 +803,8 @@
                               "val" : 42
                             }
                           },
-                          "start" : 6,
-                          "end" : 7
+                          "start" : 15,
+                          "end" : 16
                         },
                         {
                           "kind" : "NonterminalNode",
@@ -795,20 +923,20 @@
                                       ]
                                     }
                                   },
-                                  "start" : 7,
-                                  "end" : 8
+                                  "start" : 23,
+                                  "end" : 24
                                 }
                               ],
-                              "start" : 7,
-                              "end" : 8
+                              "start" : 23,
+                              "end" : 24
                             }
                           ],
-                          "start" : 7,
-                          "end" : 8
+                          "start" : 23,
+                          "end" : 24
                         }
                       ],
-                      "start" : 5,
-                      "end" : 8
+                      "start" : 13,
+                      "end" : 24
                     },
                     {
                       "kind" : "KeywordTerminalNode",
@@ -825,16 +953,16 @@
                           "val" : 59
                         }
                       },
-                      "start" : 8,
-                      "end" : 9
+                      "start" : 24,
+                      "end" : 25
                     }
                   ],
-                  "start" : 5,
-                  "end" : 9
+                  "start" : 13,
+                  "end" : 25
                 }
               ],
               "start" : 1,
-              "end" : 9
+              "end" : 25
             },
             {
               "kind" : "KeywordTerminalNode",
@@ -851,18 +979,18 @@
                   "val" : 125
                 }
               },
-              "start" : 9,
-              "end" : 10
+              "start" : 31,
+              "end" : 32
             }
           ],
           "start" : 0,
-          "end" : 10
+          "end" : 32
         }
       ],
       "start" : 0,
-      "end" : 10
+      "end" : 32
     }
   ],
   "start" : 0,
-  "end" : 10
+  "end" : 32
 }

@@ -178,7 +178,7 @@
             {
               "kind" : "ErrorNode",
               "start" : 1,
-              "end" : 8
+              "end" : 31
             },
             {
               "kind" : "KeywordTerminalNode",
@@ -195,18 +195,18 @@
                   "val" : 125
                 }
               },
-              "start" : 8,
-              "end" : 9
+              "start" : 31,
+              "end" : 32
             }
           ],
           "start" : 0,
-          "end" : 9
+          "end" : 32
         }
       ],
       "start" : 0,
-      "end" : 9
+      "end" : 32
     }
   ],
   "start" : 0,
-  "end" : 9
+  "end" : 32
 }

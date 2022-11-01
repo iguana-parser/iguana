@@ -15,6 +15,7 @@ import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.util.ParserLogger;
+import org.iguana.util.Tuple;
 import org.iguana.utils.input.Input;
 
 import java.util.*;
@@ -104,11 +105,11 @@ public class IguanaRuntime<T extends Result> {
 
         PriorityQueue<ParseError<T>> copyParseErrors = new PriorityQueue<>(parseErrors);
         while (!copyParseErrors.isEmpty()) {
-            List<GSSEdge<T>> errorSlots = new ArrayList<>();
+            List<Tuple<GSSEdge<T>, ErrorTransition>> errorSlots = new ArrayList<>();
             GSSNode<T> gssNode = copyParseErrors.poll().getGssNode();
             getErrorSlot(gssNode, errorSlots, new HashSet<>());
-            for (GSSEdge<T> edge : errorSlots) {
-                recoverFromError(edge, input);
+            for (Tuple<GSSEdge<T>, ErrorTransition> t : errorSlots) {
+                recoverFromError(t.getFirst(), t.getSecond(), input);
                 T recoveryResult = runParserLoop(startGSSNode, input);
                 if (recoveryResult != null) {
                     return recoveryResult;
@@ -151,28 +152,41 @@ public class IguanaRuntime<T extends Result> {
     /*
      * Tries to recover the error from an error edge, i.e., of the form X = alpha . Error beta
      */
-    private void recoverFromError(GSSEdge<T> edge, Input input) {
-        BodyGrammarSlot returnSlot = edge.getReturnSlot();
+    private void recoverFromError(GSSEdge<T> edge, ErrorTransition errorTransition, Input input) {
         T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
         Environment env = edge.getEnv();
-        ErrorTransition errorTransition = (ErrorTransition) returnSlot.getOutTransition();
         errorTransition.handleError(input, edge.getDestination(), result, env, this);
     }
 
     // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
     // from the current GSS node to the start symbol GSS node.
-    private void getErrorSlot(GSSNode<T> gssNode, List<GSSEdge<T>> result, Set<GSSNode<T>> visited) {
+    private void getErrorSlot(GSSNode<T> gssNode, List<Tuple<GSSEdge<T>, ErrorTransition>> result, Set<GSSNode<T>> visited) {
         if (visited.contains(gssNode)) return;
         visited.add(gssNode);
         if (gssNode == null) return;
         for (GSSEdge<T> edge : gssNode.getGSSEdges()) {
-            if (edge.getReturnSlot() != null) {
-                if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {
-                    result.add(edge);
-                }
+            ErrorTransition errorTransition = getErrorTransition(edge);
+            if (errorTransition != null) {
+                result.add(Tuple.of(edge, errorTransition));
             }
             getErrorSlot(edge.getDestination(), result, visited);
         }
+    }
+
+    private ErrorTransition getErrorTransition(GSSEdge<T> edge) {
+        if (edge.getReturnSlot() == null) return null;
+        // This covers the cases with no layout insertion: X alpha . Error
+        if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {
+            return (ErrorTransition) edge.getReturnSlot().getOutTransition();
+        }
+        // This covers cases where the layout is inserted.
+        // X = alpha . Layout Error
+        if (edge.getReturnSlot().getOutTransition() != null &&
+            edge.getReturnSlot().getOutTransition().destination() != null &&
+            edge.getReturnSlot().getOutTransition().destination().getOutTransition() instanceof ErrorTransition) {
+            return (ErrorTransition) edge.getReturnSlot().getOutTransition().destination().getOutTransition();
+        }
+        return null;
     }
 
     public boolean hasDescriptor() {

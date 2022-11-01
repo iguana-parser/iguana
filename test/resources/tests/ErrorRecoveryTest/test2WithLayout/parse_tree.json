@@ -443,8 +443,8 @@
                       "val" : 43
                     }
                   },
-                  "start" : 1,
-                  "end" : 2
+                  "start" : 2,
+                  "end" : 3
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -563,20 +563,20 @@
                               ]
                             }
                           },
-                          "start" : 2,
-                          "end" : 3
+                          "start" : 4,
+                          "end" : 5
                         }
                       ],
-                      "start" : 2,
-                      "end" : 3
+                      "start" : 4,
+                      "end" : 5
                     }
                   ],
-                  "start" : 2,
-                  "end" : 3
+                  "start" : 4,
+                  "end" : 5
                 }
               ],
               "start" : 0,
-              "end" : 3
+              "end" : 5
             },
             {
               "kind" : "KeywordTerminalNode",
@@ -593,12 +593,12 @@
                   "val" : 59
                 }
               },
-              "start" : 3,
-              "end" : 4
+              "start" : 8,
+              "end" : 9
             }
           ],
           "start" : 0,
-          "end" : 4
+          "end" : 9
         },
         {
           "kind" : "NonterminalNode",
@@ -679,9 +679,137 @@
           },
           "children" : [
             {
+              "kind" : "NonterminalNode",
+              "rule" : {
+                "head" : {
+                  "kind" : "Nonterminal",
+                  "name" : "expr",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
+                  "parameters" : [
+                    "p"
+                  ]
+                },
+                "body" : [
+                  {
+                    "kind" : "Nonterminal",
+                    "name" : "(0-9)+",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "nodeType" : "Plus"
+                  },
+                  {
+                    "kind" : "Return",
+                    "name" : "{0}",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "expression" : {
+                      "kind" : "Integer",
+                      "value" : 0
+                    }
+                  }
+                ],
+                "layout" : {
+                  "kind" : "Nonterminal",
+                  "name" : "l",
+                  "preConditions" : [ ],
+                  "postConditions" : [ ],
+                  "nodeType" : "Layout"
+                },
+                "recursion" : "NON_REC",
+                "irecursion" : "NON_REC",
+                "leftEnd" : "",
+                "rightEnd" : "",
+                "leftEnds" : [ ],
+                "rightEnds" : [ ],
+                "associativity" : "UNDEFINED",
+                "precedence" : -1,
+                "precedenceLevel" : {
+                  "lhs" : 1,
+                  "rhs" : 1,
+                  "undefined" : 1,
+                  "hasPrefixUnary" : false,
+                  "hasPostfixUnary" : false,
+                  "hasPrefixUnaryBelow" : false,
+                  "prefixUnaryBelow" : [ ],
+                  "hasPostfixUnaryBelow" : false,
+                  "postfixUnaryBelow" : [ ],
+                  "index" : 2,
+                  "containsAssociativityGroup" : false,
+                  "assoc_lhs" : -1,
+                  "assoc_rhs" : -1
+                }
+              },
+              "children" : [
+                {
+                  "kind" : "PlusNode",
+                  "symbol" : {
+                    "kind" : "Plus",
+                    "name" : "(0-9)+",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "s" : {
+                      "kind" : "Terminal",
+                      "name" : "(0-9)",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Regex",
+                      "regex" : {
+                        "kind" : "regex.Alt",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
+                        "symbols" : [
+                          {
+                            "kind" : "CharRange",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "start" : 48,
+                            "end" : 57
+                          }
+                        ]
+                      }
+                    },
+                    "separators" : [ ]
+                  },
+                  "children" : [
+                    {
+                      "kind" : "TerminalNode",
+                      "terminal" : {
+                        "kind" : "Terminal",
+                        "name" : "(0-9)",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
+                        "nodeType" : "Regex",
+                        "regex" : {
+                          "kind" : "regex.Alt",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
+                          "symbols" : [
+                            {
+                              "kind" : "CharRange",
+                              "lookaheads" : [ ],
+                              "lookbehinds" : [ ],
+                              "start" : 48,
+                              "end" : 57
+                            }
+                          ]
+                        }
+                      },
+                      "start" : 11,
+                      "end" : 12
+                    }
+                  ],
+                  "start" : 11,
+                  "end" : 12
+                }
+              ],
+              "start" : 11,
+              "end" : 12
+            },
+            {
               "kind" : "ErrorNode",
-              "start" : 4,
-              "end" : 7
+              "start" : 12,
+              "end" : 18
             },
             {
               "kind" : "KeywordTerminalNode",
@@ -698,12 +826,12 @@
                   "val" : 59
                 }
               },
-              "start" : 7,
-              "end" : 8
+              "start" : 18,
+              "end" : 19
             }
           ],
-          "start" : 4,
-          "end" : 8
+          "start" : 11,
+          "end" : 19
         },
         {
           "kind" : "NonterminalNode",
@@ -1058,16 +1186,16 @@
                               ]
                             }
                           },
-                          "start" : 8,
-                          "end" : 9
+                          "start" : 20,
+                          "end" : 21
                         }
                       ],
-                      "start" : 8,
-                      "end" : 9
+                      "start" : 20,
+                      "end" : 21
                     }
                   ],
-                  "start" : 8,
-                  "end" : 9
+                  "start" : 20,
+                  "end" : 21
                 },
                 {
                   "kind" : "KeywordTerminalNode",
@@ -1084,8 +1212,8 @@
                       "val" : 42
                     }
                   },
-                  "start" : 9,
-                  "end" : 10
+                  "start" : 24,
+                  "end" : 25
                 },
                 {
                   "kind" : "NonterminalNode",
@@ -1204,20 +1332,20 @@
                               ]
                             }
                           },
-                          "start" : 10,
-                          "end" : 11
+                          "start" : 25,
+                          "end" : 26
                         }
                       ],
-                      "start" : 10,
-                      "end" : 11
+                      "start" : 25,
+                      "end" : 26
                     }
                   ],
-                  "start" : 10,
-                  "end" : 11
+                  "start" : 25,
+                  "end" : 26
                 }
               ],
-              "start" : 8,
-              "end" : 11
+              "start" : 20,
+              "end" : 26
             },
             {
               "kind" : "KeywordTerminalNode",
@@ -1234,18 +1362,18 @@
                   "val" : 59
                 }
               },
-              "start" : 11,
-              "end" : 12
+              "start" : 26,
+              "end" : 27
             }
           ],
-          "start" : 8,
-          "end" : 12
+          "start" : 20,
+          "end" : 27
         }
       ],
       "start" : 0,
-      "end" : 12
+      "end" : 27
     }
   ],
   "start" : 0,
-  "end" : 12
+  "end" : 27
 }
