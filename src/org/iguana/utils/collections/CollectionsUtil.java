@@ -73,8 +73,9 @@ public class CollectionsUtil {
 		return mappings.stream().collect(Collectors.toMap(t -> t.getFirst(), t -> t.getSecond()));
 	}
 	
-	public static <K, V> Map<K, V> map(List<K> keys, List<V> values) {	
-		return zip(keys.stream(), values.stream(), (k, v) -> tuple(k, v)).collect(Collectors.toMap(t -> t.getFirst(), t -> t.getSecond()));		
+	public static <K, V> Map<K, V> map(List<K> keys, List<V> values) {
+		return zip(keys.stream(), values.stream(), (k, v) -> tuple(k, v)).collect(
+			Collectors.toMap(t -> t.getFirst(), t -> t.getSecond()));
 	}
 	
 	public static <A, B, C> Stream<C> zip(Stream<A> as, Stream<B> bs, BiFunction<A, B, C> f) {
@@ -117,7 +118,10 @@ public class CollectionsUtil {
 		return list.get(list.size() - 1);
 	}
 
-    public static boolean isEqual(org.iguana.utils.collections.primitive.IntIterable iterables1, IntIterable iterables2) {
+	public static boolean isEqual(
+		org.iguana.utils.collections.primitive.IntIterable iterables1,
+		IntIterable iterables2
+	) {
         org.iguana.utils.collections.primitive.IntIterator it1 = iterables1.iterator();
         IntIterator it2 = iterables2.iterator();
         while (it1.hasNext()) {

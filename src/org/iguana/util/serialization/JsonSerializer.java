@@ -756,7 +756,8 @@ public class JsonSerializer {
 
             abstract static class PPDeclareMixIn {
                 @JsonCreator
-                PPDeclareMixIn(@JsonProperty("variable") Expression variable, @JsonProperty("value") Expression value) { }
+                PPDeclareMixIn(@JsonProperty("variable") Expression variable, @JsonProperty("value") Expression value) {
+                }
             }
 
             abstract static class Put3MixIn {
@@ -776,7 +777,12 @@ public class JsonSerializer {
 
             abstract static class Pr2MixIn {
                 @JsonCreator
-                Pr2MixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") Expression arg2, @JsonProperty("arg3") Expression[] arg3) { }
+                Pr2MixIn(
+                    @JsonProperty("arg1") Expression arg1,
+                    @JsonProperty("arg2") Expression arg2,
+                    @JsonProperty("arg3") Expression[] arg3
+                ) {
+                }
             }
 
             abstract static class Pr3MixIn {

@@ -73,7 +73,11 @@ public class DotGraph {
     }
 
     private static String escape(String s) {
-        return s.replace("\\", "\\\\").replace("\t", "\\\\t").replace("\n", "\\\\n").replace("\r", "\\\\r").replace("\"", "\\\"");
+        return s.replace("\\", "\\\\")
+                .replace("\t", "\\\\t")
+                .replace("\n", "\\\\n")
+                .replace("\r", "\\\\r")
+                .replace("\"", "\\\"");
     }
 
     public enum Direction {

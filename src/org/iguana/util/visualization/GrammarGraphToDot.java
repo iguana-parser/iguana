@@ -72,7 +72,8 @@ public class GrammarGraphToDot {
 		DotGraph.Node node = newNode(slotId);
 		String label;
 		if (slot.getNonterminal().getParameters() != null) {
-			label = String.format("%s(%s)", slot.getNonterminal().getName(), listToString(slot.getNonterminal().getParameters(), ","));
+			label = String.format("%s(%s)", slot.getNonterminal().getName(),
+				listToString(slot.getNonterminal().getParameters(), ","));
 		} else {
 			label = slot.getNonterminal().getName();
 		}
