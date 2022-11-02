@@ -48,7 +48,15 @@ public class StartGSSNode<T extends Result> implements GSSNode<T> {
     }
 
     @Override
-    public void addGSSEdge(Input input, BodyGrammarSlot returnSlot, int i, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime) {
+    public void addGSSEdge(
+        Input input,
+        BodyGrammarSlot returnSlot,
+        int i,
+        GSSNode<T> destination,
+        T w,
+        Environment env,
+        IguanaRuntime<T> runtime
+    ) {
         throw new UnsupportedOperationException();
     }
 

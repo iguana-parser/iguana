@@ -15,16 +15,24 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     private static final NonPackedNode dummyNode = new NonPackedNode() {
         @Override
-        public PackedNode getChildAt(int index) {  throw new UnsupportedOperationException(); }
+        public PackedNode getChildAt(int index) {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
-        public int childrenCount() { throw new UnsupportedOperationException(); }
+        public int childrenCount() {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
-        public GrammarSlot getGrammarSlot() { throw new UnsupportedOperationException(); }
+        public GrammarSlot getGrammarSlot() {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
-        public int getLeftExtent() { throw new UnsupportedOperationException(); }
+        public int getLeftExtent() {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
         public int getRightExtent() {
@@ -37,7 +45,9 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         }
 
         @Override
-        public <R> R accept(SPPFVisitor<R> visitor) { throw new UnsupportedOperationException(); }
+        public <R> R accept(SPPFVisitor<R> visitor) {
+            throw new UnsupportedOperationException();
+        }
 
         @Override
         public void setAmbiguous(boolean ambiguous) {
@@ -90,7 +100,12 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public NonPackedNode merge(NonPackedNode current, NonPackedNode result1, NonPackedNode result2, BodyGrammarSlot slot) {
+    public NonPackedNode merge(
+        NonPackedNode current,
+        NonPackedNode result1,
+        NonPackedNode result2,
+        BodyGrammarSlot slot
+    ) {
         if (result1 == dummyNode)
             return result2;
 
@@ -123,7 +138,8 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
             if (value == null)
                 current = new NonterminalNode(slot, result, result.getLeftExtent(), result.getRightExtent());
             else
-                current = new NonterminalNodeWithValue(slot, result, result.getLeftExtent(), result.getRightExtent(), value);
+                current = new NonterminalNodeWithValue(slot, result, result.getLeftExtent(), result.getRightExtent(),
+                    value);
 
             logger.nonterminalNodeAdded((NonterminalNode) current);
         } else {
