@@ -56,7 +56,13 @@ public class EpsilonTransition extends AbstractTransition {
         this.conditions = conditions;
     }
 
-	public EpsilonTransition(Type type, String label, Conditions conditions, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+    public EpsilonTransition(
+        Type type,
+        String label,
+        Conditions conditions,
+        BodyGrammarSlot origin,
+        BodyGrammarSlot dest
+    ) {
 		super(origin, dest);
 		
 		assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
@@ -86,7 +92,13 @@ public class EpsilonTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+    public <T extends Result> void execute(
+        Input input,
+        GSSNode<T> u,
+        T result,
+        Environment env,
+        IguanaRuntime<T> runtime
+    ) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		runtime.setEnvironment(env);
@@ -115,7 +127,8 @@ public class EpsilonTransition extends AbstractTransition {
 
             case DECLARE_LABEL:
                 runtime.getEvaluatorContext().declareVariable(label, Tuple.of(i, -1));
-                runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
+                runtime.getEvaluatorContext().declareVariable(
+                    String.format(Expression.LeftExtent.format, label), Tuple.of(i, -1));
 
                 if (conditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime))
                     return;

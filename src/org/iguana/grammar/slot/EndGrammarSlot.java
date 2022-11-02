@@ -67,11 +67,23 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		execute(input, u, result, result.getValue(), runtime);
 	}
-	
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
+
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Object value,
+		IguanaRuntime<T> runtime
+	) {
 		int rightExtent = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		int nextChar = input.charAt(rightExtent);
@@ -79,7 +91,8 @@ public class EndGrammarSlot extends BodyGrammarSlot {
 		if (followTest.test(nextChar)) {
 			u.pop(input, this, result, value, runtime);
 		} else {
-			runtime.recordParseError(rightExtent, input, this, u, "Expected " + followTest + " but was " + (char) nextChar);
+			runtime.recordParseError(rightExtent, input, this, u,
+				"Expected " + followTest + " but was " + (char) nextChar);
 		}
 	}
 

@@ -40,18 +40,35 @@ public class EpsilonGrammarSlot extends EndGrammarSlot {
 
 	private final TerminalGrammarSlot epsilonSlot;
 
-	public EpsilonGrammarSlot(Position position, NonterminalGrammarSlot nonterminal, TerminalGrammarSlot epsilonSlot, Conditions conditions) {
+	public EpsilonGrammarSlot(
+		Position position,
+		NonterminalGrammarSlot nonterminal,
+		TerminalGrammarSlot epsilonSlot,
+		Conditions conditions
+	) {
 		super(position, nonterminal, null, null, null, conditions, FollowTest.DEFAULT);
 		this.epsilonSlot = epsilonSlot;
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		execute(input, u, result, (Object) null, runtime);
 	}
 	
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Object value, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Object value,
+		IguanaRuntime<T> runtime
+	) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		int nextChar = input.charAt(i);

@@ -60,17 +60,33 @@ public class BodyGrammarSlot implements GrammarSlot {
 	
 	private final Set<String> state;
 	
-	private FollowTest followTest;
+	private final FollowTest followTest;
 
 	private Transition outTransition;
 
 	private Transition inTransition;
 
-	public BodyGrammarSlot(Position position, String label, String variable, Set<String> state, Conditions conditions, FollowTest followTest) {
+	public BodyGrammarSlot(
+		Position position,
+		String label,
+		String variable,
+		Set<String> state,
+		Conditions conditions,
+		FollowTest followTest
+	) {
 		this(position, label, -1, variable, -1, state, conditions, followTest);
 	}
-	
-	public BodyGrammarSlot(Position position, String label, int i1, String variable, int i2, Set<String> state, Conditions conditions, FollowTest followTest) {
+
+	public BodyGrammarSlot(
+		Position position,
+		String label,
+		int i1,
+		String variable,
+		int i2,
+		Set<String> state,
+		Conditions conditions,
+		FollowTest followTest
+	) {
 		this.position = position;
 		this.conditions = conditions;
 		this.label = label;
@@ -91,7 +107,13 @@ public class BodyGrammarSlot implements GrammarSlot {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Result> T getIntermediateNode(T leftResult, int destinationIndex, T rightResult, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> T getIntermediateNode(
+		T leftResult,
+		int destinationIndex,
+		T rightResult,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		if (isFirst())
 			return rightResult;
 
@@ -128,8 +150,14 @@ public class BodyGrammarSlot implements GrammarSlot {
 	public String getVariable() {
 		return variable;
 	}
-	
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
         outTransition.execute(input, u, result, env, runtime);
 	}
 		
@@ -242,7 +270,14 @@ public class BodyGrammarSlot implements GrammarSlot {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		BodyGrammarSlot that = (BodyGrammarSlot) o;
-		return i1 == that.i1 && i2 == that.i2 && Objects.equals(position, that.position) && Objects.equals(conditions, that.conditions) && Objects.equals(label, that.label) && Objects.equals(variable, that.variable) && Objects.equals(state, that.state) && Objects.equals(followTest, that.followTest);
+		return i1 == that.i1 &&
+			   i2 == that.i2 &&
+			   Objects.equals(position, that.position) &&
+			   Objects.equals(conditions, that.conditions) &&
+			   Objects.equals(label, that.label) &&
+			   Objects.equals(variable, that.variable) &&
+			   Objects.equals(state, that.state) &&
+			   Objects.equals(followTest, that.followTest);
 	}
 
 	@Override

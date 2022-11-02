@@ -49,7 +49,13 @@ public class ReturnTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		Object value = runtime.evaluate(expression, env, input);
 		((EndGrammarSlot) dest).execute(input, u, result, value, runtime);
 	}

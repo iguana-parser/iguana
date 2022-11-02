@@ -17,7 +17,13 @@ public class ErrorTransition extends AbstractTransition {
         throw new UnsupportedOperationException();
     }
 
-    public <T extends Result> void handleError(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+    public <T extends Result> void handleError(
+        Input input,
+        GSSNode<T> u,
+        T result,
+        Environment env,
+        IguanaRuntime<T> runtime
+    ) {
         int rightExtent = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
         int i = rightExtent;
         while (i < input.length() && !dest.testFollow(input.charAt(i))) {
@@ -33,7 +39,13 @@ public class ErrorTransition extends AbstractTransition {
     }
 
     @Override
-    public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+    public <T extends Result> void execute(
+        Input input,
+        GSSNode<T> u,
+        T result,
+        Environment env,
+        IguanaRuntime<T> runtime
+    ) {
         dest.execute(input, u, result, env, runtime);
     }
 }

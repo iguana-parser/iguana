@@ -38,17 +38,45 @@ import org.iguana.result.Result;
 
 public interface Conditions {
 
-    default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IguanaRuntime<T> runtime) {
+    default <T extends Result> boolean execute(
+        Input input,
+        BodyGrammarSlot slot,
+        GSSNode<T> u,
+        int leftExtent,
+        int rightExtent,
+        IguanaRuntime<T> runtime
+    ) {
         return execute(input, slot, u, leftExtent, rightExtent, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
     }
 
-    <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime);
+    <T extends Result> boolean execute(
+        Input input,
+        BodyGrammarSlot slot,
+        GSSNode<T> u,
+        int leftExtent,
+        int rightExtent,
+        IEvaluatorContext ctx,
+        IguanaRuntime<T> runtime
+    );
 
-	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int inputIndex, IguanaRuntime<T> runtime) {
+    default <T extends Result> boolean execute(
+        Input input,
+        BodyGrammarSlot slot,
+        GSSNode<T> u,
+        int inputIndex,
+        IguanaRuntime<T> runtime
+    ) {
         return execute(input, slot, u, inputIndex, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
     }
-	
-	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int inputIndex, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+
+    default <T extends Result> boolean execute(
+        Input input,
+        BodyGrammarSlot slot,
+        GSSNode<T> u,
+        int inputIndex,
+        IEvaluatorContext ctx,
+        IguanaRuntime<T> runtime
+    ) {
         return execute(input, slot, u, inputIndex, inputIndex, ctx, runtime);
     }
 

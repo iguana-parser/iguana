@@ -43,7 +43,13 @@ public class TerminalTransition extends AbstractTransition {
 	
 	private final Conditions postConditions;
 
-	public TerminalTransition(TerminalGrammarSlot terminalSlot, BodyGrammarSlot origin, BodyGrammarSlot dest, Conditions preConditions, Conditions postConditions) {
+	public TerminalTransition(
+		TerminalGrammarSlot terminalSlot,
+		BodyGrammarSlot origin,
+		BodyGrammarSlot dest,
+		Conditions preConditions,
+		Conditions postConditions
+	) {
 		super(origin, dest);
         this.terminalSlot = terminalSlot;
         this.preConditions = preConditions;
@@ -60,13 +66,20 @@ public class TerminalTransition extends AbstractTransition {
 	}
 	
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		runtime.setEnvironment(env);
 		
 		if (dest.getLabel() != null)
-			runtime.getEvaluatorContext().declareVariable(String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+			runtime.getEvaluatorContext().declareVariable(
+				String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
 		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime)) {
 			terminalSlot.recordFailure(i);
@@ -83,7 +96,8 @@ public class TerminalTransition extends AbstractTransition {
 		if (dest.getLabel() != null)
 			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
 
-		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(), runtime.getEvaluatorContext(), runtime)) {
+		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(),
+			runtime.getEvaluatorContext(), runtime)) {
 			terminalSlot.recordFailure(cr.getRightExtent());
 			return;
 		}

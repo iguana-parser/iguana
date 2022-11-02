@@ -46,8 +46,13 @@ public class NonterminalTransition extends AbstractTransition {
 	
 	private final Expression[] arguments;
 
-	public NonterminalTransition(NonterminalGrammarSlot nonterminal, BodyGrammarSlot origin, BodyGrammarSlot dest,
-			                     Expression[] arguments, Conditions preConditions) {
+	public NonterminalTransition(
+		NonterminalGrammarSlot nonterminal,
+		BodyGrammarSlot origin,
+		BodyGrammarSlot dest,
+		Expression[] arguments,
+		Conditions preConditions
+	) {
 		super(origin, dest);
 		this.nonterminal = nonterminal;
 		this.arguments = arguments;
@@ -62,11 +67,18 @@ public class NonterminalTransition extends AbstractTransition {
 	public String getLabel() {
 		return (dest.getVariable() != null? dest.getVariable() + "=" : "") 
 				+ (dest.getLabel() != null? dest.getLabel() + ":"  : "")
-				+ (arguments != null? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ",")) : getSlot().toString());
+				+ (arguments != null ? String.format("%s(%s)", getSlot().toString(), listToString(arguments, ","))
+			                         : getSlot().toString());
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 

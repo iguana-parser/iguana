@@ -51,7 +51,13 @@ public class TerminalGrammarSlot implements GrammarSlot {
         this.matcher = factory.getMatcher(terminal.getRegularExpression());
     }
 
-	public <T extends Result> T getResult(Input input, int i, BodyGrammarSlot slot, GSSNode<T> gssNode, IguanaRuntime<T> runtime) {
+	public <T extends Result> T getResult(
+		Input input,
+		int i,
+		BodyGrammarSlot slot,
+		GSSNode<T> gssNode,
+		IguanaRuntime<T> runtime
+	) {
 	    if (terminalNodes == null) {
 	        terminalNodes = new OpenAddressingIntHashMap<>();
         }
