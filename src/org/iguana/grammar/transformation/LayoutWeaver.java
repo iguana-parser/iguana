@@ -47,7 +47,8 @@ public class LayoutWeaver implements GrammarTransformation {
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
 		Symbol layout = grammar.getLayout();
 
-		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(grammar.getStartSymbols());
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(
+			grammar.getStartSymbols());
 		
 		for (RuntimeRule rule : grammar.getRules()) {
 			RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
@@ -69,7 +70,8 @@ public class LayoutWeaver implements GrammarTransformation {
 				if (layout == null) {
 					builder.addRule(ruleBuilder.addSymbol(rule.symbolAt(0)).build());
 				} else {
-					builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout).build());
+					builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout)
+						.build());
 				}
 				continue;
 			}
@@ -142,7 +144,8 @@ public class LayoutWeaver implements GrammarTransformation {
 	private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
 		Set<Condition> conditions = new LinkedHashSet<>();
 		for (Condition c : s.getPostConditions()) {
-			if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT || c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
+			if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT ||
+				c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
 				conditions.add(c);
 			}
 		}
