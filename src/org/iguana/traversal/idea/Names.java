@@ -123,7 +123,8 @@ public class Names implements GrammarTransformation {
 
         @Override
         public Symbol visit(IfThenElse symbol) {
-            return IfThenElse.ifThenElse(symbol.getExpression(), visitSymbol(symbol.getThenPart()), visitSymbol(symbol.getElsePart()));
+            return IfThenElse.ifThenElse(symbol.getExpression(), visitSymbol(symbol.getThenPart()),
+                visitSymbol(symbol.getElsePart()));
         }
 
         @Override

@@ -79,8 +79,12 @@ public class GenerateParser {
             writer.println("    public ASTNode getParserTree(IElementType root, PsiBuilder builder) {");
             writer.println("        Input input = Input.fromString(builder.getOriginalText().toString());");
             writer.println("        if (graph == null) {");
-            writer.println("            grammar = Grammar.load(this.getClass().getClassLoader().getResourceAsStream(\"" + language.toLowerCase() + "/gen/parser/grammar/" + language + "\"));");
-            writer.println("            DesugarPrecedenceAndAssociativity precedenceAndAssociativity = new DesugarPrecedenceAndAssociativity();");
+            writer.println(
+                "            grammar = Grammar.load(this.getClass().getClassLoader().getResourceAsStream(\"" +
+                language.toLowerCase() + "/gen/parser/grammar/" + language + "\"));");
+            writer.println(
+                "            DesugarPrecedenceAndAssociativity precedenceAndAssociativity = " +
+                "new DesugarPrecedenceAndAssociativity();");
             writer.println("            precedenceAndAssociativity.setOP2();");
             writer.println("            grammar = new EBNFToBNF().transform(grammar);");
             writer.println("            grammar = precedenceAndAssociativity.transform(grammar);");
@@ -93,11 +97,13 @@ public class GenerateParser {
             writer.println("        if (result.isParseSuccess()) {");
             writer.println("            System.out.println(\"Success...\");");
             writer.println("            NonterminalNode sppf = result.asParseSuccess().getResult();");
-            writer.println("            ASTNode ast = SPPFToTerms.convertNoSharing(sppf, new " + language + "TermBuilder());");
+            writer.println(
+                "            ASTNode ast = SPPFToTerms.convertNoSharing(sppf, new " + language + "TermBuilder());");
             writer.println("            return ast;");
             writer.println("        } else {");
             writer.println("            System.out.println(\"Parse error...\");");
-            writer.println("            return Factory.createErrorElement(\"Sorry, you have a getParserTree error.\");");
+            writer.println(
+                "            return Factory.createErrorElement(\"Sorry, you have a getParserTree error.\");");
             writer.println("        }");
             writer.println("    }");
             writer.println("}");
@@ -135,11 +141,14 @@ public class GenerateParser {
             writer.println();
             writer.println("public class " + language + "ParserDefinition implements ParserDefinition {");
             writer.println();
-            writer.println("    public static final IFileElementType FILE = new IFileElementType(Language.<" + language + "Lang>findInstance(" + language + "Lang.class));");
+            writer.println(
+                "    public static final IFileElementType FILE = new IFileElementType(Language.<" + language +
+                "Lang>findInstance(" + language + "Lang.class));");
             writer.println();
             writer.println("    public Lexer createLexer(Project project) { return new " + language + "Lexer(); }");
             writer.println();
-            writer.println("    public PsiParser createParser(Project project) { return new " + language + "Parser(); }");
+            writer.println(
+                "    public PsiParser createParser(Project project) { return new " + language + "Parser(); }");
             writer.println();
             writer.println("    public IFileElementType getFileNodeType() { return FILE; }");
             writer.println();
@@ -149,7 +158,8 @@ public class GenerateParser {
             writer.println();
             writer.println("    public TokenSet getStringLiteralElements() { return TokenSet.EMPTY; }");
             writer.println();
-            writer.println("    public PsiElement createElement(ASTNode node) { return " + language + "ElementTypes.Factory.createElement(node); }");
+            writer.println("    public PsiElement createElement(ASTNode node) { return " + language +
+                           "ElementTypes.Factory.createElement(node); }");
             writer.println();
             writer.println("    public PsiFile createFile(FileViewProvider viewProvider) {");
             writer.println("        " + language + "File file = new " + language + "File(viewProvider);");
@@ -157,7 +167,9 @@ public class GenerateParser {
             writer.println("        return file;");
             writer.println("    }");
             writer.println();
-            writer.println("    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) { return SpaceRequirements.MAY; }");
+            writer.println(
+                "    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) " +
+                "{ return SpaceRequirements.MAY; }");
             writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
@@ -179,7 +191,9 @@ public class GenerateParser {
             writer.println("import javax.swing.Icon;");
             writer.println();
             writer.println("public class " + language + "File extends PsiFileBase {");
-            writer.println("    public " + language + "File(FileViewProvider viewProvider) { super(viewProvider, " + language + "Lang.instance); }");
+            writer.println(
+                "    public " + language + "File(FileViewProvider viewProvider) { super(viewProvider, " + language +
+                "Lang.instance); }");
             writer.println("    public FileType getFileType() { return " + language + "FileType.instance; }");
             writer.println("    public String toString() { return \"" + language + " file\"; }");
             writer.println("    public Icon getIcon(int flags) { return super.getIcon(flags); }");

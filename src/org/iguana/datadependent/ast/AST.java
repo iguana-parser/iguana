@@ -163,7 +163,7 @@ public class AST {
         }
     }
 
-    public static Indent indent(Expression...args) {
+    public static Indent indent(Expression... args) {
         if (args.length != 1) throw new RuntimeException("args size should be one");
         return indent(args[0]);
     }
@@ -189,7 +189,8 @@ public class AST {
 
             NonPackedNode node = (NonPackedNode) var;
 
-            ctx.declareGlobalVariable(input.subString(node.getLeftExtent(), node.getRightExtent()), value.interpret(ctx, input));
+            ctx.declareGlobalVariable(input.subString(node.getLeftExtent(), node.getRightExtent()),
+                value.interpret(ctx, input));
 
             return null;
         }
@@ -379,7 +380,7 @@ public class AST {
     }
 
     public static Pr1 pr1(Expression arg1, Expression arg2, Expression arg3) {
-       return new Pr1(arg1, arg2, arg3);
+        return new Pr1(arg1, arg2, arg3);
     }
 
     public static class Pr2 extends Expression.Call {
@@ -575,7 +576,7 @@ public class AST {
         }
     }
 
-    public static Contains contains(Expression...args) {
+    public static Contains contains(Expression... args) {
         if (args.length != 2) throw new RuntimeException("args size should be two");
         return contains(args[0], args[1]);
     }
@@ -684,7 +685,8 @@ public class AST {
                 throw new UnexpectedTypeOfArgumentException(this);
 
             @SuppressWarnings("unchecked")
-            Stack<java.util.Map<java.lang.String, java.lang.Boolean>> s = (Stack<java.util.Map<java.lang.String, java.lang.Boolean>>) value;
+            Stack<java.util.Map<java.lang.String, java.lang.Boolean>> s =
+                (Stack<java.util.Map<java.lang.String, java.lang.Boolean>>) value;
 
             java.lang.String key = (java.lang.String) arguments[0].interpret(ctx, input);
 
