@@ -115,7 +115,10 @@ public class ParserLogger {
     }
 
     public void error(ParseError error) {
-        if (logEnabled) logger.log("Error recorded at %s %d %s", error.getGrammarSlot(), error.getInputIndex(), error.getDescription());
+        if (logEnabled) {
+            logger.log("Error recorded at %s %d %s", error.getGrammarSlot(), error.getInputIndex(),
+                error.getDescription());
+        }
     }
 
     public <T extends Result> void processDescriptor(Descriptor<T> descriptor) {

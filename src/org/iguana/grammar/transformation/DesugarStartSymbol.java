@@ -24,7 +24,8 @@ public class DesugarStartSymbol implements GrammarTransformation {
         RuntimeGrammar.Builder builder = new RuntimeGrammar.Builder(grammar);
 
         for (Start start : starts) {
-            Nonterminal startNonterminal = new Nonterminal.Builder(start.getName()).setNodeType(NonterminalNodeType.Start).build();
+            Nonterminal startNonterminal = new Nonterminal.Builder(start.getName()).setNodeType(
+                NonterminalNodeType.Start).build();
 
             RuntimeRule startRule = RuntimeRule.withHead(startNonterminal)
                 // TODO: For now we use the label top, but would be good to allow configuring it.

@@ -169,7 +169,8 @@ public class SimpleImmutableEnvironment implements Environment {
 	@Override
 	public String toString() {
 		return (parent != null? parent.toString() + " -> " : "() -> ")
-				+ (bindings != null? listToString(bindings.entrySet().stream().map(entry -> entry.getKey() + " : " + entry.getValue()).collect(Collectors.toList()), ";")
+				+ (bindings != null? listToString(bindings.entrySet().stream()
+            .map(entry -> entry.getKey() + " : " + entry.getValue()).collect(Collectors.toList()), ";")
 								   : "()");
 	}
 

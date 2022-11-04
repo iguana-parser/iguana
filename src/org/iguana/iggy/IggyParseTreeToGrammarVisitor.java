@@ -107,7 +107,8 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
             }
         }
         Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName())
-            .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString).collect(Collectors.toList())).orElse(Collections.emptyList()))
+            .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString)
+                .collect(Collectors.toList())).orElse(Collections.emptyList()))
             .setNodeType(nonterminalNodeType)
             .build();
 

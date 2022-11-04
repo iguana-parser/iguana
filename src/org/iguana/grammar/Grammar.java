@@ -84,7 +84,7 @@ public class Grammar {
 
     public RuntimeGrammar toRuntimeGrammar() {
         if (runtimeGrammar == null) {
-            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(this.regularExpressionDefinitions);
+            Map<String, RegularExpression> regularExpressions = InlineReferences.inline(regularExpressionDefinitions);
             Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
             ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
             GrammarVisitor grammarVisitor = new GrammarVisitor(resolveIdentifiers);
@@ -114,7 +114,8 @@ public class Grammar {
                 } else if (newLayout instanceof Nonterminal) {
                     newLayout = ((Nonterminal) newLayout).copy().setNodeType(NonterminalNodeType.Layout).build();
                 } else {
-                    throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " + newLayout.getClass().getSimpleName());
+                    throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " +
+                                                   newLayout.getClass().getSimpleName());
                 }
             }
 
@@ -315,7 +316,12 @@ public class Grammar {
         }
     }
 
-    private List<RuntimeRule> getRules(Rule highLevelRule, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
+    private List<RuntimeRule> getRules(
+        Rule highLevelRule,
+        Map<String, Set<String>> leftEnds,
+        Map<String, Set<String>> rightEnds,
+        Set<String> ebnfs
+    ) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -335,7 +341,8 @@ public class Grammar {
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label,
+                                                   highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -352,7 +359,8 @@ public class Grammar {
                     if (alternative.first().isEmpty()) { // Empty alternative
                         Sequence sequence = alternative.first();
                         String label = sequence.label;
-                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label,
+                                                   highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -365,7 +373,8 @@ public class Grammar {
                         symbols.add(sequence.first());
                         if (sequence.rest() != null)
                             addAll(symbols, sequence.rest());
-                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label, highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label,
+                                                   highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -384,10 +393,20 @@ public class Grammar {
         return rules;
     }
 
-    private RuntimeRule getRule(Nonterminal head, List<Symbol> body, Associativity associativity, String label,
-                                LayoutStrategy layoutStrategy, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
-        boolean isLeft = body.size() != 0 && body.get(0).accept(new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs));
-        boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs));
+    private RuntimeRule getRule(
+        Nonterminal head,
+        List<Symbol> body,
+        Associativity associativity,
+        String label,
+        LayoutStrategy layoutStrategy,
+        Map<String, Set<String>> leftEnds,
+        Map<String, Set<String>> rightEnds,
+        Set<String> ebnfs
+    ) {
+        boolean isLeft = body.size() != 0 && body.get(0).accept(
+            new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs));
+        boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(
+            new IsRecursive(head, Recursion.RIGHT_REC, leftEnds, ebnfs));
 
         IsRecursive visitor = new IsRecursive(head, Recursion.iLEFT_REC, leftEnds, ebnfs);
 
@@ -447,7 +466,13 @@ public class Grammar {
             .build();
     }
 
-    private void computeEnds(Nonterminal head, List<Symbol> symbols, Map<String, Set<String>> leftEnds, Map<String, Set<String>> rightEnds, Set<String> ebnfs) {
+    private void computeEnds(
+        Nonterminal head,
+        List<Symbol> symbols,
+        Map<String, Set<String>> leftEnds,
+        Map<String, Set<String>> rightEnds,
+        Set<String> ebnfs
+    ) {
         if (symbols.size() >= 1) {
             Symbol first = symbols.get(0);
             Symbol last = symbols.get(symbols.size() - 1);
@@ -487,7 +512,8 @@ public class Grammar {
                 for (Alternative alternative : priorityLevel.getAlternatives()) {
                     for (Sequence seq : alternative.seqs()) {
                         for (Symbol symbol : seq.getSymbols()) {
-                            GatherTopLevelRegularExpressionsVisitor visitor = new GatherTopLevelRegularExpressionsVisitor(grammar);
+                            GatherTopLevelRegularExpressionsVisitor visitor =
+                                new GatherTopLevelRegularExpressionsVisitor(grammar);
                             symbol.accept(visitor);
                             references.addAll(visitor.references);
                         }
@@ -501,7 +527,8 @@ public class Grammar {
     // Top-level regular expressions are the ones that are directly reachable from context free rules.
     // They define the tokens of the language.
     // TODO: unify this with SymbolToSymbolVisitor
-    private static class GatherTopLevelRegularExpressionsVisitor implements ISymbolVisitor<Void>, RegularExpressionVisitor<Void>, IConditionVisitor<Void> {
+    private static class GatherTopLevelRegularExpressionsVisitor
+        implements ISymbolVisitor<Void>, RegularExpressionVisitor<Void>, IConditionVisitor<Void> {
 
         private final Set<String> references = new LinkedHashSet<>();
         private final Grammar grammar;
@@ -931,8 +958,8 @@ public class Grammar {
 
         @Override
         public Boolean visit(org.iguana.grammar.symbol.Star symbol) {
-
-            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) { // TODO: not good, there should be also left and right ends
+            // TODO: not good, there should be also left and right ends
+            if (recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC) {
 
                 IsRecursive visitor = new IsRecursive(head, recursion, ebnfs);
                 symbol.getSymbol().accept(visitor);

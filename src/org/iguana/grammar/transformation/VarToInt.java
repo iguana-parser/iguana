@@ -25,7 +25,8 @@ import org.iguana.traversal.ISymbolVisitor;
 
 import java.util.*;
 
-public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<AbstractAST>, ISymbolVisitor<Symbol>, IConditionVisitor<Condition> {
+public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<AbstractAST>, ISymbolVisitor<Symbol>,
+    IConditionVisitor<Condition> {
 
     private Map<java.lang.Integer, Map<java.lang.String, java.lang.Integer>> mapping;
 
@@ -174,7 +175,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
                     .addExcepts(symbol.getExcepts())
                     .build();
 
-        org.iguana.datadependent.ast.Expression[] arguments = new org.iguana.datadependent.ast.Expression[symbol.getArguments().length];
+        org.iguana.datadependent.ast.Expression[] arguments =
+            new org.iguana.datadependent.ast.Expression[symbol.getArguments().length];
 
         int i = 0;
         for (org.iguana.datadependent.ast.Expression e : symbol.getArguments())
@@ -270,7 +272,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public AbstractAST visit(Tuple expression) {
-        org.iguana.datadependent.ast.Expression[] expressions = new org.iguana.datadependent.ast.Expression[expression.getElements().length];
+        org.iguana.datadependent.ast.Expression[] expressions =
+            new org.iguana.datadependent.ast.Expression[expression.getElements().length];
 
         int i = 0;
         for (org.iguana.datadependent.ast.Expression e : expression.getElements())
@@ -296,7 +299,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public AbstractAST visit(Call expression) {
-        org.iguana.datadependent.ast.Expression[] arguments = new org.iguana.datadependent.ast.Expression[expression.getArguments().length];
+        org.iguana.datadependent.ast.Expression[] arguments =
+            new org.iguana.datadependent.ast.Expression[expression.getArguments().length];
         int i = 0;
         for (org.iguana.datadependent.ast.Expression e : expression.getArguments())
             arguments[i++] = (org.iguana.datadependent.ast.Expression) e.accept(this);
@@ -325,7 +329,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
             case "pr1":
                 return AST.pr1(arguments[0], arguments[1], arguments[2]);
             case "pr2":
-                org.iguana.datadependent.ast.Expression[] rest = new org.iguana.datadependent.ast.Expression[arguments.length - 2];
+                org.iguana.datadependent.ast.Expression[] rest =
+                    new org.iguana.datadependent.ast.Expression[arguments.length - 2];
                 System.arraycopy(arguments, 2, rest, 0, arguments.length - 2);
                 return AST.pr2(arguments[0], arguments[1], rest);
             case "pr3":
@@ -486,7 +491,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
     public AbstractAST visit(VariableDeclaration declaration) {
         int i = current.size();
         current.put(declaration.getName(), i);
-        return AST.varDecl(declaration.getName(), i, (org.iguana.datadependent.ast.Expression) declaration.getExpression().accept(this));
+        return AST.varDecl(declaration.getName(), i,
+            (org.iguana.datadependent.ast.Expression) declaration.getExpression().accept(this));
     }
 
     @Override
@@ -527,7 +533,8 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
 
     @Override
     public Condition visit(DataDependentCondition condition) {
-        return DataDependentCondition.predicate((org.iguana.datadependent.ast.Expression) condition.getExpression().accept(this));
+        return DataDependentCondition.predicate(
+            (org.iguana.datadependent.ast.Expression) condition.getExpression().accept(this));
     }
 
     @Override

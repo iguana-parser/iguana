@@ -54,7 +54,8 @@ public abstract class Generator {
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
-                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
+                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() +
+                                      nonterminalName.substring(1);
                     sb.append(f.apply(nodeName));
                 }
             }

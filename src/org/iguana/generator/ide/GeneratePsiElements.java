@@ -58,15 +58,19 @@ public class GeneratePsiElements extends Generator {
             List<RuntimeRule> alternatives = entry.getValue();
 
             if (alternatives.size() == 0) {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false, Collections.emptyList()));
+                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,
+                    Collections.emptyList()));
             } else if (alternatives.size() == 1) {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false, alternatives.get(0).getBody()));
+                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,
+                    alternatives.get(0).getBody()));
             } else {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), true, Collections.emptyList()));
+                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), true,
+                    Collections.emptyList()));
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
-                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() + nonterminalName.substring(1);
+                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() +
+                                      nonterminalName.substring(1);
                     sb.append(generateSymbolClass(nodeName, nonterminalName, false, alternative.getBody()));
                 }
             }
@@ -93,7 +97,9 @@ public class GeneratePsiElements extends Generator {
         sb.append("\n");
         sb.append("public class " + className + "PsiElementFactory {\n");
         sb.append("\n");
-        sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap = new IdentityHashMap<>();\n");
+        sb.append(
+            "    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap " +
+            "= new IdentityHashMap<>();\n");
         sb.append("\n");
         sb.append("    static {\n");
         metaSymbolNodes.forEach(s -> sb.append(generateTypeToPsiElementMapEntry(s)));
@@ -115,12 +121,13 @@ public class GeneratePsiElements extends Generator {
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
         return
-            "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass + " extends ASTWrapperPsiElement {\n" +
-                "        public " + symbolClass + "(@NotNull ASTNode node) {\n" +
-                "            super(node);\n" +
-                "        }\n\n" +
-                generateSymbols(symbols) +
-                "    }\n\n";
+            "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass +
+            " extends ASTWrapperPsiElement {\n" +
+            "        public " + symbolClass + "(@NotNull ASTNode node) {\n" +
+            "            super(node);\n" +
+            "        }\n\n" +
+            generateSymbols(symbols) +
+            "    }\n\n";
     }
 
     private String generateSymbols(List<Symbol> symbols) {
@@ -155,6 +162,7 @@ public class GeneratePsiElements extends Generator {
         public Type(String name) {
             this(name, null);
         }
+
         public Type(String name, String parameter) {
             this.name = name;
             this.parameter = parameter;

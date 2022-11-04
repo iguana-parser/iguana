@@ -48,7 +48,15 @@ public class ConditionsFactory {
 	public static Conditions DEFAULT = new Conditions() {
 
         @Override
-        public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> u, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+		public <T extends Result> boolean execute(
+			Input input,
+			BodyGrammarSlot slot,
+			GSSNode<T> u,
+			int leftExtent,
+			int rightExtent,
+			IEvaluatorContext ctx,
+			IguanaRuntime<T> runtime
+		) {
             return false;
         }
 
@@ -77,7 +85,15 @@ public class ConditionsFactory {
 			return new Conditions() {
 
 				@Override
-				public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int lefExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+				public <T extends Result> boolean execute(
+					Input input,
+					BodyGrammarSlot slot,
+					GSSNode<T> gssNode,
+					int lefExtent,
+					int rightExtent,
+					IEvaluatorContext ctx,
+					IguanaRuntime<T> runtime
+				) {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
 					    if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
@@ -99,7 +115,15 @@ public class ConditionsFactory {
 		return new Conditions() {
 
             @Override
-            public <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx, IguanaRuntime<T> runtime) {
+			public <T extends Result> boolean execute(
+				Input input,
+				BodyGrammarSlot slot,
+				GSSNode<T> gssNode,
+				int leftExtent,
+				int rightExtent,
+				IEvaluatorContext ctx,
+				IguanaRuntime<T> runtime
+			) {
                 for (int j = 0; j < actions.size(); j++) {
                     SlotAction slotAction = actions.get(j);
                     if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {

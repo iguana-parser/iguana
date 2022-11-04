@@ -77,7 +77,8 @@ public class GenerateLangFiles {
             "import javax.swing.*;\n" +
             "\n" +
             "public class " + className + "Icon {\n" +
-            "  public static final Icon icon = IconLoader.getIcon(\"/META-INF/pluginIcon.svg\", " + className + "Icon.class);\n" +
+            "  public static final Icon icon = IconLoader.getIcon(\"/META-INF/pluginIcon.svg\", " + className +
+            "Icon.class);\n" +
             "}\n";
         writeToJavaFile(content, langGenDirectory, className + "Icon");
     }

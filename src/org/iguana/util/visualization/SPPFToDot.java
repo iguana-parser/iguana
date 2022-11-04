@@ -42,13 +42,13 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 	
 	private final boolean showPackedNodeLabel;
 
-	private Map<SPPFNode, Integer> ids = new HashMap<>();
+	private final Map<SPPFNode, Integer> ids = new HashMap<>();
 	
-	private DotGraph dotGraph;
+	private final DotGraph dotGraph;
 
 	protected Input input;
 	
-	private Set<NonPackedNode> visited = new HashSet<>();
+	private final Set<NonPackedNode> visited = new HashSet<>();
 
 	public static DotGraph getDotGraph(SPPFNode root, Input input) {
 		return getDotGraph(root, input, false);
@@ -72,7 +72,8 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		if (!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(),
+				node.getRightExtent(), matchedInput);
 			dotGraph.addNode(newNode(getId(node), label));
 		}
 
@@ -86,13 +87,16 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 			
 			String label;
 			if (node.getValue() == null)
-				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
+					node.getRightExtent());
 			else {
 				if (node.getValue() instanceof List<?>)
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(),
-												"(" + listToString((List<?>) node.getValue(), ",") + ")");
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
+						node.getRightExtent(),
+						"(" + listToString((List<?>) node.getValue(), ",") + ")");
 				else
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent(), node.getValue());
+					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
+						node.getRightExtent(), node.getValue());
 			}
 
 			DotGraph.Node dotNode = newNode(getId(node), label);
@@ -111,8 +115,9 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 	public Void visit(IntermediateNode node) {
 		if (!visited.contains(node)) {
 			visited.add(node);
-			
-			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(), node.getRightExtent());
+
+			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
+				node.getRightExtent());
 
 			DotGraph.Node dotNode = newNode(getId(node), label).setShape(DotGraph.Shape.RECTANGLE);
 			if (node.isAmbiguous()) {
@@ -145,7 +150,8 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
 		if (!visited.contains(node)) {
 			visited.add(node);
 			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(), matchedInput);
+			String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(),
+				matchedInput);
 			dotGraph.addNode(newNode(getId(node), label));
 		}
 

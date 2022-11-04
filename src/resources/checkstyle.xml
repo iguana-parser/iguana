@@ -4,8 +4,15 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+    <property name="tabWidth" value="4"/>
     <module name="TreeWalker">
         <module name="UnusedImports"/>
         <module name="WhitespaceAfter"/>
+        <module name="SuppressionCommentFilter"/>
     </module>
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+    <module name="SuppressWithPlainTextCommentFilter"/>
 </module>

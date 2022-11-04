@@ -58,8 +58,17 @@ public class PrecedenceLevel {
 		this.index = lhs;
 	}
 
-	public PrecedenceLevel(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary,
-					boolean hasPrefixUnaryBelow, Integer[] prefixUnaryBelow, boolean hasPostfixUnaryBelow, Integer[] postfixUnaryBelow) {
+	public PrecedenceLevel(
+		int lhs,
+		int rhs,
+		int undefined,
+		boolean hasPrefixUnary,
+		boolean hasPostfixUnary,
+		boolean hasPrefixUnaryBelow,
+		Integer[] prefixUnaryBelow,
+		boolean hasPostfixUnaryBelow,
+		Integer[] postfixUnaryBelow
+	) {
 		this.lhs = lhs;
 		this.index = lhs;
 		this.rhs = rhs;
@@ -71,9 +80,16 @@ public class PrecedenceLevel {
 		this.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
 		this.postfixUnaryBelow = postfixUnaryBelow;
 	}
-	
-	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
-			   						   boolean hasPrefixUnaryBelow, boolean hasPostfixUnaryBelow) {
+
+	public static PrecedenceLevel from(
+		int lhs,
+		int rhs,
+		int undefined,
+		boolean hasPrefixUnary,
+		boolean hasPostfixUnary,
+		boolean hasPrefixUnaryBelow,
+		boolean hasPostfixUnaryBelow
+	) {
 		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;
@@ -83,9 +99,18 @@ public class PrecedenceLevel {
 		level.hasPostfixUnaryBelow = hasPostfixUnaryBelow;
 		return level;
 	}
-	
-	public static PrecedenceLevel from(int lhs, int rhs, int undefined, boolean hasPrefixUnary, boolean hasPostfixUnary, 
-									   boolean hasPrefixUnaryBelow, Integer[] prefixUnaryBelow, boolean hasPostfixUnaryBelow, Integer[] postfixUnaryBelow) {
+
+	public static PrecedenceLevel from(
+		int lhs,
+		int rhs,
+		int undefined,
+		boolean hasPrefixUnary,
+		boolean hasPostfixUnary,
+		boolean hasPrefixUnaryBelow,
+		Integer[] prefixUnaryBelow,
+		boolean hasPostfixUnaryBelow,
+		Integer[] postfixUnaryBelow
+	) {
 		PrecedenceLevel level = new PrecedenceLevel(lhs);
 		level.rhs = rhs;
 		level.undefined = undefined;

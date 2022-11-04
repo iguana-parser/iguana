@@ -40,7 +40,8 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(Block symbol) { // Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	// Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	public Void visit(Block symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 
@@ -62,12 +63,14 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(IfThen symbol) { // Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	// Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	public Void visit(IfThen symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 
 	@Override
-	public Void visit(IfThenElse symbol) { // Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	// Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	public Void visit(IfThenElse symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 
@@ -103,7 +106,8 @@ public class FindLabelsUsedInExcepts implements ISymbolVisitor<Void> {
 	}
 
 	@Override
-	public Void visit(While symbol) { // Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	// Currently, also expected to be desugared as part of data-dependent EBNF constructs
+	public Void visit(While symbol) {
 		throw new RuntimeException("Unexpected symbol: " + symbol);
 	}
 

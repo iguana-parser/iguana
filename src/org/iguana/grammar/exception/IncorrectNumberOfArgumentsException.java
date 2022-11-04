@@ -33,7 +33,8 @@ import org.iguana.grammar.symbol.Nonterminal;
 public class IncorrectNumberOfArgumentsException extends RuntimeException {
 
 	public IncorrectNumberOfArgumentsException(Nonterminal nonterminal, Expression[] arguments) {
-		super("Incorrect number of arguments passed to nonterminal " + nonterminal + ": " + arguments.length + " instead of " + nonterminal.getParameters().size());
+		super("Incorrect number of arguments passed to nonterminal " + nonterminal + ": " + arguments.length +
+			  " instead of " + nonterminal.getParameters().size());
 	}
 
 }

@@ -34,13 +34,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.regex.RegularExpression;
-import org.iguana.traversal.idea.IdeaIDEGenerator;
 
 import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.iguana.utils.string.StringUtil.listToString;
 
@@ -132,7 +130,10 @@ public class RuntimeGrammar {
 		return literals;
 	}
 
-	private static Set<RuntimeException> validate(List<RuntimeRule> rules, Map<Nonterminal, List<RuntimeRule>> definitions) {
+	private static Set<RuntimeException> validate(
+		List<RuntimeRule> rules,
+		Map<Nonterminal, List<RuntimeRule>> definitions
+	) {
 	    Set<RuntimeException> exceptions = new HashSet<>();
         for (RuntimeRule rule : rules) {
             if (rule.getBody() != null) {
@@ -160,7 +161,9 @@ public class RuntimeGrammar {
 		
 		for (Nonterminal nonterminal : definitions.keySet()) {
 			sb.append(nonterminal).append(" = ");
-			for (List<Symbol> alternatives : definitions.get(nonterminal).stream().map(r -> r.getBody()).collect(Collectors.toList())) {
+			List<List<Symbol>> alternativesList = definitions.get(nonterminal).stream().map(r -> r.getBody()).collect(
+				Collectors.toList());
+			for (List<Symbol> alternatives : alternativesList) {
 				if (alternatives == null) continue;
 				sb.append(listToString(alternatives)).append("\n");
 			}
@@ -243,7 +246,8 @@ public class RuntimeGrammar {
 				throw new GrammarValidationException(exceptions);
 			}
 
-			if (regularExpressionDefinitions == null) throw new RuntimeException("regularExpressionDefinitions is null");
+			if (regularExpressionDefinitions == null)
+				throw new RuntimeException("regularExpressionDefinitions is null");
 
             return new RuntimeGrammar(this);
 		}
@@ -386,33 +390,4 @@ public class RuntimeGrammar {
 											  .sum();
 		return heads + bodySymbols;
 	}
-
-	private static String rulesToString(Iterable<RuntimeRule> rules) {
-		return StreamSupport.stream(rules.spliterator(), false)
-				.map(r -> "\n// " + r.toString() + "\n.addRule(" + r + ")")
-				.collect(Collectors.joining());
-	}
-	
-	private static String leftsToString(Map<String, Set<String>> lefts) {
-		return lefts.entrySet().stream()
-				.map(entry -> ".addEBNFl(" + "\"" + entry.getKey() + "\"," 
-							  + "new HashSet<String>(Arrays.asList(" 
-							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
-							  + ")))")
-				.collect(Collectors.joining());
-	}
-	
-	private static String rightsToString(Map<String, Set<String>> rights) {
-		return rights.entrySet().stream()
-				.map(entry -> ".addEBNFr(" + "\"" + entry.getKey() + "\"," 
-							  + "new HashSet<String>(Arrays.asList(" 
-							  		+ listToString(entry.getValue().stream().map(elem -> "\"" + elem + "\"").collect(Collectors.toList()), ",") 
-							  + ")))")
-				.collect(Collectors.joining());
-	}
-
-	public void generate_idea_ide(String language, String extendsion, String path) {
-        new IdeaIDEGenerator().generate(this, language, "iggy", path);
-    }
-
 }

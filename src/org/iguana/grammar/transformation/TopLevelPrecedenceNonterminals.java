@@ -34,6 +34,7 @@ public class TopLevelPrecedenceNonterminals {
         List<Alternative> alternatives = rule.getPriorityLevels().get(0).getAlternatives();
         if (alternatives.stream().anyMatch(alternative -> alternative.getAssociativity() != Associativity.UNDEFINED))
             return true;
-        return alternatives.stream().flatMap(alternative -> alternative.seqs().stream()).anyMatch(sequence -> sequence.getAssociativity() != Associativity.UNDEFINED);
+        return alternatives.stream().flatMap(alternative -> alternative.seqs().stream())
+                                    .anyMatch(sequence -> sequence.getAssociativity() != Associativity.UNDEFINED);
     }
 }

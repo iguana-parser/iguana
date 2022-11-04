@@ -46,7 +46,13 @@ public class CodeTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		runtime.evaluate(statements, env, input);
 		dest.execute(input, u, result, runtime.getEnvironment(), runtime);
 	}

@@ -45,7 +45,12 @@ public class ConditionalTransition extends AbstractTransition {
 		this(condition, origin, dest, null);
 	}
 
-	private ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest, BodyGrammarSlot ifFalse) {
+	private ConditionalTransition(
+		Expression condition,
+		BodyGrammarSlot origin,
+		BodyGrammarSlot dest,
+		BodyGrammarSlot ifFalse
+	) {
 		super(origin, dest);
 		this.condition = condition;
 		this.ifFalse = ifFalse;
@@ -61,7 +66,13 @@ public class ConditionalTransition extends AbstractTransition {
 	}
 
 	@Override
-	public <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime) {
+	public <T extends Result> void execute(
+		Input input,
+		GSSNode<T> u,
+		T result,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		
 		Object value = runtime.evaluate(condition, env, input);
 		

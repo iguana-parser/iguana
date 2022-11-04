@@ -63,7 +63,15 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
     }
 
     @Override
-	public void addGSSEdge(Input input, BodyGrammarSlot returnSlot, int i, GSSNode<T> destination, T w, Environment env, IguanaRuntime<T> runtime) {
+	public void addGSSEdge(
+		Input input,
+		BodyGrammarSlot returnSlot,
+		int i,
+		GSSNode<T> destination,
+		T w,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		if (this == destination && w.isDummy()) {
 			if (!(firstGSSEdge instanceof CyclicDummyGSSEdges<?>)) {
 				addGSSEdge(firstGSSEdge);
@@ -87,7 +95,14 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
         restGSSEdges.add(edge);
 	}
 
-    private void iterateOverPoppedElements(GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
+	private void iterateOverPoppedElements(
+		GSSEdge<T> edge,
+		BodyGrammarSlot returnSlot,
+		GSSNode<T> destination,
+		Input input,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
         if (firstPoppedElement != null)
             processPoppedElement(firstPoppedElement, edge, returnSlot, destination, input, env, runtime);
 
@@ -122,7 +137,8 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 			int rightIndex = child.getRightExtent();
 
 			// Only one node is added and there is an ambiguity
-			if (rightIndex == firstPoppedElement.getRightExtent() && Objects.equals(value, firstPoppedElement.getValue())) {
+			if (rightIndex == firstPoppedElement.getRightExtent() &&
+				Objects.equals(value, firstPoppedElement.getValue())) {
 				ops.convert(firstPoppedElement, child, slot, value);
 				return null;
 			} else {
@@ -148,7 +164,15 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		}
 	}
 
-	private void processPoppedElement(T poppedElement, GSSEdge<T> edge, BodyGrammarSlot returnSlot, GSSNode<T> destination, Input input, Environment env, IguanaRuntime<T> runtime) {
+	private void processPoppedElement(
+		T poppedElement,
+		GSSEdge<T> edge,
+		BodyGrammarSlot returnSlot,
+		GSSNode<T> destination,
+		Input input,
+		Environment env,
+		IguanaRuntime<T> runtime
+	) {
 		if (returnSlot.testFollow(input.charAt(poppedElement.getRightExtent()))) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
@@ -177,13 +201,20 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
             }
 	}
 
-	private void processEdge(Input input, T node, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
+	private void processEdge(
+		Input input,
+		T node,
+		GSSEdge<T> edge,
+		BodyGrammarSlot returnSlot,
+		IguanaRuntime<T> runtime
+	) {
 		if (!returnSlot.testFollow(input.charAt(node.getRightExtent()))) return;
 
 		T result = addDescriptor(input, this, node, edge, returnSlot, runtime);
 		if (result != null) {
 			Environment env = runtime.getEnvironment();
-			runtime.scheduleDescriptor(returnSlot, edge.getDestination() != null? edge.getDestination() : this, result, env);
+			runtime.scheduleDescriptor(returnSlot, edge.getDestination() != null ? edge.getDestination() : this, result,
+				env);
 		}
 	}
 
@@ -196,7 +227,14 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
      * (2.2) if no, creates one and returns it
      *
      */
-    private T addDescriptor(Input input, GSSNode<T> source, T result, GSSEdge<T> edge, BodyGrammarSlot returnSlot, IguanaRuntime<T> runtime) {
+	private T addDescriptor(
+		Input input,
+		GSSNode<T> source,
+		T result,
+		GSSEdge<T> edge,
+		BodyGrammarSlot returnSlot,
+		IguanaRuntime<T> runtime
+	) {
         int inputIndex = result.isDummy() ? source.getInputIndex() : result.getRightExtent();
         Environment env = edge.getEnv() == null ? runtime.getEmptyEnvironment() : edge.getEnv();
         GSSNode<T> destination = edge.getDestination() != null ? edge.getDestination() : source;
@@ -206,7 +244,8 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
         runtime.setEnvironment(env);
 
-        if (returnSlot.getConditions().execute(input, returnSlot, source, inputIndex, runtime.getEvaluatorContext(), runtime)) {
+		if (returnSlot.getConditions().execute(input, returnSlot, source, inputIndex, runtime.getEvaluatorContext(),
+			runtime)) {
             EnvironmentPool.returnToPool(env);
             return null;
         }

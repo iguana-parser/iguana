@@ -55,13 +55,15 @@ public class InlineReferencesVisitor implements RegularExpressionVisitor<Regular
 
     @Override
     public <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Alt<E> alt) {
-        List<RegularExpression> newSymbols = alt.getSymbols().stream().map(symbol -> symbol.accept(this)).collect(Collectors.toList());
+        List<RegularExpression> newSymbols = alt.getSymbols().stream().map(symbol -> symbol.accept(this))
+            .collect(Collectors.toList());
         return alt.copy().setSymbols((List<E>) newSymbols).build();
     }
 
     @Override
     public <E extends RegularExpression> RegularExpression visit(org.iguana.regex.Seq<E> seq) {
-        List<RegularExpression> newSymbols = seq.getSymbols().stream().map(symbol -> symbol.accept(this)).collect(Collectors.toList());
+        List<RegularExpression> newSymbols = seq.getSymbols().stream().map(symbol -> symbol.accept(this))
+            .collect(Collectors.toList());
         return seq.copy().setSymbols((List<E>) newSymbols).build();
     }
 

@@ -324,8 +324,8 @@ public class AutomatonOperations {
 								State q1 = states[i].getState(alphabet[t]);
 								State q2 = states[j].getState(alphabet[t]);
 
-								// If both states i and j have no outgoing transitions on the interval t, continue with the
-								// next transition.
+								// If both states i and j have no outgoing transitions on the interval t, continue with
+								// the next transition.
 								if (q1 == null && q2 == null) {
 									continue;
 								}
@@ -429,7 +429,8 @@ public class AutomatonOperations {
 		
 		for (State state : states) {
 			for (Transition t : state.getTransitions()) {
-				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(), newStates.get(t.getDestination())));
+				newStates.get(state).addTransition(new Transition(t.getStart(), t.getEnd(),
+					newStates.get(t.getDestination())));
 			}
 		}
 		

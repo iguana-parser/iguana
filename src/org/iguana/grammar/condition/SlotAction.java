@@ -37,13 +37,26 @@ import org.iguana.result.Result;
 @FunctionalInterface
 public interface SlotAction {
 
-    <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int leftExtent, int rightExtent, IEvaluatorContext ctx);
+	<T extends Result> boolean execute(
+		Input input,
+		BodyGrammarSlot slot,
+		GSSNode<T> gssNode,
+		int leftExtent,
+		int rightExtent,
+		IEvaluatorContext ctx
+	);
 
 	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int inputIndex) {
 	    return execute(input, slot, gssNode, inputIndex, inputIndex, GLLEvaluator.getDefaultEvaluatorContext());
     }
-	
-	default <T extends Result> boolean execute(Input input, BodyGrammarSlot slot, GSSNode<T> gssNode, int inputIndex, IEvaluatorContext ctx) {
+
+	default <T extends Result> boolean execute(
+		Input input,
+		BodyGrammarSlot slot,
+		GSSNode<T> gssNode,
+		int inputIndex,
+		IEvaluatorContext ctx
+	) {
 		return execute(input, slot, gssNode, inputIndex, inputIndex, ctx);
 	}
 }

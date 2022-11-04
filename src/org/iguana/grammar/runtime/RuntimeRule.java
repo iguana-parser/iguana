@@ -146,11 +146,15 @@ public class RuntimeRule {
 	}
 	
 	public boolean isLeftOrRightRecursive() {
-		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
+        return recursion == Recursion.LEFT_RIGHT_REC ||
+               recursion == Recursion.LEFT_REC ||
+               recursion == Recursion.RIGHT_REC;
 	}
 	
 	public boolean isILeftOrRightRecursive() {
-		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC || irecursion == Recursion.iRIGHT_REC;
+        return irecursion == Recursion.iLEFT_RIGHT_REC ||
+               irecursion == Recursion.iLEFT_REC ||
+               irecursion == Recursion.iRIGHT_REC;
 	}
 	
 	public Recursion getRecursion() {

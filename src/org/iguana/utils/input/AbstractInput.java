@@ -74,7 +74,8 @@ public abstract class AbstractInput implements Input {
 
     private static void checkBounds(int index, int length) {
         if (index < 0 || index >= length) {
-            throw new IndexOutOfBoundsException("index must be greater than or equal to 0 and smaller than the input length (" + length + ")");
+            throw new IndexOutOfBoundsException(
+                "index must be greater than or equal to 0 and smaller than the input length (" + length + ")");
         }
     }
 }

@@ -57,7 +57,8 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input, Start start) {
-        return recognize(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), Collections.emptyMap(), false);
+        return recognize(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), Collections.emptyMap(),
+            false);
     }
 
     public boolean recognize(Input input, Nonterminal start, Map<String, Object> map, boolean global) {

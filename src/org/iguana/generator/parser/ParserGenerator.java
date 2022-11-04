@@ -11,6 +11,7 @@ public class ParserGenerator extends Generator {
         super(null, grammarName, packageName, genDirectory);
     }
 
+    // CHECKSTYLE:OFF: LineLength
     public void generateGrammar() {
         String className = toFirstUpperCase(grammarName);
         String content =
@@ -49,6 +50,7 @@ public class ParserGenerator extends Generator {
         writeToJavaFile(content, genDirectory, className + "Grammar");
         System.out.println(className + "Grammar" + " has been generated in " + genDirectory + "/" + className + "Grammar.java");
     }
+    // CHECKSTYLE:ON: LineLength
 
     public void generateParser() {
         String className = toFirstUpperCase(grammarName);
@@ -83,6 +85,7 @@ public class ParserGenerator extends Generator {
             "    }\n" +
             "}\n";
         writeToJavaFile(content, genDirectory, className + "Parser");
-        System.out.println(className + "Parser" + " has been generated in " + genDirectory + "/" + className + "Parser.java");
+        System.out.println(
+            className + "Parser" + " has been generated in " + genDirectory + "/" + className + "Parser.java");
     }
 }

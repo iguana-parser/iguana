@@ -55,8 +55,14 @@ public class AssociativityGroup {
 		this.map = new HashMap<>();
 		this.lhs = precedenceLevel.getLhs();
 	}
-	
-	public AssociativityGroup(Associativity associativity, PrecedenceLevel precedenceLevel, int lhs, int rhs, int precedence) {
+
+	public AssociativityGroup(
+		Associativity associativity,
+		PrecedenceLevel precedenceLevel,
+		int lhs,
+		int rhs,
+		int precedence
+	) {
 		this(associativity, precedenceLevel);
 		this.precedence = precedence;
 		this.lhs = lhs;

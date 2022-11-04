@@ -43,7 +43,8 @@ public class Iguana implements Callable<Integer> {
     @Option(names = "--package", description = "package name for the generated code")
     private String packageName;
 
-    @Option(names = {"--grammar-output"}, description = "The location where the grammar.json file will be generated.", required = true)
+    @Option(names = {"--grammar-output"}, description = "The location where the grammar.json file will be generated.",
+        required = true)
     private Path grammarOutputDirectory;
 
     public static void main(String[] args) {
@@ -63,24 +64,30 @@ public class Iguana implements Callable<Integer> {
             JsonSerializer.serialize(grammar, jsonPath);
             System.out.println("grammar.json file has been generated in " + jsonPath);
             Path typesOutputDirectory = outputDirectory.resolve(packageName.replace(".", "/"));
-            ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, typesOutputDirectory.toAbsolutePath().toString());
+            ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName,
+                typesOutputDirectory.toAbsolutePath().toString());
             parserGenerator.generateGrammar();
         }
 
         if (command.generateTypes) {
             Path typesOutputDirectory = outputDirectory.resolve(packageName.replace(".", "/"));
-            ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName, typesOutputDirectory.toAbsolutePath().toString());
+            ParserGenerator parserGenerator = new ParserGenerator(grammarName, packageName,
+                typesOutputDirectory.toAbsolutePath().toString());
             parserGenerator.generateParser();
-            ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammarName, packageName, typesOutputDirectory.toAbsolutePath().toString());
+            ParseTreeVisitorGenerator generator = new ParseTreeVisitorGenerator(grammar.toRuntimeGrammar(), grammarName,
+                packageName, typesOutputDirectory.toAbsolutePath().toString());
             generator.generate();
         }
 
         if (command.generateIDE) {
-            GenerateLangFiles generateLangFiles = new GenerateLangFiles(grammarName, outputDirectory.toAbsolutePath().toString());
+            GenerateLangFiles generateLangFiles = new GenerateLangFiles(grammarName,
+                outputDirectory.toAbsolutePath().toString());
             generateLangFiles.generate();
-            GeneratePsiElements generatePSIElements = new GeneratePsiElements(grammar.toRuntimeGrammar(), grammarName, packageName, outputDirectory.toAbsolutePath().toString());
+            GeneratePsiElements generatePSIElements = new GeneratePsiElements(grammar.toRuntimeGrammar(), grammarName,
+                packageName, outputDirectory.toAbsolutePath().toString());
             generatePSIElements.generate();
-            GenerateParserFiles generateParserFiles = new GenerateParserFiles(grammar.toRuntimeGrammar(), grammarName, packageName, outputDirectory.toAbsolutePath().toString());
+            GenerateParserFiles generateParserFiles = new GenerateParserFiles(grammar.toRuntimeGrammar(), grammarName,
+                packageName, outputDirectory.toAbsolutePath().toString());
             generateParserFiles.generate();
         }
 

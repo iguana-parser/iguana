@@ -73,26 +73,39 @@ public class GenerateTermBuilder {
             writer.println("    }");
             writer.println();
             writer.println("    @Override");
-            writer.println("    public TreeElement nonterminalTerm(RuleType type, Seq<TreeElement> children, int l, int r, Input input) {");
+            writer.println(
+                "    public TreeElement nonterminalTerm(RuleType type, Seq<TreeElement> children, int l, int r," +
+                " Input input) {");
             writer.println("        Rule rule = (Rule) type;");
-            writer.println("        String name = rule.getHead().getName().toUpperCase() + (rule.getLabel() == null? \"\" : \"_\" + rule.getLabel().toUpperCase());");
-            writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.get(name));");
+            writer.println(
+                "        String name = rule.getHead().getName().toUpperCase() + (rule.getLabel() == " +
+                "null? \"\" : \"_\" + " +
+                "rule.getLabel().toUpperCase());");
+            writer.println(
+                "        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.get(name));");
             writer.println("        Iterator<TreeElement> iterator = children.iterator();");
-            writer.println("        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
+            writer.println(
+                "        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
             writer.println("    @Override");
-            writer.println("    public TreeElement ambiguityTerm(scala.collection.Seq<scala.collection.Seq<TreeElement>> children) { throw new RuntimeException(\"Not yet supported in the idea tree builder: ambiguity.\"); }");
+            writer.println(
+                "    public TreeElement ambiguityTerm(scala.collection.Seq<scala.collection.Seq<TreeElement>> " +
+                "children) { throw new RuntimeException(\"Not yet supported in the idea tree builder" +
+                ": ambiguity.\"); }");
             writer.println();
             writer.println("    @Override");
-            writer.println("    public TreeElement cycle(String label) { throw new RuntimeException(\"Not yet supported in the idea tree builder: cycles.\"); }");
+            writer.println(
+                "    public TreeElement cycle(String label) { throw new RuntimeException(\"Not yet supported in " +
+                "the idea tree builder: cycles.\"); }");
             writer.println();
             writer.println("    @Override");
             writer.println("    public TreeElement star(Seq<TreeElement> children) {");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.LIST);");
             writer.println("        Iterator<TreeElement> iterator = children.iterator();");
-            writer.println("        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
+            writer.println(
+                "        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
@@ -110,7 +123,8 @@ public class GenerateTermBuilder {
             writer.println("    public TreeElement group(Seq<TreeElement> children) {");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.SEQ);");
             writer.println("        Iterator<TreeElement> iterator = children.iterator();");
-            writer.println("        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
+            writer.println(
+                "        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
@@ -118,12 +132,14 @@ public class GenerateTermBuilder {
             writer.println("    public TreeElement alt(Seq<TreeElement> children) {");
             writer.println("        CompositeElement node = ASTFactory.composite(" + language + "ElementTypes.ALT);");
             writer.println("        Iterator<TreeElement> iterator = children.iterator();");
-            writer.println("        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
+            writer.println(
+                "        while (iterator.hasNext()) node.rawAddChildrenWithoutNotifications(iterator.next());");
             writer.println("        return node;");
             writer.println("    }");
             writer.println();
             writer.println("    @Override");
-            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(" + language + "TokenTypes.TERMINAL, \"\"); }");
+            writer.println("    public TreeElement epsilon(int i) { return ASTFactory.leaf(" + language +
+                           "TokenTypes.TERMINAL, \"\"); }");
             writer.println("}");
             writer.close();
         } catch (FileNotFoundException e) {
