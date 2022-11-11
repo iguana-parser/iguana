@@ -32,6 +32,8 @@ import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.parser.options.ParseOptions;
+import org.iguana.parser.options.ParseTreeOptions;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -42,6 +44,8 @@ import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
 import org.iguana.utils.input.Input;
+
+import static org.iguana.parser.options.ParseOptions.defaultOptions;
 
 public class IguanaParser extends IguanaRecognizer {
 
@@ -74,20 +78,20 @@ public class IguanaParser extends IguanaRecognizer {
     }
 
     public void parse(Input input, Start start) {
-        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), new ParseOptions.Builder()
-            .setGlobal(false).build());
+        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), defaultOptions());
     }
 
     public void parse(Input input, Nonterminal nonterminal) {
-        parse(input, nonterminal, new ParseOptions.Builder().setGlobal(false).build());
+        parse(input, nonterminal, defaultOptions());
     }
 
-    public void parse(Input input, Nonterminal start, ParseOptions options) {
+    public void parse(Input input, Nonterminal start, ParseOptions parseOptions) {
         clear();
         this.input = input;
         IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps);
         long startTime = System.nanoTime();
-        this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
+        this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, parseOptions.getMap(),
+            parseOptions.isGlobal());
         long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
         if (sppf == null) {
@@ -111,13 +115,16 @@ public class IguanaParser extends IguanaRecognizer {
     }
 
     public ParseTreeNode getParseTree() {
-        return getParseTree(false, true);
+        return getParseTree(ParseTreeOptions.defaultOptions());
     }
 
-    public ParseTreeNode getParseTree(boolean allowAmbiguities, boolean ignoreLayout) {
+    public ParseTreeNode getParseTree(ParseTreeOptions options) {
         if (parseTree != null) return parseTree;
 
         if (sppf == null) return null;
+
+        boolean allowAmbiguities = options.allowAmbiguities();
+        boolean ignoreLayout = options.ignoreLayout();
 
         if (allowAmbiguities) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor =

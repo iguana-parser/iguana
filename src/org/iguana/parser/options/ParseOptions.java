@@ -1,4 +1,4 @@
-package org.iguana.parser;
+package org.iguana.parser.options;
 
 import java.util.Map;
 
@@ -6,18 +6,19 @@ import static java.util.Collections.emptyMap;
 
 public class ParseOptions {
 
-    private final boolean ignoreLayout;
+    /**
+     * The user-provided key-value map to set the value of the top-level variables in the environment
+     */
     private final Map<String, Object> map;
+
+    /**
+     * If variables are global. TODO: figure it out if this is still useful.
+     */
     private final boolean global;
 
     private ParseOptions(Builder builder) {
-        this.ignoreLayout = builder.ignoreLayout;
         this.map = builder.map;
         this.global= builder.global;
-    }
-
-    public boolean ignoreLayout() {
-        return ignoreLayout;
     }
 
     public Map<String, Object> getMap() {
@@ -28,21 +29,13 @@ public class ParseOptions {
         return global;
     }
 
+    public static ParseOptions defaultOptions() {
+        return new Builder().build();
+    }
+
     public static class Builder {
-        boolean ambiguous = false;
-        boolean ignoreLayout = true;
-        Map<String, Object> map = emptyMap();
-        boolean global = true;
-
-        public Builder setAmbiguous(boolean ambiguous) {
-            this.ambiguous = ambiguous;
-            return this;
-        }
-
-        public Builder setIgnoreLayout(boolean ignoreLayout) {
-            this.ignoreLayout = ignoreLayout;
-            return this;
-        }
+        private Map<String, Object> map = emptyMap();
+        private boolean global = false;
 
         public Builder setMap(Map<String, Object> map) {
             this.map = map;
