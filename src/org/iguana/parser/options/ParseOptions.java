@@ -1,50 +1,27 @@
 package org.iguana.parser.options;
 
-import java.util.Map;
+public class ParseOptions extends RecognizerOptions {
 
-import static java.util.Collections.emptyMap;
-
-public class ParseOptions {
-
-    /**
-     * The user-provided key-value map to set the value of the top-level variables in the environment
-     */
-    private final Map<String, Object> map;
-
-    /**
-     * If variables are global. TODO: figure it out if this is still useful.
-     */
-    private final boolean global;
+    private final boolean errorRecoveryEnabled;
 
     private ParseOptions(Builder builder) {
-        this.map = builder.map;
-        this.global= builder.global;
+        super(builder);
+        this.errorRecoveryEnabled = builder.errorRecoveryEnabled;
     }
 
-    public Map<String, Object> getMap() {
-        return map;
-    }
-
-    public boolean isGlobal() {
-        return global;
+    public boolean isErrorRecoveryEnabled() {
+        return errorRecoveryEnabled;
     }
 
     public static ParseOptions defaultOptions() {
         return new Builder().build();
     }
 
-    public static class Builder {
-        private Map<String, Object> map = emptyMap();
-        private boolean global = false;
+    public static class Builder extends RecognizerOptions.Builder {
+        public boolean errorRecoveryEnabled = false;
 
-        public Builder setMap(Map<String, Object> map) {
-            this.map = map;
-            return this;
-        }
-
-        public Builder setGlobal(boolean global) {
-            this.global = global;
-            return this;
+        public void setErrorRecoveryEnabled(boolean errorRecoveryEnabled) {
+            this.errorRecoveryEnabled = errorRecoveryEnabled;
         }
 
         public ParseOptions build() {

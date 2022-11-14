@@ -29,9 +29,12 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.slot.ErrorTransition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
 import org.iguana.parser.options.ParseOptions;
 import org.iguana.parser.options.ParseTreeOptions;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
@@ -43,7 +46,13 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
+import org.iguana.util.Tuple;
 import org.iguana.utils.input.Input;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
 
 import static org.iguana.parser.options.ParseOptions.defaultOptions;
 
@@ -95,8 +104,25 @@ public class IguanaParser extends IguanaRecognizer {
         long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
         if (sppf == null) {
-            this.parseError = runtime.getParseError();
-            throw new ParseErrorException(parseError);
+            if (parseOptions.isErrorRecoveryEnabled()) {
+                PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
+                while (!parseErrors.isEmpty()) {
+                    List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
+                    GSSNode<NonPackedNode> gssNode = parseErrors.poll().getGssNode();
+                    runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
+                    for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
+                        runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
+                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                        if (recoveryResult != null) {
+                            sppf = (NonterminalNode) recoveryResult;
+                        }
+                    }
+                }
+            }
+            if (sppf == null) {
+                this.parseError = runtime.getParseErrors().peek();
+                throw new ParseErrorException(parseError);
+            }
         } else {
             System.out.println("Parsing finished in " + (endTime - startTime) / 1000_000 + "ms.");
         }
