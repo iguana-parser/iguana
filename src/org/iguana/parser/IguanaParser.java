@@ -29,9 +29,14 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.slot.ErrorTransition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.gss.GSSEdge;
+import org.iguana.gss.GSSNode;
+import org.iguana.parser.options.ParseOptions;
+import org.iguana.parser.options.ParseTreeOptions;
 import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
@@ -41,7 +46,15 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
 import org.iguana.traversal.DefaultSPPFToParseTreeVisitor;
 import org.iguana.util.Configuration;
+import org.iguana.util.Tuple;
 import org.iguana.utils.input.Input;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
+
+import static org.iguana.parser.options.ParseOptions.defaultOptions;
 
 public class IguanaParser extends IguanaRecognizer {
 
@@ -67,32 +80,55 @@ public class IguanaParser extends IguanaRecognizer {
         super(grammar, config);
     }
 
-    public void parse(Input input, Symbol symbol) {
-        if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol);
-        else if (symbol instanceof Start) parse(input, (Start) symbol);
+    public void parse(Input input, Symbol symbol, ParseOptions parseOptions) {
+        if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol, parseOptions);
+        else if (symbol instanceof Start) parse(input, (Start) symbol, parseOptions);
         else throw new RuntimeException("Symbol should be a nonterminal or start, but was: " + symbol.getClass());
     }
 
+    public void parse(Input input, Symbol symbol) {
+        parse(input, symbol, ParseOptions.defaultOptions());
+    }
+
     public void parse(Input input, Start start) {
-        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), new ParseOptions.Builder()
-            .setGlobal(false).build());
+        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), defaultOptions());
     }
 
     public void parse(Input input, Nonterminal nonterminal) {
-        parse(input, nonterminal, new ParseOptions.Builder().setGlobal(false).build());
+        parse(input, nonterminal, defaultOptions());
     }
 
-    public void parse(Input input, Nonterminal start, ParseOptions options) {
+    public void parse(Input input, Nonterminal start, ParseOptions parseOptions) {
         clear();
         this.input = input;
         IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps);
         long startTime = System.nanoTime();
-        this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
+        this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, parseOptions.getMap(),
+            parseOptions.isGlobal());
         long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
         if (sppf == null) {
-            this.parseError = runtime.getParseError();
-            throw new ParseErrorException(parseError);
+            if (parseOptions.isErrorRecoveryEnabled()) {
+                PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
+                outer:
+                while (!parseErrors.isEmpty()) {
+                    List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
+                    GSSNode<NonPackedNode> gssNode = parseErrors.poll().getGssNode();
+                    runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
+                    for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
+                        runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
+                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                        if (recoveryResult != null) {
+                            sppf = (NonterminalNode) recoveryResult;
+                            break outer;
+                        }
+                    }
+                }
+            }
+            if (sppf == null) {
+                this.parseError = runtime.getParseErrors().peek();
+                throw new ParseErrorException(parseError);
+            }
         } else {
             System.out.println("Parsing finished in " + (endTime - startTime) / 1000_000 + "ms.");
         }
@@ -111,13 +147,16 @@ public class IguanaParser extends IguanaRecognizer {
     }
 
     public ParseTreeNode getParseTree() {
-        return getParseTree(false, true);
+        return getParseTree(ParseTreeOptions.defaultOptions());
     }
 
-    public ParseTreeNode getParseTree(boolean allowAmbiguities, boolean ignoreLayout) {
+    public ParseTreeNode getParseTree(ParseTreeOptions options) {
         if (parseTree != null) return parseTree;
 
         if (sppf == null) return null;
+
+        boolean allowAmbiguities = options.allowAmbiguities();
+        boolean ignoreLayout = options.ignoreLayout();
 
         if (allowAmbiguities) {
             AmbiguousSPPFToParseTreeVisitor<ParseTreeNode> visitor =

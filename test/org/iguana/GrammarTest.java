@@ -5,6 +5,7 @@ import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.parser.*;
+import org.iguana.parser.options.ParseTreeOptions;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.traversal.exception.AmbiguityException;
 import org.iguana.traversal.exception.CyclicGrammarException;
@@ -176,7 +177,8 @@ public class GrammarTest {
             } catch (AmbiguityException e) {
                 try {
                     if (parser.getStatistics().getAmbiguousNodesCount() < 20) {
-                        actualParseTree = parser.getParseTree(true, true);
+                        actualParseTree = parser.getParseTree(new ParseTreeOptions.Builder().setAllowAmbiguities(true)
+                            .setIgnoreLayout(true).build());
                         String pdfPath = testPath + "/tree" + j + ".pdf";
                         if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                             DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);

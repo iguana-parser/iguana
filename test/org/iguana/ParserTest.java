@@ -1,6 +1,7 @@
 package org.iguana;
 
 import org.iguana.grammar.symbol.Symbol;
+import org.iguana.parser.options.ParseOptions;
 
 public class ParserTest {
 
@@ -8,12 +9,14 @@ public class ParserTest {
     private final String input;
     private final Symbol startSymbol;
     private final boolean verifyParseTree;
+    private final ParseOptions parseOptions;
 
     private ParserTest(ParserTestBuilder builder) {
         this.grammar = builder.grammar;
         this.input = builder.input;
         this.startSymbol = builder.startSymbol;
         this.verifyParseTree = builder.verifyParseTree;
+        this.parseOptions = builder.parseOptions;
     }
 
     public String getGrammar() {
@@ -32,6 +35,10 @@ public class ParserTest {
         return startSymbol;
     }
 
+    public ParseOptions getParseOptions() {
+        return parseOptions;
+    }
+
     public static ParserTestBuilder newTest() {
         return new ParserTestBuilder();
     }
@@ -41,6 +48,7 @@ public class ParserTest {
         private String input;
         private Symbol startSymbol;
         private boolean verifyParseTree;
+        private ParseOptions parseOptions;
 
         public ParserTestBuilder setGrammar(String grammar) {
             this.grammar = grammar;
@@ -59,6 +67,11 @@ public class ParserTest {
 
         public ParserTestBuilder verifyParseTree() {
             verifyParseTree = true;
+            return this;
+        }
+
+        public ParserTestBuilder setParseOptions(ParseOptions parseOptions) {
+            this.parseOptions = parseOptions;
             return this;
         }
 

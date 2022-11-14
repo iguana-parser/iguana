@@ -52,7 +52,7 @@ public abstract class ParserTestRunner {
         Input input = Input.fromString(parserTest.getInput());
         IguanaParser parser = new IguanaParser(grammar);
         try {
-            parser.parse(input, parserTest.getStartSymbol());
+            parser.parse(input, parserTest.getStartSymbol(), parserTest.getParseOptions());
         } catch (ParseErrorException e) {
             throw e;
         }

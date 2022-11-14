@@ -8,13 +8,11 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.GrammarTransformer;
+import org.iguana.parser.options.RecognizerOptions;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.utils.input.Input;
-
-import java.util.Collections;
-import java.util.Map;
 
 public class IguanaRecognizer {
 
@@ -53,21 +51,21 @@ public class IguanaRecognizer {
     }
 
     public boolean recognize(Input input, Nonterminal nonterminal) {
-        return recognize(input, nonterminal, Collections.emptyMap(), false);
+        return recognize(input, nonterminal, RecognizerOptions.defaultOptions());
     }
 
     public boolean recognize(Input input, Start start) {
-        return recognize(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), Collections.emptyMap(),
-            false);
+        return recognize(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()),
+            RecognizerOptions.defaultOptions());
     }
 
-    public boolean recognize(Input input, Nonterminal start, Map<String, Object> map, boolean global) {
+    public boolean recognize(Input input, Nonterminal start, RecognizerOptions options) {
         clear();
         IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
-        RecognizerResult result = runtime.run(input, start, grammarGraph, map, global);
+        RecognizerResult result = runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
         this.statistics = runtime.getStatistics();
         if (result == null) {
-            this.parseError = runtime.getParseError();
+            this.parseError = runtime.getParseErrors().peek();
             return false;
         }
         return true;

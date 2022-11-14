@@ -35,7 +35,11 @@ public class IguanaRuntime<T extends Result> {
 
     private final ResultOps<T> resultOps;
 
+    // A priority queue (max heap) containing the parse errors thrown the parsing, sorted by the input index.
+    // The top of the priority queue is the parse error thrown at the last input position.
     private final PriorityQueue<ParseError<T>> parseErrors;
+
+    private StartGSSNode<T> startGSSNode;
 
     public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
         this.config = config;
@@ -63,8 +67,6 @@ public class IguanaRuntime<T extends Result> {
         for (Map.Entry<String, Expression> entry : grammarGraph.getGlobals().entrySet()) {
             env = env._declare(entry.getKey(), entry.getValue().interpret(ctx, input));
         }
-
-        StartGSSNode<T> startGSSNode;
 
         NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
         List<String> parameters = startSlot.getParameters();
@@ -99,29 +101,10 @@ public class IguanaRuntime<T extends Result> {
             scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);
         }
 
-        T result = runParserLoop(startGSSNode, input);
-        if (result != null) {
-            return result;
-        }
-
-        PriorityQueue<ParseError<T>> copyParseErrors = new PriorityQueue<>(parseErrors);
-        while (!copyParseErrors.isEmpty()) {
-            List<Tuple<GSSEdge<T>, ErrorTransition>> errorSlots = new ArrayList<>();
-            GSSNode<T> gssNode = copyParseErrors.poll().getGssNode();
-            getErrorSlot(gssNode, errorSlots, new HashSet<>());
-            for (Tuple<GSSEdge<T>, ErrorTransition> t : errorSlots) {
-                recoverFromError(t.getFirst(), t.getSecond(), input);
-                T recoveryResult = runParserLoop(startGSSNode, input);
-                if (recoveryResult != null) {
-                    return recoveryResult;
-                }
-            }
-        }
-
-        return result;
+        return runParserLoop(startGSSNode, input);
     }
 
-    private T runParserLoop(StartGSSNode<T> startGSSNode, Input input) {
+    public T runParserLoop(StartGSSNode<T> startGSSNode, Input input) {
         while (hasDescriptor()) {
             Descriptor<T> descriptor = nextDescriptor();
             logger.processDescriptor(descriptor);
@@ -161,7 +144,7 @@ public class IguanaRuntime<T extends Result> {
     /*
      * Tries to recover the error from an error edge, i.e., of the form X = alpha . Error beta
      */
-    private void recoverFromError(GSSEdge<T> edge, ErrorTransition errorTransition, Input input) {
+    public void recoverFromError(GSSEdge<T> edge, ErrorTransition errorTransition, Input input) {
         T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
         Environment env = edge.getEnv();
         errorTransition.handleError(input, edge.getDestination(), result, env, this);
@@ -169,7 +152,7 @@ public class IguanaRuntime<T extends Result> {
 
     // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
     // from the current GSS node to the start symbol GSS node.
-    private void getErrorSlot(
+    public void collectErrorSlots(
         GSSNode<T> gssNode,
         List<Tuple<GSSEdge<T>, ErrorTransition>> result,
         Set<GSSNode<T>> visited
@@ -182,7 +165,7 @@ public class IguanaRuntime<T extends Result> {
             if (errorTransition != null) {
                 result.add(Tuple.of(edge, errorTransition));
             }
-            getErrorSlot(edge.getDestination(), result, visited);
+            collectErrorSlots(edge.getDestination(), result, visited);
         }
     }
 
@@ -290,9 +273,8 @@ public class IguanaRuntime<T extends Result> {
         return values;
     }
 
-    public ParseError<T> getParseError() {
-        if (parseErrors.isEmpty()) return null;
-        return parseErrors.peek();
+    public PriorityQueue<ParseError<T>> getParseErrors() {
+        return new PriorityQueue<>(parseErrors);
     }
 
     public RecognizerStatistics getStatistics() {
@@ -327,6 +309,10 @@ public class IguanaRuntime<T extends Result> {
 
     public ResultOps<T> getResultOps() {
         return resultOps;
+    }
+
+    public StartGSSNode<T> getStartGSSNode() {
+        return startGSSNode;
     }
 
     private static void printStats(GrammarGraph grammarGraph) {
