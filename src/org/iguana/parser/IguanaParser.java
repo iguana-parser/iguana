@@ -80,10 +80,14 @@ public class IguanaParser extends IguanaRecognizer {
         super(grammar, config);
     }
 
-    public void parse(Input input, Symbol symbol) {
-        if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol);
-        else if (symbol instanceof Start) parse(input, (Start) symbol);
+    public void parse(Input input, Symbol symbol, ParseOptions parseOptions) {
+        if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol, parseOptions);
+        else if (symbol instanceof Start) parse(input, (Start) symbol, parseOptions);
         else throw new RuntimeException("Symbol should be a nonterminal or start, but was: " + symbol.getClass());
+    }
+
+    public void parse(Input input, Symbol symbol) {
+        parse(input, symbol, ParseOptions.defaultOptions());
     }
 
     public void parse(Input input, Start start) {
@@ -106,6 +110,7 @@ public class IguanaParser extends IguanaRecognizer {
         if (sppf == null) {
             if (parseOptions.isErrorRecoveryEnabled()) {
                 PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
+                outer:
                 while (!parseErrors.isEmpty()) {
                     List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
                     GSSNode<NonPackedNode> gssNode = parseErrors.poll().getGssNode();
@@ -115,6 +120,7 @@ public class IguanaParser extends IguanaRecognizer {
                         NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
                         if (recoveryResult != null) {
                             sppf = (NonterminalNode) recoveryResult;
+                            break outer;
                         }
                     }
                 }

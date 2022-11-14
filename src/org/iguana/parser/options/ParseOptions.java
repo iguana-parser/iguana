@@ -18,10 +18,11 @@ public class ParseOptions extends RecognizerOptions {
     }
 
     public static class Builder extends RecognizerOptions.Builder {
-        public boolean errorRecoveryEnabled = false;
+        private boolean errorRecoveryEnabled = false;
 
-        public void setErrorRecoveryEnabled(boolean errorRecoveryEnabled) {
+        public Builder setErrorRecoveryEnabled(boolean errorRecoveryEnabled) {
             this.errorRecoveryEnabled = errorRecoveryEnabled;
+            return this;
         }
 
         public ParseOptions build() {
