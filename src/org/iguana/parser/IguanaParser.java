@@ -94,6 +94,10 @@ public class IguanaParser extends IguanaRecognizer {
         parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), defaultOptions());
     }
 
+    public void parse(Input input, Start start, ParseOptions parseOptions) {
+        parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), parseOptions);
+    }
+
     public void parse(Input input, Nonterminal nonterminal) {
         parse(input, nonterminal, defaultOptions());
     }
