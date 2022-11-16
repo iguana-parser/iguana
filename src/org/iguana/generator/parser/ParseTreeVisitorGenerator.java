@@ -53,8 +53,12 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("    }\n\n");
 
         sb.append("    @Override\n");
-        sb.append(
-            "    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {\n");
+        sb.append("    public NonterminalNode nonterminalNode(\n");
+        sb.append("        RuntimeRule rule,\n");
+        sb.append("        List<ParseTreeNode> children,\n");
+        sb.append("        int leftExtent,\n");
+        sb.append("        int rightExtent) {\n");
+        sb.append("    ) {\n");
         sb.append("        java.lang.String name = rule.getHead().getName();\n");
         sb.append("        java.lang.String label = rule.getLabel();\n\n");
         sb.append("        switch (name) {\n");
