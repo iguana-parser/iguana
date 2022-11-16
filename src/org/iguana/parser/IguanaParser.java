@@ -80,29 +80,29 @@ public class IguanaParser extends IguanaRecognizer {
         super(grammar, config);
     }
 
-    public void parse(Input input, Symbol symbol, ParseOptions parseOptions) {
+    public void parse(Input input, Symbol symbol, ParseOptions parseOptions) throws ParseErrorException {
         if (symbol instanceof Nonterminal) parse(input, (Nonterminal) symbol, parseOptions);
         else if (symbol instanceof Start) parse(input, (Start) symbol, parseOptions);
         else throw new RuntimeException("Symbol should be a nonterminal or start, but was: " + symbol.getClass());
     }
 
-    public void parse(Input input, Symbol symbol) {
+    public void parse(Input input, Symbol symbol) throws ParseErrorException {
         parse(input, symbol, ParseOptions.defaultOptions());
     }
 
-    public void parse(Input input, Start start) {
+    public void parse(Input input, Start start) throws ParseErrorException {
         parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), defaultOptions());
     }
 
-    public void parse(Input input, Start start, ParseOptions parseOptions) {
+    public void parse(Input input, Start start, ParseOptions parseOptions) throws ParseErrorException {
         parse(input, Nonterminal.withName(assertStartSymbolNotNull(start).getName()), parseOptions);
     }
 
-    public void parse(Input input, Nonterminal nonterminal) {
+    public void parse(Input input, Nonterminal nonterminal) throws ParseErrorException {
         parse(input, nonterminal, defaultOptions());
     }
 
-    public void parse(Input input, Nonterminal start, ParseOptions parseOptions) {
+    public void parse(Input input, Nonterminal start, ParseOptions parseOptions) throws ParseErrorException {
         clear();
         this.input = input;
         IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps);

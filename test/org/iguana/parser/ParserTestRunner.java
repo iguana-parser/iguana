@@ -54,7 +54,7 @@ public abstract class ParserTestRunner {
         try {
             parser.parse(input, parserTest.getStartSymbol(), parserTest.getParseOptions());
         } catch (ParseErrorException e) {
-            throw e;
+            throw new RuntimeException(e);
         }
         if (parserTest.verifyParseTree()) {
             verifyParseTree(parser.getParseTree(), input);

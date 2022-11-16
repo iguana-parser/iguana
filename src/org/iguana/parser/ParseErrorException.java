@@ -1,6 +1,6 @@
 package org.iguana.parser;
 
-public class ParseErrorException extends RuntimeException {
+public class ParseErrorException extends Exception {
 
     private final ParseError<?> parseError;
 
