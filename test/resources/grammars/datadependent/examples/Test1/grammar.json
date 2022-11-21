@@ -405,7 +405,7 @@
       "startSymbol" : "Element"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "L",
     "preConditions" : [ ],

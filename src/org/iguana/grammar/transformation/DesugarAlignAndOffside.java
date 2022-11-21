@@ -69,10 +69,10 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
             Set<RuntimeRule> rules = new LinkedHashSet<>();
 
             for (RuntimeRule rule : grammar.getRules())
-                rules.add(desugarAligns.transform(rule, grammar.getLayout()));
+                rules.add(desugarAligns.transform(rule, grammar.getDefaultLayout()));
 
             return RuntimeGrammar.builder().addRules(rules)
-                .setLayout(grammar.getLayout())
+                .setDefaultLayout(grammar.getDefaultLayout())
                 .setStartSymbols(grammar.getStartSymbols())
                 .setEbnfLefts(grammar.getEBNFLefts())
                 .setEbnfRights(grammar.getEBNFRights())
@@ -100,10 +100,10 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
         Set<RuntimeRule> rules = new LinkedHashSet<>();
 
         for (RuntimeRule rule : grammar.getRules())
-            rules.add(desugarOffsides.transform(rule, grammar.getLayout()));
+            rules.add(desugarOffsides.transform(rule, grammar.getDefaultLayout()));
 
         return RuntimeGrammar.builder().addRules(rules)
-            .setLayout(grammar.getLayout())
+            .setDefaultLayout(grammar.getDefaultLayout())
             .setStartSymbols(grammar.getStartSymbols())
             .setGlobals(grammar.getGlobals())
             .setEbnfLefts(grammar.getEBNFLefts())

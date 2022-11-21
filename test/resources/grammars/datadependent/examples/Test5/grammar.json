@@ -2434,7 +2434,7 @@
       "startSymbol" : "Program"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "Layout",
     "preConditions" : [ ],

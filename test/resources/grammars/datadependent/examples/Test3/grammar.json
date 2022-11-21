@@ -769,7 +769,7 @@
       "startSymbol" : "expr"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "whitespaces",
     "preConditions" : [ ],

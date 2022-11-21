@@ -230,7 +230,7 @@
       "startSymbol" : "S"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "L",
     "preConditions" : [ ],

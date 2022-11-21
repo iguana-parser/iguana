@@ -65,7 +65,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         for (String start : startSymbols) {
             builder.addStartSymbol(Start.from(start));
         }
-        builder.setLayout(layout);
+        builder.setDefaultLayout(layout);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
         return builder.build();
     }

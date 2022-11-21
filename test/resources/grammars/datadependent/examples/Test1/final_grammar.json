@@ -1,5 +1,5 @@
 {
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Terminal",
     "name" : "L",
     "preConditions" : [ ],

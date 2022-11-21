@@ -151,7 +151,7 @@ public class DesugarState implements GrammarTransformation {
 					nonterminal_bindings == null ? new HashMap<>() : nonterminal_bindings.get(i++), returns));
 			}
 		}
-		return RuntimeGrammar.builder().addRules(newRules).setLayout(grammar.getLayout())
+		return RuntimeGrammar.builder().addRules(newRules).setDefaultLayout(grammar.getDefaultLayout())
 			.setStartSymbols(grammar.getStartSymbols())
 			.setEbnfLefts(grammar.getEBNFLefts())
 			.setEbnfRights(grammar.getEBNFRights())

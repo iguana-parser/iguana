@@ -388,7 +388,7 @@
       "startSymbol" : "S"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "Whitespaces",
     "preConditions" : [ ],

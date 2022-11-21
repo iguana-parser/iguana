@@ -58,8 +58,8 @@ public class CollectRegularExpressions implements ISymbolVisitor<Void> {
                 symbol.accept(this);
         }
 
-        if (grammar.getLayout() instanceof Terminal)
-            grammar.getLayout().accept(this);
+        if (grammar.getDefaultLayout() instanceof Terminal)
+            grammar.getDefaultLayout().accept(this);
     }
 
     @Override

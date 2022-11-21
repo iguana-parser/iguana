@@ -50,7 +50,7 @@ public class Names implements GrammarTransformation {
     public RuntimeGrammar transform(RuntimeGrammar grammar) {
         List<RuntimeRule> rules = new ArrayList<>();
 
-        NameVisitor visitor = new NameVisitor(rules, (Nonterminal) grammar.getLayout());
+        NameVisitor visitor = new NameVisitor(rules, (Nonterminal) grammar.getDefaultLayout());
 
         for (RuntimeRule rule : grammar.getRules())
             rules.add(visitor.visitRule(rule));
@@ -59,7 +59,7 @@ public class Names implements GrammarTransformation {
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())
-                .setLayout(grammar.getLayout())
+                .setDefaultLayout(grammar.getDefaultLayout())
                 .build();
     }
 

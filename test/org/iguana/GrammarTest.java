@@ -137,7 +137,6 @@ public class GrammarTest {
             }
         };
     }
-
     private Executable getParserTest(String testPath, IguanaParser parser, int j, Input input, Start start) {
         return () -> {
 
@@ -170,7 +169,7 @@ public class GrammarTest {
                 actualParseTree = parser.getParseTree();
                 // No parse error
                 String pdfPath = testPath + "/tree" + j + ".pdf";
-                if (REGENERATE_FILES || actualParseTree != null && !Files.exists(Paths.get(resultPath))) {
+                if (actualParseTree != null && REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                     DotGraph dotGraph = ParseTreeToDot.getDotGraph(actualParseTree, input);
                     dotGraph.generate(pdfPath);
                 }

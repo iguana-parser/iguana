@@ -38,7 +38,7 @@ public class Grammar {
     private final Map<String, RegularExpression> regularExpressionDefinitions;
     private final Map<String, RegularExpression> literals;
     private final List<Start> startSymbols;
-    private final Symbol layout;
+    private final Symbol defaultLayout;
     private final Map<String, Expression> globals;
     private final String name;
 
@@ -49,7 +49,7 @@ public class Grammar {
         this.regularExpressionDefinitions = builder.regularExpressionDefinitions;
         this.literals = builder.literals;
         this.startSymbols = builder.startSymbols;
-        this.layout = builder.layout;
+        this.defaultLayout = builder.defaultLayout;
         this.globals = builder.globals;
         this.name = builder.name;
     }
@@ -70,8 +70,8 @@ public class Grammar {
         return startSymbols;
     }
 
-    public Symbol getLayout() {
-        return layout;
+    public Symbol getDefaultLayout() {
+        return defaultLayout;
     }
 
     public Map<String, Expression> getGlobals() {
@@ -107,8 +107,8 @@ public class Grammar {
 
             // Resolve the layout symbol
             Symbol newLayout = null;
-            if (layout != null) {
-                newLayout = layout.accept(resolveIdentifiers);
+            if (defaultLayout != null) {
+                newLayout = defaultLayout.accept(resolveIdentifiers);
                 if (newLayout instanceof Terminal) {
                     newLayout = ((Terminal) newLayout).copy().setNodeType(TerminalNodeType.Layout).build();
                 } else if (newLayout instanceof Nonterminal) {
@@ -119,7 +119,7 @@ public class Grammar {
                 }
             }
 
-            grammarBuilder.setLayout(newLayout);
+            grammarBuilder.setDefaultLayout(newLayout);
             grammarBuilder.setGlobals(globals);
 
             Map<String, RegularExpression> newRegularExpressions = new HashMap<>();
@@ -222,13 +222,13 @@ public class Grammar {
         if (this == obj) return true;
         if (!(obj instanceof Grammar)) return false;
         Grammar other = (Grammar) obj;
-        return this.rules.equals(other.rules) && Objects.equals(this.layout, other.layout)
+        return this.rules.equals(other.rules) && Objects.equals(this.defaultLayout, other.defaultLayout)
             && Objects.equals(this.startSymbols, other.startSymbols);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rules, layout, startSymbols);
+        return Objects.hash(rules, defaultLayout, startSymbols);
     }
 
     @Override
@@ -247,7 +247,7 @@ public class Grammar {
         private Map<String, RegularExpression> literals = new LinkedHashMap<>();
         private String name;
         private List<Start> startSymbols = new ArrayList<>();
-        private Symbol layout;
+        private Symbol defaultLayout;
         private Map<String, Expression> globals = new HashMap<>();
 
         public Builder addRule(Rule rule) {
@@ -265,8 +265,8 @@ public class Grammar {
             return this;
         }
 
-        public Builder setLayout(Symbol layout) {
-            this.layout = layout;
+        public Builder setDefaultLayout(Symbol defaultLayout) {
+            this.defaultLayout = defaultLayout;
             return this;
         }
 

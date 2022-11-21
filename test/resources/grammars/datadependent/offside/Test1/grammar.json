@@ -291,7 +291,7 @@
       "startSymbol" : "S"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "Layout",
     "preConditions" : [ ],

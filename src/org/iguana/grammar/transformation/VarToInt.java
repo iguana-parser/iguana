@@ -50,7 +50,7 @@ public class VarToInt implements GrammarTransformation, IAbstractASTVisitor<Abst
                 .addRules(rules)
                 .addEBNFl(grammar.getEBNFLefts())
                 .addEBNFr(grammar.getEBNFRights())
-                .setLayout(grammar.getLayout())
+                .setDefaultLayout(grammar.getDefaultLayout())
                 .build();
     }
 

@@ -53,7 +53,7 @@ public class RuntimeGrammar {
 
 	private final Map<Nonterminal, List<RuntimeRule>> definitions;
 
-	private final Symbol layout;
+	private final Symbol defaultLayout;
 	
 	private final List<RuntimeRule> rules;
 
@@ -75,7 +75,7 @@ public class RuntimeGrammar {
 
 	public RuntimeGrammar(Builder builder) {
 		this.definitions = builder.definitions;
-		this.layout = builder.layout;
+		this.defaultLayout = builder.defaultLayout;
 		this.startSymbols = builder.startSymbols;
 		this.rules = builder.rules;
 		this.ebnfLefts = builder.ebnfLefts;
@@ -147,8 +147,8 @@ public class RuntimeGrammar {
         return exceptions;
 	}
 	
-	public Symbol getLayout() {
-		return layout;
+	public Symbol getDefaultLayout() {
+		return defaultLayout;
 	}
 
 	public Map<String, Expression> getGlobals() {
@@ -211,7 +211,7 @@ public class RuntimeGrammar {
 		private Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
 		private List<RuntimeRule> rules = new ArrayList<>();
 		public String name;
-		private Symbol layout;
+		private Symbol defaultLayout;
 		private List<Start> startSymbols;
 		private Map<String, RegularExpression> regularExpressionDefinitions;
 		private Map<String, RegularExpression> literals;
@@ -225,7 +225,7 @@ public class RuntimeGrammar {
         public Builder(RuntimeGrammar grammar) {
             definitions = new HashMap<>(grammar.definitions);
             rules = new ArrayList<>(grammar.rules);
-            layout = grammar.layout;
+            defaultLayout = grammar.defaultLayout;
             ebnfLefts = new HashMap<>(grammar.ebnfLefts);
             ebnfRights = new HashMap<>(grammar.ebnfRights);
             startSymbols = new ArrayList<>(grammar.startSymbols);
@@ -273,8 +273,8 @@ public class RuntimeGrammar {
 			return this;
 		}
 		
-		public Builder setLayout(Symbol layout) {
-			this.layout = layout;
+		public Builder setDefaultLayout(Symbol defaultLayout) {
+			this.defaultLayout = defaultLayout;
 			return this;
 		}
 

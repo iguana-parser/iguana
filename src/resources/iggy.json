@@ -8190,7 +8190,7 @@
       "startSymbol" : "Grammar"
     }
   ],
-  "layout" : {
+  "defaultLayout" : {
     "kind" : "Identifier",
     "name" : "Layout",
     "preConditions" : [ ],

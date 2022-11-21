@@ -45,9 +45,9 @@ public class LayoutWeaver implements GrammarTransformation {
 
 	@Override
 	public RuntimeGrammar transform(RuntimeGrammar grammar) {
-		Symbol layout = grammar.getLayout();
+		Symbol layout = grammar.getDefaultLayout();
 
-		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(
+		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setDefaultLayout(layout).setStartSymbols(
 			grammar.getStartSymbols());
 		
 		for (RuntimeRule rule : grammar.getRules()) {

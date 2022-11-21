@@ -50,8 +50,8 @@ public class ReachabilityGraph {
 		
 		this.layouts = new HashSet<>();
 		
-		if (grammar.getLayout() != null)
-			layouts.add(grammar.getLayout().getName());
+		if (grammar.getDefaultLayout() != null)
+			layouts.add(grammar.getDefaultLayout().getName());
 		
 		grammar.getNonterminals().forEach(n -> reachabilityGraph.put(n, new HashSet<>()));
 		
