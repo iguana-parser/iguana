@@ -62,7 +62,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = modifier:('start' | 'layout' | 'lexical')? name:Name params:Parameters? '=' body:Body
+    // Rule = modifier:ContextFreeModifier? name:Name params:Parameters? '=' body:Body
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -93,7 +93,7 @@ public class IggyParseTree {
         }
     }
 
-    // Rule = modifier:'layout'? 'regex' name:Name '=' body:RegexBody
+    // Rule = modifier:RegexModifier? 'regex' name:Name '=' body:RegexBody
     public static class RegexRule extends Rule {
         public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

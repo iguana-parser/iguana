@@ -84,7 +84,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         List<PriorityLevel> priorityLevels = visit(node.body());
 
         LayoutStrategy layoutStrategy = LayoutStrategy.INHERITED;
-        if (node.modifier().hasChildren()) { // start symbol
+        if (node.modifier().hasChildren()) {
             String text = node.modifier().getText();
             if (text.equals("start")) {
                 startSymbols.add(nonterminalName.getName());

@@ -57,7 +57,7 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("        RuntimeRule rule,\n");
         sb.append("        List<ParseTreeNode> children,\n");
         sb.append("        int leftExtent,\n");
-        sb.append("        int rightExtent) {\n");
+        sb.append("        int rightExtent\n");
         sb.append("    ) {\n");
         sb.append("        java.lang.String name = rule.getHead().getName();\n");
         sb.append("        java.lang.String label = rule.getLabel();\n\n");

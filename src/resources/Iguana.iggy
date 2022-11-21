@@ -9,8 +9,8 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body    %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                  %Regex
+  = modifier:ContextFreeModifier? name:Name params:Parameters? "=" body:Body    %ContextFree
+  | modifier:RegexModifier? "regex" name:Name "=" body:RegexBody                %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
@@ -144,6 +144,14 @@ lexical Label
 
 layout Layout
   = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
+
+regex ContextFreeModifier
+  = "start"
+  | "layout"
+  | "lexical"
+
+regex RegexModifier
+  = "layout"
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
