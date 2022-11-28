@@ -9,8 +9,8 @@ TopLevelVar
  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
-  = modifier:ContextFreeModifier? name:Name params:Parameters? "=" body:Body    %ContextFree
-  | modifier:RegexModifier? "regex" name:Name "=" body:RegexBody                %Regex
+  = modifier:ContextFreeModifier? name:Name params:Parameters? "=" body:Body NoNLLayout NL   %ContextFree
+  | modifier:RegexModifier? "regex" name:Name "=" body:RegexBody                             %Regex
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
@@ -142,6 +142,9 @@ Identifier
 lexical Label
   = '%' id:Identifier
 
+layout NoNLLayout
+  = (NoNLWhiteSpace | SingleLineComment | MultiLineComment)* !>> NoNLWhiteSpace !>> "//" !>> "/*"
+
 layout Layout
   = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
 
@@ -176,6 +179,12 @@ regex String
 
 regex WhiteSpace
   = [\ \t \f \r \n]+
+
+regex NoNLWhiteSpace
+  = [\ \t \f]+
+
+regex NL
+  = [\n \r]
 
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]

@@ -39,6 +39,7 @@ public class Grammar {
     private final Map<String, RegularExpression> literals;
     private final List<Start> startSymbols;
     private final Symbol defaultLayout;
+    private final Set<Identifier> layouts;
     private final Map<String, Expression> globals;
     private final String name;
 
@@ -50,6 +51,7 @@ public class Grammar {
         this.literals = builder.literals;
         this.startSymbols = builder.startSymbols;
         this.defaultLayout = builder.defaultLayout;
+        this.layouts = builder.layouts;
         this.globals = builder.globals;
         this.name = builder.name;
     }
@@ -86,7 +88,9 @@ public class Grammar {
         if (runtimeGrammar == null) {
             Map<String, RegularExpression> regularExpressions = InlineReferences.inline(regularExpressionDefinitions);
             Set<String> nonterminals = rules.stream().map(r -> r.getHead().getName()).collect(Collectors.toSet());
-            ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions);
+            Set<String> layoutNames = layouts.stream().map(Symbol::getName).collect(Collectors.toSet());
+            ResolveIdentifiers resolveIdentifiers = new ResolveIdentifiers(nonterminals, regularExpressions,
+                layoutNames);
             GrammarVisitor grammarVisitor = new GrammarVisitor(resolveIdentifiers);
             List<Rule> newRules = grammarVisitor.transform(rules);
             newRules.addAll(TopLevelPrecedenceNonterminals.addTopLevelPrecedenceRules(newRules));
@@ -248,6 +252,7 @@ public class Grammar {
         private String name;
         private List<Start> startSymbols = new ArrayList<>();
         private Symbol defaultLayout;
+        public Set<Identifier> layouts = new LinkedHashSet<>();
         private Map<String, Expression> globals = new HashMap<>();
 
         public Builder addRule(Rule rule) {
@@ -303,6 +308,11 @@ public class Grammar {
 
         public Builder setRegularExpressionDefinitions(Map<String, RegularExpression> regularExpressionDefinitions) {
             this.regularExpressionDefinitions = regularExpressionDefinitions;
+            return this;
+        }
+
+        public Builder setLayouts(Set<Identifier> layouts) {
+            this.layouts = layouts;
             return this;
         }
 

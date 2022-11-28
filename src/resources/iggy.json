@@ -375,6 +375,20 @@
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "excepts" : [ ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "NoNLLayout",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
+                    },
+                    {
+                      "kind" : "Identifier",
+                      "name" : "NL",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "excepts" : [ ]
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -5067,6 +5081,125 @@
     {
       "head" : {
         "kind" : "Nonterminal",
+        "name" : "NoNLLayout",
+        "preConditions" : [ ],
+        "postConditions" : [ ],
+        "nodeType" : "Layout"
+      },
+      "priorityLevels" : [
+        {
+          "alternatives" : [
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Star",
+                      "name" : "(NoNLWhiteSpace | SingleLineComment | MultiLineComment)*",
+                      "preConditions" : [ ],
+                      "postConditions" : [
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "Reference",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "name" : "NoNLWhiteSpace"
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Seq",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
+                                "val" : 47
+                              },
+                              {
+                                "kind" : "Char",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
+                                "val" : 47
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "kind" : "RegularExpressionCondition",
+                          "type" : "NOT_FOLLOW",
+                          "regularExpression" : {
+                            "kind" : "regex.Seq",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "symbols" : [
+                              {
+                                "kind" : "Char",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
+                                "val" : 47
+                              },
+                              {
+                                "kind" : "Char",
+                                "lookaheads" : [ ],
+                                "lookbehinds" : [ ],
+                                "val" : 42
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "s" : {
+                        "kind" : "Alt",
+                        "name" : "(NoNLWhiteSpace | SingleLineComment | MultiLineComment)",
+                        "preConditions" : [ ],
+                        "postConditions" : [ ],
+                        "symbols" : [
+                          {
+                            "kind" : "Identifier",
+                            "name" : "NoNLWhiteSpace",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "excepts" : [ ]
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "SingleLineComment",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "excepts" : [ ]
+                          },
+                          {
+                            "kind" : "Identifier",
+                            "name" : "MultiLineComment",
+                            "preConditions" : [ ],
+                            "postConditions" : [ ],
+                            "excepts" : [ ]
+                          }
+                        ]
+                      },
+                      "separators" : [ ]
+                    }
+                  ],
+                  "associativity" : "UNDEFINED"
+                }
+              ],
+              "associativity" : "UNDEFINED"
+            }
+          ]
+        }
+      ],
+      "layoutStrategy" : "NO_LAYOUT"
+    },
+    {
+      "head" : {
+        "kind" : "Nonterminal",
         "name" : "Layout",
         "preConditions" : [ ],
         "postConditions" : [ ],
@@ -5739,6 +5872,56 @@
         ]
       },
       "separators" : [ ]
+    },
+    "NoNLWhiteSpace" : {
+      "kind" : "regex.Plus",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
+      "regex" : {
+        "kind" : "regex.Alt",
+        "lookaheads" : [ ],
+        "lookbehinds" : [ ],
+        "symbols" : [
+          {
+            "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
+            "val" : 32
+          },
+          {
+            "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
+            "val" : 9
+          },
+          {
+            "kind" : "Char",
+            "lookaheads" : [ ],
+            "lookbehinds" : [ ],
+            "val" : 12
+          }
+        ]
+      },
+      "separators" : [ ]
+    },
+    "NL" : {
+      "kind" : "regex.Alt",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "val" : 10
+        },
+        {
+          "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "val" : 13
+        }
+      ]
     },
     "SingleLineComment" : {
       "kind" : "regex.Seq",
@@ -8204,5 +8387,21 @@
       "fun" : "set"
     }
   },
+  "layouts": [
+    {
+      "kind" : "Identifier",
+      "name" : "Layout",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "excepts" : [ ]
+    },
+    {
+      "kind" : "Identifier",
+      "name" : "NoNLLayout",
+      "preConditions" : [ ],
+      "postConditions" : [ ],
+      "excepts" : [ ]
+    }
+  ],
   "name" : "Iggy"
 }

@@ -195,6 +195,8 @@ public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 
     T visitLabel(IggyParseTree.Label node);
 
+    T visitNoNLLayout(IggyParseTree.NoNLLayout node);
+
     T visitLayout(IggyParseTree.Layout node);
 
     default T visit$_Symbol(IggyParseTree.$_Symbol node) {

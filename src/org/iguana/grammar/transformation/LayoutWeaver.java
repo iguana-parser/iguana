@@ -32,9 +32,9 @@ import org.iguana.grammar.condition.ConditionType;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.NonterminalNodeType;
+import org.iguana.grammar.slot.TerminalNodeType;
+import org.iguana.grammar.symbol.*;
 import org.iguana.grammar.symbol.Error;
-import org.iguana.grammar.symbol.Return;
-import org.iguana.grammar.symbol.Symbol;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -77,25 +77,26 @@ public class LayoutWeaver implements GrammarTransformation {
 			}
 			
 			for (int i = 0; i < rule.size() - 1; i++) {
-				Symbol s = rule.symbolAt(i);
+				Symbol currentSymbol = rule.symbolAt(i);
+				Symbol nextSymbol = rule.symbolAt(i + 1);
 
-				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
+				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(currentSymbol);
 				
 				if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
 						&& ignoreLayoutConditions.isEmpty()) {
-					ruleBuilder.addSymbol(s);
+					ruleBuilder.addSymbol(currentSymbol);
 					continue;
 				}
 				
 				if (ignoreLayoutConditions.isEmpty())
-					ruleBuilder.addSymbol(s);
+					ruleBuilder.addSymbol(currentSymbol);
 				else
-					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
+					ruleBuilder.addSymbol(currentSymbol.copy().removePostConditions(ignoreLayoutConditions).build());
 
 				// Do not insert layout after the layout symbol because we rely on the first set of the next
-				// non-layout symbol for synchronization.
-				if (!(s instanceof Error)) {
-					addLayout(layout, rule, ruleBuilder, s);
+				// non-layout symbol for synchronization
+				if (!((currentSymbol instanceof Error) || isLayout(currentSymbol) || isLayout(nextSymbol))) {
+					addLayout(layout, rule, ruleBuilder, currentSymbol);
 				}
 			}
 			
@@ -122,6 +123,14 @@ public class LayoutWeaver implements GrammarTransformation {
 		builder.setEbnfRights(grammar.getEBNFRights());
 		builder.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions());
 		return builder.build();
+	}
+
+	private boolean isLayout(Symbol s) {
+		if (s instanceof Nonterminal)
+			return ((Nonterminal) s).getNodeType() == NonterminalNodeType.Layout;
+		if (s instanceof Terminal)
+			return ((Terminal) s).getNodeType() == TerminalNodeType.Layout;
+		return false;
 	}
 
 	private void addLayout(Symbol layout, RuntimeRule rule, RuntimeRule.Builder ruleBuilder, Symbol s) {

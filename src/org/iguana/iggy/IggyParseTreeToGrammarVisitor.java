@@ -35,7 +35,8 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     private final Map<String, RegularExpression> literals = new LinkedHashMap<>();
 
     private final List<String> startSymbols = new ArrayList<>();
-    private Identifier layout;
+    private Identifier defaultLayout;
+    private final Set<Identifier> layouts = new LinkedHashSet<>();
 
     @Override
     public Grammar visitGrammar(IggyParseTree.Grammar node) {
@@ -65,7 +66,15 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         for (String start : startSymbols) {
             builder.addStartSymbol(Start.from(start));
         }
-        builder.setDefaultLayout(layout);
+
+        if (!layouts.isEmpty()) {
+            // TODO: this is workaround for now, later we introduce annotations or another mechanism to explicitly
+            // allow selecting the default layout.
+            // For now, the first defined layout the grammar file will be the default layout.
+            defaultLayout = layouts.iterator().next();
+        }
+        builder.setDefaultLayout(defaultLayout);
+        builder.setLayouts(layouts);
         name.ifPresent(identifier -> builder.setName(identifier.getName()));
         return builder.build();
     }
@@ -91,21 +100,18 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
             } else if (text.equals("lexical")) {
                 layoutStrategy = LayoutStrategy.NO_LAYOUT;
             } else { // "layout"
-                layout = nonterminalName;
+                layouts.add(nonterminalName);
                 layoutStrategy = LayoutStrategy.NO_LAYOUT;
             }
         }
 
         NonterminalNodeType nonterminalNodeType;
-        if (layout == null) {
-            nonterminalNodeType = NonterminalNodeType.Basic;
+        if (layouts.contains(nonterminalName)) {
+            nonterminalNodeType = NonterminalNodeType.Layout;
         } else {
-            if (layout.getName().equals(nonterminalName.getName())) {
-                nonterminalNodeType = NonterminalNodeType.Layout;
-            } else {
-                nonterminalNodeType = NonterminalNodeType.Basic;
-            }
+            nonterminalNodeType = NonterminalNodeType.Basic;
         }
+
         Nonterminal nonterminal = new Nonterminal.Builder(nonterminalName.getName())
             .addParameters(parameters.map(identifiers -> identifiers.stream().map(AbstractSymbol::toString)
                 .collect(Collectors.toList())).orElse(Collections.emptyList()))
@@ -125,7 +131,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
         regularExpressionDefinitions.put(identifier.getName(), getRegex(alts));
 
         if (node.modifier().hasChildren()) {
-            layout = identifier;
+            layouts.add(identifier);
         }
 
         return null;
@@ -705,8 +711,13 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     }
 
     @Override
-    public Object visitLayout(IggyParseTree.Layout node) {
-        throw new RuntimeException("Layout is handled in ContextFreeRule, this method should not be called");
+    public Identifier visitNoNLLayout(IggyParseTree.NoNLLayout node) {
+        return visit(node);
+    }
+
+    @Override
+    public Identifier visitLayout(IggyParseTree.Layout node) {
+        return visit(node);
     }
 
     @Override

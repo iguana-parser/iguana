@@ -62,7 +62,7 @@ public class IggyParseTree {
 
     }
 
-    // Rule = modifier:ContextFreeModifier? name:Name params:Parameters? '=' body:Body
+    // Rule = modifier:ContextFreeModifier? name:Name params:Parameters? '=' body:Body NoNLLayout NL
     public static class ContextFreeRule extends Rule {
         public ContextFreeRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
@@ -1969,6 +1969,21 @@ public class IggyParseTree {
         public <T> T accept(ParseTreeVisitor<T> visitor) {
             if (visitor instanceof IggyParseTreeVisitor) {
                 return ((IggyParseTreeVisitor<T>) visitor).visitLabel(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
+    // NoNLLayout = (NoNLWhiteSpace | SingleLineComment | MultiLineComment)*
+    public static class NoNLLayout extends NonterminalNode {
+        public NoNLLayout(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNoNLLayout(this);
             }
             return visitor.visitNonterminalNode(this);
         }
