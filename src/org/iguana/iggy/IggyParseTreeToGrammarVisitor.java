@@ -376,13 +376,13 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     @Override
     public Symbol visitEndOfLineSymbol(IggyParseTree.EndOfLineSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
-        return symbol.copy().addPreCondition(PositionalCondition.endOfLineCondition()).build();
+        return symbol.copy().addPostCondition(PositionalCondition.endOfLineCondition()).build();
     }
 
     @Override
     public Symbol visitEndOfFileSymbol(IggyParseTree.EndOfFileSymbol node) {
         Symbol symbol = (Symbol) node.sym().accept(this);
-        return symbol.copy().addPreCondition(PositionalCondition.endOfFileCondition()).build();
+        return symbol.copy().addPostCondition(PositionalCondition.endOfFileCondition()).build();
     }
 
     @Override
