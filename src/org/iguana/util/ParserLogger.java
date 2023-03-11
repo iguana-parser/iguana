@@ -1,5 +1,6 @@
 package org.iguana.util;
 
+import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.ParseError;
@@ -114,7 +115,7 @@ public class ParserLogger {
         if (logEnabled) logger.log("Pop %s, %d, %s, %s", gssNode, inputIndex, child, value);
     }
 
-    public void error(ParseError error) {
+    public void error(ParseError<?> error) {
         if (logEnabled) {
             logger.log("Error recorded at %s %d %s", error.getGrammarSlot(), error.getInputIndex(),
                 error.getDescription());
@@ -123,6 +124,15 @@ public class ParserLogger {
 
     public <T extends Result> void processDescriptor(Descriptor<T> descriptor) {
         if (logEnabled) logger.log("Processing %s", descriptor);
+    }
+
+    public void logFollowTestFailed(GrammarSlot grammarSlot, int inputIndex, int c, String expected) {
+        if (logEnabled) {
+            logger.log("Test follow failed at %s at input index %d. Found %d but expected %s",
+                grammarSlot,
+                inputIndex,
+                c, expected);
+        }
     }
 
     public int getDescriptorsCount() {

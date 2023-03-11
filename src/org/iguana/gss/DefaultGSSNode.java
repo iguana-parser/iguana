@@ -27,17 +27,20 @@
 
 package org.iguana.gss;
 
-import org.iguana.utils.collections.Keys;
-import org.iguana.utils.collections.OpenAddressingHashMap;
-import org.iguana.utils.collections.key.Key;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.datadependent.env.EnvironmentPool;
-import org.iguana.grammar.slot.*;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.slot.NonterminalTransition;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
 import org.iguana.util.ParserLogger;
+import org.iguana.utils.collections.Keys;
+import org.iguana.utils.collections.OpenAddressingHashMap;
+import org.iguana.utils.collections.key.Key;
+import org.iguana.utils.input.Input;
 
 import java.util.*;
 
@@ -79,12 +82,12 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 			}
 			ParserLogger.getInstance().gssEdgeAdded(firstGSSEdge);
 			((CyclicDummyGSSEdges<T>) firstGSSEdge).addReturnSlot(returnSlot);
-			iterateOverPoppedElements(firstGSSEdge, returnSlot, destination, input, env, runtime);
+			iterateOverPoppedElements(firstGSSEdge, returnSlot, destination, input, runtime);
 		} else {
 			GSSEdge<T> edge = runtime.createGSSEdge(returnSlot, w, destination, env);
 			ParserLogger.getInstance().gssEdgeAdded(edge);
 			addGSSEdge(edge);
-			iterateOverPoppedElements(edge, returnSlot, destination, input, env, runtime);
+			iterateOverPoppedElements(edge, returnSlot, destination, input, runtime);
 		}
 	}
 
@@ -100,15 +103,14 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		BodyGrammarSlot returnSlot,
 		GSSNode<T> destination,
 		Input input,
-		Environment env,
 		IguanaRuntime<T> runtime
 	) {
         if (firstPoppedElement != null)
-            processPoppedElement(firstPoppedElement, edge, returnSlot, destination, input, env, runtime);
+            processPoppedElement(firstPoppedElement, edge, returnSlot, destination, input, runtime);
 
         if (restPoppedElements != null) {
             for (T poppedElement: restPoppedElements.values()) {
-                processPoppedElement(poppedElement, edge, returnSlot, destination, input, env, runtime);
+                processPoppedElement(poppedElement, edge, returnSlot, destination, input, runtime);
             }
         }
     }
@@ -140,7 +142,6 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 			if (rightIndex == firstPoppedElement.getRightExtent() &&
 				Objects.equals(value, firstPoppedElement.getValue())) {
 				ops.convert(firstPoppedElement, child, slot, value);
-				return null;
 			} else {
 				Key key = value == null ? Keys.from(rightIndex) : Keys.from(rightIndex, value);
 
@@ -159,8 +160,8 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				}
 
 				ops.convert(poppedElement, child, slot, value);
-				return null;
 			}
+			return null;
 		}
 	}
 
@@ -170,10 +171,11 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		BodyGrammarSlot returnSlot,
 		GSSNode<T> destination,
 		Input input,
-		Environment env,
 		IguanaRuntime<T> runtime
 	) {
-		if (returnSlot.testFollow(input.charAt(poppedElement.getRightExtent()))) {
+		int rightExtent = poppedElement.getRightExtent();
+		int nextChar = input.charAt(rightExtent);
+		if (returnSlot.testFollow(nextChar)) {
 			T result = addDescriptor(input, this, poppedElement, edge, returnSlot, runtime);
 			if (result != null) {
 				// TODO: verify if this fix is correct with more data-dependent examples.
@@ -181,6 +183,9 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 				// implementations that rely on indexes.
 				runtime.scheduleDescriptor(returnSlot, destination, result, runtime.getEnvironment());
 			}
+		} else {
+			String expectedCharacters = returnSlot.getFollowTest().toString();
+			ParserLogger.getInstance().logFollowTestFailed(returnSlot, rightExtent, nextChar, expectedCharacters);
 		}
 	}
 
@@ -208,7 +213,13 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		BodyGrammarSlot returnSlot,
 		IguanaRuntime<T> runtime
 	) {
-		if (!returnSlot.testFollow(input.charAt(node.getRightExtent()))) return;
+		int rightExtent = node.getRightExtent();
+		int nextChar = input.charAt(rightExtent);
+		if (!returnSlot.testFollow(nextChar)) {
+			ParserLogger.getInstance().logFollowTestFailed(returnSlot, rightExtent, nextChar,
+				returnSlot.getFollowTest().toString());
+			return;
+		}
 
 		T result = addDescriptor(input, this, node, edge, returnSlot, runtime);
 		if (result != null) {
@@ -333,5 +344,4 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 		}
 		return s;
 	}
-
 }

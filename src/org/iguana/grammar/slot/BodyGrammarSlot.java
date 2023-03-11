@@ -265,6 +265,10 @@ public class BodyGrammarSlot implements GrammarSlot {
         return false;
     }
 
+	public FollowTest getFollowTest() {
+		return followTest;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
