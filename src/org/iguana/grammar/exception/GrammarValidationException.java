@@ -31,6 +31,7 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 import java.util.Set;
 
+@SuppressWarnings("serial")
 public class GrammarValidationException extends RuntimeException {
 
 	public GrammarValidationException(Set<RuntimeException> exceptions) {

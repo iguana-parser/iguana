@@ -1,5 +1,6 @@
 package org.iguana.parser;
 
+@SuppressWarnings("serial")
 public class ParseErrorException extends RuntimeException {
 
     private final ParseError<?> parseError;

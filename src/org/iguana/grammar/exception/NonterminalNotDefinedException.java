@@ -29,6 +29,7 @@ package org.iguana.grammar.exception;
 
 import org.iguana.grammar.symbol.Nonterminal;
 
+@SuppressWarnings("serial")
 public class NonterminalNotDefinedException extends RuntimeException {
 
 	private final Nonterminal nonterminal;

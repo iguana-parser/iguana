@@ -1,18 +1,17 @@
 package org.iguana.utils.collections;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
+public class ChainingIntHashMap<T> implements IntHashMap<T> {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 	
-	private int initialCapacity;
+	private final int initialCapacity;
 	
 	private int capacity;
 	
@@ -20,7 +19,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T>, Serializable {
 	
 	private int threshold;
 	
-	private float loadFactor;
+	private final float loadFactor;
 	
 	private int rehashCount;
 	

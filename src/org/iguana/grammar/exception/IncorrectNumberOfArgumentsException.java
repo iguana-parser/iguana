@@ -30,6 +30,7 @@ package org.iguana.grammar.exception;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.grammar.symbol.Nonterminal;
 
+@SuppressWarnings("serial")
 public class IncorrectNumberOfArgumentsException extends RuntimeException {
 
 	public IncorrectNumberOfArgumentsException(Nonterminal nonterminal, Expression[] arguments) {
