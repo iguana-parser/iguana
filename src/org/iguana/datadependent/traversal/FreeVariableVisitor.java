@@ -103,10 +103,9 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
     private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
 
     public FreeVariableVisitor(
-        Map<Nonterminal, Set<java.lang.String>> nonterminal_uses,
-        Map<Nonterminal, Set<java.lang.String>> nonterminal_updates,
-        Map<Nonterminal, Set<java.lang.String>> nonterminal_returns
-    ) {
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_uses,
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_updates,
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
         this.freeVariables = null;
         this.updates = null;
         this.nonterminal_uses = nonterminal_uses;

@@ -2,25 +2,25 @@
  * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde & Informatica (CWI)
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice, this 
+ * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this 
- *    list of conditions and the following disclaimer in the documentation and/or 
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this
+ *    list of conditions and the following disclaimer in the documentation and/or
  *    other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
  * OF SUCH DAMAGE.
  *
  */
@@ -36,57 +36,54 @@ import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 
 public class ConditionalTransition extends AbstractTransition {
-	
-	private final Expression condition;
-	
-	private final BodyGrammarSlot ifFalse;
 
-	public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		this(condition, origin, dest, null);
-	}
+    private final Expression condition;
 
-	private ConditionalTransition(
-		Expression condition,
-		BodyGrammarSlot origin,
-		BodyGrammarSlot dest,
-		BodyGrammarSlot ifFalse
-	) {
-		super(origin, dest);
-		this.condition = condition;
-		this.ifFalse = ifFalse;
-	}
+    private final BodyGrammarSlot ifFalse;
 
-	public BodyGrammarSlot ifFalseDestination() {
-		return ifFalse;
-	}
-	
-	@Override
-	public String getLabel() {
-		return String.format("[%s]", condition.toString());
-	}
+    public ConditionalTransition(Expression condition, BodyGrammarSlot origin, BodyGrammarSlot dest) {
+        this(condition, origin, dest, null);
+    }
 
-	@Override
-	public <T extends Result> void execute(
-		Input input,
-		GSSNode<T> u,
-		T result,
-		Environment env,
-		IguanaRuntime<T> runtime
-	) {
-		
-		Object value = runtime.evaluate(condition, env, input);
-		
-		if (!(value instanceof Boolean)) {
-			throw new UnexpectedRuntimeTypeException(condition);
-		}
-		
-		boolean isTrue = (Boolean) value;
-		
-		if (isTrue)
-			dest.execute(input, u, result, env, runtime);
-		else if (ifFalse != null)
-			ifFalse.execute(input, u, result, env, runtime);
-		// TODO: logging
-	}
+    private ConditionalTransition(
+            Expression condition,
+            BodyGrammarSlot origin,
+            BodyGrammarSlot dest,
+            BodyGrammarSlot ifFalse) {
+        super(origin, dest);
+        this.condition = condition;
+        this.ifFalse = ifFalse;
+    }
+
+    public BodyGrammarSlot ifFalseDestination() {
+        return ifFalse;
+    }
+
+    @Override
+    public String getLabel() {
+        return String.format("[%s]", condition.toString());
+    }
+
+    @Override
+    public <T extends Result> void execute(
+            Input input,
+            GSSNode<T> u,
+            T result,
+            Environment env,
+            IguanaRuntime<T> runtime) {
+        Object value = runtime.evaluate(condition, env, input);
+
+        if (!(value instanceof Boolean)) {
+            throw new UnexpectedRuntimeTypeException(condition);
+        }
+
+        boolean isTrue = (Boolean) value;
+
+        if (isTrue)
+            dest.execute(input, u, result, env, runtime);
+        else if (ifFalse != null)
+            ifFalse.execute(input, u, result, env, runtime);
+        // TODO: logging
+    }
 
 }

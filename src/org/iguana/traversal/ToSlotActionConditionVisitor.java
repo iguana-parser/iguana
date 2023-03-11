@@ -60,13 +60,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
             @Override
             public <T extends Result> boolean execute(
-                Input input,
-                BodyGrammarSlot slot,
-                GSSNode<T> gssNode,
-                int leftExtent,
-                int rightExtent,
-                IEvaluatorContext ctx
-            ) {
+                    Input input,
+                    BodyGrammarSlot slot,
+                    GSSNode<T> gssNode,
+                    int leftExtent,
+                    int rightExtent,
+                    IEvaluatorContext ctx) {
                 Object value = condition.getExpression().interpret(ctx, input);
                 if (!(value instanceof Boolean))
                     throw new RuntimeException("Data dependent condition should evaluate to a boolean value.");
@@ -92,13 +91,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return !input.isStartOfLine(rightExtent);
                     }
 
@@ -114,13 +112,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return !input.isEndOfLine(rightExtent);
                     }
 
@@ -135,13 +132,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return !input.isEndOfFile(rightExtent);
                     }
 
@@ -172,13 +168,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return matcher.match(input, rightExtent) == -1;
                     }
 
@@ -195,13 +190,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return matcher.match(input, rightExtent) >= 0;
                     }
 
@@ -220,13 +214,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return matcher.match(input, gssNode.getInputIndex(), rightExtent);
                     }
 
@@ -242,13 +235,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return matcher.match(input, rightExtent) >= 0;
                     }
 
@@ -264,13 +256,12 @@ public class ToSlotActionConditionVisitor implements IConditionVisitor<SlotActio
 
                     @Override
                     public <T extends Result> boolean execute(
-                        Input input,
-                        BodyGrammarSlot slot,
-                        GSSNode<T> gssNode,
-                        int leftExtent,
-                        int rightExtent,
-                        IEvaluatorContext ctx
-                    ) {
+                            Input input,
+                            BodyGrammarSlot slot,
+                            GSSNode<T> gssNode,
+                            int leftExtent,
+                            int rightExtent,
+                            IEvaluatorContext ctx) {
                         return matcher.match(input, rightExtent) == -1;
                     }
 

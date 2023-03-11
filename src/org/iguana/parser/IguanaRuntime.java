@@ -86,7 +86,7 @@ public class IguanaRuntime<T extends Result> {
                 startSlot = grammarGraph.getStartSlot(Nonterminal.withName("$_" + start.getName()));
                 if (startSlot == null) {
                     throw new RuntimeException(
-                        "No top level definition exists for " + start.getName() + " " + parameters);
+                            "No top level definition exists for " + start.getName() + " " + parameters);
                 }
                 startGSSNode = new StartGSSNode<>(startSlot, 0);
             }
@@ -109,7 +109,7 @@ public class IguanaRuntime<T extends Result> {
             Descriptor<T> descriptor = nextDescriptor();
             logger.processDescriptor(descriptor);
             descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(),
-                descriptor.getEnv(), this);
+                    descriptor.getEnv(), this);
         }
 
         int inputLength = input.length() - 1;
@@ -129,14 +129,13 @@ public class IguanaRuntime<T extends Result> {
     }
 
     public void recordParseError(
-        int inputIndex,
-        Input input,
-        GrammarSlot slot,
-        GSSNode<T> gssNode,
-        String description
-    ) {
+            int inputIndex,
+            Input input,
+            GrammarSlot slot,
+            GSSNode<T> gssNode,
+            String description) {
         ParseError<T> error = new ParseError<>(slot, gssNode, inputIndex, input.getLineNumber(inputIndex),
-            input.getColumnNumber(inputIndex), description);
+                input.getColumnNumber(inputIndex), description);
         parseErrors.add(error);
         logger.error(error);
     }
@@ -153,10 +152,9 @@ public class IguanaRuntime<T extends Result> {
     // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
     // from the current GSS node to the start symbol GSS node.
     public void collectErrorSlots(
-        GSSNode<T> gssNode,
-        List<Tuple<GSSEdge<T>, ErrorTransition>> result,
-        Set<GSSNode<T>> visited
-    ) {
+            GSSNode<T> gssNode,
+            List<Tuple<GSSEdge<T>, ErrorTransition>> result,
+            Set<GSSNode<T>> visited) {
         if (visited.contains(gssNode)) return;
         visited.add(gssNode);
         if (gssNode == null) return;
@@ -229,7 +227,7 @@ public class IguanaRuntime<T extends Result> {
                 return gssNode != null ? new DummyGSSEdge<>(returnSlot, gssNode) : new CyclicDummyGSSEdges<>();
             } else {
                 return gssNode != null ? new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env)
-                    : new CyclicDummyGSSEdgesWithEnv<>(env);
+                        : new CyclicDummyGSSEdgesWithEnv<>(env);
             }
         }
 
@@ -329,13 +327,13 @@ public class IguanaRuntime<T extends Result> {
                 System.out.println("Popped Elements: empty");
             else
                 System.out.printf("Popped Elements (min: %d, max: %d, mean: %.2f)%n", (int) poppedElementStats[0],
-                    (int) poppedElementStats[1], poppedElementStats[2]);
+                        (int) poppedElementStats[1], poppedElementStats[2]);
 
             if (gssEdgesStats == null)
                 System.out.println("GSS Edges: empty");
             else
                 System.out.printf("GSS Edges (min: %d, max: %d, mean: %.2f)%n", (int) gssEdgesStats[0],
-                    (int) gssEdgesStats[1], gssEdgesStats[2]);
+                        (int) gssEdgesStats[1], gssEdgesStats[2]);
             System.out.println("---------------");
         }
     }
@@ -353,7 +351,8 @@ public class IguanaRuntime<T extends Result> {
 
         for (GSSNode<?> gssNode : gssNodes) {
             System.out.println(
-                gssNode + ", edges: " + gssNode.countGSSEdges() + ", poppedElements: " + gssNode.countPoppedElements());
+                    gssNode + ", edges: " + gssNode.countGSSEdges() + ", poppedElements: " +
+                    gssNode.countPoppedElements());
         }
     }
 

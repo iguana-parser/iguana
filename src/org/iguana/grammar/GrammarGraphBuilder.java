@@ -150,9 +150,8 @@ public class GrammarGraphBuilder {
     }
 
     private RangeMap<BodyGrammarSlot> getLookAheadTest(
-        Nonterminal nonterminal,
-        NonterminalGrammarSlot nonterminalSlot
-    ) {
+            Nonterminal nonterminal,
+            NonterminalGrammarSlot nonterminalSlot) {
         if (config.getLookAheadCount() == 0)
             return i -> nonterminalSlot.getFirstSlots();
 
@@ -435,13 +434,12 @@ public class GrammarGraphBuilder {
     }
 
     private BodyGrammarSlot getBodyGrammarSlot(
-        RuntimeRule rule,
-        int i,
-        Position position,
-        String label,
-        String variable,
-        Set<String> state
-    ) {
+            RuntimeRule rule,
+            int i,
+            Position position,
+            String label,
+            String variable,
+            Set<String> state) {
         assert (i - 1) < rule.size();
 
         BodyGrammarSlot slot;
@@ -458,14 +456,13 @@ public class GrammarGraphBuilder {
     }
 
     private BodyGrammarSlot getEndSlot(
-        RuntimeRule rule,
-        int i,
-        Position position,
-        NonterminalGrammarSlot nonterminal,
-        String label,
-        String variable,
-        Set<String> state
-    ) {
+            RuntimeRule rule,
+            int i,
+            Position position,
+            NonterminalGrammarSlot nonterminal,
+            String label,
+            String variable,
+            Set<String> state) {
         assert i == rule.size();
 
         BodyGrammarSlot slot;

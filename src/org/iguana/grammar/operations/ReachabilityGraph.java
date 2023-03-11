@@ -249,12 +249,10 @@ public class ReachabilityGraph {
     }
 
 	private static boolean add(
-		Nonterminal a,
-		Nonterminal nonterminal,
-		Map<Nonterminal, Set<Nonterminal>> reachabilityGraph
-	) {
-		boolean changed = false;
-		changed |= reachabilityGraph.get(a).add(nonterminal);
+			Nonterminal a,
+			Nonterminal nonterminal,
+			Map<Nonterminal, Set<Nonterminal>> reachabilityGraph) {
+		boolean changed = reachabilityGraph.get(a).add(nonterminal);
 		changed |= reachabilityGraph.get(a).addAll(reachabilityGraph.get(nonterminal));
 		return changed;
 	}

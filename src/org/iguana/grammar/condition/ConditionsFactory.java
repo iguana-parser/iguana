@@ -47,16 +47,15 @@ public class ConditionsFactory {
 	
 	public static Conditions DEFAULT = new Conditions() {
 
-        @Override
+		@Override
 		public <T extends Result> boolean execute(
-			Input input,
-			BodyGrammarSlot slot,
-			GSSNode<T> u,
-			int leftExtent,
-			int rightExtent,
-			IEvaluatorContext ctx,
-			IguanaRuntime<T> runtime
-		) {
+				Input input,
+				BodyGrammarSlot slot,
+				GSSNode<T> u,
+				int leftExtent,
+				int rightExtent,
+				IEvaluatorContext ctx,
+				IguanaRuntime<T> runtime) {
             return false;
         }
 
@@ -86,22 +85,21 @@ public class ConditionsFactory {
 
 				@Override
 				public <T extends Result> boolean execute(
-					Input input,
-					BodyGrammarSlot slot,
-					GSSNode<T> gssNode,
-					int lefExtent,
-					int rightExtent,
-					IEvaluatorContext ctx,
-					IguanaRuntime<T> runtime
-				) {
+						Input input,
+						BodyGrammarSlot slot,
+						GSSNode<T> gssNode,
+						int lefExtent,
+						int rightExtent,
+						IEvaluatorContext ctx,
+						IguanaRuntime<T> runtime) {
 					for (int j = 0; j < actions.size(); j++) {
 						SlotAction slotAction = actions.get(j);
-					    if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
-                            runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
-			                return true;
-			            }
-			        }
-			        return false;
+						if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
+							runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+							return true;
+						}
+					}
+					return false;
 				}
 				
 				@Override
@@ -114,25 +112,24 @@ public class ConditionsFactory {
 		
 		return new Conditions() {
 
-            @Override
+			@Override
 			public <T extends Result> boolean execute(
-				Input input,
-				BodyGrammarSlot slot,
-				GSSNode<T> gssNode,
-				int leftExtent,
-				int rightExtent,
-				IEvaluatorContext ctx,
-				IguanaRuntime<T> runtime
-			) {
-                for (int j = 0; j < actions.size(); j++) {
-                    SlotAction slotAction = actions.get(j);
-                    if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
-                        runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
-                        return true;
-                    }
-                }
-                return false;
-            }
+					Input input,
+					BodyGrammarSlot slot,
+					GSSNode<T> gssNode,
+					int leftExtent,
+					int rightExtent,
+					IEvaluatorContext ctx,
+					IguanaRuntime<T> runtime) {
+				for (int j = 0; j < actions.size(); j++) {
+					SlotAction slotAction = actions.get(j);
+					if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
+						runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+						return true;
+					}
+				}
+				return false;
+			}
 
 			@Override
 			public String toString() {

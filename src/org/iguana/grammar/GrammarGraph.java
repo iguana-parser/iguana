@@ -23,10 +23,9 @@ public class GrammarGraph {
     private final Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 
     public GrammarGraph(
-        List<GrammarSlot> slots,
-        Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap,
-        Map<String, Expression> globals
-    ) {
+            List<GrammarSlot> slots,
+            Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap,
+            Map<String, Expression> globals) {
         this.slots = slots;
         this.nonterminalsMap = nonterminalsMap;
         this.globals = globals;

@@ -101,11 +101,10 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
 
     @Override
     public NonPackedNode merge(
-        NonPackedNode current,
-        NonPackedNode result1,
-        NonPackedNode result2,
-        BodyGrammarSlot slot
-    ) {
+            NonPackedNode current,
+            NonPackedNode result1,
+            NonPackedNode result2,
+            BodyGrammarSlot slot) {
         if (result1 == dummyNode)
             return result2;
 
@@ -139,7 +138,7 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
                 current = new NonterminalNode(slot, result, result.getLeftExtent(), result.getRightExtent());
             else
                 current = new NonterminalNodeWithValue(slot, result, result.getLeftExtent(), result.getRightExtent(),
-                    value);
+                        value);
 
             logger.nonterminalNodeAdded((NonterminalNode) current);
         } else {

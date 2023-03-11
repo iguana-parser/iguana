@@ -317,11 +317,10 @@ public class Grammar {
     }
 
     private List<RuntimeRule> getRules(
-        Rule highLevelRule,
-        Map<String, Set<String>> leftEnds,
-        Map<String, Set<String>> rightEnds,
-        Set<String> ebnfs
-    ) {
+            Rule highLevelRule,
+            Map<String, Set<String>> leftEnds,
+            Map<String, Set<String>> rightEnds,
+            Set<String> ebnfs) {
         List<PriorityLevel> priorityLevels = highLevelRule.getPriorityLevels();
 
         List<RuntimeRule> rules = new ArrayList<>();
@@ -394,15 +393,14 @@ public class Grammar {
     }
 
     private RuntimeRule getRule(
-        Nonterminal head,
-        List<Symbol> body,
-        Associativity associativity,
-        String label,
-        LayoutStrategy layoutStrategy,
-        Map<String, Set<String>> leftEnds,
-        Map<String, Set<String>> rightEnds,
-        Set<String> ebnfs
-    ) {
+            Nonterminal head,
+            List<Symbol> body,
+            Associativity associativity,
+            String label,
+            LayoutStrategy layoutStrategy,
+            Map<String, Set<String>> leftEnds,
+            Map<String, Set<String>> rightEnds,
+            Set<String> ebnfs) {
         boolean isLeft = body.size() != 0 && body.get(0).accept(
             new IsRecursive(head, Recursion.LEFT_REC, leftEnds, ebnfs));
         boolean isRight = body.size() != 0 && body.get(body.size() - 1).accept(
@@ -467,12 +465,11 @@ public class Grammar {
     }
 
     private void computeEnds(
-        Nonterminal head,
-        List<Symbol> symbols,
-        Map<String, Set<String>> leftEnds,
-        Map<String, Set<String>> rightEnds,
-        Set<String> ebnfs
-    ) {
+            Nonterminal head,
+            List<Symbol> symbols,
+            Map<String, Set<String>> leftEnds,
+            Map<String, Set<String>> rightEnds,
+            Set<String> ebnfs) {
         if (symbols.size() >= 1) {
             Symbol first = symbols.get(0);
             Symbol last = symbols.get(symbols.size() - 1);

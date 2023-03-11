@@ -44,13 +44,12 @@ public class ParseError<T extends Result> {
     private final String description;
 
     public ParseError(
-        GrammarSlot slot,
-        GSSNode<T> gssNode,
-        int inputIndex,
-        int lineNumber,
-        int columnNumber,
-        String description
-    ) {
+            GrammarSlot slot,
+            GSSNode<T> gssNode,
+            int inputIndex,
+            int lineNumber,
+            int columnNumber,
+            String description) {
         this.slot = slot;
         this.inputIndex = inputIndex;
         this.lineNumber = lineNumber;
@@ -101,6 +100,6 @@ public class ParseError<T extends Result> {
     @Override
     public String toString() {
         return String.format("Parse error at input index: %d, line: %d, column: %d, grammar rule: %s, description: %s",
-            inputIndex, lineNumber, columnNumber, slot, description);
+                inputIndex, lineNumber, columnNumber, slot, description);
     }
 }

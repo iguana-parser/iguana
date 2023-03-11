@@ -45,9 +45,9 @@ public class JsonSerializer {
 
     static {
         mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
-            .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
-            .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
-            .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -282,16 +282,16 @@ public class JsonSerializer {
     abstract static class AnnotationMixIn {
         @JsonCreator
         AnnotationMixIn(
-            @JsonProperty("name") String name,
-            @JsonProperty("value") String value,
-            @JsonProperty("symbolName") String symbolName) { }
+                @JsonProperty("name") String name,
+                @JsonProperty("value") String value,
+                @JsonProperty("symbolName") String symbolName) {}
     }
 
     @JsonDeserialize(builder = PriorityLevel.Builder.class)
-    abstract static class PriorityLevelMixIn { }
+    abstract static class PriorityLevelMixIn {}
 
     @JsonDeserialize(builder = Alternative.Builder.class)
-    abstract static class AlternativeMixIn { }
+    abstract static class AlternativeMixIn {}
 
     @JsonDeserialize(builder = Sequence.Builder.class)
     abstract static class SequenceMixIn {
@@ -301,25 +301,25 @@ public class JsonSerializer {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=Nonterminal.class, name="Nonterminal"),
-        @JsonSubTypes.Type(value=Terminal.class, name="Terminal"),
-        @JsonSubTypes.Type(value=Star.class, name="Star"),
-        @JsonSubTypes.Type(value=Plus.class, name="Plus"),
-        @JsonSubTypes.Type(value=Opt.class, name="Opt"),
-        @JsonSubTypes.Type(value=Alt.class, name="Alt"),
-        @JsonSubTypes.Type(value=Group.class, name="Sequence"),
-        @JsonSubTypes.Type(value=Start.class, name="Start"),
-        @JsonSubTypes.Type(value=Identifier.class, name="Identifier"),
-        @JsonSubTypes.Type(value=CodeHolder.class, name="CodeHolder"),
-        @JsonSubTypes.Type(value=Code.class, name="Code"),
-        @JsonSubTypes.Type(value=Return.class, name="Return"),
-        @JsonSubTypes.Type(value=IfThenElse.class, name="IfThenElse"),
-        @JsonSubTypes.Type(value=Offside.class, name="Offside"),
-        @JsonSubTypes.Type(value=Align.class, name="Align"),
-        @JsonSubTypes.Type(value=Ignore.class, name="Ignore"),
-        @JsonSubTypes.Type(value=Error.class, name="Error")
+            @JsonSubTypes.Type(value = Nonterminal.class, name = "Nonterminal"),
+            @JsonSubTypes.Type(value = Terminal.class, name = "Terminal"),
+            @JsonSubTypes.Type(value = Star.class, name = "Star"),
+            @JsonSubTypes.Type(value = Plus.class, name = "Plus"),
+            @JsonSubTypes.Type(value = Opt.class, name = "Opt"),
+            @JsonSubTypes.Type(value = Alt.class, name = "Alt"),
+            @JsonSubTypes.Type(value = Group.class, name = "Sequence"),
+            @JsonSubTypes.Type(value = Start.class, name = "Start"),
+            @JsonSubTypes.Type(value = Identifier.class, name = "Identifier"),
+            @JsonSubTypes.Type(value = CodeHolder.class, name = "CodeHolder"),
+            @JsonSubTypes.Type(value = Code.class, name = "Code"),
+            @JsonSubTypes.Type(value = Return.class, name = "Return"),
+            @JsonSubTypes.Type(value = IfThenElse.class, name = "IfThenElse"),
+            @JsonSubTypes.Type(value = Offside.class, name = "Offside"),
+            @JsonSubTypes.Type(value = Align.class, name = "Align"),
+            @JsonSubTypes.Type(value = Ignore.class, name = "Ignore"),
+            @JsonSubTypes.Type(value = Error.class, name = "Error")
     })
-    abstract static class SymbolMixIn { }
+    abstract static class SymbolMixIn {}
 
     abstract static class AbstractSymbolMixIn extends SymbolMixIn {
         @JsonIgnore
@@ -328,125 +328,125 @@ public class JsonSerializer {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value = org.iguana.regex.Seq.class, name="regex.Seq"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Alt.class, name="regex.Alt"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Star.class, name="regex.Star"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Plus.class, name="regex.Plus"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Opt.class, name="regex.Opt"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Char.class, name="Char"),
-        @JsonSubTypes.Type(value = org.iguana.regex.CharRange.class, name="CharRange"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Reference.class, name="Reference"),
-        @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name="Epsilon")
+            @JsonSubTypes.Type(value = org.iguana.regex.Seq.class, name = "regex.Seq"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Alt.class, name = "regex.Alt"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Star.class, name = "regex.Star"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Plus.class, name = "regex.Plus"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Opt.class, name = "regex.Opt"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Char.class, name = "Char"),
+            @JsonSubTypes.Type(value = org.iguana.regex.CharRange.class, name = "CharRange"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Reference.class, name = "Reference"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name = "Epsilon")
     })
-    abstract static class RegularExpressionMixIn { }
+    abstract static class RegularExpressionMixIn {}
 
     abstract static class AbstractRegularExpressionMixIn {
-        @JsonIgnore Automaton automaton;
+        @JsonIgnore
+        Automaton automaton;
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=DefaultTerminalNode.class, name="TerminalNode"),
-        @JsonSubTypes.Type(value=KeywordTerminalNode.class, name="KeywordTerminalNode"),
-        @JsonSubTypes.Type(value=NonterminalNode.class, name="NonterminalNode"),
-        @JsonSubTypes.Type(value=AmbiguityNode.class, name="AmbiguityNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.StarNode.class, name="StarNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.PlusNode.class, name="PlusNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.GroupNode.class, name="GroupNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.OptionNode.class, name="OptionNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.AltNode.class, name="AltNode"),
-        @JsonSubTypes.Type(value=MetaSymbolNode.StartNode.class, name="StartNode"),
-        @JsonSubTypes.Type(value=ErrorNode.class, name="ErrorNode")
+            @JsonSubTypes.Type(value = DefaultTerminalNode.class, name = "TerminalNode"),
+            @JsonSubTypes.Type(value = KeywordTerminalNode.class, name = "KeywordTerminalNode"),
+            @JsonSubTypes.Type(value = NonterminalNode.class, name = "NonterminalNode"),
+            @JsonSubTypes.Type(value = AmbiguityNode.class, name = "AmbiguityNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.StarNode.class, name = "StarNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.PlusNode.class, name = "PlusNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.GroupNode.class, name = "GroupNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.OptionNode.class, name = "OptionNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.AltNode.class, name = "AltNode"),
+            @JsonSubTypes.Type(value = MetaSymbolNode.StartNode.class, name = "StartNode"),
+            @JsonSubTypes.Type(value = ErrorNode.class, name = "ErrorNode")
     })
-    abstract static class ParseTreeNodeMixIn { }
+    abstract static class ParseTreeNodeMixIn {}
 
     abstract static class DefaultTerminalNodeMixIn {
         DefaultTerminalNodeMixIn(
-            @JsonProperty("terminal") Terminal terminal,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end,
-            @JsonProperty("input") Input input
-        ) { }
+                @JsonProperty("terminal") Terminal terminal,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end,
+                @JsonProperty("input") Input input) {}
+
         @JsonIgnore
         Input input;
     }
 
     abstract static class KeywordTerminalNodeMixIn {
         KeywordTerminalNodeMixIn(
-            @JsonProperty("terminal") Terminal terminal,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end
-        ) { }
+                @JsonProperty("terminal") Terminal terminal,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class ErrorNodeMixIn {
         ErrorNodeMixIn(
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end,
-            @JsonProperty("input") Input input
-        ) { }
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end,
+                @JsonProperty("input") Input input) {}
+
         @JsonIgnore
         Input input;
     }
 
     abstract static class NonterminalNodeMixIn {
         NonterminalNodeMixIn(
-            @JsonProperty("rule") RuntimeRule rule,
-            @JsonProperty("children") List<ParseTreeNode> children,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("rule") RuntimeRule rule,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class StarNodeMixIn {
         StarNodeMixIn(
-            @JsonProperty("symbol") Star symbol,
-            @JsonProperty("children") List<ParseTreeNode> children,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Star symbol,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class PlusNodeMixIn {
         PlusNodeMixIn(
-            @JsonProperty("symbol") Plus symbol,
-            @JsonProperty("children") List<ParseTreeNode> children,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Plus symbol,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class GroupNodeMixIn {
         GroupNodeMixIn(
-            @JsonProperty("symbol") Group symbol,
-            @JsonProperty("children") List<ParseTreeNode> children,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Group symbol,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class OptionNodeMixIn {
         OptionNodeMixIn(
-            @JsonProperty("symbol") Opt symbol,
-            @JsonProperty("child") ParseTreeNode child,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Opt symbol,
+                @JsonProperty("child") ParseTreeNode child,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class AltNodeMixIn {
         AltNodeMixIn(
-            @JsonProperty("symbol") Alt symbol,
-            @JsonProperty("child") ParseTreeNode child,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Alt symbol,
+                @JsonProperty("child") ParseTreeNode child,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class StartNodeMixIn {
         StartNodeMixIn(
-            @JsonProperty("symbol") Start symbol,
-            @JsonProperty("children") List<ParseTreeNode> children,
-            @JsonProperty("start") int start,
-            @JsonProperty("end") int end) { }
+                @JsonProperty("symbol") Start symbol,
+                @JsonProperty("children") List<ParseTreeNode> children,
+                @JsonProperty("start") int start,
+                @JsonProperty("end") int end) {}
     }
 
     abstract static class AmbiguityNodeMixIn {
-        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) { }
+        AmbiguityNodeMixIn(@JsonProperty("alternatives") Set<ParseTreeNode> alternatives) {}
     }
 
     @JsonDeserialize(builder = Nonterminal.Builder.class)
@@ -473,49 +473,49 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = Star.Builder.class)
-    abstract static class StarMixIn extends AbstractSymbolMixIn { }
+    abstract static class StarMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Start.Builder.class)
-    abstract static class StartMixIn extends AbstractSymbolMixIn { }
+    abstract static class StartMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Code.Builder.class)
-    abstract static class CodeMixIn extends AbstractSymbolMixIn { }
+    abstract static class CodeMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = CodeHolder.Builder.class)
-    abstract static class CodeHolderMixIn extends AbstractSymbolMixIn { }
+    abstract static class CodeHolderMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Plus.Builder.class)
-    abstract static class PlusMixIn extends AbstractSymbolMixIn { }
+    abstract static class PlusMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Opt.Builder.class)
-    abstract static class OptMixIn extends AbstractSymbolMixIn { }
+    abstract static class OptMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Alt.Builder.class)
-    abstract static class AltMixIn extends AbstractSymbolMixIn { }
+    abstract static class AltMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Group.Builder.class)
-    abstract static class GroupMixIn extends AbstractSymbolMixIn { }
+    abstract static class GroupMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Identifier.Builder.class)
-    abstract static class IdentifierMixIn extends AbstractSymbolMixIn { }
+    abstract static class IdentifierMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Terminal.Builder.class)
-    abstract static class TerminalMixIn extends AbstractSymbolMixIn { }
+    abstract static class TerminalMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Return.Builder.class)
-    abstract static class ReturnMixIn extends AbstractSymbolMixIn { }
+    abstract static class ReturnMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = IfThenElse.Builder.class)
-    abstract static class IfThenElseMixIn extends AbstractSymbolMixIn { }
+    abstract static class IfThenElseMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Offside.Builder.class)
-    abstract static class OffsideMixIn extends AbstractSymbolMixIn { }
+    abstract static class OffsideMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Align.Builder.class)
-    abstract static class AlignMixIn extends AbstractSymbolMixIn { }
+    abstract static class AlignMixIn extends AbstractSymbolMixIn {}
 
     @JsonDeserialize(builder = Ignore.Builder.class)
-    abstract static class IgnoreMixIn extends AbstractSymbolMixIn { }
+    abstract static class IgnoreMixIn extends AbstractSymbolMixIn {}
 
     abstract static class ErrorMixIn extends AbstractAttrsMixIn {
         @JsonCreator
@@ -523,28 +523,28 @@ public class JsonSerializer {
     }
 
     @JsonDeserialize(builder = org.iguana.regex.Seq.Builder.class)
-    abstract static class SeqMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class SeqMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Alt.Builder.class)
-    abstract static class RegexAltMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class RegexAltMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Star.Builder.class)
-    abstract static class RegexStarMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class RegexStarMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Plus.Builder.class)
-    abstract static class RegexPlusMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class RegexPlusMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Opt.Builder.class)
-    abstract static class RegexOptMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class RegexOptMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Char.Builder.class)
-    abstract static class CharMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class CharMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.CharRange.Builder.class)
-    abstract static class CharRangeMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class CharRangeMixIn extends AbstractRegularExpressionMixIn {}
 
     @JsonDeserialize(builder = org.iguana.regex.Reference.Builder.class)
-    abstract static class ReferenceMixIn extends AbstractRegularExpressionMixIn { }
+    abstract static class ReferenceMixIn extends AbstractRegularExpressionMixIn {}
 
     abstract static class EpsilonMixIn extends AbstractRegularExpressionMixIn {
         @JsonCreator
@@ -553,205 +553,207 @@ public class JsonSerializer {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=RegularExpressionCondition.class, name="RegularExpressionCondition"),
-        @JsonSubTypes.Type(value=DataDependentCondition.class, name="DataDependentCondition"),
-        @JsonSubTypes.Type(value=PositionalCondition.class, name="PositionalCondition")
+            @JsonSubTypes.Type(value = RegularExpressionCondition.class, name = "RegularExpressionCondition"),
+            @JsonSubTypes.Type(value = DataDependentCondition.class, name = "DataDependentCondition"),
+            @JsonSubTypes.Type(value = PositionalCondition.class, name = "PositionalCondition")
     })
-    abstract static class ConditionMixIn { }
+    abstract static class ConditionMixIn {}
 
     abstract static class VariableDeclarationMixIn {
         @JsonCreator
-        VariableDeclarationMixIn(@JsonProperty("name") String name,
-                                 @JsonProperty("i") int i,
-                                 @JsonProperty("expression") Expression expression) { }
+        VariableDeclarationMixIn(
+                @JsonProperty("name") String name,
+                @JsonProperty("i") int i,
+                @JsonProperty("expression") Expression expression) {}
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value= Expression.Integer.class, name="Integer"),
-        @JsonSubTypes.Type(value= Expression.Real.class, name="Real"),
-        @JsonSubTypes.Type(value= Expression.String.class, name="String"),
-        @JsonSubTypes.Type(value= Expression.Name.class, name="Name"),
-        @JsonSubTypes.Type(value= Expression.Assignment.class, name="Assignment"),
-        @JsonSubTypes.Type(value= Expression.Tuple.class, name="Tuple"),
-        @JsonSubTypes.Type(value= Expression.GreaterThanEqual.class, name="GreaterThanEqual"),
-        @JsonSubTypes.Type(value= Expression.LShiftANDEqZero.class, name="LShiftANDEqZero"),
-        @JsonSubTypes.Type(value= Expression.Greater.class, name="Greater"),
-        @JsonSubTypes.Type(value= Expression.Not.class, name="Not"),
-        @JsonSubTypes.Type(value= Expression.Or.class, name="Or"),
-        @JsonSubTypes.Type(value= Expression.LessThanEqual.class, name="LessThanEqual"),
-        @JsonSubTypes.Type(value= Expression.IfThenElse.class, name="IfThenElse"),
-        @JsonSubTypes.Type(value= Expression.Equal.class, name="Equal"),
-        @JsonSubTypes.Type(value= Expression.NotEqual.class, name="NotEqual"),
-        @JsonSubTypes.Type(value= Expression.OrIndent.class, name="OrIndent"),
-        @JsonSubTypes.Type(value= Expression.AndIndent.class, name="AndIndent"),
-        @JsonSubTypes.Type(value= Expression.And.class, name="And"),
-        @JsonSubTypes.Type(value= Expression.Add.class, name="Add"),
-        @JsonSubTypes.Type(value= Expression.LeftExtent.class, name="LeftExtent"),
-        @JsonSubTypes.Type(value= Expression.RightExtent.class, name="RightExtent"),
-        @JsonSubTypes.Type(value= Expression.Yield.class, name="Yield"),
-        @JsonSubTypes.Type(value= Expression.Val.class, name="Val"),
-        @JsonSubTypes.Type(value= Expression.EndOfFile.class, name="EndOfFile"),
-        @JsonSubTypes.Type(value= Expression.Call.class, name="Call")
+            @JsonSubTypes.Type(value = Expression.Integer.class, name = "Integer"),
+            @JsonSubTypes.Type(value = Expression.Real.class, name = "Real"),
+            @JsonSubTypes.Type(value = Expression.String.class, name = "String"),
+            @JsonSubTypes.Type(value = Expression.Name.class, name = "Name"),
+            @JsonSubTypes.Type(value = Expression.Assignment.class, name = "Assignment"),
+            @JsonSubTypes.Type(value = Expression.Tuple.class, name = "Tuple"),
+            @JsonSubTypes.Type(value = Expression.GreaterThanEqual.class, name = "GreaterThanEqual"),
+            @JsonSubTypes.Type(value = Expression.LShiftANDEqZero.class, name = "LShiftANDEqZero"),
+            @JsonSubTypes.Type(value = Expression.Greater.class, name = "Greater"),
+            @JsonSubTypes.Type(value = Expression.Not.class, name = "Not"),
+            @JsonSubTypes.Type(value = Expression.Or.class, name = "Or"),
+            @JsonSubTypes.Type(value = Expression.LessThanEqual.class, name = "LessThanEqual"),
+            @JsonSubTypes.Type(value = Expression.IfThenElse.class, name = "IfThenElse"),
+            @JsonSubTypes.Type(value = Expression.Equal.class, name = "Equal"),
+            @JsonSubTypes.Type(value = Expression.NotEqual.class, name = "NotEqual"),
+            @JsonSubTypes.Type(value = Expression.OrIndent.class, name = "OrIndent"),
+            @JsonSubTypes.Type(value = Expression.AndIndent.class, name = "AndIndent"),
+            @JsonSubTypes.Type(value = Expression.And.class, name = "And"),
+            @JsonSubTypes.Type(value = Expression.Add.class, name = "Add"),
+            @JsonSubTypes.Type(value = Expression.LeftExtent.class, name = "LeftExtent"),
+            @JsonSubTypes.Type(value = Expression.RightExtent.class, name = "RightExtent"),
+            @JsonSubTypes.Type(value = Expression.Yield.class, name = "Yield"),
+            @JsonSubTypes.Type(value = Expression.Val.class, name = "Val"),
+            @JsonSubTypes.Type(value = Expression.EndOfFile.class, name = "EndOfFile"),
+            @JsonSubTypes.Type(value = Expression.Call.class, name = "Call")
     })
     abstract static class ExpressionMixIn {
 
         abstract static class IntegerMixIn {
             @JsonCreator
-            IntegerMixIn(@JsonProperty("value") Integer value) { }
+            IntegerMixIn(@JsonProperty("value") Integer value) {}
         }
 
         abstract static class RealMixIn {
             @JsonCreator
-            RealMixIn(@JsonProperty("value") Float value) { }
+            RealMixIn(@JsonProperty("value") Float value) {}
         }
 
         abstract static class StringMixIn {
             @JsonCreator
-            StringMixIn(@JsonProperty("value") String value) { }
+            StringMixIn(@JsonProperty("value") String value) {}
         }
 
         abstract static class NameMixIn {
             @JsonCreator
-            NameMixIn(@JsonProperty("name") String name, @JsonProperty("i") int i) { }
+            NameMixIn(@JsonProperty("name") String name, @JsonProperty("i") int i) {}
         }
 
         abstract static class AssignmentMixIn {
             @JsonCreator
-            AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) { }
+            AssignmentMixIn(@JsonProperty("id") String id, @JsonProperty("exp") Expression exp) {}
         }
 
         abstract static class TupleMixIn {
             @JsonCreator
-            TupleMixIn(@JsonProperty("elements") Expression... elements) { }
+            TupleMixIn(@JsonProperty("elements") Expression... elements) {}
         }
 
         abstract static class IfThenElseMixIn {
             @JsonCreator
-            IfThenElseMixIn(@JsonProperty("condition") Expression condition,
-                            @JsonProperty("thenPart") Expression thenPart,
-                            @JsonProperty("elsePart") Expression elsePart) { }
+            IfThenElseMixIn(
+                    @JsonProperty("condition") Expression condition,
+                    @JsonProperty("thenPart") Expression thenPart,
+                    @JsonProperty("elsePart") Expression elsePart) {}
         }
 
         @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
         @JsonSubTypes({
-            @JsonSubTypes.Type(value = AST.StartsWith.class, name = "StartsWith"),
-            @JsonSubTypes.Type(value = AST.Push.class, name = "Push"),
-            @JsonSubTypes.Type(value = AST.Pop.class, name = "Pop"),
-            @JsonSubTypes.Type(value = AST.Top.class, name = "Top"),
-            @JsonSubTypes.Type(value = AST.Find.class, name = "Find"),
-            @JsonSubTypes.Type(value = AST.Shift.class, name = "Shift"),
-            @JsonSubTypes.Type(value = AST.Println.class, name = "Println"),
-            @JsonSubTypes.Type(value = AST.Assert.class, name = "Assert"),
-            @JsonSubTypes.Type(value = AST.Set.class, name = "Set"),
-            @JsonSubTypes.Type(value = AST.Indent.class, name = "Indent"),
-            @JsonSubTypes.Type(value = AST.Min.class, name = "Min"),
-            @JsonSubTypes.Type(value = AST.Neg.class, name = "Neg"),
-            @JsonSubTypes.Type(value = AST.Get.class, name = "Get"),
-            @JsonSubTypes.Type(value = AST.Len.class, name = "Len"),
-            @JsonSubTypes.Type(value = AST.Get2.class, name = "Get2"),
-            @JsonSubTypes.Type(value = AST.Put.class, name = "Put"),
-            @JsonSubTypes.Type(value = AST.Contains.class, name = "Contains"),
-            @JsonSubTypes.Type(value = AST.PPDeclare.class, name = "PPDeclare"),
-            @JsonSubTypes.Type(value = AST.Put3.class, name = "Put3"),
-            @JsonSubTypes.Type(value = AST.EndsWith.class, name = "EndsWith"),
-            @JsonSubTypes.Type(value = AST.Map.class, name = "Map"),
-            @JsonSubTypes.Type(value = AST.Pr2.class, name = "Pr2"),
-            @JsonSubTypes.Type(value = AST.Pr3.class, name = "Pr3"),
-            @JsonSubTypes.Type(value = AST.PPLookup.class, name = "PPLookup"),
-            @JsonSubTypes.Type(value = AST.Undef.class, name = "Undef"),
-            @JsonSubTypes.Type(value = AST.Pr1.class, name = "Pr1")
+                @JsonSubTypes.Type(value = AST.StartsWith.class, name = "StartsWith"),
+                @JsonSubTypes.Type(value = AST.Push.class, name = "Push"),
+                @JsonSubTypes.Type(value = AST.Pop.class, name = "Pop"),
+                @JsonSubTypes.Type(value = AST.Top.class, name = "Top"),
+                @JsonSubTypes.Type(value = AST.Find.class, name = "Find"),
+                @JsonSubTypes.Type(value = AST.Shift.class, name = "Shift"),
+                @JsonSubTypes.Type(value = AST.Println.class, name = "Println"),
+                @JsonSubTypes.Type(value = AST.Assert.class, name = "Assert"),
+                @JsonSubTypes.Type(value = AST.Set.class, name = "Set"),
+                @JsonSubTypes.Type(value = AST.Indent.class, name = "Indent"),
+                @JsonSubTypes.Type(value = AST.Min.class, name = "Min"),
+                @JsonSubTypes.Type(value = AST.Neg.class, name = "Neg"),
+                @JsonSubTypes.Type(value = AST.Get.class, name = "Get"),
+                @JsonSubTypes.Type(value = AST.Len.class, name = "Len"),
+                @JsonSubTypes.Type(value = AST.Get2.class, name = "Get2"),
+                @JsonSubTypes.Type(value = AST.Put.class, name = "Put"),
+                @JsonSubTypes.Type(value = AST.Contains.class, name = "Contains"),
+                @JsonSubTypes.Type(value = AST.PPDeclare.class, name = "PPDeclare"),
+                @JsonSubTypes.Type(value = AST.Put3.class, name = "Put3"),
+                @JsonSubTypes.Type(value = AST.EndsWith.class, name = "EndsWith"),
+                @JsonSubTypes.Type(value = AST.Map.class, name = "Map"),
+                @JsonSubTypes.Type(value = AST.Pr2.class, name = "Pr2"),
+                @JsonSubTypes.Type(value = AST.Pr3.class, name = "Pr3"),
+                @JsonSubTypes.Type(value = AST.PPLookup.class, name = "PPLookup"),
+                @JsonSubTypes.Type(value = AST.Undef.class, name = "Undef"),
+                @JsonSubTypes.Type(value = AST.Pr1.class, name = "Pr1")
         })
         abstract static class CallMixIn {
 
             abstract static class PrintlnMixIn {
                 @JsonCreator
-                PrintlnMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                PrintlnMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class AssertMixIn {
                 @JsonCreator
-                AssertMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                AssertMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class SetMixIn {
                 @JsonCreator
-                SetMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                SetMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class StartsWithMixIn {
                 @JsonCreator
-                StartsWithMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                StartsWithMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class PushMixIn {
                 @JsonCreator
-                PushMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                PushMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class PopMixIn {
                 @JsonCreator
-                PopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                PopMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class TopMixIn {
                 @JsonCreator
-                TopMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                TopMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class FindMixIn {
                 @JsonCreator
-                FindMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                FindMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class ShiftMixIn {
                 @JsonCreator
-                ShiftMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                ShiftMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class IndentMixIn {
                 @JsonCreator
-                IndentMixIn(@JsonProperty("argument") Expression argument) { }
+                IndentMixIn(@JsonProperty("argument") Expression argument) {}
             }
 
             abstract static class MinMixIn {
                 @JsonCreator
-                MinMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                MinMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class NotMixIn {
                 @JsonCreator
-                NotMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                NotMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class NegMixIn {
                 @JsonCreator
-                NegMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                NegMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class GetMixIn {
                 @JsonCreator
-                GetMixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") int arg2) { }
+                GetMixIn(@JsonProperty("arg1") Expression arg1, @JsonProperty("arg2") int arg2) {}
             }
 
             abstract static class LenMixIn {
                 @JsonCreator
-                LenMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                LenMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class Get2MixIn {
                 @JsonCreator
-                Get2MixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                Get2MixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class PutMixIn {
                 @JsonCreator
-                PutMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                PutMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class ContainsMixIn {
                 @JsonCreator
-                ContainsMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                ContainsMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class PPDeclareMixIn {
@@ -762,204 +764,211 @@ public class JsonSerializer {
 
             abstract static class Put3MixIn {
                 @JsonCreator
-                Put3MixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                Put3MixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class EndsWithMixIn {
                 @JsonCreator
-                EndsWithMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                EndsWithMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class MapMixIn {
                 @JsonCreator
-                MapMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                MapMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class Pr2MixIn {
                 @JsonCreator
                 Pr2MixIn(
-                    @JsonProperty("arg1") Expression arg1,
-                    @JsonProperty("arg2") Expression arg2,
-                    @JsonProperty("arg3") Expression[] arg3
-                ) {
-                }
+                        @JsonProperty("arg1") Expression arg1,
+                        @JsonProperty("arg2") Expression arg2,
+                        @JsonProperty("arg3") Expression[] arg3) {}
             }
 
             abstract static class Pr3MixIn {
                 @JsonCreator
-                Pr3MixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                Pr3MixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class PPLookupMixIn {
                 @JsonCreator
-                PPLookupMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                PPLookupMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class UndefMixIn {
                 @JsonCreator
-                UndefMixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                UndefMixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
 
             abstract static class Pr1MixIn {
                 @JsonCreator
-                Pr1MixIn(@JsonProperty("arguments") Expression[] arguments) { }
+                Pr1MixIn(@JsonProperty("arguments") Expression[] arguments) {}
             }
         }
 
         abstract static class OrIndentMixIn {
             @JsonCreator
-            OrIndentMixIn(@JsonProperty("index") Expression index,
-                          @JsonProperty("ind") Expression ind,
-                          @JsonProperty("first") Expression first,
-                          @JsonProperty("lExt") Expression lExt) { }
+            OrIndentMixIn(
+                    @JsonProperty("index") Expression index,
+                    @JsonProperty("ind") Expression ind,
+                    @JsonProperty("first") Expression first,
+                    @JsonProperty("lExt") Expression lExt) {}
         }
 
         abstract static class AndIndentMixIn {
             @JsonCreator
-            AndIndentMixIn(@JsonProperty("index") Expression index,
-                           @JsonProperty("first") Expression first,
-                           @JsonProperty("lExt") Expression lExt) { }
+            AndIndentMixIn(
+                    @JsonProperty("index") Expression index,
+                    @JsonProperty("first") Expression first,
+                    @JsonProperty("lExt") Expression lExt) {}
         }
 
         abstract static class BinaryExpressionMixIn {
-            @JsonIgnore java.lang.String symbolName;
+            @JsonIgnore
+            java.lang.String symbolName;
         }
 
         abstract static class AndMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            AndMixIn(@JsonProperty("lhs") Expression lhs,
-                     @JsonProperty("rhs") Expression rhs) { }
+            AndMixIn(
+                    @JsonProperty("lhs") Expression lhs,
+                    @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class LShiftANDEqZeroMixIn {
             @JsonCreator
-            LShiftANDEqZeroMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            LShiftANDEqZeroMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class GreaterThanEqualMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            GreaterThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            GreaterThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class EqualMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            EqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            EqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class NotEqualMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            NotEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            NotEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class GreaterMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            GreaterMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class NotMixIn {
             @JsonCreator
-            NotMixIn(@JsonProperty("exp") Expression exp) { }
+            NotMixIn(@JsonProperty("exp") Expression exp) {}
         }
 
         abstract static class OrMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            OrMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            OrMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class LessThanEqualMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            LessThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            LessThanEqualMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class LessMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            LessMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) { }
+            LessMixIn(@JsonProperty("lhs") Expression lhs, @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class AddMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            AddMixIn(@JsonProperty("lhs") Expression lhs,
-                     @JsonProperty("rhs") Expression rhs) { }
+            AddMixIn(
+                    @JsonProperty("lhs") Expression lhs,
+                    @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class SubtractMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            SubtractMixIn(@JsonProperty("lhs") Expression lhs,
-                          @JsonProperty("rhs") Expression rhs) { }
+            SubtractMixIn(
+                    @JsonProperty("lhs") Expression lhs,
+                    @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class MultiplyMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            MultiplyMixIn(@JsonProperty("lhs") Expression lhs,
-                          @JsonProperty("rhs") Expression rhs) { }
+            MultiplyMixIn(
+                    @JsonProperty("lhs") Expression lhs,
+                    @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class DivideMixIn extends BinaryExpressionMixIn {
             @JsonCreator
-            DivideMixIn(@JsonProperty("lhs") Expression lhs,
-                        @JsonProperty("rhs") Expression rhs) { }
+            DivideMixIn(
+                    @JsonProperty("lhs") Expression lhs,
+                    @JsonProperty("rhs") Expression rhs) {}
         }
 
         abstract static class LeftExtentMixIn {
             @JsonCreator
-            LeftExtentMixIn(@JsonProperty("label") String label) { }
+            LeftExtentMixIn(@JsonProperty("label") String label) {}
         }
 
         abstract static class RightExtentMixIn {
             @JsonCreator
-            RightExtentMixIn(@JsonProperty("label") String label) { }
+            RightExtentMixIn(@JsonProperty("label") String label) {}
         }
 
         abstract static class YieldMixIn {
             @JsonCreator
-            YieldMixIn(@JsonProperty("label") String label) { }
+            YieldMixIn(@JsonProperty("label") String label) {}
         }
 
         abstract static class ValMixIn {
             @JsonCreator
-            ValMixIn(@JsonProperty("label") String label) { }
+            ValMixIn(@JsonProperty("label") String label) {}
         }
 
         abstract static class EndOfFileMixIn {
             @JsonCreator
-            EndOfFileMixIn(@JsonProperty("index") Expression index) { }
+            EndOfFileMixIn(@JsonProperty("index") Expression index) {}
         }
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes({
-        @JsonSubTypes.Type(value=Statement.Expression.class, name="ExpressionStatement"),
-        @JsonSubTypes.Type(value= Statement.VariableDeclaration.class, name="VariableDeclaration")
+            @JsonSubTypes.Type(value = Statement.Expression.class, name = "ExpressionStatement"),
+            @JsonSubTypes.Type(value = Statement.VariableDeclaration.class, name = "VariableDeclaration")
     })
     abstract static class StatementMixIn {
 
         abstract static class ExpressionMixIn {
             @JsonCreator
-            ExpressionMixIn(@JsonProperty("exp") Expression value) { }
+            ExpressionMixIn(@JsonProperty("exp") Expression value) {}
         }
 
         abstract static class VariableDeclarationMixIn {
             @JsonCreator
-            VariableDeclarationMixIn(@JsonProperty("decl") VariableDeclaration value) { }
+            VariableDeclarationMixIn(@JsonProperty("decl") VariableDeclaration value) {}
         }
     }
 
     abstract static class RegularExpressionConditionMixIn {
         @JsonCreator
         RegularExpressionConditionMixIn(
-            @JsonProperty("type") ConditionType type,
-            @JsonProperty("regularExpression") RegularExpression regularExpression) { }
+                @JsonProperty("type") ConditionType type,
+                @JsonProperty("regularExpression") RegularExpression regularExpression) {}
     }
 
     abstract static class DataDependentConditionMixIn {
         @JsonCreator
-        DataDependentConditionMixIn(@JsonProperty("type") ConditionType type,
-                                    @JsonProperty("expression") Expression expression) { }
+        DataDependentConditionMixIn(
+                @JsonProperty("type") ConditionType type,
+                @JsonProperty("expression") Expression expression) {}
     }
 
     abstract static class PositionalConditionMixIn {
         @JsonCreator
-        PositionalConditionMixIn(@JsonProperty("type") ConditionType type) { }
+        PositionalConditionMixIn(@JsonProperty("type") ConditionType type) {}
     }
 
     abstract static class AbstractAttrsMixIn {
@@ -968,37 +977,40 @@ public class JsonSerializer {
     }
 
     abstract static class ParseErrorMixIn {
-        @JsonIgnore GrammarSlot slot;
+        @JsonIgnore
+        GrammarSlot slot;
+
         ParseErrorMixIn(
-            @JsonProperty("slot") GrammarSlot slot,
-            @JsonProperty("gssNode") GSSNode<?> gssNode,
-            @JsonProperty("inputIndex") int inputIndex,
-            @JsonProperty("lineNumber") int lineNumber,
-            @JsonProperty("columnNumber") int columnNumber,
-            @JsonProperty("description") String description) { }
-        @JsonIgnore GSSNode<?> gssNode;
+                @JsonProperty("slot") GrammarSlot slot,
+                @JsonProperty("gssNode") GSSNode<?> gssNode,
+                @JsonProperty("inputIndex") int inputIndex,
+                @JsonProperty("lineNumber") int lineNumber,
+                @JsonProperty("columnNumber") int columnNumber,
+                @JsonProperty("description") String description) {}
+
+        @JsonIgnore
+        GSSNode<?> gssNode;
     }
 
     abstract static class PrecedenceLevelMixIn {
         PrecedenceLevelMixIn(
-            @JsonProperty("lhs") int lhs,
-            @JsonProperty("rhs") int rhs,
-            @JsonProperty("undefined") int undefined,
-            @JsonProperty("hasPrefixUnary") boolean hasPrefixUnary,
-            @JsonProperty("hasPostfixUnary") boolean hasPostfixUnary,
-            @JsonProperty("hasPrefixUnaryBelow") boolean hasPrefixUnaryBelow,
-            @JsonProperty("prefixUnaryBelow") Integer[] prefixUnaryBelow,
-            @JsonProperty("hasPostfixUnaryBelow") boolean hasPostfixUnaryBelow,
-            @JsonProperty("postfixUnaryBelow") Integer[] postfixUnaryBelow
-        ) { }
+                @JsonProperty("lhs") int lhs,
+                @JsonProperty("rhs") int rhs,
+                @JsonProperty("undefined") int undefined,
+                @JsonProperty("hasPrefixUnary") boolean hasPrefixUnary,
+                @JsonProperty("hasPostfixUnary") boolean hasPostfixUnary,
+                @JsonProperty("hasPrefixUnaryBelow") boolean hasPrefixUnaryBelow,
+                @JsonProperty("prefixUnaryBelow") Integer[] prefixUnaryBelow,
+                @JsonProperty("hasPostfixUnaryBelow") boolean hasPostfixUnaryBelow,
+                @JsonProperty("postfixUnaryBelow") Integer[] postfixUnaryBelow) {}
     }
 
     abstract static class AssociativityGroupMixIn {
         AssociativityGroupMixIn(
-            @JsonProperty("associativity") Associativity associativity,
-            @JsonProperty("precedenceLevel") PrecedenceLevel precedenceLevel,
-            @JsonProperty("lhs") int lhs,
-            @JsonProperty("rhs") int rhs,
-            @JsonProperty("precedence") int precedence) { }
+                @JsonProperty("associativity") Associativity associativity,
+                @JsonProperty("precedenceLevel") PrecedenceLevel precedenceLevel,
+                @JsonProperty("lhs") int lhs,
+                @JsonProperty("rhs") int rhs,
+                @JsonProperty("precedence") int precedence) {}
     }
 }

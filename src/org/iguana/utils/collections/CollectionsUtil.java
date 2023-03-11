@@ -120,8 +120,7 @@ public class CollectionsUtil {
 
 	public static boolean isEqual(
 		org.iguana.utils.collections.primitive.IntIterable iterables1,
-		IntIterable iterables2
-	) {
+		IntIterable iterables2) {
         org.iguana.utils.collections.primitive.IntIterator it1 = iterables1.iterator();
         IntIterator it2 = iterables2.iterator();
         while (it1.hasNext()) {

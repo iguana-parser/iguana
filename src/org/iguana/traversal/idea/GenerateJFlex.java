@@ -67,11 +67,10 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     private final StringBuffer tokens;
 
     public GenerateJFlex(
-        String language,
-        String path,
-        Map<String, RegularExpression> regularExpressions,
-        Set<String> seenTokenTypes
-    ) {
+            String language,
+            String path,
+            Map<String, RegularExpression> regularExpressions,
+            Set<String> seenTokenTypes) {
         this.language = language;
         this.path = path;
         this.regularExpressions = regularExpressions;
@@ -104,50 +103,52 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
 
         seenTokenTypes.add("Keyword");
         tokens.append("    IElementType Keyword = new " + language + "TokenType(\"Keyword\");")
-            .append("\n");
+                .append("\n");
         regularExpressions.entrySet().stream()
-            .filter(entry -> entry.getKey().startsWith("|keyword|:"))
-            .forEach(entry -> {
-                String regex = entry.getValue().accept(this);
-                rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
-                    .append("\t{ return " + language + "TokenTypes.Keyword; }").append("\n");
-            });
-
-        regularExpressions.entrySet().stream()
-            .filter(entry -> entry.getKey().startsWith("|regex|:"))
-            .forEach(entry -> {
-                String tokenType = entry.getKey().replaceFirst("\\|regex\\|:", "").toUpperCase();
-
-                if (!seenTokenTypes.contains(tokenType)) {
-                    seenTokenTypes.add(tokenType);
-                    tokens.append(
-                            "    IElementType " + tokenType + " = new " + language + "TokenType(\"" + tokenType +
-                            "\");")
-                        .append("\n");
-                }
-
-                macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
-                rules.append("{" + tokenType + "} " + getLookaheads(entry.getValue().getLookaheads()))
-                    .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
-            });
+                .filter(entry -> entry.getKey().startsWith("|keyword|:"))
+                .forEach(entry -> {
+                    String regex = entry.getValue().accept(this);
+                    rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
+                            .append("\t{ return " + language + "TokenTypes.Keyword; }").append("\n");
+                });
 
         regularExpressions.entrySet().stream()
-            .filter(entry -> !(entry.getKey().startsWith("|regex|:") || entry.getKey().startsWith("|keyword|:")))
-            .forEach(entry -> {
-                String regex = entry.getValue().accept(this);
-                String tokenType = getTokenType(regex);
+                .filter(entry -> entry.getKey().startsWith("|regex|:"))
+                .forEach(entry -> {
+                    String tokenType = entry.getKey().replaceFirst("\\|regex\\|:", "").toUpperCase();
 
-                if (!seenTokenTypes.contains(tokenType)) {
-                    seenTokenTypes.add(tokenType);
-                    tokens.append(
-                            "    IElementType " + tokenType + " = new " + language + "TokenType(\"" + tokenType +
-                            "\");")
-                        .append("\n");
-                }
+                    if (!seenTokenTypes.contains(tokenType)) {
+                        seenTokenTypes.add(tokenType);
+                        tokens.append(
+                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\"" +
+                                        tokenType +
+                                        "\");")
+                                .append("\n");
+                    }
 
-                rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
-                    .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
-            });
+                    macros.append(tokenType + "=" + entry.getValue().accept(this)).append("\n");
+                    rules.append("{" + tokenType + "} " + getLookaheads(entry.getValue().getLookaheads()))
+                            .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                });
+
+        regularExpressions.entrySet().stream()
+                .filter(entry -> !(entry.getKey().startsWith("|regex|:") || entry.getKey().startsWith("|keyword|:")))
+                .forEach(entry -> {
+                    String regex = entry.getValue().accept(this);
+                    String tokenType = getTokenType(regex);
+
+                    if (!seenTokenTypes.contains(tokenType)) {
+                        seenTokenTypes.add(tokenType);
+                        tokens.append(
+                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\"" +
+                                        tokenType +
+                                        "\");")
+                                .append("\n");
+                    }
+
+                    rules.append(regex + getLookaheads(entry.getValue().getLookaheads()))
+                            .append("\t{ return " + language + "TokenTypes." + tokenType + "; }").append("\n");
+                });
 
         rules.append("[^]").append("\t { return " + language + "TokenTypes.BAD_CHARACTER; }\n");
         rules.append("}").append("\n");
@@ -262,7 +263,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     @Override
     public <E extends RegularExpression> String visit(org.iguana.regex.Alt<E> symbol) {
         Map<Boolean, List<E>> parition = symbol.getSymbols().stream().collect(
-            Collectors.partitioningBy(s -> isCharClass(s)));
+                Collectors.partitioningBy(s -> isCharClass(s)));
         List<E> charClasses = parition.get(true);
         List<E> other = parition.get(false);
 
@@ -279,7 +280,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
                 sb.append(other.stream().map(s -> s.accept(this)).collect(Collectors.joining("|")));
             } else {
                 sb.append(other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this))
-                    .collect(Collectors.joining("|")));
+                        .collect(Collectors.joining("|")));
                 sb.append("|");
                 sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
             }
@@ -288,7 +289,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
             sb.append("[" + charClasses.stream().map(s -> asCharClass(s)).collect(Collectors.joining()) + "]");
         } else {
             sb.append("(" + other.stream().sorted(RegularExpression.lengthComparator()).map(s -> s.accept(this))
-                .collect(Collectors.joining("|")) + ")");
+                    .collect(Collectors.joining("|")) + ")");
         }
 
         return sb.toString();

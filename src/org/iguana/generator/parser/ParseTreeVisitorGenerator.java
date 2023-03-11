@@ -20,11 +20,10 @@ import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 public class ParseTreeVisitorGenerator extends Generator {
 
     public ParseTreeVisitorGenerator(
-        RuntimeGrammar grammar,
-        String grammarName,
-        String packageName,
-        String genDirectory
-    ) {
+            RuntimeGrammar grammar,
+            String grammarName,
+            String packageName,
+            String genDirectory) {
         super(grammar, grammarName, packageName, genDirectory);
     }
 
