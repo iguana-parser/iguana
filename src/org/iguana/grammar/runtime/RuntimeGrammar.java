@@ -131,9 +131,8 @@ public class RuntimeGrammar {
 	}
 
 	private static Set<RuntimeException> validate(
-		List<RuntimeRule> rules,
-		Map<Nonterminal, List<RuntimeRule>> definitions
-	) {
+			List<RuntimeRule> rules,
+			Map<Nonterminal, List<RuntimeRule>> definitions) {
 	    Set<RuntimeException> exceptions = new HashSet<>();
         for (RuntimeRule rule : rules) {
             if (rule.getBody() != null) {

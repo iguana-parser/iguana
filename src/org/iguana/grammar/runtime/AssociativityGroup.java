@@ -57,12 +57,11 @@ public class AssociativityGroup {
 	}
 
 	public AssociativityGroup(
-		Associativity associativity,
-		PrecedenceLevel precedenceLevel,
-		int lhs,
-		int rhs,
-		int precedence
-	) {
+			Associativity associativity,
+			PrecedenceLevel precedenceLevel,
+			int lhs,
+			int rhs,
+			int precedence) {
 		this(associativity, precedenceLevel);
 		this.precedence = precedence;
 		this.lhs = lhs;

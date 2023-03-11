@@ -44,16 +44,15 @@ public class TerminalTransition extends AbstractTransition {
 	private final Conditions postConditions;
 
 	public TerminalTransition(
-		TerminalGrammarSlot terminalSlot,
-		BodyGrammarSlot origin,
-		BodyGrammarSlot dest,
-		Conditions preConditions,
-		Conditions postConditions
-	) {
+			TerminalGrammarSlot terminalSlot,
+			BodyGrammarSlot origin,
+			BodyGrammarSlot dest,
+			Conditions preConditions,
+			Conditions postConditions) {
 		super(origin, dest);
-        this.terminalSlot = terminalSlot;
-        this.preConditions = preConditions;
-        this.postConditions = postConditions;
+		this.terminalSlot = terminalSlot;
+		this.preConditions = preConditions;
+		this.postConditions = postConditions;
 	}
 
 	public TerminalGrammarSlot getTerminalSlot() {
@@ -67,12 +66,11 @@ public class TerminalTransition extends AbstractTransition {
 	
 	@Override
 	public <T extends Result> void execute(
-		Input input,
-		GSSNode<T> u,
-		T result,
-		Environment env,
-		IguanaRuntime<T> runtime
-	) {
+			Input input,
+			GSSNode<T> u,
+			T result,
+			Environment env,
+			IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
 		runtime.setEnvironment(env);
@@ -86,7 +84,7 @@ public class TerminalTransition extends AbstractTransition {
 			return;
 		}
 
-		T cr = terminalSlot.getResult(input, i, origin, u, runtime);
+		T cr = terminalSlot.getResult(input, i, runtime);
 		
 		if (cr == null) {
 			runtime.recordParseError(i, input, origin, u, "Match failed");

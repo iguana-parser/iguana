@@ -29,11 +29,10 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
 
     @Override
     public NonterminalNode nonterminalNode(
-        RuntimeRule rule,
-        List<ParseTreeNode> children,
-        int leftExtent,
-        int rightExtent
-    ) {
+            RuntimeRule rule,
+            List<ParseTreeNode> children,
+            int leftExtent,
+            int rightExtent) {
         return new NonterminalNode(rule, children, leftExtent, rightExtent);
     }
 

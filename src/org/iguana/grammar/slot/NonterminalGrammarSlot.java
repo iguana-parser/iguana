@@ -138,14 +138,13 @@ public class NonterminalGrammarSlot implements GrammarSlot {
     }
 
     public <T extends Result> void create(
-        Input input,
-        BodyGrammarSlot returnSlot,
-        GSSNode<T> u,
-        T result,
-        Expression[] arguments,
-        Environment env,
-        IguanaRuntime<T> runtime
-    ) {
+            Input input,
+            BodyGrammarSlot returnSlot,
+            GSSNode<T> u,
+            T result,
+            Expression[] arguments,
+            Environment env,
+            IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
         Key key = null;
@@ -193,7 +192,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                     newEnv = runtime.getEmptyEnvironment().declare(data);
                 else
                     newEnv = runtime.getEmptyEnvironment().declare(
-                        nonterminal.getParameters().toArray(new String[] {}), data);
+                            nonterminal.getParameters().toArray(new String[]{}), data);
             }
 
             for (int j = 0; j < firstSlots.size(); j++) {
@@ -202,11 +201,11 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
                 if (slot.getLabel() != null)
                     runtime.getEvaluatorContext().declareVariable(
-                        String.format(Expression.LeftExtent.format, slot.getLabel()), i);
+                            String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
                 int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getRightExtent();
                 if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(),
-                    runtime)) {
+                        runtime)) {
                     runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
                 }
 

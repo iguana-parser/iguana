@@ -17,11 +17,10 @@ public class IggyParseTreeBuilder extends DefaultParseTreeBuilder {
 
     @Override
     public NonterminalNode nonterminalNode(
-        RuntimeRule rule,
-        List<ParseTreeNode> children,
-        int leftExtent,
-        int rightExtent
-    ) {
+            RuntimeRule rule,
+            List<ParseTreeNode> children,
+            int leftExtent,
+            int rightExtent) {
         java.lang.String name = rule.getHead().getName();
         java.lang.String label = rule.getLabel();
 

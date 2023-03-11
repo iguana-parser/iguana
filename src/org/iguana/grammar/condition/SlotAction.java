@@ -51,12 +51,11 @@ public interface SlotAction {
     }
 
 	default <T extends Result> boolean execute(
-		Input input,
-		BodyGrammarSlot slot,
-		GSSNode<T> gssNode,
-		int inputIndex,
-		IEvaluatorContext ctx
-	) {
+			Input input,
+			BodyGrammarSlot slot,
+			GSSNode<T> gssNode,
+			int inputIndex,
+			IEvaluatorContext ctx) {
 		return execute(input, slot, gssNode, inputIndex, inputIndex, ctx);
 	}
 }

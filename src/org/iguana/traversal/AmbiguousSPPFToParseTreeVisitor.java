@@ -28,10 +28,9 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
     private final VisitResult.CreateParseTreeVisitor<T> createNodeVisitor;
 
     public AmbiguousSPPFToParseTreeVisitor(
-        ParseTreeBuilder<T> parseTreeBuilder,
-        boolean ignoreLayout,
-        ParserResultOps resultOps
-    ) {
+            ParseTreeBuilder<T> parseTreeBuilder,
+            boolean ignoreLayout,
+            ParserResultOps resultOps) {
         this.parseTreeBuilder = parseTreeBuilder;
         this.ignoreLayout = ignoreLayout;
         this.resultOps = resultOps;
@@ -48,7 +47,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
         return convertedNodes.computeIfAbsent(node, key -> {
                     if (node.getLeftExtent() == node.getRightExtent()) return empty();
                     Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(),
-                        node.getLeftExtent(), node.getRightExtent());
+                            node.getLeftExtent(), node.getRightExtent());
                     return single(terminalNode);
                 }
         );
@@ -102,7 +101,7 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                         T child = children.get(0);
                         if (child instanceof MetaSymbolNode) { // Last Plus node propagated up
                             result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(),
-                                children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                                    children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
                         } else {
                             result = single(children.get(0));
                         }
@@ -130,12 +129,12 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                         visitResult.getValues().get(0) instanceof VisitResult.EBNF) {
                         VisitResult.EBNF ebnfChild = (VisitResult.EBNF) visitResult.getValues().get(0);
                         T ebnfResult = parseTreeBuilder.metaSymbolNode(ebnfChild.getSymbol(),
-                            (List<T>) ebnfChild.getValues(), node.getLeftExtent(), node.getRightExtent());
+                                (List<T>) ebnfChild.getValues(), node.getLeftExtent(), node.getRightExtent());
                         result = single(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult),
-                            node.getLeftExtent(), node.getRightExtent()));
+                                node.getLeftExtent(), node.getRightExtent()));
                     } else {
                         result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(),
-                            node.getLeftExtent(), node.getRightExtent()));
+                                node.getLeftExtent(), node.getRightExtent()));
                     }
 
                     break;
