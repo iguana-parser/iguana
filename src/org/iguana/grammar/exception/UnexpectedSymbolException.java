@@ -29,6 +29,7 @@ package org.iguana.grammar.exception;
 
 import org.iguana.grammar.symbol.Symbol;
 
+@SuppressWarnings("serial")
 public class UnexpectedSymbolException extends RuntimeException {
 
     public UnexpectedSymbolException(Symbol symbol) {

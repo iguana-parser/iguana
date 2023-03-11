@@ -31,15 +31,11 @@ import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.utils.collections.hash.MurmurHash3;
 
-import java.io.Serializable;
-
-public class Transition implements Comparable<Transition>, Serializable {
+public class Transition implements Comparable<Transition> {
 	
-	private CharRange range;
+	private final CharRange range;
 	
-	private State destination;
-	
-	private int id;
+	private final State destination;
 	
 	public Transition(int start, int end, State destination) {
 		this(CharRange.in(start, end), destination);

@@ -4,6 +4,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class CyclicGrammarException extends RuntimeException {
 
     private final List<Nonterminal> cycle;

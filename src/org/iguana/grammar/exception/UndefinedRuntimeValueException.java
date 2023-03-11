@@ -27,6 +27,7 @@
 
 package org.iguana.grammar.exception;
 
+@SuppressWarnings("serial")
 public class UndefinedRuntimeValueException extends RuntimeException {
 	
 	private UndefinedRuntimeValueException() {
