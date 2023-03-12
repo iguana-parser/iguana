@@ -356,7 +356,7 @@ public class IguanaRuntime<T extends Result> {
         }
     }
 
-    private static double[] stats(Iterable<GSSNode> gssNodes, Function<GSSNode, Integer> f) {
+    private static double[] stats(Iterable<GSSNode<?>> gssNodes, Function<GSSNode<?>, Integer> f) {
         if (!gssNodes.iterator().hasNext()) return null;
 
         int min = Integer.MAX_VALUE;
@@ -364,7 +364,7 @@ public class IguanaRuntime<T extends Result> {
         int sum = 0;
         int count = 0;
 
-        for (GSSNode gssNode : gssNodes) {
+        for (GSSNode<?> gssNode : gssNodes) {
             min = Integer.min(min, f.apply(gssNode));
             max = Integer.max(max, f.apply(gssNode));
             sum += f.apply(gssNode);

@@ -59,9 +59,9 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
     private final List<BodyGrammarSlot> firstSlots;
 
-    private Map<Key, GSSNode> gssNodes;
+    private Map<Key, GSSNode<?>> gssNodes;
 
-    private IntHashMap<GSSNode> intGSSNodes;
+    private IntHashMap<GSSNode<?>> intGSSNodes;
 
     private RangeMap<BodyGrammarSlot> lookAheadTest;
 
@@ -124,7 +124,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         return nonterminal.toString();
     }
 
-    public Iterable<GSSNode> getGSSNodes() {
+    public Iterable<GSSNode<?>> getGSSNodes() {
         if (gssNodes == null) {
             return emptyList();
         }
@@ -137,6 +137,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         intGSSNodes = null;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Result> void create(
             Input input,
             BodyGrammarSlot returnSlot,
@@ -161,13 +162,13 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             if (intGSSNodes == null) {
                 intGSSNodes = new OpenAddressingIntHashMap<>();
             } else {
-                gssNode = intGSSNodes.get(i);
+                gssNode = (GSSNode<T>) intGSSNodes.get(i);
             }
         } else {
             if (gssNodes == null) {
                 gssNodes = new OpenAddressingHashMap<>();
             } else {
-                gssNode = gssNodes.get(key);
+                gssNode = (GSSNode<T>) gssNodes.get(key);
             }
         }
 

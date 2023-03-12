@@ -8,7 +8,7 @@ public class RecognizerStatistics {
     private final int gssNodesCount;
     private final int gssEdgesCount;
 
-    public RecognizerStatistics(Builder builder) {
+    public RecognizerStatistics(Builder<? extends RecognizerStatistics> builder) {
         this.descriptorsCount = builder.descriptorsCount;
         this.gssNodesCount = builder.gssNodesCount;
         this.gssEdgesCount = builder.gssEdgesCount;
@@ -53,28 +53,28 @@ public class RecognizerStatistics {
                "GSS Edges: " + gssEdgesCount + "\n";
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static Builder<? extends RecognizerStatistics> builder() {
+        return new Builder<>();
     }
 
-    public static class Builder<T extends Builder<T>> {
+    public static class Builder<T extends RecognizerStatistics> {
         int descriptorsCount;
         int gssNodesCount;
         int gssEdgesCount;
 
-        public T setDescriptorsCount(int descriptorsCount) {
+        public Builder<T> setDescriptorsCount(int descriptorsCount) {
             this.descriptorsCount = descriptorsCount;
-            return (T) this;
+            return this;
         }
 
-        public Builder setGSSNodesCount(int gssNodesCount) {
+        public Builder<T> setGSSNodesCount(int gssNodesCount) {
             this.gssNodesCount = gssNodesCount;
-            return (T) this;
+            return this;
         }
 
-        public Builder setGSSEdgesCount(int gssEdgesCount) {
+        public Builder<T> setGSSEdgesCount(int gssEdgesCount) {
             this.gssEdgesCount = gssEdgesCount;
-            return (T) this;
+            return this;
         }
 
         public RecognizerStatistics build() {
