@@ -29,8 +29,7 @@ public class GSSNodeTest {
 
     @BeforeEach
     public void init() {
-        RuntimeGrammar grammar = fromIggyGrammar(
-            "A = 'a'").toRuntimeGrammar();
+        RuntimeGrammar grammar = fromIggyGrammar("A = 'a'").toRuntimeGrammar();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
         input = Input.fromString("Test");
@@ -38,7 +37,7 @@ public class GSSNodeTest {
 
     @Test
     public void test() {
-        GSSNode gssNode = new StartGSSNode<>(grammarGraph.getNonterminalGrammarSlots().get(0), 0);
+        GSSNode<NonPackedNode> gssNode = new StartGSSNode<>(grammarGraph.getNonterminalGrammarSlots().get(0), 0);
 
         NonterminalGrammarSlot nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlots().get(0);// A
         EndGrammarSlot endGrammarSlot = (EndGrammarSlot) grammarGraph.getBodyGrammarSlots().get(1); // A ::= a.
@@ -88,7 +87,6 @@ public class GSSNodeTest {
         // Pop ("a", 0, 2)
         assertFalse(gssNode.pop(input, endGrammarSlot, terminalNode02, runtime));
         assertEquals(3, gssNode.countPoppedElements());
-        it = gssNode.getPoppedElements().iterator();
         assertTrue(nonterminalNode2.isAmbiguous());
         assertEquals(2, resultOps.getPackedNodes(nonterminalNode1).size());
         assertEquals(2, resultOps.getPackedNodes(nonterminalNode2).size());

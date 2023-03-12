@@ -13,7 +13,7 @@ public class IntHashSet {
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_LOAD_FACTOR = 0.7f;
 	
-	private int initialCapacity;
+	private final int initialCapacity;
 	
 	private int capacity;
 	
@@ -21,7 +21,7 @@ public class IntHashSet {
 	
 	private int threshold;
 	
-	private float loadFactor;
+	private final float loadFactor;
 	
 	private int rehashCount;
 	
@@ -35,8 +35,7 @@ public class IntHashSet {
 	
 	private int[] table;
 	
- 	@SafeVarargs
-	public static IntHashSet from(int...elements) {
+	public static IntHashSet from(int... elements) {
  		IntHashSet set = new IntHashSet();
 		for (int e : elements) {
 			set.add(e);
@@ -48,8 +47,8 @@ public class IntHashSet {
 		this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
 	}
 	
-	public IntHashSet(int initalCapacity) {
-		this(initalCapacity, DEFAULT_LOAD_FACTOR);
+	public IntHashSet(int initialCapacity) {
+		this(initialCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
 	public IntHashSet(int initialCapacity, float loadFactor) {
