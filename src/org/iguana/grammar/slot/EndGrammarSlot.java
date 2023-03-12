@@ -97,7 +97,6 @@ public class EndGrammarSlot extends BodyGrammarSlot {
             Object value,
             IguanaRuntime<T> runtime) {
         int rightExtent = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
-
         int nextChar = input.charAt(rightExtent);
         FollowTest followTest = nonterminal.getFollowTest();
         if (followTest.test(nextChar)) {

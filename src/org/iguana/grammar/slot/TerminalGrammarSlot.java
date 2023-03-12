@@ -27,14 +27,14 @@
 
 package org.iguana.grammar.slot;
 
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.parser.IguanaRuntime;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
+import org.iguana.result.Result;
 import org.iguana.utils.collections.IntHashMap;
 import org.iguana.utils.collections.OpenAddressingIntHashMap;
 import org.iguana.utils.input.Input;
-import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parser.IguanaRuntime;
-import org.iguana.result.Result;
 
 public class TerminalGrammarSlot implements GrammarSlot {
 
@@ -59,16 +59,18 @@ public class TerminalGrammarSlot implements GrammarSlot {
             return null;
         }
 
-        if (node == null) {
+        @SuppressWarnings("unchecked")
+        T terminalNode = (T) node;
+        if (terminalNode == null) {
             int length = matcher.match(input, i);
             if (length < 0) {
                 terminalNodes.put(i, failure);
             } else {
-                node = runtime.getResultOps().base(this, i, i + length);
-                terminalNodes.put(i, node);
+                terminalNode = runtime.getResultOps().base(this, i, i + length);
+                terminalNodes.put(i, terminalNode);
             }
         }
-        return (T) node;
+        return terminalNode;
     }
 
 

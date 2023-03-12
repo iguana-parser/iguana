@@ -34,7 +34,6 @@ package org.iguana.grammar.slot;
  * For example, in the rule X ::= alpha . beta, the grammar 
  * slot, denoted by ., is after
  * alpha and before beta, where alpha are a list of grammar symbols.
- * 
  *
  * @author Ali Afroozeh
  *

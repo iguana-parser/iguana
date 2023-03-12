@@ -6,11 +6,11 @@ import static java.util.Collections.emptyList;
 
 public class RangeMapBuilder<T> {
 
-    private List<Range> ranges = new ArrayList<>();
-    private List<T> values = new ArrayList<>();
+    private final List<Range> ranges = new ArrayList<>();
+    private final List<T> values = new ArrayList<>();
 
-    private static RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
-    private static IntRangeMap emptyIntRangeMap = key -> -2;
+    private static final RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
+    private static final IntRangeMap emptyIntRangeMap = key -> -2;
 
     public RangeMapBuilder<T> put(Range range, T value) {
         ranges.add(range);
@@ -49,15 +49,20 @@ public class RangeMapBuilder<T> {
         }
 
         if (intVals.length < 8) {
-            return new LinearSerachIntRangeMap(result.keys, result.starts, intVals);
+            return new LinearSerachIntRangeMap<>(result.keys, result.starts, intVals);
         }
 
         return new BinarySearchIntRangeMap(result.keys, result.starts, intVals);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> RangeMap<T> emptyRangeMap() {
+        return (RangeMap<T>) emptyRangeMap;
+    }
+
     public RangeMap<T> buildRangeMap() {
         if (ranges.isEmpty()) {
-            return (RangeMap<T>) emptyRangeMap;
+            return emptyRangeMap();
         }
 
         if (ranges.size() == 1) {
@@ -111,6 +116,7 @@ public class RangeMapBuilder<T> {
         int size = cumulativeValues.size();
         int[] keys = new int[size];
         boolean[] starts = new boolean[size];
+        @SuppressWarnings({"unchecked", "rawtypes"})
         List<T>[] vals = new List[size];
 
         int i = 0;

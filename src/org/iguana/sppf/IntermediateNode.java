@@ -32,9 +32,9 @@ import org.iguana.traversal.SPPFVisitor;
 
 public class IntermediateNode extends NonPackedNode {
 
-    private NonPackedNode leftChild;
+    private final NonPackedNode leftChild;
 
-    private NonPackedNode rightChild;
+    private final NonPackedNode rightChild;
 
     private final BodyGrammarSlot slot;
 

@@ -5,10 +5,10 @@ import java.util.Deque;
 
 public class EnvironmentPool {
 
-    static Deque<Environment>[] environmentPools;
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    static Deque<Environment>[] environmentPools = new ArrayDeque[3];
 
     static {
-        environmentPools = new ArrayDeque[3];
         for (int i = 0; i < environmentPools.length; i++) {
             environmentPools[i] = new ArrayDeque<>(1000);
         }

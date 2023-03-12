@@ -41,7 +41,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
 		this(initalCapacity, DEFAULT_LOAD_FACTOR);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public ChainingIntHashMap(int initialCapacity, float loadFactor) {
 		
 		this.initialCapacity = initialCapacity;
@@ -166,7 +166,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
 		
 		bitMask = capacity - 1;
 		
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({"unchecked", "rawtypes"})
 		Entry<T>[] newTable = new Entry[capacity];
 		
 		for (Entry<T> e : this) {

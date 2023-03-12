@@ -104,7 +104,7 @@ public class ParseStatistics extends RecognizerStatistics {
                "Ambiguities: " + ambiguousNodesCount + "\n";
     }
 
-    public static class Builder extends RecognizerStatistics.Builder<Builder> {
+    public static class Builder extends RecognizerStatistics.Builder<ParseStatistics> {
         int nonterminalNodesCount;
         int terminalNodesCount;
         int intermediateNodesCount;
