@@ -34,77 +34,77 @@ import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import java.util.Objects;
 
 public class VariableDeclaration extends AbstractAST {
-	
-	public static Object defaultValue = new Object() {};
-	
-	private final String name;
-	private final int i;
-	private final Expression expression;
-	
-	VariableDeclaration(String name, int i, Expression expression) {
-		this.name = name;
-		this.i = i;
-		this.expression = expression;
-	}
-	
-	VariableDeclaration(String name, Expression expression) {
-		this(name, -1, expression);
-	}
-	
-	VariableDeclaration(String name, int i) {
-		this(name, i, null);
-	}
-	
-	VariableDeclaration(String name) {
-		this(name, null);
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
 
-	@Override
-	public Object interpret(IEvaluatorContext ctx, Input input) {
-		Object value = defaultValue;
-		
-		if (expression != null)
-			value = expression.interpret(ctx, input);
-		
-		if (i != -1)
-			ctx.declareVariable(value);
-		else
-			ctx.declareVariable(name, value);
-		
-		return null;
-	}
+    public static Object defaultValue = new Object() {};
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof VariableDeclaration)) return false;
-		VariableDeclaration that = (VariableDeclaration) o;
-		return i == that.i && Objects.equals(name, that.name) && Objects.equals(expression, that.expression);
-	}
+    private final String name;
+    private final int i;
+    private final Expression expression;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, i, expression);
-	}
+    VariableDeclaration(String name, int i, Expression expression) {
+        this.name = name;
+        this.i = i;
+        this.expression = expression;
+    }
 
-	@Override
-	public String toString() {
-		return expression != null? (i != -1? String.format( "var %s:%s = %s", name, i, expression) :
-			                     String.format( "var %s = %s", name, expression))
-								 : (i != -1? String.format("var %s:%s", name, i) : String.format("var %s", name));
-	}
+    VariableDeclaration(String name, Expression expression) {
+        this(name, -1, expression);
+    }
 
-	@Override
-	public <T> T accept(IAbstractASTVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    VariableDeclaration(String name, int i) {
+        this(name, i, null);
+    }
+
+    VariableDeclaration(String name) {
+        this(name, null);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    @Override
+    public Object interpret(IEvaluatorContext ctx, Input input) {
+        Object value = defaultValue;
+
+        if (expression != null)
+            value = expression.interpret(ctx, input);
+
+        if (i != -1)
+            ctx.declareVariable(value);
+        else
+            ctx.declareVariable(name, value);
+
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VariableDeclaration)) return false;
+        VariableDeclaration that = (VariableDeclaration) o;
+        return i == that.i && Objects.equals(name, that.name) && Objects.equals(expression, that.expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, i, expression);
+    }
+
+    @Override
+    public String toString() {
+        return expression != null? (i != -1? String.format( "var %s:%s = %s", name, i, expression) :
+                                 String.format( "var %s = %s", name, expression))
+                                 : (i != -1? String.format("var %s:%s", name, i) : String.format("var %s", name));
+    }
+
+    @Override
+    public <T> T accept(IAbstractASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

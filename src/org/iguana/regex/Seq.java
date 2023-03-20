@@ -34,168 +34,168 @@ import java.util.stream.Collectors;
 
 public class Seq<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
 
-	private final List<T> symbols;
+    private final List<T> symbols;
 
-	public static Seq<Char> from(String s) {
-		return builder(s.chars().mapToObj(Char::from).collect(Collectors.toList())).build();
-	}
+    public static Seq<Char> from(String s) {
+        return builder(s.chars().mapToObj(Char::from).collect(Collectors.toList())).build();
+    }
 
-	public static Seq<Char> from(int[] chars) {
-		return builder(Arrays.stream(chars).mapToObj(Char::from).collect(Collectors.toList())).build();
-	}
-	
-	public static <T extends RegularExpression> Seq<T> from(List<T> symbols) {
-		return builder(symbols).build();
-	}
-	
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends RegularExpression> Seq<T> from(T...elements) {
-		return from(Arrays.asList(elements));
-	}
+    public static Seq<Char> from(int[] chars) {
+        return builder(Arrays.stream(chars).mapToObj(Char::from).collect(Collectors.toList())).build();
+    }
 
-	private Seq(Builder<T> builder) {
-		super(builder);
-		this.symbols = builder.symbols;
-	}
-	
-	@Override
-	public int length() {
-		return symbols.stream().mapToInt(s -> s.length()).sum();
-	}
-	
-	@Override
-	public boolean isNullable() {
-		return symbols.stream().allMatch(e -> e.isNullable());
-	}
-	
-	public int size() {
-		return symbols.size();
-	}
-	
-	public T get(int index) {
-		return symbols.get(index);
-	}
+    public static <T extends RegularExpression> Seq<T> from(List<T> symbols) {
+        return builder(symbols).build();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this)
-			return true;
-		
-		if (!(obj instanceof Seq))
-			return false;
-		
-		Seq<?> other = (Seq<?>) obj;
-		
-		return symbols.equals(other.symbols);
-	}
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <T extends RegularExpression> Seq<T> from(T...elements) {
+        return from(Arrays.asList(elements));
+    }
 
-	@Override
-	public int hashCode() {
-		return symbols.hashCode();
-	}
+    private Seq(Builder<T> builder) {
+        super(builder);
+        this.symbols = builder.symbols;
+    }
+
+    @Override
+    public int length() {
+        return symbols.stream().mapToInt(s -> s.length()).sum();
+    }
+
+    @Override
+    public boolean isNullable() {
+        return symbols.stream().allMatch(e -> e.isNullable());
+    }
+
+    public int size() {
+        return symbols.size();
+    }
+
+    public T get(int index) {
+        return symbols.get(index);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        if (!(obj instanceof Seq))
+            return false;
+
+        Seq<?> other = (Seq<?>) obj;
+
+        return symbols.equals(other.symbols);
+    }
+
+    @Override
+    public int hashCode() {
+        return symbols.hashCode();
+    }
 
     @Override
     public String toString() {
         if (symbols.stream().allMatch(c -> c instanceof Char))
             return "'" + symbols.stream().map(c -> Char.getName(((Char) c).getValue()))
-				.collect(Collectors.joining("")) + "'";
+                .collect(Collectors.joining("")) + "'";
         return "(" + symbols.stream().map(a -> a.toString()).collect(Collectors.joining(" ")) + ")";
     }
 
     @Override
-	public Iterator<T> iterator() {
-		return symbols.iterator();
-	}
-	
-	@Override
-	public Set<CharRange> getFirstSet() {
-		Set<CharRange> firstSet = new HashSet<>();
-		for (RegularExpression regex : symbols) {
-			firstSet.addAll(regex.getFirstSet());
-			if (!regex.isNullable()) {
-				break;
-			}
-		}
-		return firstSet;
-	}
-	
-	@Override
-	public Set<CharRange> getNotFollowSet() {
-		return Collections.emptySet();
-	}
+    public Iterator<T> iterator() {
+        return symbols.iterator();
+    }
 
-	
-	@Override
-	public Builder<T> copy() {
-		return new Builder<T>(this);
-	}
-	
-	public List<T> getSymbols() {
-		return symbols;
-	}
+    @Override
+    public Set<CharRange> getFirstSet() {
+        Set<CharRange> firstSet = new HashSet<>();
+        for (RegularExpression regex : symbols) {
+            firstSet.addAll(regex.getFirstSet());
+            if (!regex.isNullable()) {
+                break;
+            }
+        }
+        return firstSet;
+    }
 
-	@Override
-	public List<T> getChildren() {
-		return symbols;
-	}
+    @Override
+    public Set<CharRange> getNotFollowSet() {
+        return Collections.emptySet();
+    }
 
-	public static <T extends RegularExpression> Builder<T> builder(T s) {
-		return builder(Arrays.asList(s));
-	}
-	
-	public static <T extends RegularExpression> Builder<T> builder(List<T> symbols) {
-		return new Builder<T>().setSymbols(symbols);
-	}
-	
-	@SafeVarargs
-	@SuppressWarnings("varargs")
-	public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
-		return builder(Arrays.asList(symbols));
-	}
-	
-	public static class Builder<T extends RegularExpression> extends RegexBuilder<Seq<T>> {
 
-		private List<T> symbols = new ArrayList<>();
+    @Override
+    public Builder<T> copy() {
+        return new Builder<T>(this);
+    }
 
-		public Builder(Seq<T> seq) {
-			super(seq);
-			this.symbols = new ArrayList<>(seq.symbols);
-		}
+    public List<T> getSymbols() {
+        return symbols;
+    }
 
-		public Builder() {}
-		
-		public Builder<T> add(T s) {
-			symbols.add(s);
-			return this;
-		}
-		
-		public Builder<T> addAll(List<T> symbols) {
-			this.symbols.addAll(symbols);
-			return this;
-		}
+    @Override
+    public List<T> getChildren() {
+        return symbols;
+    }
 
-		public Builder<T> setSymbols(List<T> symbols) {
-			this.symbols = new ArrayList<>(symbols);
-			return this;
-		}
+    public static <T extends RegularExpression> Builder<T> builder(T s) {
+        return builder(Arrays.asList(s));
+    }
 
-		@Override
-		public RegexBuilder<Seq<T>> setChildren(List<RegularExpression> children) {
-			this.symbols = (List<T>) children;
-			return this;
-		}
+    public static <T extends RegularExpression> Builder<T> builder(List<T> symbols) {
+        return new Builder<T>().setSymbols(symbols);
+    }
 
-		@Override
-		public Seq<T> build() {
-			return new Seq<>(this);
-		}
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
+        return builder(Arrays.asList(symbols));
+    }
 
-	}
+    public static class Builder<T extends RegularExpression> extends RegexBuilder<Seq<T>> {
 
-	@Override
-	public <E> E accept(RegularExpressionVisitor<E> visitor) {
-		return visitor.visit(this);
-	}
-	
+        private List<T> symbols = new ArrayList<>();
+
+        public Builder(Seq<T> seq) {
+            super(seq);
+            this.symbols = new ArrayList<>(seq.symbols);
+        }
+
+        public Builder() {}
+
+        public Builder<T> add(T s) {
+            symbols.add(s);
+            return this;
+        }
+
+        public Builder<T> addAll(List<T> symbols) {
+            this.symbols.addAll(symbols);
+            return this;
+        }
+
+        public Builder<T> setSymbols(List<T> symbols) {
+            this.symbols = new ArrayList<>(symbols);
+            return this;
+        }
+
+        @Override
+        public RegexBuilder<Seq<T>> setChildren(List<RegularExpression> children) {
+            this.symbols = (List<T>) children;
+            return this;
+        }
+
+        @Override
+        public Seq<T> build() {
+            return new Seq<>(this);
+        }
+
+    }
+
+    @Override
+    public <E> E accept(RegularExpressionVisitor<E> visitor) {
+        return visitor.visit(this);
+    }
+
 }

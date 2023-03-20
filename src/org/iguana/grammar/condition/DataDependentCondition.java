@@ -30,35 +30,35 @@ package org.iguana.grammar.condition;
 import org.iguana.traversal.IConditionVisitor;
 
 public class DataDependentCondition extends Condition {
-	
-	private final org.iguana.datadependent.ast.Expression expression;
-	
-	private DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {
-		super(type);
-		this.expression = expression;
-	}
-	
-	public org.iguana.datadependent.ast.Expression getExpression() {
-		return expression;
-	}
-	
-	@Override
-	public boolean isDataDependent() {
-		return true;
-	}
 
-	public static DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
-		return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("[%s]", expression);
-	}
+    private final org.iguana.datadependent.ast.Expression expression;
 
-	@Override
-	public <T> T accept(IConditionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    private DataDependentCondition(ConditionType type, org.iguana.datadependent.ast.Expression expression) {
+        super(type);
+        this.expression = expression;
+    }
+
+    public org.iguana.datadependent.ast.Expression getExpression() {
+        return expression;
+    }
+
+    @Override
+    public boolean isDataDependent() {
+        return true;
+    }
+
+    public static DataDependentCondition predicate(org.iguana.datadependent.ast.Expression expression) {
+        return new DataDependentCondition(ConditionType.DATA_DEPENDENT, expression);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s]", expression);
+    }
+
+    @Override
+    public <T> T accept(IConditionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

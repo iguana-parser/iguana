@@ -34,91 +34,91 @@ import java.util.List;
 import java.util.Objects;
 
 public class Ignore extends AbstractSymbol {
-	
-	private final Symbol symbol;
 
-	Ignore(Builder builder) {
-		super(builder);
-		this.symbol = builder.symbol;
-	}
-	
-	public static Ignore ignore(Symbol symbol) {
-		return new Builder(symbol).build();
-	}
-	
-	public Symbol getSymbol() {
-		return symbol;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    private final Symbol symbol;
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(symbol);
-	}
+    Ignore(Builder builder) {
+        super(builder);
+        this.symbol = builder.symbol;
+    }
 
-	@Override
-	public int size() {
-		return symbol.size();
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format("ignore %s", symbol.toString(j));
-	}
+    public static Ignore ignore(Symbol symbol) {
+        return new Builder(symbol).build();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Ignore)) return false;
-		Ignore ignore = (Ignore) o;
-		return Objects.equals(symbol, ignore.symbol);
-	}
+    public Symbol getSymbol() {
+        return symbol;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(symbol);
-	}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-	public static class Builder extends SymbolBuilder<Ignore> {
-		
-		private Symbol symbol;
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(symbol);
+    }
 
-		public Builder() { }
+    @Override
+    public int size() {
+        return symbol.size();
+    }
 
-		public Builder(Ignore ignore) {
-			super(ignore);
-			this.symbol = ignore.symbol;
-		}
-		
-		public Builder(Symbol symbol) {
-			this.symbol = symbol;
-		}
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
-		@Override
-		public SymbolBuilder<Ignore> setChildren(List<Symbol> symbols) {
-			this.symbol = symbols.get(0);
-			return this;
-		}
+    @Override
+    public String toString(int j) {
+        return String.format("ignore %s", symbol.toString(j));
+    }
 
-		@Override
-		public Ignore build() {
-			this.name = String.format("ignore %s", symbol.toString());
-			return new Ignore(this);
-		}
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ignore)) return false;
+        Ignore ignore = (Ignore) o;
+        return Objects.equals(symbol, ignore.symbol);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(symbol);
+    }
+
+    public static class Builder extends SymbolBuilder<Ignore> {
+
+        private Symbol symbol;
+
+        public Builder() { }
+
+        public Builder(Ignore ignore) {
+            super(ignore);
+            this.symbol = ignore.symbol;
+        }
+
+        public Builder(Symbol symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public SymbolBuilder<Ignore> setChildren(List<Symbol> symbols) {
+            this.symbol = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Ignore build() {
+            this.name = String.format("ignore %s", symbol.toString());
+            return new Ignore(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

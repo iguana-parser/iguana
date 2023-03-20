@@ -35,85 +35,85 @@ import java.util.Objects;
  *
  */
 public class Position {
-	
-	private final RuntimeRule rule;
-	
-	private final int posInRule;
-	private final int posInSymbol;
-	
-	public Position(RuntimeRule rule, int posInRule) {
-		this(rule, posInRule, 0);
-	}
-	
-	public Position(RuntimeRule rule, int posInRule, int posInSymbol) {
-		this.rule = rule;
-		this.posInRule = posInRule;
-		this.posInSymbol = posInSymbol;
-	}
-	
-	public RuntimeRule getRule() {
-		return rule;
-	}
-	
-	public int getPosition() {
-		return posInRule;
-	}
-	
-	public boolean isFirst() {
-		return posInRule == 1;
-	}
-	
-	public boolean isLast() {
-		return posInRule == rule.size();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Position))
-			return false;
-		
-		Position other = (Position) obj;
-		
-		return rule.equals(other.rule) && posInRule == other.posInRule && posInSymbol == other.posInSymbol;
-	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(rule, posInRule, posInSymbol);
-	}
+    private final RuntimeRule rule;
 
-	@Override
-	public String toString() {
-		
-		if (posInSymbol == -1) 
-			return "-";
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(rule.getHead()).append(" ::= ");
-		
-		if (rule.size() == 0) { 
-			sb.append(".");
-		} else {
-			int i;
-			if (posInRule == 0 && posInSymbol == 0) {
-				sb.append(". ");
-			}
-			for (i = 0; i < rule.size(); i++) {
-				if (i + 1 == posInRule) {
-					if (posInRule == rule.size())
-						sb.append(rule.symbolAt(i).toString().trim() + " .");
-					else
-						sb.append(rule.symbolAt(i).toString().trim() + " . ");
-				} else {
-					sb.append(rule.symbolAt(i) + " ");
-				}
-			}
-			
-		}
-		
-		return sb.toString().trim();
-	}
+    private final int posInRule;
+    private final int posInSymbol;
+
+    public Position(RuntimeRule rule, int posInRule) {
+        this(rule, posInRule, 0);
+    }
+
+    public Position(RuntimeRule rule, int posInRule, int posInSymbol) {
+        this.rule = rule;
+        this.posInRule = posInRule;
+        this.posInSymbol = posInSymbol;
+    }
+
+    public RuntimeRule getRule() {
+        return rule;
+    }
+
+    public int getPosition() {
+        return posInRule;
+    }
+
+    public boolean isFirst() {
+        return posInRule == 1;
+    }
+
+    public boolean isLast() {
+        return posInRule == rule.size();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Position))
+            return false;
+
+        Position other = (Position) obj;
+
+        return rule.equals(other.rule) && posInRule == other.posInRule && posInSymbol == other.posInSymbol;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rule, posInRule, posInSymbol);
+    }
+
+    @Override
+    public String toString() {
+
+        if (posInSymbol == -1)
+            return "-";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(rule.getHead()).append(" ::= ");
+
+        if (rule.size() == 0) {
+            sb.append(".");
+        } else {
+            int i;
+            if (posInRule == 0 && posInSymbol == 0) {
+                sb.append(". ");
+            }
+            for (i = 0; i < rule.size(); i++) {
+                if (i + 1 == posInRule) {
+                    if (posInRule == rule.size())
+                        sb.append(rule.symbolAt(i).toString().trim() + " .");
+                    else
+                        sb.append(rule.symbolAt(i).toString().trim() + " . ");
+                } else {
+                    sb.append(rule.symbolAt(i) + " ");
+                }
+            }
+
+        }
+
+        return sb.toString().trim();
+    }
 }

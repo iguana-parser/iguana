@@ -31,10 +31,10 @@ import org.iguana.utils.function.*;
 
 public class MurmurHash3 {
 
-	private final static int C1 = 0xcc9e2d51;
-	private final static int C2 = 0x1b873593;
-	private final static int M = 5;
-	private final static int N = 0xe6546b64;
+    private final static int C1 = 0xcc9e2d51;
+    private final static int C2 = 0x1b873593;
+    private final static int M = 5;
+    private final static int N = 0xe6546b64;
 
     public static IntFunction2 f2() {
         return f2(19);
@@ -63,13 +63,13 @@ public class MurmurHash3 {
 
             return h;
         };
-	}
+    }
 
     public static IntFunction3 f3() {
         return f3(19);
     }
 
-	public static IntFunction3 f3(int seed) {
+    public static IntFunction3 f3(int seed) {
         return (a, b, c) -> {
             int h = seed;
 
@@ -96,7 +96,7 @@ public class MurmurHash3 {
 
             return h;
         };
-	}
+    }
 
     public static IntFunction4 f4() {
         return f4(19);
@@ -139,7 +139,7 @@ public class MurmurHash3 {
         return f5(19);
     }
 
-	public static IntFunction5 f5(int seed) {
+    public static IntFunction5 f5(int seed) {
         return (a, b, c, d, e) -> {
             int h = seed;
 
@@ -174,7 +174,7 @@ public class MurmurHash3 {
 
             return h;
         };
-	}
+    }
 
     public static IntFunctionAny fn() {
         return fn(19);
@@ -204,16 +204,16 @@ public class MurmurHash3 {
     }
 
     private final static int mixK(int k) {
-		k *= C1;
-		k = Integer.rotateLeft(k, 15);
-		k = k * C2;
-		return k;
-	}
+        k *= C1;
+        k = Integer.rotateLeft(k, 15);
+        k = k * C2;
+        return k;
+    }
 
-	private final static int mixH(int h, int k) {
-		h ^= k;
-		h = Integer.rotateLeft(h, 13);
-		h = h * M + N;
-		return h;
-	}
+    private final static int mixH(int h, int k) {
+        h ^= k;
+        h = Integer.rotateLeft(h, 13);
+        h = h * M + N;
+        return h;
+    }
 }

@@ -31,22 +31,22 @@ package org.iguana.datadependent.attrs;
 import io.usethesource.capsule.Set;
 
 public abstract class AbstractAttrs implements Attr {
-	
-	private Set.Immutable<String> env;
 
-	@Override
-	public Set.Immutable<String> getEnv() {
-		return env == null? Set.Immutable.of() : env;
-	}
+    private Set.Immutable<String> env;
 
-	@Override
-	public void setEnv(Set.Immutable<String> env) {
-		this.env = env;
-	}
-	
-	@Override
-	public void setEmpty() {
-		this.env = io.usethesource.capsule.Set.Immutable.of();
-	}
+    @Override
+    public Set.Immutable<String> getEnv() {
+        return env == null? Set.Immutable.of() : env;
+    }
+
+    @Override
+    public void setEnv(Set.Immutable<String> env) {
+        this.env = env;
+    }
+
+    @Override
+    public void setEmpty() {
+        this.env = io.usethesource.capsule.Set.Immutable.of();
+    }
 
 }

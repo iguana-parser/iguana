@@ -33,20 +33,20 @@ import org.iguana.result.Result;
 
 public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
 
-	private final BodyGrammarSlot returnSlot;
-	private final T result;
-	private final GSSNode<T> destination;
+    private final BodyGrammarSlot returnSlot;
+    private final T result;
+    private final GSSNode<T> destination;
 
-	public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination) {
-		this.returnSlot = returnSlot;
-		this.result = result;
-		this.destination = destination;
-	}
+    public DefaultGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> destination) {
+        this.returnSlot = returnSlot;
+        this.result = result;
+        this.destination = destination;
+    }
 
-	@Override
-	public T getResult() {
-		return result;
-	}
+    @Override
+    public T getResult() {
+        return result;
+    }
 
     @Override
     public int getInputIndex() {
@@ -54,14 +54,14 @@ public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
     }
 
     @Override
-	public BodyGrammarSlot getReturnSlot() {
-		return returnSlot;
-	}
+    public BodyGrammarSlot getReturnSlot() {
+        return returnSlot;
+    }
 
     @Override
-	public GSSNode<T> getDestination() {
-		return destination;
-	}
+    public GSSNode<T> getDestination() {
+        return destination;
+    }
 
     @Override
     public Environment getEnv() {
@@ -69,8 +69,8 @@ public class DefaultGSSEdge<T extends Result> implements GSSEdge<T> {
     }
 
     @Override
-	public String toString() {
-		return String.format("(%s, %s, %s)", returnSlot, result, destination);
-	}
+    public String toString() {
+        return String.format("(%s, %s, %s)", returnSlot, result, destination);
+    }
 
 }

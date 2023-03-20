@@ -32,100 +32,100 @@ import org.iguana.grammar.condition.Condition;
 import java.util.*;
 
 public abstract class SymbolBuilder<T extends Symbol> {
-	
-	protected String name;
-	
-	protected String label;
-	
-	protected Object object;
 
-	protected List<Condition> preConditions = new ArrayList<>();
+    protected String name;
 
-	protected List<Condition> postConditions = new ArrayList<>();
+    protected String label;
 
-	protected Map<String, Object> attributes = new HashMap<>();
+    protected Object object;
 
-	public SymbolBuilder(T symbol) {
-		this.name = symbol.getName();
-		this.label = symbol.getLabel();
-		this.preConditions = new ArrayList<>(symbol.getPreConditions());
-		this.postConditions = new ArrayList<>(symbol.getPostConditions());
-		this.attributes = new HashMap<>(symbol.getAttributes());
-	}
-	
-	public SymbolBuilder() { }
-	
-	public SymbolBuilder<T> setLabel(String label) {
-		this.label = label;
-		return this;
-	}
-	
-	public SymbolBuilder<T> setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
-	public SymbolBuilder<T> addPreCondition(Condition condition) {
-		preConditions.add(condition);
-		return this;
-	}
-	
-	public SymbolBuilder<T> addPostCondition(Condition condition) {
-		postConditions.add(condition);
-		return this;
-	}	
-	
-	public SymbolBuilder<T> setObject(Object object) {
-		this.object = object;
-		return this;
-	}
-	
-	public SymbolBuilder<T> addConditions(Symbol s) {
-		addPreConditions(s.getPreConditions());
-		addPostConditions(s.getPostConditions());
-		return this;
-	}
-	
- 	public SymbolBuilder<T> addPreConditions(Iterable<Condition> conditions) {
- 		conditions.forEach(c -> preConditions.add(c));
-		return this;
-	}
+    protected List<Condition> preConditions = new ArrayList<>();
 
-	// TODO: Get rid of this method, use the addCondition method instead
- 	public SymbolBuilder<T> addPostConditions(Iterable<Condition> conditions) {
- 		conditions.forEach(c -> postConditions.add(c));
-		return this;
-	}
- 	
- 	public SymbolBuilder<T> removePreConditions(Collection<Condition> conditions) {
- 		preConditions.removeAll(conditions);
- 		return this;
- 	}
- 	
- 	public SymbolBuilder<T> removePostConditions(Collection<Condition> conditions) {
- 		postConditions.removeAll(conditions);
- 		return this;
- 	}
+    protected List<Condition> postConditions = new ArrayList<>();
 
-	public SymbolBuilder<T> setPreConditions(List<Condition> conditions) {
-		preConditions = new ArrayList<>(conditions);
-		return this;
-	}
+    protected Map<String, Object> attributes = new HashMap<>();
 
-	public SymbolBuilder<T> setPostConditions(List<Condition> conditions) {
-		postConditions = new ArrayList<>(conditions);
-		return this;
-	}
+    public SymbolBuilder(T symbol) {
+        this.name = symbol.getName();
+        this.label = symbol.getLabel();
+        this.preConditions = new ArrayList<>(symbol.getPreConditions());
+        this.postConditions = new ArrayList<>(symbol.getPostConditions());
+        this.attributes = new HashMap<>(symbol.getAttributes());
+    }
 
-	public SymbolBuilder<T> addAttribute(String key, Object value) {
-		this.attributes.put(key, value);
-		return this;
-	}
+    public SymbolBuilder() { }
 
-	public SymbolBuilder<T> setChildren(List<Symbol> symbols) {
-		return this;
-	}
- 	
-	public abstract T build();
-	
+    public SymbolBuilder<T> setLabel(String label) {
+        this.label = label;
+        return this;
+    }
+
+    public SymbolBuilder<T> setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public SymbolBuilder<T> addPreCondition(Condition condition) {
+        preConditions.add(condition);
+        return this;
+    }
+
+    public SymbolBuilder<T> addPostCondition(Condition condition) {
+        postConditions.add(condition);
+        return this;
+    }
+
+    public SymbolBuilder<T> setObject(Object object) {
+        this.object = object;
+        return this;
+    }
+
+    public SymbolBuilder<T> addConditions(Symbol s) {
+        addPreConditions(s.getPreConditions());
+        addPostConditions(s.getPostConditions());
+        return this;
+    }
+
+    public SymbolBuilder<T> addPreConditions(Iterable<Condition> conditions) {
+        conditions.forEach(c -> preConditions.add(c));
+        return this;
+    }
+
+    // TODO: Get rid of this method, use the addCondition method instead
+    public SymbolBuilder<T> addPostConditions(Iterable<Condition> conditions) {
+        conditions.forEach(c -> postConditions.add(c));
+        return this;
+    }
+
+    public SymbolBuilder<T> removePreConditions(Collection<Condition> conditions) {
+        preConditions.removeAll(conditions);
+        return this;
+    }
+
+    public SymbolBuilder<T> removePostConditions(Collection<Condition> conditions) {
+        postConditions.removeAll(conditions);
+        return this;
+    }
+
+    public SymbolBuilder<T> setPreConditions(List<Condition> conditions) {
+        preConditions = new ArrayList<>(conditions);
+        return this;
+    }
+
+    public SymbolBuilder<T> setPostConditions(List<Condition> conditions) {
+        postConditions = new ArrayList<>(conditions);
+        return this;
+    }
+
+    public SymbolBuilder<T> addAttribute(String key, Object value) {
+        this.attributes.put(key, value);
+        return this;
+    }
+
+    public SymbolBuilder<T> setChildren(List<Symbol> symbols) {
+        return this;
+    }
+
+    public abstract T build();
+
 }

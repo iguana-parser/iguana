@@ -32,34 +32,34 @@ import org.iguana.utils.function.IntFunctionAny;
 import java.util.Arrays;
 
 public class ObjectKeyN implements Key {
-	
-	private final Object[] elements;
 
-	private final int hash;
+    private final Object[] elements;
 
-	public ObjectKeyN(IntFunctionAny f, Object... elements) {
-	    this.elements = elements;
-		this.hash = f.apply(elements);
-	}
-	
-	@Override
-	public boolean equals(Object other) {
-		if (this == other) return true;
-		
-		if (!(other instanceof ObjectKeyN)) return false;
-		
-		ObjectKeyN that = (ObjectKeyN) other;
-		return hash == that.hash && Arrays.equals(elements, that.elements);
-	}
+    private final int hash;
 
-	@Override
-	public int hashCode() {
-		return hash;
-	}
+    public ObjectKeyN(IntFunctionAny f, Object... elements) {
+        this.elements = elements;
+        this.hash = f.apply(elements);
+    }
 
-	@Override
-	public String toString() {
-		return String.format("(%s)", Arrays.toString(elements));
-	}
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+
+        if (!(other instanceof ObjectKeyN)) return false;
+
+        ObjectKeyN that = (ObjectKeyN) other;
+        return hash == that.hash && Arrays.equals(elements, that.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s)", Arrays.toString(elements));
+    }
 
 }

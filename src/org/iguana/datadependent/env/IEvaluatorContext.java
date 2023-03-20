@@ -28,42 +28,42 @@
 package org.iguana.datadependent.env;
 
 public interface IEvaluatorContext {
-	
-	Environment getEnvironment();
-	
-	void setEnvironment(Environment env);
-	
-	Environment getEmptyEnvironment();
-	
-	
-	// Operations on environment
 
-	void popEnvironment();
-	
-	void pushEnvironment();
-	
-	void declareVariable(String name, Object value);
-	
-	void declareVariables(String[] names, Object[] values);
-	
-	void storeVariable(String name, Object value);
-	
-	Object lookupVariable(String name);
-	
-	void declareVariable(Object value);
-	
-	void declareVariables(Object[] values);
-	
-	void storeVariable(int i, Object value);
-	
-	Object lookupVariable(int i);
-	
-	// Global parser environment
+    Environment getEnvironment();
 
-	void declareGlobalVariable(String name, Object value);
-	
-	void declareGlobalVariables(String[] names, Object[] values);
-	
-	Object lookupGlobalVariable(String name);
+    void setEnvironment(Environment env);
+
+    Environment getEmptyEnvironment();
+
+
+    // Operations on environment
+
+    void popEnvironment();
+
+    void pushEnvironment();
+
+    void declareVariable(String name, Object value);
+
+    void declareVariables(String[] names, Object[] values);
+
+    void storeVariable(String name, Object value);
+
+    Object lookupVariable(String name);
+
+    void declareVariable(Object value);
+
+    void declareVariables(Object[] values);
+
+    void storeVariable(int i, Object value);
+
+    Object lookupVariable(int i);
+
+    // Global parser environment
+
+    void declareGlobalVariable(String name, Object value);
+
+    void declareGlobalVariables(String[] names, Object[] values);
+
+    Object lookupGlobalVariable(String name);
 
 }

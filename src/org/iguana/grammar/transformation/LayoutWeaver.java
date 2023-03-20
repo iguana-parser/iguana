@@ -43,113 +43,113 @@ import static org.iguana.grammar.symbol.LayoutStrategy.INHERITED;
 
 public class LayoutWeaver implements GrammarTransformation {
 
-	@Override
-	public RuntimeGrammar transform(RuntimeGrammar grammar) {
-		Symbol layout = grammar.getLayout();
+    @Override
+    public RuntimeGrammar transform(RuntimeGrammar grammar) {
+        Symbol layout = grammar.getLayout();
 
-		RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(
-			grammar.getStartSymbols());
-		
-		for (RuntimeRule rule : grammar.getRules()) {
-			RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
-												.setRecursion(rule.getRecursion())
-												.setAssociativity(rule.getAssociativity())
-												.setAssociativityGroup(rule.getAssociativityGroup())
-												.setPrecedence(rule.getPrecedence())
-												.setPrecedenceLevel(rule.getPrecedenceLevel())
-												.setLabel(rule.getLabel())
-												.setAttributes(rule.getAttributes())
-												.setDefinition(rule.getDefinition());
+        RuntimeGrammar.Builder builder = RuntimeGrammar.builder().setLayout(layout).setStartSymbols(
+            grammar.getStartSymbols());
 
-			if (rule.size() == 0) {
-				builder.addRule(ruleBuilder.build());
-				continue;
-			}
+        for (RuntimeRule rule : grammar.getRules()) {
+            RuntimeRule.Builder ruleBuilder = RuntimeRule.withHead(rule.getHead())
+                                                .setRecursion(rule.getRecursion())
+                                                .setAssociativity(rule.getAssociativity())
+                                                .setAssociativityGroup(rule.getAssociativityGroup())
+                                                .setPrecedence(rule.getPrecedence())
+                                                .setPrecedenceLevel(rule.getPrecedenceLevel())
+                                                .setLabel(rule.getLabel())
+                                                .setAttributes(rule.getAttributes())
+                                                .setDefinition(rule.getDefinition());
 
-			if (rule.getHead().getNodeType() == NonterminalNodeType.Start) {
-				if (layout == null) {
-					builder.addRule(ruleBuilder.addSymbol(rule.symbolAt(0)).build());
-				} else {
-					builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout)
-						.build());
-				}
-				continue;
-			}
-			
-			for (int i = 0; i < rule.size() - 1; i++) {
-				Symbol s = rule.symbolAt(i);
+            if (rule.size() == 0) {
+                builder.addRule(ruleBuilder.build());
+                continue;
+            }
 
-				Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
-				
-				if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
-						&& ignoreLayoutConditions.isEmpty()) {
-					ruleBuilder.addSymbol(s);
-					continue;
-				}
-				
-				if (ignoreLayoutConditions.isEmpty())
-					ruleBuilder.addSymbol(s);
-				else
-					ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
+            if (rule.getHead().getNodeType() == NonterminalNodeType.Start) {
+                if (layout == null) {
+                    builder.addRule(ruleBuilder.addSymbol(rule.symbolAt(0)).build());
+                } else {
+                    builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout)
+                        .build());
+                }
+                continue;
+            }
 
-				// Do not insert layout after the layout symbol because we rely on the first set of the next
-				// non-layout symbol for synchronization.
-				if (!(s instanceof Error)) {
-					addLayout(layout, rule, ruleBuilder, s);
-				}
-			}
-			
-			Symbol last = rule.symbolAt(rule.size() - 1);
-			Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
+            for (int i = 0; i < rule.size() - 1; i++) {
+                Symbol s = rule.symbolAt(i);
 
-			if (ignoreLayoutConditions.isEmpty())
-				ruleBuilder.addSymbol(last);
-			else 
-				ruleBuilder.addSymbol(last.copy().removePostConditions(ignoreLayoutConditions).build());
-			
-			if (!ignoreLayoutConditions.isEmpty()) {
-				addLayout(layout, rule, ruleBuilder, last);
-			}
+                Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
 
-			if (rule.getLayoutStrategy() == INHERITED) {
-				ruleBuilder.setLayout(layout);
-			}
-			builder.addRule(ruleBuilder.build());
-		}
+                if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
+                        && ignoreLayoutConditions.isEmpty()) {
+                    ruleBuilder.addSymbol(s);
+                    continue;
+                }
 
-		builder.setGlobals(grammar.getGlobals());
-		builder.setEbnfLefts(grammar.getEBNFLefts());
-		builder.setEbnfRights(grammar.getEBNFRights());
-		builder.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions());
-		return builder.build();
-	}
+                if (ignoreLayoutConditions.isEmpty())
+                    ruleBuilder.addSymbol(s);
+                else
+                    ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
 
-	private void addLayout(Symbol layout, RuntimeRule rule, RuntimeRule.Builder ruleBuilder, Symbol s) {
-		switch (rule.getLayoutStrategy()) {
-			case NO_LAYOUT:
-				// do nothing
-				break;
-				
-			case INHERITED:
+                // Do not insert layout after the layout symbol because we rely on the first set of the next
+                // non-layout symbol for synchronization.
+                if (!(s instanceof Error)) {
+                    addLayout(layout, rule, ruleBuilder, s);
+                }
+            }
+
+            Symbol last = rule.symbolAt(rule.size() - 1);
+            Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
+
+            if (ignoreLayoutConditions.isEmpty())
+                ruleBuilder.addSymbol(last);
+            else
+                ruleBuilder.addSymbol(last.copy().removePostConditions(ignoreLayoutConditions).build());
+
+            if (!ignoreLayoutConditions.isEmpty()) {
+                addLayout(layout, rule, ruleBuilder, last);
+            }
+
+            if (rule.getLayoutStrategy() == INHERITED) {
+                ruleBuilder.setLayout(layout);
+            }
+            builder.addRule(ruleBuilder.build());
+        }
+
+        builder.setGlobals(grammar.getGlobals());
+        builder.setEbnfLefts(grammar.getEBNFLefts());
+        builder.setEbnfRights(grammar.getEBNFRights());
+        builder.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions());
+        return builder.build();
+    }
+
+    private void addLayout(Symbol layout, RuntimeRule rule, RuntimeRule.Builder ruleBuilder, Symbol s) {
+        switch (rule.getLayoutStrategy()) {
+            case NO_LAYOUT:
+                // do nothing
+                break;
+
+            case INHERITED:
                 if (layout != null)
-				    ruleBuilder.addSymbol(layout.copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
-				break;
-				
-			case FIXED:
-				ruleBuilder.addSymbol(rule.getLayout().copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
-				break;
-		}
-	}
-	
-	private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
-		Set<Condition> conditions = new LinkedHashSet<>();
-		for (Condition c : s.getPostConditions()) {
-			if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT ||
-				c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
-				conditions.add(c);
-			}
-		}
-		return conditions;
-	}
-	
+                    ruleBuilder.addSymbol(layout.copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
+                break;
+
+            case FIXED:
+                ruleBuilder.addSymbol(rule.getLayout().copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
+                break;
+        }
+    }
+
+    private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
+        Set<Condition> conditions = new LinkedHashSet<>();
+        for (Condition c : s.getPostConditions()) {
+            if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT ||
+                c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
+                conditions.add(c);
+            }
+        }
+        return conditions;
+    }
+
 }

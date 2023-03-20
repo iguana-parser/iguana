@@ -30,7 +30,7 @@ package org.iguana.utils.function;
 @FunctionalInterface
 public interface IntFunctionAny {
 
-	int apply(Integer...elements);
+    int apply(Integer...elements);
 
     default int apply(Object...elements) {
         Integer[] res = new Integer[elements.length];

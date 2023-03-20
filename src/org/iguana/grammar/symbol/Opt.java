@@ -34,79 +34,79 @@ import java.util.List;
 
 public class Opt extends AbstractSymbol {
 
-	private final Symbol s;
-	
-	private Opt(Builder builder) {
-		super(builder);
-		this.s = builder.s;
-	}
+    private final Symbol s;
 
-	public static Opt from(Symbol s) {
-		return new Builder(s).build();
-	}
-	
-	public Symbol getSymbol() {
-		return s;
-	}
+    private Opt(Builder builder) {
+        super(builder);
+        this.s = builder.s;
+    }
 
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    public static Opt from(Symbol s) {
+        return new Builder(s).build();
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(s);
-	}
+    public Symbol getSymbol() {
+        return s;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Opt))
-			return false;
-		
-		Opt other = (Opt) obj;
-		return s.equals(other.s);
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-	
-	public static class Builder extends SymbolBuilder<Opt> {
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		private Symbol s;
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(s);
+    }
 
-		private Builder() {}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-		public Builder(Symbol s) {
-			this.s = s;
-		}
-		
-		public Builder(Opt opt) {
-			super(opt);
-			this.s = opt.s;
-		}
+        if (!(obj instanceof Opt))
+            return false;
 
-		@Override
-		public SymbolBuilder<Opt> setChildren(List<Symbol> symbols) {
-			this.s = symbols.get(0);
-			return this;
-		}
+        Opt other = (Opt) obj;
+        return s.equals(other.s);
+    }
 
-		@Override
-		public Opt build() {
-			this.name = s.getName() + "?";
-			return new Opt(this);
-		}
-	}
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-	
+    public static class Builder extends SymbolBuilder<Opt> {
+
+        private Symbol s;
+
+        private Builder() {}
+
+        public Builder(Symbol s) {
+            this.s = s;
+        }
+
+        public Builder(Opt opt) {
+            super(opt);
+            this.s = opt.s;
+        }
+
+        @Override
+        public SymbolBuilder<Opt> setChildren(List<Symbol> symbols) {
+            this.s = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Opt build() {
+            this.name = s.getName() + "?";
+            return new Opt(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
 }

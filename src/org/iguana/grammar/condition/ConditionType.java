@@ -28,36 +28,36 @@
 package org.iguana.grammar.condition;
 
 public enum ConditionType {
-	
- 	FOLLOW(">>", "Follow"),
-	NOT_FOLLOW("!>>", "Not follow"),
-	FOLLOW_IGNORE_LAYOUT(">>>", "Follow ignoring the layout"),
-	NOT_FOLLOW_IGNORE_LAYOUT("!>>>", "Not follow ignoring the layout"),
-	PRECEDE("<<", "Precede"),
-	NOT_PRECEDE("!<<", "Not precede"),
-	MATCH("&", "match"),
-	NOT_MATCH("\\", "Not match"),
-	END_OF_LINE("$", "End of line"),
-	START_OF_LINE("^", "Start of line"),
-	END_OF_FILE("$$", "End of file"),
-	DATA_DEPENDENT("?", "Data dependent")
-	;
-	
-	private final String symbol;
-	private final String description;
 
-	ConditionType(String symbol, String description) {
-		this.symbol = symbol;
-		this.description = description;
-	}
+    FOLLOW(">>", "Follow"),
+    NOT_FOLLOW("!>>", "Not follow"),
+    FOLLOW_IGNORE_LAYOUT(">>>", "Follow ignoring the layout"),
+    NOT_FOLLOW_IGNORE_LAYOUT("!>>>", "Not follow ignoring the layout"),
+    PRECEDE("<<", "Precede"),
+    NOT_PRECEDE("!<<", "Not precede"),
+    MATCH("&", "match"),
+    NOT_MATCH("\\", "Not match"),
+    END_OF_LINE("$", "End of line"),
+    START_OF_LINE("^", "Start of line"),
+    END_OF_FILE("$$", "End of file"),
+    DATA_DEPENDENT("?", "Data dependent")
+    ;
 
-	public String getDescription() {
-		return description;
-	}
+    private final String symbol;
+    private final String description;
 
-	@Override
-	public String toString() {
-		return symbol;
-	}
-	
+    ConditionType(String symbol, String description) {
+        this.symbol = symbol;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return symbol;
+    }
+
 }

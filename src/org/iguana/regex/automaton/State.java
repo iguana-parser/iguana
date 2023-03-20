@@ -35,122 +35,122 @@ import java.util.*;
 
 public class State {
 
-	private final Set<Transition> transitions;
-	
-	private final Map<CharRange, State> reachableStates;
-	
-	private final Set<State> epsilonSates;
-			
-	/**
-	 * The set of regular expressions whose final state is this state.
-	 */
-	private final Set<Tuple<RegularExpression, Integer>> regularExpressions;
-	
-	private StateType stateType;
-	
-	private int id;
-	
-	public State() {
-		this(StateType.NORMAL);
-	}
-	
-	public State(StateType stateType) {
-		this.transitions = new HashSet<>();
-		this.reachableStates = new HashMap<>();
-		this.stateType = stateType;
-		this.regularExpressions = new HashSet<>();
-		this.epsilonSates = new HashSet<>();
-	}
-	
-	public Set<Transition> getTransitions() {
-		return transitions;
-	}
-	
-	public State getState(CharRange r) {
-		return reachableStates.get(r);
-	}
+    private final Set<Transition> transitions;
 
-	public boolean hasTransition(CharRange r) {
-		return reachableStates.get(r) != null;
-	}
+    private final Map<CharRange, State> reachableStates;
 
-	public StateType getStateType() {
-		return stateType;
-	}
-	
-	public boolean isFinalState() {
-		return stateType == StateType.FINAL;
-	}
-	
-	public void setStateType(StateType stateType) {
-		this.stateType = stateType;
-	}
-	
-	public void addEpsilonTransition(State dest) {
-		transitions.add(new Transition(-1, dest));
-		epsilonSates.add(dest);
-	}
-	
-	public void addTransitions(Iterable<Transition> transitions) {
-		for (Transition t : transitions) {
-			addTransition(t);
-		}
-	}
-	
-	public void addTransition(Transition transition) {
-		if (transition.isEpsilonTransition())
-			epsilonSates.add(transition.getDestination());
-		
-		if (transitions.add(transition)) {
-			reachableStates.put(transition.getRange(), transition.getDestination());
-		}
-	}
-	
-	public void removeTransition(Transition transition) {
-		transitions.remove(transition);
-	}
-	
-	public void removeTransitions(Collection<Transition> c) {
-		transitions.removeAll(c);
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
-	}
+    private final Set<State> epsilonSates;
 
-	public void clearRegularExpressions() {
-		regularExpressions.clear();
-	}
-	
-	public Set<Tuple<RegularExpression, Integer>> getRegularExpressions() {
-		return regularExpressions;
-	}
-	
-	public Set<State> getEpsilonSates() {
-		return epsilonSates;
-	}
-	
-	public State addRegularExpression(RegularExpression regex, int order) {
-		regularExpressions.add(Tuple.of(regex, order));
-		return this;
-	}
-	
-	public State addRegularExpressions(Collection<? extends Tuple<RegularExpression, Integer>> c) {
-		regularExpressions.addAll(c);
-		return this;
-	}
-	
-	public int getCountTransitions() {
-		return transitions.size();
-	}
-		
-	@Override
-	public String toString() {
-		return "State" + id;
-	}
+    /**
+     * The set of regular expressions whose final state is this state.
+     */
+    private final Set<Tuple<RegularExpression, Integer>> regularExpressions;
+
+    private StateType stateType;
+
+    private int id;
+
+    public State() {
+        this(StateType.NORMAL);
+    }
+
+    public State(StateType stateType) {
+        this.transitions = new HashSet<>();
+        this.reachableStates = new HashMap<>();
+        this.stateType = stateType;
+        this.regularExpressions = new HashSet<>();
+        this.epsilonSates = new HashSet<>();
+    }
+
+    public Set<Transition> getTransitions() {
+        return transitions;
+    }
+
+    public State getState(CharRange r) {
+        return reachableStates.get(r);
+    }
+
+    public boolean hasTransition(CharRange r) {
+        return reachableStates.get(r) != null;
+    }
+
+    public StateType getStateType() {
+        return stateType;
+    }
+
+    public boolean isFinalState() {
+        return stateType == StateType.FINAL;
+    }
+
+    public void setStateType(StateType stateType) {
+        this.stateType = stateType;
+    }
+
+    public void addEpsilonTransition(State dest) {
+        transitions.add(new Transition(-1, dest));
+        epsilonSates.add(dest);
+    }
+
+    public void addTransitions(Iterable<Transition> transitions) {
+        for (Transition t : transitions) {
+            addTransition(t);
+        }
+    }
+
+    public void addTransition(Transition transition) {
+        if (transition.isEpsilonTransition())
+            epsilonSates.add(transition.getDestination());
+
+        if (transitions.add(transition)) {
+            reachableStates.put(transition.getRange(), transition.getDestination());
+        }
+    }
+
+    public void removeTransition(Transition transition) {
+        transitions.remove(transition);
+    }
+
+    public void removeTransitions(Collection<Transition> c) {
+        transitions.removeAll(c);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void clearRegularExpressions() {
+        regularExpressions.clear();
+    }
+
+    public Set<Tuple<RegularExpression, Integer>> getRegularExpressions() {
+        return regularExpressions;
+    }
+
+    public Set<State> getEpsilonSates() {
+        return epsilonSates;
+    }
+
+    public State addRegularExpression(RegularExpression regex, int order) {
+        regularExpressions.add(Tuple.of(regex, order));
+        return this;
+    }
+
+    public State addRegularExpressions(Collection<? extends Tuple<RegularExpression, Integer>> c) {
+        regularExpressions.addAll(c);
+        return this;
+    }
+
+    public int getCountTransitions() {
+        return transitions.size();
+    }
+
+    @Override
+    public String toString() {
+        return "State" + id;
+    }
 
 }

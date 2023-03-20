@@ -29,31 +29,31 @@ package org.iguana.grammar.slot;
 
 
 public abstract class AbstractTransition implements Transition {
-	
-	protected final BodyGrammarSlot dest;
 
-	protected final BodyGrammarSlot origin;
+    protected final BodyGrammarSlot dest;
 
-	public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
-		if (origin.equals(dest)) {
-			throw new IllegalArgumentException("Origin " + origin + " and Destination " + dest + " are equal");
-		}
-		this.origin = origin;
-		this.dest = dest;
-	}
+    protected final BodyGrammarSlot origin;
 
-	@Override
-	public BodyGrammarSlot destination() {
-		return dest;
-	}
+    public AbstractTransition(BodyGrammarSlot origin, BodyGrammarSlot dest) {
+        if (origin.equals(dest)) {
+            throw new IllegalArgumentException("Origin " + origin + " and Destination " + dest + " are equal");
+        }
+        this.origin = origin;
+        this.dest = dest;
+    }
 
-	@Override
-	public BodyGrammarSlot origin() {
-		return origin;
-	}
-	
-	@Override
-	public String toString() {
-		return origin + " ---> " + dest;
-	}
+    @Override
+    public BodyGrammarSlot destination() {
+        return dest;
+    }
+
+    @Override
+    public BodyGrammarSlot origin() {
+        return origin;
+    }
+
+    @Override
+    public String toString() {
+        return origin + " ---> " + dest;
+    }
 }

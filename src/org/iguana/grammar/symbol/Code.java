@@ -39,94 +39,94 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Code extends AbstractSymbol {
 
-	private final Symbol symbol;
-	private final Statement[] statements;
-	
-	Code(Builder builder) {
-		super(builder);
-		this.symbol = builder.symbol;
-		this.statements = builder.statements;
-	}
-	
-	public static Code code(Symbol symbol, Statement... statements) {
-		return new Builder(symbol, statements).build();
-	}
-	
-	public Symbol getSymbol() {
-		return symbol;
-	}
-	
-	public Statement[] getStatements() {
-		return statements;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    private final Symbol symbol;
+    private final Statement[] statements;
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(symbol);
-	}
+    Code(Builder builder) {
+        super(builder);
+        this.symbol = builder.symbol;
+        this.statements = builder.statements;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Code)) return false;
-		Code code = (Code) o;
-		return Objects.equals(symbol, code.symbol) && Arrays.equals(statements, code.statements);
-	}
+    public static Code code(Symbol symbol, Statement... statements) {
+        return new Builder(symbol, statements).build();
+    }
 
-	@Override
-	public int hashCode() {
-		int result = Objects.hash(symbol);
-		result = 31 * result + Arrays.hashCode(statements);
-		return result;
-	}
+    public Symbol getSymbol() {
+        return symbol;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
-	}
-		
-	public static class Builder extends SymbolBuilder<Code> {
-		
-		private Symbol symbol;
-		private Statement[] statements;
+    public Statement[] getStatements() {
+        return statements;
+    }
 
-		public Builder() { }
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		public Builder(Code code) {
-			super(code);
-			this.symbol = code.symbol;
-			this.statements = code.statements;
-		}
-		
-		public Builder(Symbol symbol, Statement... statements) {
-			assert statements.length != 0;
-			
-			this.symbol = symbol;
-			this.statements = statements;
-		}
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(symbol);
+    }
 
-		@Override
-		public SymbolBuilder<Code> setChildren(List<Symbol> symbols) {
-			this.symbol = symbols.get(0);
-			return this;
-		}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Code)) return false;
+        Code code = (Code) o;
+        return Objects.equals(symbol, code.symbol) && Arrays.equals(statements, code.statements);
+    }
 
-		@Override
-		public Code build() {
-			this.name = String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
-			return new Code(this);
-		}
-		
-	}
-	
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(symbol);
+        result = 31 * result + Arrays.hashCode(statements);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
+    }
+
+    public static class Builder extends SymbolBuilder<Code> {
+
+        private Symbol symbol;
+        private Statement[] statements;
+
+        public Builder() { }
+
+        public Builder(Code code) {
+            super(code);
+            this.symbol = code.symbol;
+            this.statements = code.statements;
+        }
+
+        public Builder(Symbol symbol, Statement... statements) {
+            assert statements.length != 0;
+
+            this.symbol = symbol;
+            this.statements = statements;
+        }
+
+        @Override
+        public SymbolBuilder<Code> setChildren(List<Symbol> symbols) {
+            this.symbol = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Code build() {
+            this.name = String.format("%s {%s}", symbol.toString(), listToString(statements, ";"));
+            return new Code(this);
+        }
+
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

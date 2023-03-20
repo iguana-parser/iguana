@@ -34,16 +34,16 @@ public class PrimeMultiplication {
     private static final int P1 = 17;
     private static final int P2 = 31;
 
-	public static IntFunction2 f2() {
+    public static IntFunction2 f2() {
         return (k1, k2) -> {
             int result = P1;
             result = P2 * result + k1;
             result = P2 * result + k2;
             return result;
         };
-	}
+    }
 
-	public static IntFunction3 f3() {
+    public static IntFunction3 f3() {
         return (k1, k2, k3) -> {
             int result = P1;
             result = P2 * result + k1;
@@ -51,9 +51,9 @@ public class PrimeMultiplication {
             result = P2 * result + k3;
             return result;
         };
-	}
+    }
 
-	public static IntFunction4 f4() {
+    public static IntFunction4 f4() {
         return (k1, k2, k3, k4) -> {
             int result = P1;
             result = P2 * result + k1;
@@ -62,9 +62,9 @@ public class PrimeMultiplication {
             result = P2 * result + k4;
             return result;
         };
-	}
+    }
 
-	public static IntFunction5 f5() {
+    public static IntFunction5 f5() {
         return (k1, k2, k3, k4, k5) -> {
             int result = P1;
             result = P2 * result + k1;
@@ -74,9 +74,9 @@ public class PrimeMultiplication {
             result = P2 * result + k5;
             return result;
         };
-	}
+    }
 
-	public static IntFunctionAny fn() {
+    public static IntFunctionAny fn() {
         return (Integer...elements) -> {
             int result = P1;
             for (int k : elements) {
@@ -84,6 +84,6 @@ public class PrimeMultiplication {
             }
             return result;
         };
-	}
+    }
 
 }

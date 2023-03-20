@@ -39,28 +39,28 @@ import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class GSSToDot {
 
-	private final Map<GSSNode<?>, Integer> ids = new HashMap<>();
+    private final Map<GSSNode<?>, Integer> ids = new HashMap<>();
 
-	public DotGraph execute(Iterable<GSSNode<?>> set) {
-		DotGraph dotGraph = new DotGraph();
-		
-		for (GSSNode<?> gssNode : set) {
-			dotGraph.addNode(newNode(getId(gssNode), gssNode.toString()));
+    public DotGraph execute(Iterable<GSSNode<?>> set) {
+        DotGraph dotGraph = new DotGraph();
 
-			for (GSSEdge<?> edge : gssNode.getGSSEdges()) {
-				DotGraph.Edge dotEdge = newEdge(getId(gssNode), getId(edge.getDestination()));
-				if (edge.getReturnSlot() != null) {
-					dotEdge.setLabel(edge.getReturnSlot().toString());
-				}
-				dotGraph.addEdge(dotEdge);
-			}
-		}
+        for (GSSNode<?> gssNode : set) {
+            dotGraph.addNode(newNode(getId(gssNode), gssNode.toString()));
 
-		return dotGraph;
-	}
+            for (GSSEdge<?> edge : gssNode.getGSSEdges()) {
+                DotGraph.Edge dotEdge = newEdge(getId(gssNode), getId(edge.getDestination()));
+                if (edge.getReturnSlot() != null) {
+                    dotEdge.setLabel(edge.getReturnSlot().toString());
+                }
+                dotGraph.addEdge(dotEdge);
+            }
+        }
 
-	private int getId(GSSNode<?> node) {
-		return ids.computeIfAbsent(node, k -> ids.size() + 1);
-	}
-	
+        return dotGraph;
+    }
+
+    private int getId(GSSNode<?> node) {
+        return ids.computeIfAbsent(node, k -> ids.size() + 1);
+    }
+
 }

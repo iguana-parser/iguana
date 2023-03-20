@@ -34,11 +34,11 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class GrammarValidationException extends RuntimeException {
 
-	public GrammarValidationException(Set<RuntimeException> exceptions) {
-		super(getMessage(exceptions));
-	}
-	
-	private static String getMessage(Set<RuntimeException> exceptions) {
-		return listToString(exceptions, ",");
-	}
+    public GrammarValidationException(Set<RuntimeException> exceptions) {
+        super(getMessage(exceptions));
+    }
+
+    private static String getMessage(Set<RuntimeException> exceptions) {
+        return listToString(exceptions, ",");
+    }
 }

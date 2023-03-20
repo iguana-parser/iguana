@@ -40,32 +40,32 @@ import java.util.*;
  *
  */
 public class RuntimeRule {
-	
+
     private final Nonterminal head;
 
     private final List<Symbol> body;
 
-	private final Symbol layout;
-	
-	private final LayoutStrategy layoutStrategy;
-	
-	private final Recursion recursion;
-	private final Recursion irecursion;
-	
-	private final String leftEnd;
-	private final String rightEnd;
-	
-	private final Set<String> leftEnds;
-	private final Set<String> rightEnds;
-		
-	private final Associativity associativity;
-	private final AssociativityGroup associativityGroup;
-	
-	private final int precedence;
-	private final PrecedenceLevel precedenceLevel;
-	
-	private final String label;
-	
+    private final Symbol layout;
+
+    private final LayoutStrategy layoutStrategy;
+
+    private final Recursion recursion;
+    private final Recursion irecursion;
+
+    private final String leftEnd;
+    private final String rightEnd;
+
+    private final Set<String> leftEnds;
+    private final Set<String> rightEnds;
+
+    private final Associativity associativity;
+    private final AssociativityGroup associativityGroup;
+
+    private final int precedence;
+    private final PrecedenceLevel precedenceLevel;
+
+    private final String label;
+
     private final Map<String, Object> attributes;
 
     private final Symbol definition; // Used for converted EBNF nodes
@@ -91,12 +91,12 @@ public class RuntimeRule {
     }
 
     public Nonterminal getHead() {
-		return head;
-	}
-	
-	public List<Symbol> getBody() {
-		return body;
-	}
+        return head;
+    }
+
+    public List<Symbol> getBody() {
+        return body;
+    }
 
     public Symbol getFirstSymbol() {
         return symbolAt(0);
@@ -105,106 +105,106 @@ public class RuntimeRule {
     public Symbol getLastSymbol() {
         return symbolAt(size() - 1);
     }
-	
-	public int size() {
-		return body == null ? 0 : body.size();
-	}
-	
-	public Symbol symbolAt(int i) {
-		if (i > body.size())
-			throw new IllegalArgumentException(i + " cannot be greater than " + body.size());
-		
-		return body.get(i);
-	}
-	
-	public Symbol getLayout() {
-		return layout;
-	}
-	
-	public LayoutStrategy getLayoutStrategy() {
-		return layoutStrategy;
-	}
-	
-	public boolean isUnary() {
-		return recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
-	}
-	
-	public boolean isLeftRecursive() {
-		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
-	}
-	
-	public boolean isILeftRecursive() {
-		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC;
-	}
-	
-	public boolean isRightRecursive() {
-		return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
-	}
-	
-	public boolean isIRightRecursive() {
-		return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iRIGHT_REC;
-	}
-	
-	public boolean isLeftOrRightRecursive() {
+
+    public int size() {
+        return body == null ? 0 : body.size();
+    }
+
+    public Symbol symbolAt(int i) {
+        if (i > body.size())
+            throw new IllegalArgumentException(i + " cannot be greater than " + body.size());
+
+        return body.get(i);
+    }
+
+    public Symbol getLayout() {
+        return layout;
+    }
+
+    public LayoutStrategy getLayoutStrategy() {
+        return layoutStrategy;
+    }
+
+    public boolean isUnary() {
+        return recursion == Recursion.LEFT_REC || recursion == Recursion.RIGHT_REC;
+    }
+
+    public boolean isLeftRecursive() {
+        return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.LEFT_REC;
+    }
+
+    public boolean isILeftRecursive() {
+        return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iLEFT_REC;
+    }
+
+    public boolean isRightRecursive() {
+        return recursion == Recursion.LEFT_RIGHT_REC || recursion == Recursion.RIGHT_REC;
+    }
+
+    public boolean isIRightRecursive() {
+        return irecursion == Recursion.iLEFT_RIGHT_REC || irecursion == Recursion.iRIGHT_REC;
+    }
+
+    public boolean isLeftOrRightRecursive() {
         return recursion == Recursion.LEFT_RIGHT_REC ||
                recursion == Recursion.LEFT_REC ||
                recursion == Recursion.RIGHT_REC;
-	}
-	
-	public boolean isILeftOrRightRecursive() {
+    }
+
+    public boolean isILeftOrRightRecursive() {
         return irecursion == Recursion.iLEFT_RIGHT_REC ||
                irecursion == Recursion.iLEFT_REC ||
                irecursion == Recursion.iRIGHT_REC;
-	}
-	
-	public Recursion getRecursion() {
-		return recursion;
-	}
-	
-	public Recursion getIRecursion() {
-		return irecursion;
-	}
-	
-	public String getLeftEnd() {
-		return leftEnd;
-	}
-	
-	public String getRightEnd() {
-		return rightEnd;
-	}
-	
-	public Set<String> getLeftEnds() {
-		return leftEnds;
-	}
-	
-	public Set<String> getRightEnds() {
-		return rightEnds;
-	}
-	
-	public Associativity getAssociativity() {
-		return associativity;
-	}
-	
-	public AssociativityGroup getAssociativityGroup() {
-		return associativityGroup;
-	}
-	
-	public int getPrecedence() {
-		return precedence;
-	}
-	
-	public PrecedenceLevel getPrecedenceLevel() {
-		return precedenceLevel;
-	}
-	
-	public String getLabel() {
-		return label;
-	}
-	
-	public boolean hasLayout() {
-		return layout != null;
-	}
-	
+    }
+
+    public Recursion getRecursion() {
+        return recursion;
+    }
+
+    public Recursion getIRecursion() {
+        return irecursion;
+    }
+
+    public String getLeftEnd() {
+        return leftEnd;
+    }
+
+    public String getRightEnd() {
+        return rightEnd;
+    }
+
+    public Set<String> getLeftEnds() {
+        return leftEnds;
+    }
+
+    public Set<String> getRightEnds() {
+        return rightEnds;
+    }
+
+    public Associativity getAssociativity() {
+        return associativity;
+    }
+
+    public AssociativityGroup getAssociativityGroup() {
+        return associativityGroup;
+    }
+
+    public int getPrecedence() {
+        return precedence;
+    }
+
+    public PrecedenceLevel getPrecedenceLevel() {
+        return precedenceLevel;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean hasLayout() {
+        return layout != null;
+    }
+
     public Map<String, Object> getAttributes() {
         return attributes;
     }
@@ -214,12 +214,12 @@ public class RuntimeRule {
     }
 
     @Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(head).append(" = ");
-		for (Symbol s : body) {
-			sb.append(s).append(" ");
-		}
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(head).append(" = ");
+        for (Symbol s : body) {
+            sb.append(s).append(" ");
+        }
 
         if (associativity != Associativity.UNDEFINED && precedence != 0) {
             sb.append(" {").append(associativity.name());
@@ -233,62 +233,62 @@ public class RuntimeRule {
         if (label != null) sb.append(label);
 
         return sb.toString();
-	}
-	
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof RuntimeRule)) return false;
-		
-		RuntimeRule other = (RuntimeRule) obj;
+    }
 
-		return head.equals(other.head) && Objects.equals(body, other.body);
-	}
-	
-	@Override
-	public int hashCode() {
-		return MurmurHash3.fn().apply(head, body);
-	}
-	
-	public Position getPosition(int i) {
-		if (i < 0)
-			throw new IllegalArgumentException("i cannot be less than zero.");
-		
-		if (i > size())
-			throw new IllegalArgumentException("i cannot be greater than the size.");
-		
-		return new Position(this, i);
-	}
-	
-	public Position getPosition(int i, int j) {
-		if (i < 0)
-			throw new IllegalArgumentException("i cannot be less than zero.");
-		
-		if (i > size())
-			throw new IllegalArgumentException("i cannot be greater than the size.");
-		
-		return new Position(this, i, j);
-	}
-	
-	public Builder copy() {
-		return new Builder(this);
-	}
-	
-	public Builder copyBuilderButWithHead(Nonterminal nonterminal) {
-		Builder builder = new Builder(this);
-		builder.head = nonterminal;
-		return builder;
-	}
-	
-	public static Builder withHead(Nonterminal nonterminal) {
-		return new Builder(nonterminal);
-	}
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof RuntimeRule)) return false;
+
+        RuntimeRule other = (RuntimeRule) obj;
+
+        return head.equals(other.head) && Objects.equals(body, other.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return MurmurHash3.fn().apply(head, body);
+    }
+
+    public Position getPosition(int i) {
+        if (i < 0)
+            throw new IllegalArgumentException("i cannot be less than zero.");
+
+        if (i > size())
+            throw new IllegalArgumentException("i cannot be greater than the size.");
+
+        return new Position(this, i);
+    }
+
+    public Position getPosition(int i, int j) {
+        if (i < 0)
+            throw new IllegalArgumentException("i cannot be less than zero.");
+
+        if (i > size())
+            throw new IllegalArgumentException("i cannot be greater than the size.");
+
+        return new Position(this, i, j);
+    }
+
+    public Builder copy() {
+        return new Builder(this);
+    }
+
+    public Builder copyBuilderButWithHead(Nonterminal nonterminal) {
+        Builder builder = new Builder(this);
+        builder.head = nonterminal;
+        return builder;
+    }
+
+    public static Builder withHead(Nonterminal nonterminal) {
+        return new Builder(nonterminal);
+    }
 
     public String head() {
         return head.getName();
     }
 
     public String label() {
-    	return label;
+        return label;
     }
         
 
@@ -469,5 +469,5 @@ public class RuntimeRule {
             return new RuntimeRule(this);
         }
     }
-	
+
 }

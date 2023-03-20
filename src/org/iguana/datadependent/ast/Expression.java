@@ -741,8 +741,8 @@ public abstract class Expression extends AbstractAST {
 
         @Override
         public java.lang.String toString() {
-//			return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
-//					          : first + " && " + lExt + " - " + index + " == 0";
+//            return returnIndex? "(" +first + " && " + lExt + " - " + index + " == 0)?" + index
+//                              : first + " && " + lExt + " - " + index + " == 0";
             return returnIndex ? java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 1)
                 : java.lang.String.format("g(%s,%s,%s,%s)", index, first, lExt, 0);
         }

@@ -32,8 +32,8 @@ import org.iguana.datadependent.ast.Expression;
 @SuppressWarnings("serial")
 public class UnexpectedTypeOfArgumentException extends RuntimeException {
 
-	public UnexpectedTypeOfArgumentException(Expression expression) {
-		super("Unexpected type of an operand: " + expression);
-	}
+    public UnexpectedTypeOfArgumentException(Expression expression) {
+        super("Unexpected type of an operand: " + expression);
+    }
 
 }

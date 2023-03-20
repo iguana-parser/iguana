@@ -38,63 +38,63 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
 
-	protected final String name;
+    protected final String name;
 
-	protected final String label;
+    protected final String label;
 
-	protected final List<Condition> preConditions;
+    protected final List<Condition> preConditions;
 
-	protected final List<Condition> postConditions;
+    protected final List<Condition> postConditions;
 
-	private final Map<String, Object> attributes;
+    private final Map<String, Object> attributes;
 
-	public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
-		if (builder.name == null) 
-			throw new IllegalArgumentException("Name cannot be null");
-		this.name = builder.name;
-		this.label = builder.label;
-		this.preConditions = builder.preConditions.isEmpty() ? Collections.emptyList() : builder.preConditions;
-		this.postConditions = builder.postConditions.isEmpty() ? Collections.emptyList() : builder.postConditions;
-		this.attributes = builder.attributes.isEmpty() ? Collections.emptyMap() : builder.attributes;
-	}
-	
-	@Override
-	public List<Condition> getPreConditions() {
-		return preConditions;
-	}
-	
-	@Override
-	public List<Condition> getPostConditions() {
-		return postConditions;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-	
-	@Override
-	public String getLabel() {
-		return label;
-	}
+    public AbstractSymbol(SymbolBuilder<? extends Symbol> builder) {
+        if (builder.name == null)
+            throw new IllegalArgumentException("Name cannot be null");
+        this.name = builder.name;
+        this.label = builder.label;
+        this.preConditions = builder.preConditions.isEmpty() ? Collections.emptyList() : builder.preConditions;
+        this.postConditions = builder.postConditions.isEmpty() ? Collections.emptyList() : builder.postConditions;
+        this.attributes = builder.attributes.isEmpty() ? Collections.emptyMap() : builder.attributes;
+    }
 
-	@Override
-	public String toString() {
-		String s = label == null ? name : label + ":" + name;
-		if (!preConditions.isEmpty())
-			s += " " + listToString(preConditions);
-		if (!postConditions.isEmpty())
-			s += " " + listToString(postConditions);
-		return s;
-	}
-	
-	@Override
-	public String toString(int j) {
-		return this + (j == 1 ? " . " : "");
-	}
+    @Override
+    public List<Condition> getPreConditions() {
+        return preConditions;
+    }
 
-	@Override
-	public Map<String, Object> getAttributes() {
-		return attributes;
-	}
+    @Override
+    public List<Condition> getPostConditions() {
+        return postConditions;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        String s = label == null ? name : label + ":" + name;
+        if (!preConditions.isEmpty())
+            s += " " + listToString(preConditions);
+        if (!postConditions.isEmpty())
+            s += " " + listToString(postConditions);
+        return s;
+    }
+
+    @Override
+    public String toString(int j) {
+        return this + (j == 1 ? " . " : "");
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 }

@@ -39,143 +39,143 @@ import static org.iguana.utils.visualization.DotGraph.newEdge;
 import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class SPPFToDot implements SPPFVisitor<Void>  {
-	
-	private final boolean showPackedNodeLabel;
 
-	private final Map<SPPFNode, Integer> ids = new HashMap<>();
-	
-	private final DotGraph dotGraph;
+    private final boolean showPackedNodeLabel;
 
-	protected Input input;
-	
-	private final Set<NonPackedNode> visited = new HashSet<>();
+    private final Map<SPPFNode, Integer> ids = new HashMap<>();
 
-	public static DotGraph getDotGraph(SPPFNode root, Input input) {
-		return getDotGraph(root, input, false);
-	}
+    private final DotGraph dotGraph;
 
-	public static DotGraph getDotGraph(SPPFNode root, Input input, boolean showPackedNodeLabel) {
-		DotGraph dotGraph = new DotGraph();
-		SPPFToDot sppfToDot = new SPPFToDot(input, dotGraph, showPackedNodeLabel);
-		root.accept(sppfToDot);
-		return dotGraph;
-	}
+    protected Input input;
 
-	public SPPFToDot(Input input, DotGraph dotGraph, boolean showPackedNodeLabel) {
-		this.input = input;
-		this.showPackedNodeLabel = showPackedNodeLabel;
-		this.dotGraph = dotGraph;
-	}
+    private final Set<NonPackedNode> visited = new HashSet<>();
 
-	@Override
-	public Void visit(TerminalNode node) {
-		if (!visited.contains(node)) {
-			visited.add(node);
-			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(),
-				node.getRightExtent(), matchedInput);
-			dotGraph.addNode(newNode(getId(node), label));
-		}
+    public static DotGraph getDotGraph(SPPFNode root, Input input) {
+        return getDotGraph(root, input, false);
+    }
 
-		return null;
-	}
+    public static DotGraph getDotGraph(SPPFNode root, Input input, boolean showPackedNodeLabel) {
+        DotGraph dotGraph = new DotGraph();
+        SPPFToDot sppfToDot = new SPPFToDot(input, dotGraph, showPackedNodeLabel);
+        root.accept(sppfToDot);
+        return dotGraph;
+    }
 
-	@Override
-	public Void visit(NonterminalNode node) {
-		if (!visited.contains(node)) {
-			visited.add(node);
-			
-			String label;
-			if (node.getValue() == null)
-				label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
-					node.getRightExtent());
-			else {
-				if (node.getValue() instanceof List<?>)
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
-						node.getRightExtent(),
-						"(" + listToString((List<?>) node.getValue(), ",") + ")");
-				else
-					label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
-						node.getRightExtent(), node.getValue());
-			}
+    public SPPFToDot(Input input, DotGraph dotGraph, boolean showPackedNodeLabel) {
+        this.input = input;
+        this.showPackedNodeLabel = showPackedNodeLabel;
+        this.dotGraph = dotGraph;
+    }
 
-			DotGraph.Node dotNode = newNode(getId(node), label);
-			if (node.isAmbiguous()) {
-				dotNode.setColor(DotGraph.Color.RED);
-			}
-			dotGraph.addNode(dotNode);
-			addEdgesToChildren(node);
-			
-			visitChildren(node);
-		}
-		return null;
-	}
+    @Override
+    public Void visit(TerminalNode node) {
+        if (!visited.contains(node)) {
+            visited.add(node);
+            String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
+            String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(),
+                node.getRightExtent(), matchedInput);
+            dotGraph.addNode(newNode(getId(node), label));
+        }
 
-	@Override
-	public Void visit(IntermediateNode node) {
-		if (!visited.contains(node)) {
-			visited.add(node);
+        return null;
+    }
 
-			String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
-				node.getRightExtent());
+    @Override
+    public Void visit(NonterminalNode node) {
+        if (!visited.contains(node)) {
+            visited.add(node);
 
-			DotGraph.Node dotNode = newNode(getId(node), label).setShape(DotGraph.Shape.RECTANGLE);
-			if (node.isAmbiguous()) {
-				dotNode.setColor(DotGraph.Color.RED);
-			}
-			dotGraph.addNode(dotNode);
-			addEdgesToChildren(node);
-	
-			visitChildren(node);
-		}
-		return null;
-	}
+            String label;
+            if (node.getValue() == null)
+                label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
+                    node.getRightExtent());
+            else {
+                if (node.getValue() instanceof List<?>)
+                    label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
+                        node.getRightExtent(),
+                        "(" + listToString((List<?>) node.getValue(), ",") + ")");
+                else
+                    label = String.format("(%s, %d, %d, %s)", node.getGrammarSlot(), node.getLeftExtent(),
+                        node.getRightExtent(), node.getValue());
+            }
 
-	@Override
-	public Void visit(PackedNode node) {
-		DotGraph.Node dotNode = newNode(getId(node)).setShape(DotGraph.Shape.CIRCLE);
-		if (showPackedNodeLabel) {
-			dotNode.setLabel(node.toString());
-		}
-		dotGraph.addNode(dotNode);
+            DotGraph.Node dotNode = newNode(getId(node), label);
+            if (node.isAmbiguous()) {
+                dotNode.setColor(DotGraph.Color.RED);
+            }
+            dotGraph.addNode(dotNode);
+            addEdgesToChildren(node);
 
-		addEdgesToChildren(node);
-		
-		visitChildren(node);
-		return null;
-	}
+            visitChildren(node);
+        }
+        return null;
+    }
 
-	@Override
-	public Void visit(ErrorNode node) {
-		if (!visited.contains(node)) {
-			visited.add(node);
-			String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-			String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(),
-				matchedInput);
-			dotGraph.addNode(newNode(getId(node), label));
-		}
+    @Override
+    public Void visit(IntermediateNode node) {
+        if (!visited.contains(node)) {
+            visited.add(node);
 
-		return null;
-	}
+            String label = String.format("(%s, %d, %d)", node.getGrammarSlot(), node.getLeftExtent(),
+                node.getRightExtent());
 
-	private void addEdgesToChildren(SPPFNode node) {
-	    for (int i = 0; i < node.childrenCount(); i++) {
+            DotGraph.Node dotNode = newNode(getId(node), label).setShape(DotGraph.Shape.RECTANGLE);
+            if (node.isAmbiguous()) {
+                dotNode.setColor(DotGraph.Color.RED);
+            }
+            dotGraph.addNode(dotNode);
+            addEdgesToChildren(node);
+
+            visitChildren(node);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(PackedNode node) {
+        DotGraph.Node dotNode = newNode(getId(node)).setShape(DotGraph.Shape.CIRCLE);
+        if (showPackedNodeLabel) {
+            dotNode.setLabel(node.toString());
+        }
+        dotGraph.addNode(dotNode);
+
+        addEdgesToChildren(node);
+
+        visitChildren(node);
+        return null;
+    }
+
+    @Override
+    public Void visit(ErrorNode node) {
+        if (!visited.contains(node)) {
+            visited.add(node);
+            String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
+            String label = String.format("(Error, %d, %d): \"%s\"", node.getLeftExtent(), node.getRightExtent(),
+                matchedInput);
+            dotGraph.addNode(newNode(getId(node), label));
+        }
+
+        return null;
+    }
+
+    private void addEdgesToChildren(SPPFNode node) {
+        for (int i = 0; i < node.childrenCount(); i++) {
             addEdgeToChild(node, node.getChildAt(i));
         }
-	}
-	
-	private void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
-		dotGraph.addEdge(newEdge(getId(parentNode), getId(childNode)));
-	}
-	
-	private void visitChildren(SPPFNode node) {
+    }
+
+    private void addEdgeToChild(SPPFNode parentNode, SPPFNode childNode) {
+        dotGraph.addEdge(newEdge(getId(parentNode), getId(childNode)));
+    }
+
+    private void visitChildren(SPPFNode node) {
         for (int i = 0; i < node.childrenCount(); i++) {
             node.getChildAt(i).accept(this);
         }
-	}
+    }
 
-	private int getId(SPPFNode node) {
-		return ids.computeIfAbsent(node, k -> ids.size() + 1);
-	}
+    private int getId(SPPFNode node) {
+        return ids.computeIfAbsent(node, k -> ids.size() + 1);
+    }
 
 }

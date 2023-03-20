@@ -32,8 +32,8 @@ import org.iguana.utils.function.IntFunctionAny;
 
 public class MurmurHash2 {
 
-	private final static int m = 0x5bd1e995;
-	private final static int r = 24;
+    private final static int m = 0x5bd1e995;
+    private final static int r = 24;
 
     public static IntFunction5 hash5() {
         return hash5(19);
@@ -78,7 +78,7 @@ public class MurmurHash2 {
         return hash4(19);
     }
 
-	public static org.iguana.utils.function.IntFunction4 hash4(int seed) {
+    public static org.iguana.utils.function.IntFunction4 hash4(int seed) {
         return (a, b, c, d) -> {
 
             int h = seed ^ 4;
@@ -111,13 +111,13 @@ public class MurmurHash2 {
 
             return h;
         };
-	}
+    }
 
     public static org.iguana.utils.function.IntFunction3 hash3() {
         return hash3(19);
     }
 
-	public static org.iguana.utils.function.IntFunction3 hash3(int seed) {
+    public static org.iguana.utils.function.IntFunction3 hash3(int seed) {
         return (a, b, c) -> {
 
             int h = seed ^ 4;

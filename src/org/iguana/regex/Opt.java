@@ -35,67 +35,67 @@ import java.util.Set;
 
 public class Opt extends AbstractRegularExpression {
 
-	private final RegularExpression regex;
-	
-	private Opt(Builder builder) {
-		super(builder);
-		this.regex = builder.regex;
-	}
+    private final RegularExpression regex;
 
-	public static Opt from(RegularExpression s) {
-		return builder(s).build();
-	}
-	
-	public RegularExpression getSymbol() {
-		return regex;
-	}
+    private Opt(Builder builder) {
+        super(builder);
+        this.regex = builder.regex;
+    }
 
-	@Override
-	public int length() {
-		return regex.length();
-	}
-	
-	@Override
-	public boolean isNullable() {
-		return true;
-	}
-	
-	@Override
-	public Set<org.iguana.regex.CharRange> getFirstSet() {
-		return regex.getFirstSet();
-	}
-	
-	@Override
-	public Set<CharRange> getNotFollowSet() {
-		return Collections.emptySet();
-	}
+    public static Opt from(RegularExpression s) {
+        return builder(s).build();
+    }
 
-	@Override
-	public List<RegularExpression> getChildren() {
-		return Collections.singletonList(regex);
-	}
+    public RegularExpression getSymbol() {
+        return regex;
+    }
 
-	@Override
-	public Builder copy() {
-		return new Builder(regex);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Opt))
-			return false;
-		
-		Opt other = (Opt) obj;
-		return regex.equals(other.regex);
-	}
-	
-	@Override
-	public int hashCode() {
-		return regex.hashCode();
-	}
+    @Override
+    public int length() {
+        return regex.length();
+    }
+
+    @Override
+    public boolean isNullable() {
+        return true;
+    }
+
+    @Override
+    public Set<org.iguana.regex.CharRange> getFirstSet() {
+        return regex.getFirstSet();
+    }
+
+    @Override
+    public Set<CharRange> getNotFollowSet() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public List<RegularExpression> getChildren() {
+        return Collections.singletonList(regex);
+    }
+
+    @Override
+    public Builder copy() {
+        return new Builder(regex);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Opt))
+            return false;
+
+        Opt other = (Opt) obj;
+        return regex.equals(other.regex);
+    }
+
+    @Override
+    public int hashCode() {
+        return regex.hashCode();
+    }
 
     @Override
     public String toString() {
@@ -103,47 +103,47 @@ public class Opt extends AbstractRegularExpression {
     }
 
     public static Builder builder(RegularExpression s) {
-		return new Builder(s);
-	}
-	
-	public static class Builder extends RegexBuilder<Opt> {
+        return new Builder(s);
+    }
 
-		private RegularExpression regex;
+    public static class Builder extends RegexBuilder<Opt> {
 
-		private Builder() {}
+        private RegularExpression regex;
 
-		public Builder(RegularExpression regex) {
-			this.regex = regex;
-		}
-		
-		public Builder(Opt opt) {
-			super(opt);
-			this.regex = opt.regex;
-		}
+        private Builder() {}
 
-		public Builder setSymbol(RegularExpression regex) {
-			this.regex = regex;
-			return this;
-		}
+        public Builder(RegularExpression regex) {
+            this.regex = regex;
+        }
 
-		@Override
-		public RegexBuilder<Opt> setChildren(List<RegularExpression> children) {
-			if (children.size() != 1) {
-				throw new RuntimeException("Children size should be one.");
-			}
-			this.regex = children.get(0);
-			return this;
-		}
+        public Builder(Opt opt) {
+            super(opt);
+            this.regex = opt.regex;
+        }
 
-		@Override
-		public Opt build() {
-			return new Opt(this);
-		}
-	}
+        public Builder setSymbol(RegularExpression regex) {
+            this.regex = regex;
+            return this;
+        }
 
-	@Override
-	public <T> T accept(RegularExpressionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-	
+        @Override
+        public RegexBuilder<Opt> setChildren(List<RegularExpression> children) {
+            if (children.size() != 1) {
+                throw new RuntimeException("Children size should be one.");
+            }
+            this.regex = children.get(0);
+            return this;
+        }
+
+        @Override
+        public Opt build() {
+            return new Opt(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(RegularExpressionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
 }

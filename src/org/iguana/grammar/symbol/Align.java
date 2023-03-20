@@ -34,92 +34,92 @@ import java.util.List;
 import java.util.Objects;
 
 public class Align extends AbstractSymbol {
-	
-	private final Symbol symbol;
 
-	Align(Builder builder) {
-		super(builder);
-		this.symbol = builder.symbol;
-	}
-	
-	public static Align align(Symbol symbol) {
-		return new Builder(symbol).build();
-	}
-	
-	public Symbol getSymbol() {
-		return symbol;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
-	
-	@Override
-	public int size() {
-		return symbol.size();
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format("align %s", symbol.toString(j));
-	}
+    private final Symbol symbol;
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(symbol);
-	}
+    Align(Builder builder) {
+        super(builder);
+        this.symbol = builder.symbol;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Align)) return false;
-		Align align = (Align) o;
-		return Objects.equals(symbol, align.symbol);
-	}
+    public static Align align(Symbol symbol) {
+        return new Builder(symbol).build();
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(symbol);
-	}
+    public Symbol getSymbol() {
+        return symbol;
+    }
 
-	public static class Builder extends SymbolBuilder<Align> {
-		
-		private Symbol symbol;
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		public Builder() { }
+    @Override
+    public int size() {
+        return symbol.size();
+    }
 
-		public Builder(Align align) {
-			super(align);
-			this.symbol = align.symbol;
-		}
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
-		public Builder(Symbol symbol) {
-			this.symbol = symbol;
-		}
+    @Override
+    public String toString(int j) {
+        return String.format("align %s", symbol.toString(j));
+    }
 
-		@Override
-		public SymbolBuilder<Align> setChildren(List<Symbol> symbols) {
-			this.symbol = symbols.get(0);
-			return this;
-		}
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(symbol);
+    }
 
-		@Override
-		public Align build() {
-			this.name = String.format("align %s", symbol.toString());
-			return new Align(this);
-		}
-		
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Align)) return false;
+        Align align = (Align) o;
+        return Objects.equals(symbol, align.symbol);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(symbol);
+    }
+
+    public static class Builder extends SymbolBuilder<Align> {
+
+        private Symbol symbol;
+
+        public Builder() { }
+
+        public Builder(Align align) {
+            super(align);
+            this.symbol = align.symbol;
+        }
+
+        public Builder(Symbol symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public SymbolBuilder<Align> setChildren(List<Symbol> symbols) {
+            this.symbol = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Align build() {
+            this.name = String.format("align %s", symbol.toString());
+            return new Align(this);
+        }
+
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

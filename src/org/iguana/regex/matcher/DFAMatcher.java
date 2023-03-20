@@ -42,95 +42,95 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DFAMatcher implements Matcher {
-	
-	public static final int ERROR_STATE = -2;
 
-	protected IntRangeMap[] table;
+    public static final int ERROR_STATE = -2;
 
-	protected final boolean[] finalStates;
+    protected IntRangeMap[] table;
 
-	protected final int start;
+    protected final boolean[] finalStates;
 
-	protected final Map<Integer, State> finalStatesMap;
+    protected final int start;
 
-	private int finalStateId;
+    protected final Map<Integer, State> finalStatesMap;
 
-	public DFAMatcher(RegularExpression regex) {
-		this(regex.getAutomaton());
-	}
+    private int finalStateId;
 
-	public DFAMatcher(Automaton automaton) {
-		automaton = AutomatonOperations.makeDeterministic(automaton);
-		finalStatesMap = new HashMap<>();
+    public DFAMatcher(RegularExpression regex) {
+        this(regex.getAutomaton());
+    }
 
-		finalStates = new boolean[automaton.getStates().length];
+    public DFAMatcher(Automaton automaton) {
+        automaton = AutomatonOperations.makeDeterministic(automaton);
+        finalStatesMap = new HashMap<>();
 
-		int size = automaton.getCountStates();
-		table = new IntRangeMap[size];
+        finalStates = new boolean[automaton.getStates().length];
 
-		for (int i = 0; i < size; i++) {
-			RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();
-			State state = automaton.getStates()[i];
-			for (Transition transition : state.getTransitions()) {
-				builder.put(transition.getRange(), transition.getDestination().getId());
-			}
-			table[i] = builder.buildIntRangeMap();
+        int size = automaton.getCountStates();
+        table = new IntRangeMap[size];
 
-			finalStates[state.getId()] = state.isFinalState();
-			if (state.isFinalState()) {
-				finalStatesMap.put(state.getId(), state);
-			}
-		}
+        for (int i = 0; i < size; i++) {
+            RangeMapBuilder<Integer> builder = new RangeMapBuilder<>();
+            State state = automaton.getStates()[i];
+            for (Transition transition : state.getTransitions()) {
+                builder.put(transition.getRange(), transition.getDestination().getId());
+            }
+            table[i] = builder.buildIntRangeMap();
 
-		this.start = automaton.getStartState().getId();
-	}
+            finalStates[state.getId()] = state.isFinalState();
+            if (state.isFinalState()) {
+                finalStatesMap.put(state.getId(), state);
+            }
+        }
 
-	@Override
-	public int match(Input input, int inputIndex) {
-		int length = 0;
-		int maximumMatched = -1;
-		int state = start;
-		finalStateId = -1;
+        this.start = automaton.getStartState().getId();
+    }
 
-		if (finalStates[state]) {
-			maximumMatched = 0;
-			finalStateId = state;
-		}
+    @Override
+    public int match(Input input, int inputIndex) {
+        int length = 0;
+        int maximumMatched = -1;
+        int state = start;
+        finalStateId = -1;
 
-		for (int i = inputIndex; i < input.length(); i++) {
-			state = table[state].get(input.charAt(i));
+        if (finalStates[state]) {
+            maximumMatched = 0;
+            finalStateId = state;
+        }
 
-			if (state == ERROR_STATE)
-				break;
+        for (int i = inputIndex; i < input.length(); i++) {
+            state = table[state].get(input.charAt(i));
 
-			length++;
+            if (state == ERROR_STATE)
+                break;
 
-			if (finalStates[state]) {
-				maximumMatched = length;
-				finalStateId = state;
-			}
-		}
+            length++;
 
-		return maximumMatched;
-	}
+            if (finalStates[state]) {
+                maximumMatched = length;
+                finalStateId = state;
+            }
+        }
 
-	public RegularExpression getMatchedRegularExpression() {
-		if (finalStateId == -1) {
-			throw new IllegalStateException("This method should be called after a successful match.");
-		}
-		if (finalStatesMap.get(finalStateId).getRegularExpressions().isEmpty()) {
-			return EOF.getInstance();
-		}
+        return maximumMatched;
+    }
 
-		int min = Integer.MAX_VALUE;
-		RegularExpression matchedRegularExpression = null;
-		for (Tuple<RegularExpression, Integer> t : finalStatesMap.get(finalStateId).getRegularExpressions()) {
-			if (t.getSecond() < min) {
-				min = t.getSecond();
-				matchedRegularExpression = t.getFirst();
-			}
-		}
-		return matchedRegularExpression;
-	}
+    public RegularExpression getMatchedRegularExpression() {
+        if (finalStateId == -1) {
+            throw new IllegalStateException("This method should be called after a successful match.");
+        }
+        if (finalStatesMap.get(finalStateId).getRegularExpressions().isEmpty()) {
+            return EOF.getInstance();
+        }
+
+        int min = Integer.MAX_VALUE;
+        RegularExpression matchedRegularExpression = null;
+        for (Tuple<RegularExpression, Integer> t : finalStatesMap.get(finalStateId).getRegularExpressions()) {
+            if (t.getSecond() < min) {
+                min = t.getSecond();
+                matchedRegularExpression = t.getFirst();
+            }
+        }
+        return matchedRegularExpression;
+    }
 
 }

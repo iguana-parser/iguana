@@ -32,20 +32,20 @@ import org.iguana.result.Result;
 import org.iguana.traversal.SPPFVisitor;
 
 public interface SPPFNode extends Result {
-	
-	SPPFNode getChildAt(int index);
 
-	int childrenCount();
+    SPPFNode getChildAt(int index);
 
-	GrammarSlot getGrammarSlot();
+    int childrenCount();
 
-	int getLeftExtent();
+    GrammarSlot getGrammarSlot();
 
-	<R> R accept(SPPFVisitor<R> visitor);
+    int getLeftExtent();
 
-	default Object getValue() {
-		return null;
-	}
-	
-	default boolean isDummy() { return false; }
+    <R> R accept(SPPFVisitor<R> visitor);
+
+    default Object getValue() {
+        return null;
+    }
+
+    default boolean isDummy() { return false; }
 }

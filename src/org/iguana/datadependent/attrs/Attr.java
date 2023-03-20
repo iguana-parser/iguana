@@ -30,9 +30,9 @@ package org.iguana.datadependent.attrs;
 import io.usethesource.capsule.Set;
 
 public interface Attr {
-	
-	Set.Immutable<String> getEnv();
-	void setEnv(Set.Immutable<String> env);
-	void setEmpty();
+
+    Set.Immutable<String> getEnv();
+    void setEnv(Set.Immutable<String> env);
+    void setEmpty();
 
 }

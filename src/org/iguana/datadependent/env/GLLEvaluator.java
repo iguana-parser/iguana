@@ -34,26 +34,26 @@ import org.iguana.datadependent.env.simple.SimpleEvaluatorContext;
 import org.iguana.util.Configuration;
 
 public class GLLEvaluator {
-	
-	public static IEvaluatorContext getDefaultEvaluatorContext() {
-		// return new PersistentEvaluatorContext(input);
-		// return new SimpleEvaluatorContext(input);
-		return new ArrayEvaluatorContext();
-	}
-	
-	public static IEvaluatorContext getEvaluatorContext(Configuration config) {
-		switch(config.getEnvImpl()) {
-			case ARRAY: 
-				return new ArrayEvaluatorContext();
-			case INT_ARRAY:
-				return new IntArrayEvaluatorContext();
-			case HASH_MAP:
-				return new SimpleEvaluatorContext();
-			case TRIE: 
-				return new PersistentEvaluatorContext();
-			default:
-				throw new RuntimeException("Should not have happened!");
-		}
-	}
+
+    public static IEvaluatorContext getDefaultEvaluatorContext() {
+        // return new PersistentEvaluatorContext(input);
+        // return new SimpleEvaluatorContext(input);
+        return new ArrayEvaluatorContext();
+    }
+
+    public static IEvaluatorContext getEvaluatorContext(Configuration config) {
+        switch(config.getEnvImpl()) {
+            case ARRAY:
+                return new ArrayEvaluatorContext();
+            case INT_ARRAY:
+                return new IntArrayEvaluatorContext();
+            case HASH_MAP:
+                return new SimpleEvaluatorContext();
+            case TRIE:
+                return new PersistentEvaluatorContext();
+            default:
+                throw new RuntimeException("Should not have happened!");
+        }
+    }
 
 }

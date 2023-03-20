@@ -36,26 +36,26 @@ import java.util.function.Consumer;
  */
 public class AutomatonVisitor {
 
-	public static void visit(Automaton automaton, Consumer<State> action) {
-		Set<State> visitedStates = new HashSet<>();
-		visit(automaton.getStartState(), action, visitedStates);
-	}
+    public static void visit(Automaton automaton, Consumer<State> action) {
+        Set<State> visitedStates = new HashSet<>();
+        visit(automaton.getStartState(), action, visitedStates);
+    }
 
-	public static void visit(State state, Consumer<State> action) {
-		Set<State> visitedStates = new HashSet<>();
-		visit(state, action, visitedStates);
-	}
-	
-	public static void visit(State state, Consumer<State> action, Set<State> visitedStates) {
-		action.accept(state);
-		visitedStates.add(state);
+    public static void visit(State state, Consumer<State> action) {
+        Set<State> visitedStates = new HashSet<>();
+        visit(state, action, visitedStates);
+    }
 
-		for (Transition transition : state.getTransitions()) {
-			State destination = transition.getDestination();
-			if (!visitedStates.contains(destination)) {
-				visit(destination, action, visitedStates);
-			}
-		}
-	}
-	
+    public static void visit(State state, Consumer<State> action, Set<State> visitedStates) {
+        action.accept(state);
+        visitedStates.add(state);
+
+        for (Transition transition : state.getTransitions()) {
+            State destination = transition.getDestination();
+            if (!visitedStates.contains(destination)) {
+                visit(destination, action, visitedStates);
+            }
+        }
+    }
+
 }

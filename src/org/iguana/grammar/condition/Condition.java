@@ -32,26 +32,26 @@ import org.iguana.traversal.IConditionVisitor;
 
 
 public abstract class Condition extends AbstractAttrs {
-	
-	protected final ConditionType type;
 
-	public Condition (ConditionType type) {
-		this.type = type;
-	}
-	
-	public ConditionType getType() {
-		return type;
-	}
+    protected final ConditionType type;
 
-	public abstract <T> T accept(IConditionVisitor<T> visitor);
-	
-	/*
-	 *
-	 * Data-dependent GLL parsing
-	 *
-	 */
-	public boolean isDataDependent() {
-		return false;
-	}
-	
+    public Condition (ConditionType type) {
+        this.type = type;
+    }
+
+    public ConditionType getType() {
+        return type;
+    }
+
+    public abstract <T> T accept(IConditionVisitor<T> visitor);
+
+    /*
+     *
+     * Data-dependent GLL parsing
+     *
+     */
+    public boolean isDataDependent() {
+        return false;
+    }
+
 }

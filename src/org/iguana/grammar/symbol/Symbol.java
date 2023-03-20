@@ -58,27 +58,27 @@ import java.util.Map;
  */
 public interface Symbol extends Attr {
 
-	String getName();
-	
-	List<Condition> getPreConditions();
-	
-	List<Condition> getPostConditions();
-	
-	String getLabel();
-	
-	SymbolBuilder<? extends Symbol> copy();
+    String getName();
 
-	default List<Symbol> getChildren() {
-		return Collections.emptyList();
-	}
-	
-	default int size() {
-		return 1;
-	}
-		
-	String toString(int j);
+    List<Condition> getPreConditions();
 
-	Map<String, Object> getAttributes();
-	
-	<T> T accept(ISymbolVisitor<T> visitor);
-}	
+    List<Condition> getPostConditions();
+
+    String getLabel();
+
+    SymbolBuilder<? extends Symbol> copy();
+
+    default List<Symbol> getChildren() {
+        return Collections.emptyList();
+    }
+
+    default int size() {
+        return 1;
+    }
+
+    String toString(int j);
+
+    Map<String, Object> getAttributes();
+
+    <T> T accept(ISymbolVisitor<T> visitor);
+}

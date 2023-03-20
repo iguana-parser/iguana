@@ -5,13 +5,13 @@ import org.iguana.datadependent.env.Environment;
 
 public class ArrayEvaluatorContext extends AbstractEvaluatorContext {
 
-	public ArrayEvaluatorContext() {
-		setEnvironment(ArrayEnvironment.EMPTY);
-	}
+    public ArrayEvaluatorContext() {
+        setEnvironment(ArrayEnvironment.EMPTY);
+    }
 
-	@Override
-	public Environment getEmptyEnvironment() {
-		return ArrayEnvironment.EMPTY;
-	}
+    @Override
+    public Environment getEmptyEnvironment() {
+        return ArrayEnvironment.EMPTY;
+    }
 
 }

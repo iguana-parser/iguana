@@ -37,90 +37,90 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Block extends AbstractSymbol {
 
-	private final List<Symbol> symbols;
+    private final List<Symbol> symbols;
 
-	Block(Builder builder) {
-		super(builder);
-		this.symbols = builder.symbols;
-	}
-	
-	public static Block block(Symbol... symbols) {
-		return new Builder(symbols).build();
-	}
-	
-	public List<Symbol> getSymbols() {
-		return symbols;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    Block(Builder builder) {
+        super(builder);
+        this.symbols = builder.symbols;
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return symbols;
-	}
+    public static Block block(Symbol... symbols) {
+        return new Builder(symbols).build();
+    }
 
-	@Override
-	public int size() {
-		int size = 0;
-		for (Symbol symbol: symbols)
-			size = size + symbol.size();
-		return size;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("{ %s }", listToString(symbols, " "));
-	}
-	
-	@Override
-	public String toString(int j) {
-		List<String> strings = new ArrayList<>(symbols.size());
-		
-		int k = 0;
-		for (Symbol symbol : symbols) {
-			strings.set(k, j <= 1? symbol.toString(j) : symbol.toString());
-			j = j - symbol.size();
-			k++;
-		}
-		
-		return String.format("{ %s }", listToString(strings, " "));
-	}
-	
-	public static class Builder extends SymbolBuilder<Block> {
-		
-		private List<Symbol> symbols;
+    public List<Symbol> getSymbols() {
+        return symbols;
+    }
 
-		public Builder(Block block) {
-			super(block);
-			this.symbols = block.symbols; 
-		}
-		
-		public Builder(Symbol...symbols) {
-			assert symbols.length != 0;
-			
-			this.symbols = Arrays.asList(symbols);
-		}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		@Override
-		public SymbolBuilder<Block> setChildren(List<Symbol> symbols) {
-			this.symbols = new ArrayList<>(symbols);
-			return this;
-		}
+    @Override
+    public List<Symbol> getChildren() {
+        return symbols;
+    }
 
-		@Override
-		public Block build() {
-			this.name = String.format("{ %s }", listToString(symbols, " "));
-			return new Block(this);
-		}
-		
-	}
+    @Override
+    public int size() {
+        int size = 0;
+        for (Symbol symbol: symbols)
+            size = size + symbol.size();
+        return size;
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public String toString() {
+        return String.format("{ %s }", listToString(symbols, " "));
+    }
+
+    @Override
+    public String toString(int j) {
+        List<String> strings = new ArrayList<>(symbols.size());
+
+        int k = 0;
+        for (Symbol symbol : symbols) {
+            strings.set(k, j <= 1? symbol.toString(j) : symbol.toString());
+            j = j - symbol.size();
+            k++;
+        }
+
+        return String.format("{ %s }", listToString(strings, " "));
+    }
+
+    public static class Builder extends SymbolBuilder<Block> {
+
+        private List<Symbol> symbols;
+
+        public Builder(Block block) {
+            super(block);
+            this.symbols = block.symbols;
+        }
+
+        public Builder(Symbol...symbols) {
+            assert symbols.length != 0;
+
+            this.symbols = Arrays.asList(symbols);
+        }
+
+        @Override
+        public SymbolBuilder<Block> setChildren(List<Symbol> symbols) {
+            this.symbols = new ArrayList<>(symbols);
+            return this;
+        }
+
+        @Override
+        public Block build() {
+            this.name = String.format("{ %s }", listToString(symbols, " "));
+            return new Block(this);
+        }
+
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

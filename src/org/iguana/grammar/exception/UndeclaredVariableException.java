@@ -30,8 +30,8 @@ package org.iguana.grammar.exception;
 @SuppressWarnings("serial")
 public class UndeclaredVariableException extends RuntimeException {
 
-	public UndeclaredVariableException(String name) {
-		super("Undeclared variable: " + name);
-	}
+    public UndeclaredVariableException(String name) {
+        super("Undeclared variable: " + name);
+    }
 
 }
