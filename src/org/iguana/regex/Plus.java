@@ -36,130 +36,130 @@ import java.util.Set;
 
 public class Plus extends AbstractRegularExpression {
 
-	private final RegularExpression regex;
-	
-	private final List<RegularExpression> separators;
-	
-	public static Plus from(RegularExpression s) {
-		return builder(s).build();
-	}
-	
-	private Plus(Builder builder) {
-		super(builder);
-		this.regex = builder.regex;
-		this.separators = Collections.unmodifiableList(builder.separators);
-	}
-	
-	@Override
-	public int length() {
-		return regex.length();
-	}
-	
-	@Override
-	public boolean isNullable() {
-		return regex.isNullable();
-	}
-	
-	@Override
-	public Set<org.iguana.regex.CharRange> getFirstSet() {
-		return regex.getFirstSet();
-	}
-	
-	@Override
-	public Set<CharRange> getNotFollowSet() {
-		return regex.getFirstSet();
-	}
-	
-	public List<RegularExpression> getSeparators() {
-		return separators;
-	}
+    private final RegularExpression regex;
 
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    private final List<RegularExpression> separators;
 
-	public RegularExpression getSymbol() {
-		return regex;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Plus))
-			return false;
-		
-		Plus other = (Plus) obj;
-		return regex.equals(other.regex) && separators.equals(other.separators);
-	}
-	
-	@Override
-	public int hashCode() {
-		return regex.hashCode();
-	}
+    public static Plus from(RegularExpression s) {
+        return builder(s).build();
+    }
 
-	@Override
-	public String toString() {
-		return regex.toString() + "*";
-	}
+    private Plus(Builder builder) {
+        super(builder);
+        this.regex = builder.regex;
+        this.separators = Collections.unmodifiableList(builder.separators);
+    }
 
-	public static Builder builder(RegularExpression s) {
-		return new Builder(s);
-	}
+    @Override
+    public int length() {
+        return regex.length();
+    }
 
-	public static class Builder extends org.iguana.regex.RegexBuilder<Plus> {
+    @Override
+    public boolean isNullable() {
+        return regex.isNullable();
+    }
 
-		private RegularExpression regex;
+    @Override
+    public Set<org.iguana.regex.CharRange> getFirstSet() {
+        return regex.getFirstSet();
+    }
 
-		private List<RegularExpression> separators = new ArrayList<>();
+    @Override
+    public Set<CharRange> getNotFollowSet() {
+        return regex.getFirstSet();
+    }
 
-		private Builder() {}
+    public List<RegularExpression> getSeparators() {
+        return separators;
+    }
 
-		public Builder(RegularExpression regex) {
-			this.regex = regex;
-		}
-		
-		public Builder(Plus plus) {
-			super(plus);
-			this.regex = plus.regex;
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
+
+    public RegularExpression getSymbol() {
+        return regex;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Plus))
+            return false;
+
+        Plus other = (Plus) obj;
+        return regex.equals(other.regex) && separators.equals(other.separators);
+    }
+
+    @Override
+    public int hashCode() {
+        return regex.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return regex.toString() + "*";
+    }
+
+    public static Builder builder(RegularExpression s) {
+        return new Builder(s);
+    }
+
+    public static class Builder extends org.iguana.regex.RegexBuilder<Plus> {
+
+        private RegularExpression regex;
+
+        private List<RegularExpression> separators = new ArrayList<>();
+
+        private Builder() {}
+
+        public Builder(RegularExpression regex) {
+            this.regex = regex;
+        }
+
+        public Builder(Plus plus) {
+            super(plus);
+            this.regex = plus.regex;
             this.separators = new ArrayList<>(plus.getSeparators());
-		}
-		
-		@Override
-		public Plus build() {
-			return new Plus(this);
-		}
+        }
 
-		public Builder setSymbol(RegularExpression regex) {
-			this.regex = regex;
-			return this;
-		}
+        @Override
+        public Plus build() {
+            return new Plus(this);
+        }
 
-		public Builder setSeparators(List<RegularExpression> separators) {
-			this.separators = separators;
-			return this;
-		}
+        public Builder setSymbol(RegularExpression regex) {
+            this.regex = regex;
+            return this;
+        }
 
-		@Override
-		public RegexBuilder<Plus> setChildren(List<RegularExpression> children) {
-			if (children.size() != 1) {
-				throw new RuntimeException("Children size should be one.");
-			}
-			this.regex = children.get(0);
-			return this;
-		}
-	}
+        public Builder setSeparators(List<RegularExpression> separators) {
+            this.separators = separators;
+            return this;
+        }
 
-	@Override
-	public <T> T accept(RegularExpressionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        @Override
+        public RegexBuilder<Plus> setChildren(List<RegularExpression> children) {
+            if (children.size() != 1) {
+                throw new RuntimeException("Children size should be one.");
+            }
+            this.regex = children.get(0);
+            return this;
+        }
+    }
 
-	@Override
-	public List<RegularExpression> getChildren() {
-		return Collections.singletonList(regex);
-	}
+    @Override
+    public <T> T accept(RegularExpressionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public List<RegularExpression> getChildren() {
+        return Collections.singletonList(regex);
+    }
 
 }

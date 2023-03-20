@@ -29,7 +29,7 @@ package org.iguana.utils.function;
 
 @FunctionalInterface
 public interface IntFunction2 {
-	int apply(int x, int y);
+    int apply(int x, int y);
 
     default int apply(Object x, Object y) {
         return apply(x.hashCode(), y.hashCode());

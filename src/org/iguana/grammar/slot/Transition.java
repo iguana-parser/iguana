@@ -37,11 +37,11 @@ import org.iguana.result.Result;
 public interface Transition {
 
     BodyGrammarSlot destination();
-	
-	BodyGrammarSlot origin();
 
-	String getLabel();
+    BodyGrammarSlot origin();
 
-	<T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime);
-	
+    String getLabel();
+
+    <T extends Result> void execute(Input input, GSSNode<T> u, T result, Environment env, IguanaRuntime<T> runtime);
+
 }

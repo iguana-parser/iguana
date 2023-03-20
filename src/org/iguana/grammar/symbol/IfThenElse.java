@@ -36,116 +36,116 @@ import java.util.Objects;
 
 public class IfThenElse extends AbstractSymbol {
 
-	private final Expression expression;
-	private final Symbol thenPart;
-	private final Symbol elsePart;
+    private final Expression expression;
+    private final Symbol thenPart;
+    private final Symbol elsePart;
 
-	IfThenElse(Builder builder) {
-		super(builder);
-		this.expression = builder.expression;
-		this.thenPart = builder.thenPart;
-		this.elsePart = builder.elsePart;
-	}
-	
-	public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
-		return new Builder(expression, thenPart, elsePart).build();
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
-	
-	public Symbol getThenPart() {
-		return thenPart;
-	}
-	
-	public Symbol getElsePart() {
-		return elsePart;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    IfThenElse(Builder builder) {
+        super(builder);
+        this.expression = builder.expression;
+        this.thenPart = builder.thenPart;
+        this.elsePart = builder.elsePart;
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Arrays.asList(thenPart, elsePart);
-	}
+    public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
+        return new Builder(expression, thenPart, elsePart).build();
+    }
 
-	@Override
-	public String toString() {
-		return String.format("if (%s) %s else %s", expression.toString(), thenPart.toString(), elsePart.toString());
-	}
-	
-	@Override
-	public int size() {
-		return thenPart.size() + elsePart.size();
-	}
+    public Expression getExpression() {
+        return expression;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof IfThenElse)) return false;
-		IfThenElse that = (IfThenElse) o;
-		return Objects.equals(expression, that.expression) &&
-			Objects.equals(thenPart, that.thenPart) &&
-			Objects.equals(elsePart, that.elsePart);
-	}
+    public Symbol getThenPart() {
+        return thenPart;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(expression, thenPart, elsePart);
-	}
+    public Symbol getElsePart() {
+        return elsePart;
+    }
 
-	@Override
-	public String toString(int j) {
-		return String.format("if (%s) { %s } else { %s }", 
-								expression.toString(), 
-								thenPart.toString(j), 
-								j - thenPart.size() <= 1? elsePart.toString(j - thenPart.size())
-											           : elsePart.toString());
-	}
-	
-	public static class Builder extends SymbolBuilder<IfThenElse> {
-		
-		private Expression expression;
-		private Symbol thenPart;
-		private Symbol elsePart;
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		public Builder() { }
+    @Override
+    public List<Symbol> getChildren() {
+        return Arrays.asList(thenPart, elsePart);
+    }
 
-		public Builder(IfThenElse ifThenElse) {
-			super(ifThenElse);
-			this.expression = ifThenElse.expression;
-			this.thenPart = ifThenElse.thenPart;
-			this.elsePart = ifThenElse.elsePart;
-		}
-		
-		public Builder(Expression expression, Symbol thenPart, Symbol elsePart) {
-			this.expression = expression;
-			this.thenPart = thenPart;
-			this.elsePart = elsePart;
-		}
+    @Override
+    public String toString() {
+        return String.format("if (%s) %s else %s", expression.toString(), thenPart.toString(), elsePart.toString());
+    }
 
-		@Override
-		public SymbolBuilder<IfThenElse> setChildren(List<Symbol> symbols) {
-			this.thenPart = symbols.get(0);
-			this.elsePart = symbols.get(1);
-			return this;
-		}
+    @Override
+    public int size() {
+        return thenPart.size() + elsePart.size();
+    }
 
-		@Override
-		public IfThenElse build() {
-			this.name = String.format("if (%s) %s else %s;", expression, thenPart, elsePart);
-			return new IfThenElse(this);
-		}
-		
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IfThenElse)) return false;
+        IfThenElse that = (IfThenElse) o;
+        return Objects.equals(expression, that.expression) &&
+            Objects.equals(thenPart, that.thenPart) &&
+            Objects.equals(elsePart, that.elsePart);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression, thenPart, elsePart);
+    }
+
+    @Override
+    public String toString(int j) {
+        return String.format("if (%s) { %s } else { %s }",
+                                expression.toString(),
+                                thenPart.toString(j),
+                                j - thenPart.size() <= 1? elsePart.toString(j - thenPart.size())
+                                                       : elsePart.toString());
+    }
+
+    public static class Builder extends SymbolBuilder<IfThenElse> {
+
+        private Expression expression;
+        private Symbol thenPart;
+        private Symbol elsePart;
+
+        public Builder() { }
+
+        public Builder(IfThenElse ifThenElse) {
+            super(ifThenElse);
+            this.expression = ifThenElse.expression;
+            this.thenPart = ifThenElse.thenPart;
+            this.elsePart = ifThenElse.elsePart;
+        }
+
+        public Builder(Expression expression, Symbol thenPart, Symbol elsePart) {
+            this.expression = expression;
+            this.thenPart = thenPart;
+            this.elsePart = elsePart;
+        }
+
+        @Override
+        public SymbolBuilder<IfThenElse> setChildren(List<Symbol> symbols) {
+            this.thenPart = symbols.get(0);
+            this.elsePart = symbols.get(1);
+            return this;
+        }
+
+        @Override
+        public IfThenElse build() {
+            this.name = String.format("if (%s) %s else %s;", expression, thenPart, elsePart);
+            return new IfThenElse(this);
+        }
+
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

@@ -28,6 +28,6 @@
 package org.iguana.regex.automaton;
 
 public enum StateType {
-	NORMAL,
-	FINAL,
+    NORMAL,
+    FINAL,
 }

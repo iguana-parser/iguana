@@ -36,93 +36,93 @@ import java.util.List;
 
 public class IfThen extends AbstractSymbol {
 
-	private final Expression expression;
-	private final Symbol thenPart;
+    private final Expression expression;
+    private final Symbol thenPart;
 
-	IfThen(Builder builder) {
-		super(builder);
-		this.expression = builder.expression;
-		this.thenPart = builder.thenPart;
-	}
-	
-	public static IfThen ifThen(Expression expression, Symbol thenPart) {
-		return new Builder(expression, thenPart).build();
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
-	
-	public Symbol getThenPart() {
-		return thenPart;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    IfThen(Builder builder) {
+        super(builder);
+        this.expression = builder.expression;
+        this.thenPart = builder.thenPart;
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(thenPart);
-	}
+    public static IfThen ifThen(Expression expression, Symbol thenPart) {
+        return new Builder(expression, thenPart).build();
+    }
 
-	@Override
-	public int size() {
-		return thenPart.size() + 1;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("if (%s) %s", expression.toString(), thenPart.toString());
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format("if (%s) { %s } else %s", 
-								expression.toString(), 
-								thenPart.toString(j), 
-								j - thenPart.size() <= 1? epsilonToString(j - thenPart.size())
-														  : Epsilon.getInstance().toString());
-	}
+    public Expression getExpression() {
+        return expression;
+    }
 
-	public String epsilonToString(int j) {
-		return Epsilon.getInstance().toString() + (j == 1? " . " : "");
-	}
+    public Symbol getThenPart() {
+        return thenPart;
+    }
 
-	public static class Builder extends SymbolBuilder<IfThen> {
-		
-		private Expression expression;
-		private Symbol thenPart;
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		public Builder(IfThen ifThen) {
-			super(ifThen);
-			this.expression = ifThen.expression;
-			this.thenPart = ifThen.thenPart;
-		}
-		
-		public Builder(Expression expression, Symbol thenPart) {
-			this.expression = expression;
-			this.thenPart = thenPart;
-		}
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(thenPart);
+    }
 
-		@Override
-		public SymbolBuilder<IfThen> setChildren(List<Symbol> symbols) {
-			this.thenPart = symbols.get(0);
-			return this;
-		}
+    @Override
+    public int size() {
+        return thenPart.size() + 1;
+    }
 
-		@Override
-		public IfThen build() {
-			this.name = String.format("if (%s) %s", expression.toString(), thenPart.toString());
-			return new IfThen(this);
-		}
-		
-	}
+    @Override
+    public String toString() {
+        return String.format("if (%s) %s", expression.toString(), thenPart.toString());
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public String toString(int j) {
+        return String.format("if (%s) { %s } else %s",
+                                expression.toString(),
+                                thenPart.toString(j),
+                                j - thenPart.size() <= 1? epsilonToString(j - thenPart.size())
+                                                          : Epsilon.getInstance().toString());
+    }
+
+    public String epsilonToString(int j) {
+        return Epsilon.getInstance().toString() + (j == 1? " . " : "");
+    }
+
+    public static class Builder extends SymbolBuilder<IfThen> {
+
+        private Expression expression;
+        private Symbol thenPart;
+
+        public Builder(IfThen ifThen) {
+            super(ifThen);
+            this.expression = ifThen.expression;
+            this.thenPart = ifThen.thenPart;
+        }
+
+        public Builder(Expression expression, Symbol thenPart) {
+            this.expression = expression;
+            this.thenPart = thenPart;
+        }
+
+        @Override
+        public SymbolBuilder<IfThen> setChildren(List<Symbol> symbols) {
+            this.thenPart = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public IfThen build() {
+            this.name = String.format("if (%s) %s", expression.toString(), thenPart.toString());
+            return new IfThen(this);
+        }
+
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

@@ -31,69 +31,69 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Return extends AbstractSymbol {
-	
-	private final Expression expression;
-	
-	public Return(Builder builder) {
-		super(builder);
-		this.expression = builder.expression;
-	}
-	
-	public static Return ret(Expression expression) {
-		return new Builder(expression).build();
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("{%s}", expression.toString());
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof Return)) return false;
-		Return other = (Return) obj;
-		return this.expression.equals(other.expression);
-	}
+    private final Expression expression;
 
-	@Override
-	public int hashCode() {
-		return this.expression.hashCode();
-	}
+    public Return(Builder builder) {
+        super(builder);
+        this.expression = builder.expression;
+    }
 
-	public static class Builder extends SymbolBuilder<Return> {
-		
-		private Expression expression;
+    public static Return ret(Expression expression) {
+        return new Builder(expression).build();
+    }
 
-		private Builder() {}
+    public Expression getExpression() {
+        return expression;
+    }
 
-		public Builder(Return ret) {
-			super(ret);
-			this.expression = ret.expression;
-		}
-		
-		public Builder(Expression expression) {
-			this.expression = expression;
-		}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		@Override
-		public Return build() {
-			this.name = String.format("{%s}", expression.toString());
-			return new Return(this);
-		}
-	}
+    @Override
+    public String toString() {
+        return String.format("{%s}", expression.toString());
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Return)) return false;
+        Return other = (Return) obj;
+        return this.expression.equals(other.expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.expression.hashCode();
+    }
+
+    public static class Builder extends SymbolBuilder<Return> {
+
+        private Expression expression;
+
+        private Builder() {}
+
+        public Builder(Return ret) {
+            super(ret);
+            this.expression = ret.expression;
+        }
+
+        public Builder(Expression expression) {
+            this.expression = expression;
+        }
+
+        @Override
+        public Return build() {
+            this.name = String.format("{%s}", expression.toString());
+            return new Return(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

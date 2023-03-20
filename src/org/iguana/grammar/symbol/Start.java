@@ -32,60 +32,60 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Start extends AbstractSymbol {
 
-	private final String startSymbol;
-	
+    private final String startSymbol;
+
     public static Start from(String startSymbol) {
         return new Builder(startSymbol).build();
     }
 
-	public Start(Builder builder) {
-		super(builder);
-		this.startSymbol = builder.startSymbol;
-	}
+    public Start(Builder builder) {
+        super(builder);
+        this.startSymbol = builder.startSymbol;
+    }
 
-	public String getStartSymbol() {
-		return startSymbol;
-	}
+    public String getStartSymbol() {
+        return startSymbol;
+    }
 
-	@Override
-	public Builder copy() {
-		return new Builder(startSymbol);
-	}
+    @Override
+    public Builder copy() {
+        return new Builder(startSymbol);
+    }
 
     @Override
     public <T> T accept(ISymbolVisitor<T> visitor) {
         return visitor.visit(this);
     }
 
-	@Override
-	public boolean equals(Object obj) {
-    	if (this == obj) return true;
-    	if (!(obj instanceof Start)) return false;
-    	Start other = (Start) obj;
-    	return this.name.equals(other.name);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Start)) return false;
+        Start other = (Start) obj;
+        return this.name.equals(other.name);
+    }
 
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-	public static class Builder extends SymbolBuilder<Start> {
+    public static class Builder extends SymbolBuilder<Start> {
 
-		private String startSymbol;
+        private String startSymbol;
 
-		private Builder() {}
+        private Builder() {}
 
-		public Builder(String startSymbol) {
-			this.startSymbol = startSymbol;
-		}
+        public Builder(String startSymbol) {
+            this.startSymbol = startSymbol;
+        }
 
-		@Override
-		public Start build() {
-			if (startSymbol == null)
-				throw new IllegalArgumentException("startSymbol cannot be null.");
-			this.name = "Start(" + startSymbol + ")";
-			return new Start(this);
-		}
-	}
+        @Override
+        public Start build() {
+            if (startSymbol == null)
+                throw new IllegalArgumentException("startSymbol cannot be null.");
+            this.name = "Start(" + startSymbol + ")";
+            return new Start(this);
+        }
+    }
 }

@@ -32,29 +32,29 @@ import org.iguana.traversal.SPPFVisitor;
 
 public abstract class TerminalNode extends NonPackedNode {
 
-	private final int leftExtent;
+    private final int leftExtent;
 
-	public TerminalNode(int leftExtent) {
-		this.leftExtent = leftExtent;
-	}
+    public TerminalNode(int leftExtent) {
+        this.leftExtent = leftExtent;
+    }
 
-	@Override
-	public <R> R accept(SPPFVisitor<R> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public <R> R accept(SPPFVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
 
-	@Override
-	public int childrenCount() {
-		return 0;
-	}
+    @Override
+    public int childrenCount() {
+        return 0;
+    }
 
-	@Override
-	public abstract TerminalGrammarSlot getGrammarSlot();
+    @Override
+    public abstract TerminalGrammarSlot getGrammarSlot();
 
-	@Override
-	public PackedNode getChildAt(int index) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public PackedNode getChildAt(int index) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public int getLeftExtent() {
@@ -63,7 +63,7 @@ public abstract class TerminalNode extends NonPackedNode {
 
     @Override
     public void setAmbiguous(boolean ambiguous) {
-		throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

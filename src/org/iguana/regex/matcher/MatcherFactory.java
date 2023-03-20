@@ -35,9 +35,9 @@ import org.iguana.regex.RegularExpression;
  *
  */
 public interface MatcherFactory {
-	
-	Matcher getMatcher(RegularExpression regex);
-	
-	Matcher getBackwardsMatcher(RegularExpression regex);
-	
+
+    Matcher getMatcher(RegularExpression regex);
+
+    Matcher getBackwardsMatcher(RegularExpression regex);
+
 }

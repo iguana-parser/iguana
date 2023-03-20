@@ -31,14 +31,14 @@ import org.iguana.datadependent.env.AbstractEvaluatorContext;
 import org.iguana.datadependent.env.Environment;
 
 public class PersistentEvaluatorContext extends AbstractEvaluatorContext {
-	
-	public PersistentEvaluatorContext() {
-		setEnvironment(PersistentEnvironment.EMPTY);
-	}
 
-	@Override
-	public Environment getEmptyEnvironment() {
-		return PersistentEnvironment.EMPTY;
-	}
+    public PersistentEvaluatorContext() {
+        setEnvironment(PersistentEnvironment.EMPTY);
+    }
+
+    @Override
+    public Environment getEmptyEnvironment() {
+        return PersistentEnvironment.EMPTY;
+    }
 
 }

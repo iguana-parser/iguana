@@ -33,48 +33,48 @@ import org.iguana.gss.GSSNode;
 import org.iguana.result.Result;
 
 public class Descriptor<T extends Result> {
-	
-	// L
-	private BodyGrammarSlot slot;
-	
-	// (L1, i)
-	private GSSNode<T> gssNode;
-	
-	// (L, i, j), The label of SPPFNode is the same as the slot
-	private T result;
 
-	private Environment env;
+    // L
+    private BodyGrammarSlot slot;
 
-	public Descriptor(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
-		init(slot, gssNode, result, env);
-	}
+    // (L1, i)
+    private GSSNode<T> gssNode;
 
-	public void init(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
-		this.slot = slot;
-		this.gssNode = gssNode;
-		this.result = result;
-		this.env = env;
-	}
-	
-	public BodyGrammarSlot getGrammarSlot() {
-		return slot;
-	}
+    // (L, i, j), The label of SPPFNode is the same as the slot
+    private T result;
 
-	public GSSNode<T> getGSSNode() {
-		return gssNode;
-	}
-	
-	public T getResult() {
-		return result;
-	}
+    private Environment env;
 
-	public Environment getEnv() {
-		return env;
-	}
+    public Descriptor(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
+        init(slot, gssNode, result, env);
+    }
 
-	@Override
-	public String toString() {
-		return String.format("(%s, %s, %s, %s)", slot, gssNode, result, env);
-	}
-	
+    public void init(BodyGrammarSlot slot, GSSNode<T> gssNode, T result, Environment env) {
+        this.slot = slot;
+        this.gssNode = gssNode;
+        this.result = result;
+        this.env = env;
+    }
+
+    public BodyGrammarSlot getGrammarSlot() {
+        return slot;
+    }
+
+    public GSSNode<T> getGSSNode() {
+        return gssNode;
+    }
+
+    public T getResult() {
+        return result;
+    }
+
+    public Environment getEnv() {
+        return env;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s, %s, %s)", slot, gssNode, result, env);
+    }
+
 }

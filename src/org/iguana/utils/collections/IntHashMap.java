@@ -9,31 +9,31 @@ import java.util.function.IntFunction;
  *
  */
 public interface IntHashMap<T> extends Iterable<Entry<T>> {
-	
-	boolean containsKey(int key);
-	
-	T computeIfAbsent(int key, IntFunction<T> f);
 
-	/**
-	 * @return null if there is already a value associated with a key
-	 */
-	T compute(int key, IntKeyMapper<T> mapper);
-	
-	T put(int key, T value);
-	
-	T remove(int key);
+    boolean containsKey(int key);
 
-	T get(int key);
+    T computeIfAbsent(int key, IntFunction<T> f);
 
-	int size();
-	
-	int getInitialCapacity();
-	
-	boolean isEmpty();
+    /**
+     * @return null if there is already a value associated with a key
+     */
+    T compute(int key, IntKeyMapper<T> mapper);
 
-	void clear();
+    T put(int key, T value);
 
-	Iterable<T> values();
+    T remove(int key);
+
+    T get(int key);
+
+    int size();
+
+    int getInitialCapacity();
+
+    boolean isEmpty();
+
+    void clear();
+
+    Iterable<T> values();
 
 }
 

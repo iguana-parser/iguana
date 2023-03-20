@@ -33,12 +33,12 @@ import java.util.logging.LogRecord;
 
 public class IguanaLogFormatter extends Formatter {
 
-	@Override
-	public String format(LogRecord record) {
-		StringBuilder sb = new StringBuilder();		
-		sb.append(record.getMessage());
-		sb.append("\n");
-		return sb.toString();
-	}
+    @Override
+    public String format(LogRecord record) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(record.getMessage());
+        sb.append("\n");
+        return sb.toString();
+    }
 
 }

@@ -33,36 +33,36 @@ import org.iguana.utils.input.Input;
 
 public class DFABackwardsMatcher extends DFAMatcher {
 
-	public DFABackwardsMatcher(RegularExpression regex) {
-		super(AutomatonOperations.reverse(regex.getAutomaton()));
-	}
+    public DFABackwardsMatcher(RegularExpression regex) {
+        super(AutomatonOperations.reverse(regex.getAutomaton()));
+    }
 
-	@Override
-	public int match(Input input, int inputIndex) {
-		
-		if (inputIndex == 0)
-			return -1;
-		
-		int length = 0;
-		int maximumMatched = -1;
-		int state = start;
-		
-		if (finalStates[state])
-			maximumMatched = 0;
-		
-		for (int i = inputIndex - 1; i >= 0; i--) {
-			state = table[state].get(input.charAt(i));
+    @Override
+    public int match(Input input, int inputIndex) {
 
-			if (state == ERROR_STATE)
-				break;
-			
-			length++;
+        if (inputIndex == 0)
+            return -1;
 
-			if (finalStates[state])
-				maximumMatched = length;
-		}
+        int length = 0;
+        int maximumMatched = -1;
+        int state = start;
 
-		return maximumMatched;
-	}
+        if (finalStates[state])
+            maximumMatched = 0;
+
+        for (int i = inputIndex - 1; i >= 0; i--) {
+            state = table[state].get(input.charAt(i));
+
+            if (state == ERROR_STATE)
+                break;
+
+            length++;
+
+            if (finalStates[state])
+                maximumMatched = length;
+        }
+
+        return maximumMatched;
+    }
 
 }

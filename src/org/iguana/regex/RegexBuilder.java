@@ -37,22 +37,22 @@ public abstract class RegexBuilder<T extends RegularExpression> {
 
     protected Set<org.iguana.regex.CharRange> lookbehinds = new HashSet<>();
 
-	public RegexBuilder(T symbol) {
+    public RegexBuilder(T symbol) {
         this.lookaheads = symbol.getLookaheads();
         this.lookbehinds = symbol.getLookbehinds();
-	}
+    }
 
     public RegexBuilder() {}
-	
+
     public RegexBuilder<T> addLookbehind(org.iguana.regex.Char c) {
         lookbehinds.add(org.iguana.regex.CharRange.from(c.getValue()));
         return this;
     }
 
-	public RegexBuilder<T> addLookbehind(org.iguana.regex.CharRange range) {
-		lookbehinds.add(range);
-		return this;
-	}
+    public RegexBuilder<T> addLookbehind(org.iguana.regex.CharRange range) {
+        lookbehinds.add(range);
+        return this;
+    }
 
     public RegexBuilder<T> addLookahead(Char c) {
         lookaheads.add(org.iguana.regex.CharRange.from(c.getValue()));
@@ -60,14 +60,14 @@ public abstract class RegexBuilder<T extends RegularExpression> {
     }
 
     public RegexBuilder<T> addLookahead(CharRange range) {
-		lookaheads.add(range);
-		return this;
-	}
+        lookaheads.add(range);
+        return this;
+    }
 
     public RegexBuilder<T> setChildren(List<RegularExpression> children) {
         return this;
     }
 
-	public abstract T build();
-	
+    public abstract T build();
+
 }

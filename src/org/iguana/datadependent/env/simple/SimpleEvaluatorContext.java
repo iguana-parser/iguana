@@ -32,13 +32,13 @@ import org.iguana.datadependent.env.Environment;
 
 public class SimpleEvaluatorContext extends AbstractEvaluatorContext {
 
-	public SimpleEvaluatorContext() {
-		setEnvironment(SimpleImmutableEnvironment.EMPTY);
-	}
+    public SimpleEvaluatorContext() {
+        setEnvironment(SimpleImmutableEnvironment.EMPTY);
+    }
 
-	@Override
-	public Environment getEmptyEnvironment() {
-		return SimpleImmutableEnvironment.EMPTY;
-	}
+    @Override
+    public Environment getEmptyEnvironment() {
+        return SimpleImmutableEnvironment.EMPTY;
+    }
 
 }

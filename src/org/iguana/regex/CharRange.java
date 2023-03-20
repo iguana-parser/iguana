@@ -42,84 +42,84 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
  *
  */
 public class CharRange extends AbstractRegularExpression implements Range {
-	
-	private final int start;
-	
-	private final int end;
-	
-	public static CharRange from(int c) {
-		return in(c, c);
-	}
-	
-	public static CharRange in(int start, int end) {
-		return new Builder(start, end).build();
-	}
-		
-	private CharRange(Builder builder) {
-		super(builder);
-		
-		if (builder.end < builder.start) 
-			throw new IllegalArgumentException("Start cannot be less than end.");
-		
-		this.start = builder.start;
-		this.end = builder.end;
-	}
 
-	public static String getName(int start, int end) {
-		if (start == end) {
-			return Char.getName(start);
-		} else {
-			return Char.getName(start) + "-" + Char.getName(end);
-		}
-	}
+    private final int start;
 
-    @Override
-	public int getStart() {
-		return start;
-	}
+    private final int end;
+
+    public static CharRange from(int c) {
+        return in(c, c);
+    }
+
+    public static CharRange in(int start, int end) {
+        return new Builder(start, end).build();
+    }
+
+    private CharRange(Builder builder) {
+        super(builder);
+
+        if (builder.end < builder.start)
+            throw new IllegalArgumentException("Start cannot be less than end.");
+
+        this.start = builder.start;
+        this.end = builder.end;
+    }
+
+    public static String getName(int start, int end) {
+        if (start == end) {
+            return Char.getName(start);
+        } else {
+            return Char.getName(start) + "-" + Char.getName(end);
+        }
+    }
 
     @Override
-	public int getEnd() {
-		return end;
-	}
+    public int getStart() {
+        return start;
+    }
 
     @Override
-	public int hashCode() {
-		return MurmurHash3.f2().apply(start, end);
-	}
+    public int getEnd() {
+        return end;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
+    @Override
+    public int hashCode() {
+        return MurmurHash3.f2().apply(start, end);
+    }
 
-		if (!(obj instanceof CharRange))
-			return false;
-		
-		CharRange other = (CharRange) obj;
-		
-		return start == other.start && end == other.end;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-	@Override
-	public String toString() {
-		return getName(start, end);
-	}
+        if (!(obj instanceof CharRange))
+            return false;
 
-	@Override
-	public boolean isNullable() {
-		return false;
-	}
-	
-	@Override
-	public Set<CharRange> getFirstSet() {
-		return immutableSet(this);
-	}
-	
-	@Override
-	public Set<CharRange> getNotFollowSet() {
-		return Collections.emptySet();
-	}
+        CharRange other = (CharRange) obj;
+
+        return start == other.start && end == other.end;
+    }
+
+    @Override
+    public String toString() {
+        return getName(start, end);
+    }
+
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
+
+    @Override
+    public Set<CharRange> getFirstSet() {
+        return immutableSet(this);
+    }
+
+    @Override
+    public Set<CharRange> getNotFollowSet() {
+        return Collections.emptySet();
+    }
 
     @Override
     public int length() {
@@ -127,41 +127,41 @@ public class CharRange extends AbstractRegularExpression implements Range {
     }
 
     public static Builder builder(int start, int end) {
-		return new Builder(start, end);
-	}
-	
+        return new Builder(start, end);
+    }
+
     @Override
     public Builder copy() {
         return new Builder(this);
     }
     
-	public static class Builder extends RegexBuilder<CharRange> {
+    public static class Builder extends RegexBuilder<CharRange> {
 
-		private int start;
-		private int end;
+        private int start;
+        private int end;
 
-		private Builder() {}
+        private Builder() {}
 
-		public Builder(int start, int end) {
-			this.start = start;
-			this.end = end;
-		}
-		
-		public Builder(CharRange range) {
-			super(range);
-			this.start = range.start;
-			this.end = range.end;
-		}
-		
-		@Override
-		public CharRange build() {
-			return new CharRange(this);
-		}
-	}
+        public Builder(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
 
-	@Override
-	public <T> T accept(RegularExpressionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        public Builder(CharRange range) {
+            super(range);
+            this.start = range.start;
+            this.end = range.end;
+        }
+
+        @Override
+        public CharRange build() {
+            return new CharRange(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(RegularExpressionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

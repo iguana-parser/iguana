@@ -33,47 +33,47 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class StringUtil {
-	
-	public static final String NewLine = System.getProperty("line.separator"); 
 
-	public static <T> String listToString(T[] elements) {
-		return listToString(elements, " ");
-	}
+    public static final String NewLine = System.getProperty("line.separator");
 
-	public static <T> String listToString(T[] elements, String sep) {
-		return listToString(Arrays.asList(elements), sep);
-	}
-	
-	public static <T> String listToString(Iterable<T> elements) {
-		return listToString(elements, " ");
-	}
-	
-	public static <T> String listToString(Iterable<T> elements, String sep) {
-		
-		if (elements == null) throw new IllegalArgumentException("elements cannot be null.");
-		
-		Stream<T> stream = StreamSupport.stream(elements.spliterator(), false);
-		
-		return stream.map(a -> a.toString()).collect(Collectors.joining(sep));
-	}
-	
-	public static String repeat(String s, int count) {
-		return Stream.generate(() -> s).limit(count).collect(Collectors.joining());
-	}
+    public static <T> String listToString(T[] elements) {
+        return listToString(elements, " ");
+    }
 
-	public static String toFirstUpperCase(String s) {
-		if (s.length() == 0) return s;
-		return s.substring(0, 1).toUpperCase() + s.substring(1);
-	}
+    public static <T> String listToString(T[] elements, String sep) {
+        return listToString(Arrays.asList(elements), sep);
+    }
 
-	public static String escapeNewLine(String s) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '\n') 		sb.append("\\n");
-			else if (c == '\r') sb.append("\\r");
-			else 				sb.append(c);
-		}
-		return sb.toString();
-	}
+    public static <T> String listToString(Iterable<T> elements) {
+        return listToString(elements, " ");
+    }
+
+    public static <T> String listToString(Iterable<T> elements, String sep) {
+
+        if (elements == null) throw new IllegalArgumentException("elements cannot be null.");
+
+        Stream<T> stream = StreamSupport.stream(elements.spliterator(), false);
+
+        return stream.map(a -> a.toString()).collect(Collectors.joining(sep));
+    }
+
+    public static String repeat(String s, int count) {
+        return Stream.generate(() -> s).limit(count).collect(Collectors.joining());
+    }
+
+    public static String toFirstUpperCase(String s) {
+        if (s.length() == 0) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
+    public static String escapeNewLine(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '\n')      sb.append("\\n");
+            else if (c == '\r') sb.append("\\r");
+            else                sb.append(c);
+        }
+        return sb.toString();
+    }
 }

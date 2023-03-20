@@ -32,11 +32,11 @@ import org.iguana.grammar.condition.PositionalCondition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 
 public interface IConditionVisitor<T> {
-	
-	T visit(DataDependentCondition condition);
-	
-	T visit(PositionalCondition condition);
-	
-	T visit(RegularExpressionCondition condition);
+
+    T visit(DataDependentCondition condition);
+
+    T visit(PositionalCondition condition);
+
+    T visit(RegularExpressionCondition condition);
 
 }

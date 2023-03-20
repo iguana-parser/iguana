@@ -32,17 +32,17 @@ import org.iguana.util.config.XMLConfigFileParser;
 
 public class Configuration {
 
-	public static final int DEFAULT_LOOKAHEAD = 1;
-	
-	private final LookupImpl gssLookupImpl;
-	
-	private final MatcherType matcherType;
-	
-	private final int lookAheadCount;
-	
-	private final HashMapImpl hashmapImpl;
-	
-	private final EnvironmentImpl envImpl;
+    public static final int DEFAULT_LOOKAHEAD = 1;
+
+    private final LookupImpl gssLookupImpl;
+
+    private final MatcherType matcherType;
+
+    private final int lookAheadCount;
+
+    private final HashMapImpl hashmapImpl;
+
+    private final EnvironmentImpl envImpl;
 
     private final LogLevel logLevel;
 
@@ -56,121 +56,121 @@ public class Configuration {
         }
         return configuration;
     }
-	
-	private Configuration(Builder builder) {
-		this.gssLookupImpl = builder.gssLookupImpl;
-		this.lookAheadCount = builder.lookaheadCount;
-		this.matcherType = builder.matcherType;
-		this.hashmapImpl = builder.hashmapImpl;
-		this.envImpl = builder.envImpl;
+
+    private Configuration(Builder builder) {
+        this.gssLookupImpl = builder.gssLookupImpl;
+        this.lookAheadCount = builder.lookaheadCount;
+        this.matcherType = builder.matcherType;
+        this.hashmapImpl = builder.hashmapImpl;
+        this.envImpl = builder.envImpl;
         this.logLevel = builder.logLevel;
-	}
-		
-	public LookupImpl getGSSLookupImpl() {
-		return gssLookupImpl;
-	}
-			
-	public int getLookAheadCount() {
-		return lookAheadCount;
-	}
-	
-	public MatcherType getMatcherType() {
-		return matcherType;
-	}
-	
-	public HashMapImpl getHashmapImpl() {
-		return hashmapImpl;
-	}
-	
-	public EnvironmentImpl getEnvImpl() {
-		return envImpl;
-	}
+    }
+
+    public LookupImpl getGSSLookupImpl() {
+        return gssLookupImpl;
+    }
+
+    public int getLookAheadCount() {
+        return lookAheadCount;
+    }
+
+    public MatcherType getMatcherType() {
+        return matcherType;
+    }
+
+    public HashMapImpl getHashmapImpl() {
+        return hashmapImpl;
+    }
+
+    public EnvironmentImpl getEnvImpl() {
+        return envImpl;
+    }
 
     public LogLevel getLogLevel() {
         return logLevel;
     }
 
     public static Builder builder() {
-		return new Builder();
-	}
-	
-	public enum MatcherType {
-		DFA,
-		JAVA_REGEX
-	}
-		
-	public enum LookupImpl {
-		ARRAY,
-		HASH_MAP
-	}
-	
-	public enum HashMapImpl {
-		JAVA,
-		INT_OPEN_ADDRESSING
-	}
-	
-	public enum EnvironmentImpl {
-		ARRAY,
-		INT_ARRAY,
-		HASH_MAP,
-		TRIE
-	}
-		
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append(MatcherType.class.getName()).append(": ").append(matcherType)
-		  .append(LookupImpl.class.getName()).append(": ").append(gssLookupImpl)
-		  .append(HashMapImpl.class.getName()).append(": ").append(hashmapImpl)
-		  .append("LookaheadCount").append(": ").append(lookAheadCount);
-		
-		return sb.toString();
-	}
-	
-	public static class Builder {
-		
-		private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
-		private MatcherType matcherType = MatcherType.JAVA_REGEX;
-		private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
-		private int lookaheadCount = DEFAULT_LOOKAHEAD;
+        return new Builder();
+    }
+
+    public enum MatcherType {
+        DFA,
+        JAVA_REGEX
+    }
+
+    public enum LookupImpl {
+        ARRAY,
+        HASH_MAP
+    }
+
+    public enum HashMapImpl {
+        JAVA,
+        INT_OPEN_ADDRESSING
+    }
+
+    public enum EnvironmentImpl {
+        ARRAY,
+        INT_ARRAY,
+        HASH_MAP,
+        TRIE
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(MatcherType.class.getName()).append(": ").append(matcherType)
+          .append(LookupImpl.class.getName()).append(": ").append(gssLookupImpl)
+          .append(HashMapImpl.class.getName()).append(": ").append(hashmapImpl)
+          .append("LookaheadCount").append(": ").append(lookAheadCount);
+
+        return sb.toString();
+    }
+
+    public static class Builder {
+
+        private LookupImpl gssLookupImpl = LookupImpl.HASH_MAP;
+        private MatcherType matcherType = MatcherType.JAVA_REGEX;
+        private HashMapImpl hashmapImpl = HashMapImpl.JAVA; // HashMapImpl.INT_OPEN_ADDRESSING;
+        private int lookaheadCount = DEFAULT_LOOKAHEAD;
         private LogLevel logLevel = LogLevel.NONE;
-		
-		private EnvironmentImpl envImpl = EnvironmentImpl.TRIE;
-				
-		public Configuration build() {
-			return new Configuration(this);
-		}
-		
-		public Builder setGSSLookupImpl(LookupImpl gssLookupImpl) {
-			this.gssLookupImpl = gssLookupImpl;
-			return this;
-		}
-		
-		public Builder setMatcherType(MatcherType matcherType) {
-			this.matcherType = matcherType;
-			return this;
-		}
-		
-		public Builder setHashmapImpl(HashMapImpl hashmapImpl) {
-			this.hashmapImpl = hashmapImpl;
-			return this;
-		}
-		
-		public Builder setLookaheadCount(int lookaheadCount) {
-			this.lookaheadCount = lookaheadCount;
-			return this;
-		}
-		
-		public Builder setEnvironmentImpl(EnvironmentImpl impl) {
-			this.envImpl = impl;
-			return this;
-		}
+
+        private EnvironmentImpl envImpl = EnvironmentImpl.TRIE;
+
+        public Configuration build() {
+            return new Configuration(this);
+        }
+
+        public Builder setGSSLookupImpl(LookupImpl gssLookupImpl) {
+            this.gssLookupImpl = gssLookupImpl;
+            return this;
+        }
+
+        public Builder setMatcherType(MatcherType matcherType) {
+            this.matcherType = matcherType;
+            return this;
+        }
+
+        public Builder setHashmapImpl(HashMapImpl hashmapImpl) {
+            this.hashmapImpl = hashmapImpl;
+            return this;
+        }
+
+        public Builder setLookaheadCount(int lookaheadCount) {
+            this.lookaheadCount = lookaheadCount;
+            return this;
+        }
+
+        public Builder setEnvironmentImpl(EnvironmentImpl impl) {
+            this.envImpl = impl;
+            return this;
+        }
 
         public Builder setLogLevel(LogLevel logLevel) {
             this.logLevel = logLevel;
             return this;
         }
 
-	}
+    }
 }

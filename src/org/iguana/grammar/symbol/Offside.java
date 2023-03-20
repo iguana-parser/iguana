@@ -34,91 +34,91 @@ import java.util.List;
 import java.util.Objects;
 
 public class Offside extends AbstractSymbol {
-	
-	private final Symbol symbol;
 
-	Offside(Builder builder) {
-		super(builder);
-		this.symbol = builder.symbol;
-	}
-	
-	public static Offside offside(Symbol symbol) {
-		return new Builder(symbol).build();
-	}
-	
-	public Symbol getSymbol() {
-		return symbol;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    private final Symbol symbol;
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(symbol);
-	}
+    Offside(Builder builder) {
+        super(builder);
+        this.symbol = builder.symbol;
+    }
 
-	@Override
-	public int size() {
-		return symbol.size();
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format("offside %s", symbol.toString(j));
-	}
+    public static Offside offside(Symbol symbol) {
+        return new Builder(symbol).build();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Offside)) return false;
-		Offside offside = (Offside) o;
-		return Objects.equals(symbol, offside.symbol);
-	}
+    public Symbol getSymbol() {
+        return symbol;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(symbol);
-	}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-	public static class Builder extends SymbolBuilder<Offside> {
-		
-		private Symbol symbol;
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(symbol);
+    }
 
-		public Builder() { }
+    @Override
+    public int size() {
+        return symbol.size();
+    }
 
-		public Builder(Offside offside) {
-			super(offside);
-			this.symbol = offside.symbol;
-		}
-		
-		public Builder(Symbol symbol) {
-			this.symbol = symbol;
-		}
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
-		@Override
-		public SymbolBuilder<Offside> setChildren(List<Symbol> symbols) {
-			this.symbol = symbols.get(0);
-			return this;
-		}
+    @Override
+    public String toString(int j) {
+        return String.format("offside %s", symbol.toString(j));
+    }
 
-		@Override
-		public Offside build() {
-			this.name = String.format("offside %s", symbol.toString());
-			return new Offside(this);
-		}
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Offside)) return false;
+        Offside offside = (Offside) o;
+        return Objects.equals(symbol, offside.symbol);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(symbol);
+    }
+
+    public static class Builder extends SymbolBuilder<Offside> {
+
+        private Symbol symbol;
+
+        public Builder() { }
+
+        public Builder(Offside offside) {
+            super(offside);
+            this.symbol = offside.symbol;
+        }
+
+        public Builder(Symbol symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public SymbolBuilder<Offside> setChildren(List<Symbol> symbols) {
+            this.symbol = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Offside build() {
+            this.name = String.format("offside %s", symbol.toString());
+            return new Offside(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

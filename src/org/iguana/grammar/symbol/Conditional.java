@@ -35,84 +35,84 @@ import java.util.List;
 
 public class Conditional extends AbstractSymbol {
 
-	private final Symbol symbol;
-	private final Expression expression;
+    private final Symbol symbol;
+    private final Expression expression;
 
-	Conditional(Builder builder) {
-		super(builder);
-		this.symbol = builder.symbol;
-		this.expression = builder.expression;
-	}
-	
-	public static Conditional when(Symbol symbol, Expression expression) {
-		return new Builder(symbol, expression).build();
-	}
-	
-	public Symbol getSymbol() {
-		return symbol;
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    Conditional(Builder builder) {
+        super(builder);
+        this.symbol = builder.symbol;
+        this.expression = builder.expression;
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(symbol);
-	}
+    public static Conditional when(Symbol symbol, Expression expression) {
+        return new Builder(symbol, expression).build();
+    }
 
-	@Override
-	public int size() {
-		return symbol.size();
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("%s when %s", symbol.toString(), expression.toString());
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format(" %s when %s", symbol.toString(j), expression.toString());
-	}
-	
-	public static class Builder extends SymbolBuilder<Conditional> {
-		
-		private Symbol symbol;
-		private Expression expression;
+    public Symbol getSymbol() {
+        return symbol;
+    }
 
-		public Builder(Conditional conditional) {
-			super(conditional);
-			this.symbol = conditional.symbol;
-			this.expression = conditional.expression;
-		}
-		
-		public Builder(Symbol symbol, Expression expression) {
-			this.symbol = symbol;
-			this.expression = expression;
-		}
+    public Expression getExpression() {
+        return expression;
+    }
 
-		@Override
-		public SymbolBuilder<Conditional> setChildren(List<Symbol> symbols) {
-			this.symbol = symbols.get(0);
-			return this;
-		}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		@Override
-		public Conditional build() {
-			this.name = String.format("%s when %s;", symbol.toString(), expression.toString());
-			return new Conditional(this);
-		}
-	}
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(symbol);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int size() {
+        return symbol.size();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s when %s", symbol.toString(), expression.toString());
+    }
+
+    @Override
+    public String toString(int j) {
+        return String.format(" %s when %s", symbol.toString(j), expression.toString());
+    }
+
+    public static class Builder extends SymbolBuilder<Conditional> {
+
+        private Symbol symbol;
+        private Expression expression;
+
+        public Builder(Conditional conditional) {
+            super(conditional);
+            this.symbol = conditional.symbol;
+            this.expression = conditional.expression;
+        }
+
+        public Builder(Symbol symbol, Expression expression) {
+            this.symbol = symbol;
+            this.expression = expression;
+        }
+
+        @Override
+        public SymbolBuilder<Conditional> setChildren(List<Symbol> symbols) {
+            this.symbol = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public Conditional build() {
+            this.name = String.format("%s when %s;", symbol.toString(), expression.toString());
+            return new Conditional(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

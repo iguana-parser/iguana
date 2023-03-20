@@ -40,6 +40,6 @@ package org.iguana.grammar.slot;
  */
 public interface GrammarSlot {
 
-	void reset();
-	
+    void reset();
+
 }

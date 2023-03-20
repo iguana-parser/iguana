@@ -34,89 +34,89 @@ import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 import java.util.Objects;
 
 public abstract class Statement extends AbstractAST {
-	
-	public static class Expression extends Statement {
 
-		private final org.iguana.datadependent.ast.Expression exp;
-		
-		Expression(org.iguana.datadependent.ast.Expression exp) {
-			this.exp = exp;
-		}
-		
-		public org.iguana.datadependent.ast.Expression getExpression() {
-			return exp;
-		}
-		
-		@Override
-		public Object interpret(IEvaluatorContext ctx, Input input) {
-			exp.interpret(ctx, input);
-			return null;
-		}
+    public static class Expression extends Statement {
 
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (!(o instanceof Expression)) return false;
-			Expression other = (Expression) o;
-			return Objects.equals(exp, other.exp);
-		}
+        private final org.iguana.datadependent.ast.Expression exp;
 
-		@Override
-		public int hashCode() {
-			return Objects.hashCode(exp);
-		}
+        Expression(org.iguana.datadependent.ast.Expression exp) {
+            this.exp = exp;
+        }
 
-		@Override
-		public String toString() {
-			return exp.toString();
-		}
+        public org.iguana.datadependent.ast.Expression getExpression() {
+            return exp;
+        }
 
-		@Override
-		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			return visitor.visit(this);
-		}
-		
-	}
-	
-	public static class VariableDeclaration extends Statement {
-		
-		private final org.iguana.datadependent.ast.VariableDeclaration decl;
-		
-		VariableDeclaration(org.iguana.datadependent.ast.VariableDeclaration decl) {
-			this.decl = decl;
-		}
-		
-		public org.iguana.datadependent.ast.VariableDeclaration getDeclaration() {
-			return decl;
-		}
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            exp.interpret(ctx, input);
+            return null;
+        }
 
-		@Override
-		public Object interpret(IEvaluatorContext ctx, Input input) {
-			decl.interpret(ctx, input);
-			return null;
-		}
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Expression)) return false;
+            Expression other = (Expression) o;
+            return Objects.equals(exp, other.exp);
+        }
 
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (!(o instanceof VariableDeclaration)) return false;
-			VariableDeclaration other = (VariableDeclaration) o;
-			return Objects.equals(decl, other.decl);
-		}
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(exp);
+        }
 
-		@Override
-		public int hashCode() {
-			return Objects.hashCode(decl);
-		}
-		
-		@Override
-		public String toString() {
-			return decl.toString();
-		}
+        @Override
+        public String toString() {
+            return exp.toString();
+        }
 
-		@Override
-		public <T> T accept(IAbstractASTVisitor<T> visitor) {
-			return visitor.visit(this);
-		}
-		
-	}
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+
+    }
+
+    public static class VariableDeclaration extends Statement {
+
+        private final org.iguana.datadependent.ast.VariableDeclaration decl;
+
+        VariableDeclaration(org.iguana.datadependent.ast.VariableDeclaration decl) {
+            this.decl = decl;
+        }
+
+        public org.iguana.datadependent.ast.VariableDeclaration getDeclaration() {
+            return decl;
+        }
+
+        @Override
+        public Object interpret(IEvaluatorContext ctx, Input input) {
+            decl.interpret(ctx, input);
+            return null;
+        }
+
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof VariableDeclaration)) return false;
+            VariableDeclaration other = (VariableDeclaration) o;
+            return Objects.equals(decl, other.decl);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(decl);
+        }
+
+        @Override
+        public String toString() {
+            return decl.toString();
+        }
+
+        @Override
+        public <T> T accept(IAbstractASTVisitor<T> visitor) {
+            return visitor.visit(this);
+        }
+
+    }
 
 }

@@ -35,84 +35,84 @@ import java.util.List;
 
 public class While extends AbstractSymbol {
 
-	private final Expression expression;
-	private final Symbol body;
+    private final Expression expression;
+    private final Symbol body;
 
-	While(Builder builder) {
-		super(builder);
-		this.expression = builder.expression;
-		this.body = builder.body;
-	}
-	
-	public static While whileLoop(Expression expression, Symbol body) {
-		return new Builder(expression, body).build();
-	}
-	
-	public Expression getExpression() {
-		return expression;
-	}
-	
-	public Symbol getBody() {
-		return body; 
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    While(Builder builder) {
+        super(builder);
+        this.expression = builder.expression;
+        this.body = builder.body;
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		return Collections.singletonList(body);
-	}
+    public static While whileLoop(Expression expression, Symbol body) {
+        return new Builder(expression, body).build();
+    }
 
-	@Override
-	public int size() {
-		return body.size();
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("while (%s) %s", expression.toString(), body.toString());
-	}
-	
-	@Override
-	public String toString(int j) {
-		return String.format("while (%s) %s", expression.toString(), body.toString(j));
-	}
-	
-	public static class Builder extends SymbolBuilder<While> {
-		
-		private Expression expression;
-		private Symbol body;
+    public Expression getExpression() {
+        return expression;
+    }
 
-		public Builder(While whileSymbol) {
-			super(whileSymbol);
-			this.expression = whileSymbol.expression;
-			this.body = whileSymbol.body;
-		}
-		
-		public Builder(Expression expression, Symbol body) {
-			this.expression = expression;
-			this.body = body;
-		}
+    public Symbol getBody() {
+        return body;
+    }
 
-		@Override
-		public SymbolBuilder<While> setChildren(List<Symbol> symbols) {
-			this.body = symbols.get(0);
-			return this;
-		}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		@Override
-		public While build() {
-			this.name = String.format("while (%s) %s", expression.toString(), body.toString());
-			return new While(this);
-		}
-	}
+    @Override
+    public List<Symbol> getChildren() {
+        return Collections.singletonList(body);
+    }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public int size() {
+        return body.size();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("while (%s) %s", expression.toString(), body.toString());
+    }
+
+    @Override
+    public String toString(int j) {
+        return String.format("while (%s) %s", expression.toString(), body.toString(j));
+    }
+
+    public static class Builder extends SymbolBuilder<While> {
+
+        private Expression expression;
+        private Symbol body;
+
+        public Builder(While whileSymbol) {
+            super(whileSymbol);
+            this.expression = whileSymbol.expression;
+            this.body = whileSymbol.body;
+        }
+
+        public Builder(Expression expression, Symbol body) {
+            this.expression = expression;
+            this.body = body;
+        }
+
+        @Override
+        public SymbolBuilder<While> setChildren(List<Symbol> symbols) {
+            this.body = symbols.get(0);
+            return this;
+        }
+
+        @Override
+        public While build() {
+            this.name = String.format("while (%s) %s", expression.toString(), body.toString());
+            return new While(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

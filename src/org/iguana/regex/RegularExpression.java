@@ -37,38 +37,38 @@ import java.util.Set;
 
 public interface RegularExpression {
 
-	boolean isNullable();
+    boolean isNullable();
 
     Set<CharRange> getLookaheads();
 
     Set<CharRange> getLookbehinds();
-	
-	Set<CharRange> getFirstSet();
-	
-	/**
-	 * The set of characters (ranges) that cannot follow this regular expressions. 
-	 */
-	Set<CharRange> getNotFollowSet();
-		
-	int length();
+
+    Set<CharRange> getFirstSet();
+
+    /**
+     * The set of characters (ranges) that cannot follow this regular expressions.
+     */
+    Set<CharRange> getNotFollowSet();
+
+    int length();
 
     <T> T accept(RegularExpressionVisitor<T> visitor);
-	
-	Automaton getAutomaton();
 
-	default List<? extends RegularExpression> getChildren() {
-		return Collections.emptyList();
-	}
+    Automaton getAutomaton();
+
+    default List<? extends RegularExpression> getChildren() {
+        return Collections.emptyList();
+    }
 
     RegexBuilder<? extends RegularExpression> copy();
 
-	static <T> Comparator<T> lengthComparator() {
-		return (T o1, T o2) -> {
-			if (!(o1 instanceof RegularExpression) || !(o2 instanceof RegularExpression)) { return 0; }
+    static <T> Comparator<T> lengthComparator() {
+        return (T o1, T o2) -> {
+            if (!(o1 instanceof RegularExpression) || !(o2 instanceof RegularExpression)) { return 0; }
 
-			RegularExpression r1 = (RegularExpression) o1;
-			RegularExpression r2 = (RegularExpression) o2;
-			return r2.length() - r1.length();
-		};
-	}
+            RegularExpression r1 = (RegularExpression) o1;
+            RegularExpression r2 = (RegularExpression) o2;
+            return r2.length() - r1.length();
+        };
+    }
 }

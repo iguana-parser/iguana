@@ -49,144 +49,144 @@ public interface Input {
 
     int EOF = -1;
 
-	static Input fromString(String s) {
-		return createInput(s, null);
-	}
+    static Input fromString(String s) {
+        return createInput(s, null);
+    }
 
-	static Input fromFile(File file) throws IOException {
-		return fromFile(file, StandardCharsets.UTF_8);
-	}
+    static Input fromFile(File file) throws IOException {
+        return fromFile(file, StandardCharsets.UTF_8);
+    }
 
-	static Input fromFile(File file, Charset charset) throws IOException {
-		return createInput(Files.readString(Paths.get(file.toURI()), charset), file.toURI());
-	}
+    static Input fromFile(File file, Charset charset) throws IOException {
+        return createInput(Files.readString(Paths.get(file.toURI()), charset), file.toURI());
+    }
 
-	static Input empty() {
-		return fromString("");
-	}
+    static Input empty() {
+        return fromString("");
+    }
 
-	static Input createInput(String s, URI uri) {
-		boolean hasSurrogatePair = false;
+    static Input createInput(String s, URI uri) {
+        boolean hasSurrogatePair = false;
 
-		int lineCount = 0;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (isHighSurrogate(c)) {
-				hasSurrogatePair = true;
-			}
-			if (c == '\n') {
-				lineCount++;
-			}
-		}
+        int lineCount = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (isHighSurrogate(c)) {
+                hasSurrogatePair = true;
+            }
+            if (c == '\n') {
+                lineCount++;
+            }
+        }
 
-		if (!hasSurrogatePair) {
-			return new DefaultInput(s, lineCount + 1, uri);
-		}
+        if (!hasSurrogatePair) {
+            return new DefaultInput(s, lineCount + 1, uri);
+        }
 
-		int[] characters = new int[s.length() + 1];
+        int[] characters = new int[s.length() + 1];
 
-		int i = 0;
-		int j = 0;
-		while (i < s.length()) {
-			char c = s.charAt(i);
-			if (!Character.isHighSurrogate(c)) {
-				characters[j++] = c;
+        int i = 0;
+        int j = 0;
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if (!Character.isHighSurrogate(c)) {
+                characters[j++] = c;
 
-				i++;
-			} else {
-				if (i < s.length() - 1) {
-					characters[j++] = Character.toCodePoint(c, s.charAt(i + 1));
-				} else {
-					throw new RuntimeException("Invalid input");
-				}
-				i += 2;
-			}
-		}
+                i++;
+            } else {
+                if (i < s.length() - 1) {
+                    characters[j++] = Character.toCodePoint(c, s.charAt(i + 1));
+                } else {
+                    throw new RuntimeException("Invalid input");
+                }
+                i += 2;
+            }
+        }
 
-		characters[j] = EOF;
+        characters[j] = EOF;
 
-		return new UTF32Input(characters, j + 1, lineCount + 1, uri);
-	}
+        return new UTF32Input(characters, j + 1, lineCount + 1, uri);
+    }
 
-	int charAt(int index);
+    int charAt(int index);
 
-	default int[] calculateLineLengths(int lineCount) {
-		int[] lineStarts = new int[lineCount];
-		lineStarts[0] = 0;
-		int j = 0;
+    default int[] calculateLineLengths(int lineCount) {
+        int[] lineStarts = new int[lineCount];
+        lineStarts[0] = 0;
+        int j = 0;
 
-		for (int i = 0; i < length(); i++) {
-			if (charAt(i) == '\n') {
-				if (i + 1 < length())
-					lineStarts[++j] = i + 1;
-			}
-		}
-		return lineStarts;
-	}
+        for (int i = 0; i < length(); i++) {
+            if (charAt(i) == '\n') {
+                if (i + 1 < length())
+                    lineStarts[++j] = i + 1;
+            }
+        }
+        return lineStarts;
+    }
 
-	/**
+    /**
      * The length is one more than the actual characters in the input as the last input character is considered EOF.
      */
-	int length();
-	
-	default boolean match(int index, String target) {
-		int end = index + target.length();
-		int i = index;
-		while (i < end) {
-			char c = target.charAt(i - index);
-			int targetVal = c;
-			if (isHighSurrogate(c) && i < target.length()) {
-				targetVal = toCodePoint(c, target.charAt(i + 1));
-				i++;
-			}
-			if (targetVal != charAt(i)) {
-				return false;
-			}
-			i++;
-		}
+    int length();
 
-		return true;
-	}
-	
-	default boolean matchBackward(int index, String target) {
-		int i = index - 1;
-		int j = target.length() - 1;
+    default boolean match(int index, String target) {
+        int end = index + target.length();
+        int i = index;
+        while (i < end) {
+            char c = target.charAt(i - index);
+            int targetVal = c;
+            if (isHighSurrogate(c) && i < target.length()) {
+                targetVal = toCodePoint(c, target.charAt(i + 1));
+                i++;
+            }
+            if (targetVal != charAt(i)) {
+                return false;
+            }
+            i++;
+        }
 
-		while (j >= 0) {
-			char c = target.charAt(j);
-			int targetVal = c;
-			if (isLowSurrogate(c) && i > 0) {
-				targetVal = toCodePoint(c, target.charAt(j - 1));
-				i--;
-				j--;
-			}
-			if (targetVal != charAt(i)) {
-				return false;
-			}
-			i--;
-			j--;
-		}
+        return true;
+    }
 
-		return true;
-	}
+    default boolean matchBackward(int index, String target) {
+        int i = index - 1;
+        int j = target.length() - 1;
 
-	default boolean isEmpty() {
-		return length() == 1;
-	}
+        while (j >= 0) {
+            char c = target.charAt(j);
+            int targetVal = c;
+            if (isLowSurrogate(c) && i > 0) {
+                targetVal = toCodePoint(c, target.charAt(j - 1));
+                i--;
+                j--;
+            }
+            if (targetVal != charAt(i)) {
+                return false;
+            }
+            i--;
+            j--;
+        }
 
-	int getLineNumber(int inputIndex);
+        return true;
+    }
 
-	int getColumnNumber(int inputIndex);
+    default boolean isEmpty() {
+        return length() == 1;
+    }
 
-	String subString(int start, int end);
+    int getLineNumber(int inputIndex);
 
-	int getLineCount();
-	
-	URI getURI();
+    int getColumnNumber(int inputIndex);
+
+    String subString(int start, int end);
+
+    int getLineCount();
+
+    URI getURI();
 
     boolean isStartOfLine(int inputIndex);
 
-	boolean isEndOfLine(int inputIndex);
-	
-	boolean isEndOfFile(int inputIndex);
+    boolean isEndOfLine(int inputIndex);
+
+    boolean isEndOfFile(int inputIndex);
 }

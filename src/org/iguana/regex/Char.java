@@ -39,73 +39,73 @@ import java.util.Set;
  *
  */
 public class Char extends AbstractRegularExpression {
-	
-	private final int val;
 
-	private Char(Builder builder) {
-		super(builder);
-		this.val = builder.val;
-	}	
-	
-	public static Char from(int val) {
-		return new Builder(val).build();
-	}
-	
-	public int getValue() {
-		return val;
-	}
+    private final int val;
 
-	@Override
-	public int hashCode() {
-		return val;
-	}
+    private Char(Builder builder) {
+        super(builder);
+        this.val = builder.val;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
+    public static Char from(int val) {
+        return new Builder(val).build();
+    }
 
-		if (!(obj instanceof Char))
-			return false;
-		
-		Char other = (Char) obj;
-		
-		return val == other.val;
-	}
+    public int getValue() {
+        return val;
+    }
 
-	public static String getName(int c) {
-		if (CharacterRanges.isPrintableAscii(c)) {
-			return (char) c + "";
-		} else if (CharacterRanges.isKnownWhitespace(c)) {
-			return CharacterRanges.getKnownWhitespaceString(c);
-		} else {
-			String s = "\\u" + String.format("%04X", c);
-			// Escape newline inside strings
-			return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s  : s;
-		}
-	}
+    @Override
+    public int hashCode() {
+        return val;
+    }
 
-	@Override
-	public String toString() {
-		return "'" + getName(val) + "'";
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-	@Override
-	public boolean isNullable() {
-		return false;
-	}
-	
-	@Override
-	public Set<CharRange> getFirstSet() {
-		Set<CharRange> firstSet = new HashSet<>();
-		firstSet.add(CharRange.in(val, val));
-		return firstSet;
-	}
-	
-	@Override
-	public Set<CharRange> getNotFollowSet() {
-		return Collections.emptySet();
-	}
+        if (!(obj instanceof Char))
+            return false;
+
+        Char other = (Char) obj;
+
+        return val == other.val;
+    }
+
+    public static String getName(int c) {
+        if (CharacterRanges.isPrintableAscii(c)) {
+            return (char) c + "";
+        } else if (CharacterRanges.isKnownWhitespace(c)) {
+            return CharacterRanges.getKnownWhitespaceString(c);
+        } else {
+            String s = "\\u" + String.format("%04X", c);
+            // Escape newline inside strings
+            return s.equals("\\u000D") || s.equals("\\u000A") ? "\\" + s  : s;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "'" + getName(val) + "'";
+    }
+
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
+
+    @Override
+    public Set<CharRange> getFirstSet() {
+        Set<CharRange> firstSet = new HashSet<>();
+        firstSet.add(CharRange.in(val, val));
+        return firstSet;
+    }
+
+    @Override
+    public Set<CharRange> getNotFollowSet() {
+        return Collections.emptySet();
+    }
 
     @Override
     public int length() {
@@ -113,37 +113,37 @@ public class Char extends AbstractRegularExpression {
     }
 
     public static Builder builder(int c) {
-		return new Builder(c);
-	}
-	
-	@Override
-	public RegexBuilder<Char> copy() {
-		return new Builder(this);
-	}
+        return new Builder(c);
+    }
 
-	public static class Builder extends RegexBuilder<Char> {
-		
-		private int val;
+    @Override
+    public RegexBuilder<Char> copy() {
+        return new Builder(this);
+    }
 
-		private Builder() {}
-		
-		public Builder(int val) {
-			this.val = val;
-		}
+    public static class Builder extends RegexBuilder<Char> {
 
-		public Builder(Char character) {
-			super(character);
-			this.val = character.val;
-		}
-		
-		@Override
-		public Char build() {
-			return new Char(this);
-		}
-	}
-	
-	@Override
-	public <T> T accept(RegularExpressionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        private int val;
+
+        private Builder() {}
+
+        public Builder(int val) {
+            this.val = val;
+        }
+
+        public Builder(Char character) {
+            super(character);
+            this.val = character.val;
+        }
+
+        @Override
+        public Char build() {
+            return new Char(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(RegularExpressionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

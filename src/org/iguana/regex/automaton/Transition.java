@@ -32,99 +32,99 @@ import org.iguana.regex.EOF;
 import org.iguana.utils.collections.hash.MurmurHash3;
 
 public class Transition implements Comparable<Transition> {
-	
-	private final CharRange range;
-	
-	private final State destination;
-	
-	public Transition(int start, int end, State destination) {
-		this(CharRange.in(start, end), destination);
-	}
-	
-	public Transition(int c, State destination) {
-		this(c, c, destination);
-	}
-	
-	public Transition(CharRange range, State destination) {
-		if (range.getEnd() < range.getStart())
-			throw new IllegalArgumentException("start cannot be less than end.");
-		
-		if (destination == null) 
-			throw new IllegalArgumentException("Destination cannot be null.");
 
-		this.range = range;
-		this.destination = destination;
-	}
-	
-	public static Transition EOFTransition(State destination) {
-		return new Transition(EOF.VALUE, destination);
-	}
-	
-	public int getStart() {
-		return range.getStart();
-	}
-	
-	public int getEnd() {
-		return range.getEnd();
-	}
-	
-	public CharRange getRange() {
-		return range;
-	}
-	
-	public State getDestination() {
-		return destination;
-	}
-	
-	public boolean isEpsilonTransition() {
-		return range.getStart() == -1;
-	}
-	
-	public boolean isLoop(State source) {
-		return source == destination;
-	}
-	
-	public boolean canMove(int c) {
-		return range.contains(c);
-	}
-	
-	public boolean overlaps(Transition t) {
-		return range.overlaps(t.range);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Transition))
-			return false;
-		
-		Transition other = (Transition) obj;
-		
-		return isEpsilonTransition() ? other.isEpsilonTransition() && this == other : range.equals(other.range);
-	}
-	
-	@Override
-	public int hashCode() {
-		
-		if (isEpsilonTransition())
-			return super.hashCode();
-		
-		return MurmurHash3.f2().apply(range.getStart(), range.getEnd());
-	}
-	
-	@Override
-	public String toString() {
-		if (isEpsilonTransition()) return "-1";
+    private final CharRange range;
 
-		return range.toString();
-	}
+    private final State destination;
 
-	@Override
-	public int compareTo(Transition t) {
-		return range.compareTo(t.range);
-	}
-		
+    public Transition(int start, int end, State destination) {
+        this(CharRange.in(start, end), destination);
+    }
+
+    public Transition(int c, State destination) {
+        this(c, c, destination);
+    }
+
+    public Transition(CharRange range, State destination) {
+        if (range.getEnd() < range.getStart())
+            throw new IllegalArgumentException("start cannot be less than end.");
+
+        if (destination == null)
+            throw new IllegalArgumentException("Destination cannot be null.");
+
+        this.range = range;
+        this.destination = destination;
+    }
+
+    public static Transition EOFTransition(State destination) {
+        return new Transition(EOF.VALUE, destination);
+    }
+
+    public int getStart() {
+        return range.getStart();
+    }
+
+    public int getEnd() {
+        return range.getEnd();
+    }
+
+    public CharRange getRange() {
+        return range;
+    }
+
+    public State getDestination() {
+        return destination;
+    }
+
+    public boolean isEpsilonTransition() {
+        return range.getStart() == -1;
+    }
+
+    public boolean isLoop(State source) {
+        return source == destination;
+    }
+
+    public boolean canMove(int c) {
+        return range.contains(c);
+    }
+
+    public boolean overlaps(Transition t) {
+        return range.overlaps(t.range);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Transition))
+            return false;
+
+        Transition other = (Transition) obj;
+
+        return isEpsilonTransition() ? other.isEpsilonTransition() && this == other : range.equals(other.range);
+    }
+
+    @Override
+    public int hashCode() {
+
+        if (isEpsilonTransition())
+            return super.hashCode();
+
+        return MurmurHash3.f2().apply(range.getStart(), range.getEnd());
+    }
+
+    @Override
+    public String toString() {
+        if (isEpsilonTransition()) return "-1";
+
+        return range.toString();
+    }
+
+    @Override
+    public int compareTo(Transition t) {
+        return range.compareTo(t.range);
+    }
+
 }

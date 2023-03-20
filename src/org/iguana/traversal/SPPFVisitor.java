@@ -39,14 +39,14 @@ import org.iguana.sppf.*;
  */
 public interface SPPFVisitor<T> {
 
-	T visit(TerminalNode node);
+    T visit(TerminalNode node);
 
-	T visit(NonterminalNode node);
+    T visit(NonterminalNode node);
 
-	Object visit(IntermediateNode node);
+    Object visit(IntermediateNode node);
 
-	Object visit(PackedNode node);
+    Object visit(PackedNode node);
 
-	T visit(ErrorNode node);
+    T visit(ErrorNode node);
 
 }

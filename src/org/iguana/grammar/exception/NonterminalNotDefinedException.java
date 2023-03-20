@@ -32,25 +32,25 @@ import org.iguana.grammar.symbol.Nonterminal;
 @SuppressWarnings("serial")
 public class NonterminalNotDefinedException extends RuntimeException {
 
-	private final Nonterminal nonterminal;
+    private final Nonterminal nonterminal;
 
-	public NonterminalNotDefinedException(Nonterminal nonterminal) {
-		super(nonterminal + " not defined.");
-		this.nonterminal = nonterminal;
-	}
+    public NonterminalNotDefinedException(Nonterminal nonterminal) {
+        super(nonterminal + " not defined.");
+        this.nonterminal = nonterminal;
+    }
 
-	@Override
-	public int hashCode() {
-		return nonterminal.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return nonterminal.hashCode();
+    }
 
-	// The equality in this class is important because we put these exceptions in a set and want
-	// to deduplicate them based on the nonterminals.
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof NonterminalNotDefinedException)) return false;
-		NonterminalNotDefinedException other = (NonterminalNotDefinedException) obj;
-		return nonterminal.equals(other.nonterminal);
-	}
+    // The equality in this class is important because we put these exceptions in a set and want
+    // to deduplicate them based on the nonterminals.
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof NonterminalNotDefinedException)) return false;
+        NonterminalNotDefinedException other = (NonterminalNotDefinedException) obj;
+        return nonterminal.equals(other.nonterminal);
+    }
 }

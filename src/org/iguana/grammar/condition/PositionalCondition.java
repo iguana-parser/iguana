@@ -35,47 +35,47 @@ import org.iguana.traversal.IConditionVisitor;
  *
  */
 public class PositionalCondition extends Condition {
-	
-	public PositionalCondition(ConditionType type) {
-		super(type);
-	}
-	
-	@Override
-	public String toString() {
-		return type.toString();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (this == obj) return true;
-		
-		if (!(obj instanceof PositionalCondition)) return false;
-		
-		PositionalCondition other = (PositionalCondition) obj;
-		
-		return type == other.type;
-	}
 
-	@Override
-	public int hashCode() {
-		return type.hashCode();
-	}
+    public PositionalCondition(ConditionType type) {
+        super(type);
+    }
 
-	@Override
-	public <T> T accept(IConditionVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+    @Override
+    public String toString() {
+        return type.toString();
+    }
 
-	public static PositionalCondition startOfLineCondition() {
-		return new PositionalCondition(ConditionType.START_OF_LINE);
-	}
+    @Override
+    public boolean equals(Object obj) {
 
-	public static PositionalCondition endOfLineCondition() {
-		return new PositionalCondition(ConditionType.END_OF_LINE);
-	}
+        if (this == obj) return true;
 
-	public static PositionalCondition endOfFileCondition() {
-		return new PositionalCondition(ConditionType.END_OF_FILE);
-	}
+        if (!(obj instanceof PositionalCondition)) return false;
+
+        PositionalCondition other = (PositionalCondition) obj;
+
+        return type == other.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
+
+    @Override
+    public <T> T accept(IConditionVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    public static PositionalCondition startOfLineCondition() {
+        return new PositionalCondition(ConditionType.START_OF_LINE);
+    }
+
+    public static PositionalCondition endOfLineCondition() {
+        return new PositionalCondition(ConditionType.END_OF_LINE);
+    }
+
+    public static PositionalCondition endOfFileCondition() {
+        return new PositionalCondition(ConditionType.END_OF_FILE);
+    }
 }

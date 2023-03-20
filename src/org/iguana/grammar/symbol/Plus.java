@@ -38,112 +38,112 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Plus extends AbstractSymbol {
 
-	private final Symbol s;
-	
-	private final List<Symbol> separators;
-	
-	public static Plus from(Symbol s) {
-		return new Builder(s).build();
-	}
-	
-	private Plus(Builder builder) {
-		super(builder);
-		this.s = builder.s;
-		this.separators = Collections.unmodifiableList(builder.separators);
-	}
-	
-	public List<Symbol> getSeparators() {
-		return separators;
-	}
-	
-	@Override
-	public SymbolBuilder<Plus> copy() {
-		return new Builder(this);
-	}
+    private final Symbol s;
 
-	@Override
-	public List<Symbol> getChildren() {
-		List<Symbol> children = new ArrayList<>();
-		children.add(s);
-		children.addAll(separators);
-		return children;
-	}
+    private final List<Symbol> separators;
 
-	public Symbol getSymbol() {
-		return s;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Plus))
-			return false;
-		
-		Plus other = (Plus) obj;
-		return s.equals(other.s) && separators.equals(other.separators);
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-	
-	public static class Builder extends SymbolBuilder<Plus> {
+    public static Plus from(Symbol s) {
+        return new Builder(s).build();
+    }
 
-		private Symbol s;
-		
-		private List<Symbol> separators = new ArrayList<>();
+    private Plus(Builder builder) {
+        super(builder);
+        this.s = builder.s;
+        this.separators = Collections.unmodifiableList(builder.separators);
+    }
 
-		private Builder() {}
+    public List<Symbol> getSeparators() {
+        return separators;
+    }
 
-		public Builder(Symbol s) {
-			this.s = s;
-		}
-		
-		public Builder(Plus plus) {
-			super(plus);
-			this.s = plus.s;
+    @Override
+    public SymbolBuilder<Plus> copy() {
+        return new Builder(this);
+    }
+
+    @Override
+    public List<Symbol> getChildren() {
+        List<Symbol> children = new ArrayList<>();
+        children.add(s);
+        children.addAll(separators);
+        return children;
+    }
+
+    public Symbol getSymbol() {
+        return s;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Plus))
+            return false;
+
+        Plus other = (Plus) obj;
+        return s.equals(other.s) && separators.equals(other.separators);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    public static class Builder extends SymbolBuilder<Plus> {
+
+        private Symbol s;
+
+        private List<Symbol> separators = new ArrayList<>();
+
+        private Builder() {}
+
+        public Builder(Symbol s) {
+            this.s = s;
+        }
+
+        public Builder(Plus plus) {
+            super(plus);
+            this.s = plus.s;
             this.addSeparators(plus.getSeparators());
-		}
-		
-		public Builder addSeparator(Symbol symbol) {
-			separators.add(symbol);
-			return this;
-		}
-		
-		public Builder addSeparators(List<Symbol> symbols) {
-			separators.addAll(symbols);
-			return this;
-		}
-		
-		public Builder addSeparators(Symbol...symbols) {
-			separators.addAll(Arrays.asList(symbols));
-			return this;
-		}
+        }
 
-		@Override
-		public SymbolBuilder<Plus> setChildren(List<Symbol> symbols) {
-			this.s = symbols.get(0);
-			this.separators = symbols.subList(1, symbols.size());
-			return this;
-		}
+        public Builder addSeparator(Symbol symbol) {
+            separators.add(symbol);
+            return this;
+        }
 
-		@Override
-		public Plus build() {
-			if (separators.isEmpty()) {
-				this.name = s.getName() + "+";
-			} else {
-				this.name = String.format("{%s %s}+", s.getName(), listToString(separators));
-			}
-			return new Plus(this);
-		}
-	}
+        public Builder addSeparators(List<Symbol> symbols) {
+            separators.addAll(symbols);
+            return this;
+        }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-	
+        public Builder addSeparators(Symbol...symbols) {
+            separators.addAll(Arrays.asList(symbols));
+            return this;
+        }
+
+        @Override
+        public SymbolBuilder<Plus> setChildren(List<Symbol> symbols) {
+            this.s = symbols.get(0);
+            this.separators = symbols.subList(1, symbols.size());
+            return this;
+        }
+
+        @Override
+        public Plus build() {
+            if (separators.isEmpty()) {
+                this.name = s.getName() + "+";
+            } else {
+                this.name = String.format("{%s %s}+", s.getName(), listToString(separators));
+            }
+            return new Plus(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
 }

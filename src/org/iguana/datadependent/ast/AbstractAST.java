@@ -33,9 +33,9 @@ import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
 
 public abstract class AbstractAST extends AbstractAttrs {
-	
-	public abstract Object interpret(IEvaluatorContext ctx, Input input);
-	
-	public abstract <T> T accept(IAbstractASTVisitor<T> visitor);
+
+    public abstract Object interpret(IEvaluatorContext ctx, Input input);
+
+    public abstract <T> T accept(IAbstractASTVisitor<T> visitor);
 
 }

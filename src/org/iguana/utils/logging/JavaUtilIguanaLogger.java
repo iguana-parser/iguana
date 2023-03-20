@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JavaUtilIguanaLogger implements IguanaLogger {
-	
-	private final Logger log;
+
+    private final Logger log;
     private final Level level;
 
     public JavaUtilIguanaLogger(String name) {
@@ -37,33 +37,33 @@ public class JavaUtilIguanaLogger implements IguanaLogger {
     }
 
     @Override
-	public void log(String s) {
-		log.log(level, s);
-	}
+    public void log(String s) {
+        log.log(level, s);
+    }
 
     @Override
-	public void log(String s, Object... args) {
-		log.log(level, String.format(s, args));
-	}
+    public void log(String s, Object... args) {
+        log.log(level, String.format(s, args));
+    }
 
     @Override
-	public void log(String s, Object arg) {
-		log.log(level, String.format(s, arg));
-	}
+    public void log(String s, Object arg) {
+        log.log(level, String.format(s, arg));
+    }
 
-	@Override
-	public void log(String s, Object arg1, Object arg2) {
-		log.log(level, String.format(s, arg1, arg2));
-	}
+    @Override
+    public void log(String s, Object arg1, Object arg2) {
+        log.log(level, String.format(s, arg1, arg2));
+    }
 
-	@Override
-	public void log(String s, Object arg1, Object arg2, Object arg3) {
-		log.log(level, String.format(s, arg1, arg2, arg3));
-	}
+    @Override
+    public void log(String s, Object arg1, Object arg2, Object arg3) {
+        log.log(level, String.format(s, arg1, arg2, arg3));
+    }
 
-	@Override
-	public void log(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
-		log.log(level, String.format(s, arg1, arg2, arg3, arg4));
-	}
+    @Override
+    public void log(String s, Object arg1, Object arg2, Object arg3, Object arg4) {
+        log.log(level, String.format(s, arg1, arg2, arg3, arg4));
+    }
 
 }

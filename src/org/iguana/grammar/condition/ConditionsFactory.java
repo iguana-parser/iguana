@@ -44,99 +44,99 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 
 public class ConditionsFactory {
-	
-	public static Conditions DEFAULT = new Conditions() {
 
-		@Override
-		public <T extends Result> boolean execute(
-				Input input,
-				BodyGrammarSlot slot,
-				GSSNode<T> u,
-				int leftExtent,
-				int rightExtent,
-				IEvaluatorContext ctx,
-				IguanaRuntime<T> runtime) {
+    public static Conditions DEFAULT = new Conditions() {
+
+        @Override
+        public <T extends Result> boolean execute(
+                Input input,
+                BodyGrammarSlot slot,
+                GSSNode<T> u,
+                int leftExtent,
+                int rightExtent,
+                IEvaluatorContext ctx,
+                IguanaRuntime<T> runtime) {
             return false;
         }
 
-		@Override
-		public String toString() {
-			return "";
-		}
-	};
-	
-	public static Conditions getConditions(List<Condition> conditions, MatcherFactory factory) {
-		
-		List<Condition> list = new ArrayList<>(conditions);
-		
-		boolean requiresEnvironment = false;
-		for (Condition c : list) {
-			if (c.isDataDependent()) {
-				requiresEnvironment = true;
-				break;
-			}
-		}
+        @Override
+        public String toString() {
+            return "";
+        }
+    };
 
-		ToSlotActionConditionVisitor visitor = new ToSlotActionConditionVisitor(factory);
-		List<SlotAction> actions = list.stream().map(c -> c.accept(visitor)).collect(Collectors.toList());
-		
-		if (requiresEnvironment) {
-			return new Conditions() {
+    public static Conditions getConditions(List<Condition> conditions, MatcherFactory factory) {
 
-				@Override
-				public <T extends Result> boolean execute(
-						Input input,
-						BodyGrammarSlot slot,
-						GSSNode<T> gssNode,
-						int lefExtent,
-						int rightExtent,
-						IEvaluatorContext ctx,
-						IguanaRuntime<T> runtime) {
-					for (int j = 0; j < actions.size(); j++) {
-						SlotAction slotAction = actions.get(j);
-						if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
-							runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
-							return true;
-						}
-					}
-					return false;
-				}
-				
-				@Override
-				public String toString() {
-					return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
-				}
-				
-			};
-		}
-		
-		return new Conditions() {
+        List<Condition> list = new ArrayList<>(conditions);
 
-			@Override
-			public <T extends Result> boolean execute(
-					Input input,
-					BodyGrammarSlot slot,
-					GSSNode<T> gssNode,
-					int leftExtent,
-					int rightExtent,
-					IEvaluatorContext ctx,
-					IguanaRuntime<T> runtime) {
-				for (int j = 0; j < actions.size(); j++) {
-					SlotAction slotAction = actions.get(j);
-					if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
-						runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
-						return true;
-					}
-				}
-				return false;
-			}
+        boolean requiresEnvironment = false;
+        for (Condition c : list) {
+            if (c.isDataDependent()) {
+                requiresEnvironment = true;
+                break;
+            }
+        }
 
-			@Override
-			public String toString() {
-				return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
-			}
-		};
+        ToSlotActionConditionVisitor visitor = new ToSlotActionConditionVisitor(factory);
+        List<SlotAction> actions = list.stream().map(c -> c.accept(visitor)).collect(Collectors.toList());
 
-	}
+        if (requiresEnvironment) {
+            return new Conditions() {
+
+                @Override
+                public <T extends Result> boolean execute(
+                        Input input,
+                        BodyGrammarSlot slot,
+                        GSSNode<T> gssNode,
+                        int lefExtent,
+                        int rightExtent,
+                        IEvaluatorContext ctx,
+                        IguanaRuntime<T> runtime) {
+                    for (int j = 0; j < actions.size(); j++) {
+                        SlotAction slotAction = actions.get(j);
+                        if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
+                            runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                @Override
+                public String toString() {
+                    return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
+                }
+
+            };
+        }
+
+        return new Conditions() {
+
+            @Override
+            public <T extends Result> boolean execute(
+                    Input input,
+                    BodyGrammarSlot slot,
+                    GSSNode<T> gssNode,
+                    int leftExtent,
+                    int rightExtent,
+                    IEvaluatorContext ctx,
+                    IguanaRuntime<T> runtime) {
+                for (int j = 0; j < actions.size(); j++) {
+                    SlotAction slotAction = actions.get(j);
+                    if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
+                        runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public String toString() {
+                return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
+            }
+        };
+
+    }
 
 }

@@ -38,301 +38,301 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Nonterminal extends AbstractSymbol {
 
-	private final boolean ebnfList;
-	
-	private final int index;
-	
-	private final String variable;
-	
-	private final Set<String> state;
-	
-	private final List<String> parameters; // Only head
-	
-	private final Expression[] arguments;
-	
-	private final Set<String> excepts;
-	
-	/**
-	 * The type of this nonterminal. This field is used to track EBNF to BNF conversion
-	 * information for each nonterminal. See NonterminalNodeType.
-	 */
-	private final NonterminalNodeType nodeType;
-	
-	public static Nonterminal withName(String name) {
-		return new Builder(name).build();
-	}
+    private final boolean ebnfList;
 
-	protected Nonterminal(Builder builder) {
-		super(builder);
-		this.ebnfList = builder.ebnfList;
-		this.index = builder.index;
-		this.variable = builder.variable;
-		this.state = builder.state;
-		this.parameters = builder.parameters;
-		this.arguments = builder.arguments;
-		this.excepts = builder.excepts;
-		this.nodeType = builder.nodeType;
-	}
-	
-	public boolean isEbnfList() {
-		if (ebnfList) {
-			return true;
-		} else {
-			return name.startsWith("List");
-		}
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-	
-	public String getVariable() {
-		return variable;
-	}
-	
-	public Set<String> getState() {
-		return state;
-	}
-	
-	public List<String> getParameters() {
-		return parameters;
-	}
-	
-	public Expression[] getArguments() {
-		return arguments;
-	}
-	
-	public Set<String> getExcepts() {
-		return excepts;
-	}
+    private final int index;
 
-	public NonterminalNodeType getNodeType() {
-		return nodeType;
-	}
+    private final String variable;
 
-	@Override
-	public String toString() {
-		return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
-				+ (state != null && !state.isEmpty()? listToString(state, ":") + "=" : "")
-				+ (getPreConditions().isEmpty()? "" : listToString(getPreConditions(), ","))
-			    + (label != null? label + ":" : "")
-			    + name + (index > 0 ? index : "")
-			    + (arguments == null && parameters != null? "(" + listToString(parameters, ",") + ")" : "")
-		        + (arguments != null? "(" + listToString(arguments, ",") + ")" : "")
-		        + (getPostConditions().isEmpty()? "" : listToString(getPostConditions(), ","));
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Nonterminal))
-			return false;
-		
-		Nonterminal other = (Nonterminal) obj;
+    private final Set<String> state;
 
-		return getEffectiveName().equals(other.getEffectiveName());
-	}
+    private final List<String> parameters; // Only head
+
+    private final Expression[] arguments;
+
+    private final Set<String> excepts;
+
+    /**
+     * The type of this nonterminal. This field is used to track EBNF to BNF conversion
+     * information for each nonterminal. See NonterminalNodeType.
+     */
+    private final NonterminalNodeType nodeType;
+
+    public static Nonterminal withName(String name) {
+        return new Builder(name).build();
+    }
+
+    protected Nonterminal(Builder builder) {
+        super(builder);
+        this.ebnfList = builder.ebnfList;
+        this.index = builder.index;
+        this.variable = builder.variable;
+        this.state = builder.state;
+        this.parameters = builder.parameters;
+        this.arguments = builder.arguments;
+        this.excepts = builder.excepts;
+        this.nodeType = builder.nodeType;
+    }
+
+    public boolean isEbnfList() {
+        if (ebnfList) {
+            return true;
+        } else {
+            return name.startsWith("List");
+        }
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public Set<String> getState() {
+        return state;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
+    public Expression[] getArguments() {
+        return arguments;
+    }
+
+    public Set<String> getExcepts() {
+        return excepts;
+    }
+
+    public NonterminalNodeType getNodeType() {
+        return nodeType;
+    }
+
+    @Override
+    public String toString() {
+        return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
+                + (state != null && !state.isEmpty()? listToString(state, ":") + "=" : "")
+                + (getPreConditions().isEmpty()? "" : listToString(getPreConditions(), ","))
+                + (label != null? label + ":" : "")
+                + name + (index > 0 ? index : "")
+                + (arguments == null && parameters != null? "(" + listToString(parameters, ",") + ")" : "")
+                + (arguments != null? "(" + listToString(arguments, ",") + ")" : "")
+                + (getPostConditions().isEmpty()? "" : listToString(getPostConditions(), ","));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Nonterminal))
+            return false;
+
+        Nonterminal other = (Nonterminal) obj;
+
+        return getEffectiveName().equals(other.getEffectiveName());
+    }
 
     private String getEffectiveName() {
         return name + (index > 0 ? index : "");
     }
 
-	@Override
-	public int hashCode() {
-		return getEffectiveName().hashCode();
-	}
-	
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    @Override
+    public int hashCode() {
+        return getEffectiveName().hashCode();
+    }
 
-	public static class Builder extends SymbolBuilder<Nonterminal> {
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-		private boolean ebnfList;
-		
-		private int index;
-		
-		private String variable;
-		
-		private Set<String> state;
-		
-		private List<String> parameters; // Only head
-		
-		private Expression[] arguments;
-		
-		private Set<String> excepts;
+    public static class Builder extends SymbolBuilder<Nonterminal> {
 
-		private NonterminalNodeType nodeType = NonterminalNodeType.Basic;
-		
-		private Map<String, Object> attributes = new HashMap<>();
+        private boolean ebnfList;
 
-		public Builder(Nonterminal nonterminal) {
-			super(nonterminal);
-			this.ebnfList = nonterminal.ebnfList;
-			this.index = nonterminal.index;
-			this.variable = nonterminal.variable;
-			this.state = nonterminal.state;
-			this.parameters = nonterminal.parameters;
-			this.arguments = nonterminal.arguments;
-			this.excepts = nonterminal.excepts;
-			this.nodeType = nonterminal.nodeType;
-		}
+        private int index;
 
-		public Builder(String name) {
-			this.name = name;
-		}
+        private String variable;
 
-		private Builder() { }
+        private Set<String> state;
 
-		public Builder setName(String name) {
-			this.name = name;
-			return this;
-		}
+        private List<String> parameters; // Only head
 
-		public Builder setIndex(int index) {
-			this.index = index;
-			return this;
-		}
-		
-		public Builder setVariable(String variable) {
-			this.variable = variable;
-			return this;
-		}
-		
-		public Builder setState(Set<String> state) {
-			this.state = state;
-			return this;
-		}
-		
-		public Builder setEbnfList(boolean ebnfList) {
-			this.ebnfList = ebnfList;
-			return this;
-		}
+        private Expression[] arguments;
 
-		public Builder addParameters(String...parameters) {
-			addParameters(Arrays.asList(parameters));
-			return this;
-		}
+        private Set<String> excepts;
 
-		public Builder addParameters(List<String> parameters) {
-			if (parameters.isEmpty()) return this;
-			if (this.parameters == null) {
-				this.parameters = new ArrayList<>(parameters);
- 			} else {
-				for (String parameter : parameters) {
-					if (!this.parameters.contains(parameter))
-						this.parameters.add(parameter);
-				}
-			}
-			return this;
-		}
+        private NonterminalNodeType nodeType = NonterminalNodeType.Basic;
 
-		public Builder apply(Expression... arguments) {
-			if (arguments.length == 0)
-				return this;
-			
-			if (this.arguments == null) {
-				this.arguments = arguments;
-				return this;
-			}
-			
-			Expression[] args = new Expression[this.arguments.length + arguments.length];
-			int i = 0;
-			for (Expression argument : this.arguments)
-				args[i++] = argument;
-			
-			for (Expression argument : arguments)
-				args[i++] = argument;
+        private Map<String, Object> attributes = new HashMap<>();
 
-			this.arguments = args;			
-			return this;
-		}
-		
-		@Override
-		public Builder setLabel(String label) {
-			super.setLabel(label);
-			return this;
-		}
-		
-		@Override
-		public Builder addPreCondition(Condition condition) {
-			preConditions.add(condition);
-			return this;
-		}
-		
-		@Override
-		public Builder addPostCondition(Condition condition) {
-			postConditions.add(condition);
-			return this;
-		}	
-		
-		@Override
-		public Builder setObject(Object object) {
-			this.object = object;
-			return this;
-		}
-		
-		@Override
-	 	public Builder addPreConditions(Iterable<Condition> conditions) {
-	 		conditions.forEach(c -> preConditions.add(c));
-			return this;
-		}
-	 	
-		@Override
-	 	public Builder addPostConditions(Iterable<Condition> conditions) {
-	 		conditions.forEach(c -> postConditions.add(c));
-			return this;
-		}
-		
-		public Builder addExcept(String label) {
-			if (excepts == null) excepts = new HashSet<>();
-			excepts.add(label);
-			return this;
-		}
-		
-		public Builder addExcepts(Set<String> labels) {
-			if (labels == null || labels.isEmpty()) 
-				return this;
-			
-			if (excepts == null) 
-				excepts = new HashSet<>();
-			
-			excepts.addAll(labels);			
-			return this;
-		}
+        public Builder(Nonterminal nonterminal) {
+            super(nonterminal);
+            this.ebnfList = nonterminal.ebnfList;
+            this.index = nonterminal.index;
+            this.variable = nonterminal.variable;
+            this.state = nonterminal.state;
+            this.parameters = nonterminal.parameters;
+            this.arguments = nonterminal.arguments;
+            this.excepts = nonterminal.excepts;
+            this.nodeType = nonterminal.nodeType;
+        }
 
-		public Builder setNodeType(NonterminalNodeType nodeType) {
-			this.nodeType = nodeType;
-			return this;
-		}
-		
-		public Builder setAttributes(Map<String, Object> attributes) {
-			this.attributes = attributes;
-			return this;
-		}
-		
-		public Builder addAttribute(String key, Object value) {
-			this.attributes.put(key, value);
-			return this;
-		}
-		
-		public Builder addAttributes(Map<String, Object> attributes) {
-			this.attributes.putAll(attributes);
-			return this;
-		}
+        public Builder(String name) {
+            this.name = name;
+        }
 
-		@Override
-		public Nonterminal build() {
-			return new Nonterminal(this);
-		}
-	}
+        private Builder() { }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setIndex(int index) {
+            this.index = index;
+            return this;
+        }
+
+        public Builder setVariable(String variable) {
+            this.variable = variable;
+            return this;
+        }
+
+        public Builder setState(Set<String> state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder setEbnfList(boolean ebnfList) {
+            this.ebnfList = ebnfList;
+            return this;
+        }
+
+        public Builder addParameters(String...parameters) {
+            addParameters(Arrays.asList(parameters));
+            return this;
+        }
+
+        public Builder addParameters(List<String> parameters) {
+            if (parameters.isEmpty()) return this;
+            if (this.parameters == null) {
+                this.parameters = new ArrayList<>(parameters);
+            } else {
+                for (String parameter : parameters) {
+                    if (!this.parameters.contains(parameter))
+                        this.parameters.add(parameter);
+                }
+            }
+            return this;
+        }
+
+        public Builder apply(Expression... arguments) {
+            if (arguments.length == 0)
+                return this;
+
+            if (this.arguments == null) {
+                this.arguments = arguments;
+                return this;
+            }
+
+            Expression[] args = new Expression[this.arguments.length + arguments.length];
+            int i = 0;
+            for (Expression argument : this.arguments)
+                args[i++] = argument;
+
+            for (Expression argument : arguments)
+                args[i++] = argument;
+
+            this.arguments = args;
+            return this;
+        }
+
+        @Override
+        public Builder setLabel(String label) {
+            super.setLabel(label);
+            return this;
+        }
+
+        @Override
+        public Builder addPreCondition(Condition condition) {
+            preConditions.add(condition);
+            return this;
+        }
+
+        @Override
+        public Builder addPostCondition(Condition condition) {
+            postConditions.add(condition);
+            return this;
+        }
+
+        @Override
+        public Builder setObject(Object object) {
+            this.object = object;
+            return this;
+        }
+
+        @Override
+        public Builder addPreConditions(Iterable<Condition> conditions) {
+            conditions.forEach(c -> preConditions.add(c));
+            return this;
+        }
+
+        @Override
+        public Builder addPostConditions(Iterable<Condition> conditions) {
+            conditions.forEach(c -> postConditions.add(c));
+            return this;
+        }
+
+        public Builder addExcept(String label) {
+            if (excepts == null) excepts = new HashSet<>();
+            excepts.add(label);
+            return this;
+        }
+
+        public Builder addExcepts(Set<String> labels) {
+            if (labels == null || labels.isEmpty())
+                return this;
+
+            if (excepts == null)
+                excepts = new HashSet<>();
+
+            excepts.addAll(labels);
+            return this;
+        }
+
+        public Builder setNodeType(NonterminalNodeType nodeType) {
+            this.nodeType = nodeType;
+            return this;
+        }
+
+        public Builder setAttributes(Map<String, Object> attributes) {
+            this.attributes = attributes;
+            return this;
+        }
+
+        public Builder addAttribute(String key, Object value) {
+            this.attributes.put(key, value);
+            return this;
+        }
+
+        public Builder addAttributes(Map<String, Object> attributes) {
+            this.attributes.putAll(attributes);
+            return this;
+        }
+
+        @Override
+        public Nonterminal build() {
+            return new Nonterminal(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 
 }

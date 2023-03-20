@@ -30,43 +30,43 @@ package org.iguana.utils.collections.key;
 
 public class ObjectKey4 implements Key {
 
-	private final Object o1;
-	private final Object o2;
-	private final Object o3;
+    private final Object o1;
+    private final Object o2;
+    private final Object o3;
     private final Object o4;
-	private final int hash;
+    private final int hash;
 
-	public ObjectKey4(Object o1, Object o2, Object o3, Object o4, int hash) {
-		this.o1 = o1;
-		this.o2 = o2;
-		this.o3 = o3;
+    public ObjectKey4(Object o1, Object o2, Object o3, Object o4, int hash) {
+        this.o1 = o1;
+        this.o2 = o2;
+        this.o3 = o3;
         this.o4 = o4;
-		this.hash = hash;
-	}
+        this.hash = hash;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-		if (!(obj instanceof ObjectKey4))
-			return false;
+        if (!(obj instanceof ObjectKey4))
+            return false;
 
-		ObjectKey4 other = (ObjectKey4) obj;
-		return o1.equals(other.o1) &&
+        ObjectKey4 other = (ObjectKey4) obj;
+        return o1.equals(other.o1) &&
                o2.equals(other.o2) &&
                o3.equals(other.o3) &&
                o4.equals(other.o4);
-	}
-	
-	@Override
-	public int hashCode() {
-		return hash;
-	}
+    }
 
-	@Override
-	public String toString() {
-		return String.format("(%s, %s, %s, %s)", o1, o2, o3, o4);
-	}
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s, %s, %s)", o1, o2, o3, o4);
+    }
 
 }

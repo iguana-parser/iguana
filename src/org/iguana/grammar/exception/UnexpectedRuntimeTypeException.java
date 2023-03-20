@@ -32,8 +32,8 @@ import org.iguana.datadependent.ast.Expression;
 @SuppressWarnings("serial")
 public class UnexpectedRuntimeTypeException extends RuntimeException {
 
-	public UnexpectedRuntimeTypeException(Expression expression) {
-		super("Unexpected runtime type of a value: " + expression);
-	}
+    public UnexpectedRuntimeTypeException(Expression expression) {
+        super("Unexpected runtime type of a value: " + expression);
+    }
 
 }

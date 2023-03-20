@@ -38,71 +38,71 @@ import org.iguana.result.Result;
 public class TerminalTransition extends AbstractTransition {
 
     protected final TerminalGrammarSlot terminalSlot;
-	
-	private final Conditions preConditions;
-	
-	private final Conditions postConditions;
 
-	public TerminalTransition(
-			TerminalGrammarSlot terminalSlot,
-			BodyGrammarSlot origin,
-			BodyGrammarSlot dest,
-			Conditions preConditions,
-			Conditions postConditions) {
-		super(origin, dest);
-		this.terminalSlot = terminalSlot;
-		this.preConditions = preConditions;
-		this.postConditions = postConditions;
-	}
+    private final Conditions preConditions;
 
-	public TerminalGrammarSlot getTerminalSlot() {
-		return terminalSlot;
-	}
-	
-	@Override
-	public String getLabel() {
-		return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getTerminalSlot();
-	}
-	
-	@Override
-	public <T extends Result> void execute(
-			Input input,
-			GSSNode<T> u,
-			T result,
-			Environment env,
-			IguanaRuntime<T> runtime) {
+    private final Conditions postConditions;
+
+    public TerminalTransition(
+            TerminalGrammarSlot terminalSlot,
+            BodyGrammarSlot origin,
+            BodyGrammarSlot dest,
+            Conditions preConditions,
+            Conditions postConditions) {
+        super(origin, dest);
+        this.terminalSlot = terminalSlot;
+        this.preConditions = preConditions;
+        this.postConditions = postConditions;
+    }
+
+    public TerminalGrammarSlot getTerminalSlot() {
+        return terminalSlot;
+    }
+
+    @Override
+    public String getLabel() {
+        return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getTerminalSlot();
+    }
+
+    @Override
+    public <T extends Result> void execute(
+            Input input,
+            GSSNode<T> u,
+            T result,
+            Environment env,
+            IguanaRuntime<T> runtime) {
         int i = result.isDummy() ? u.getInputIndex() : result.getRightExtent();
 
-		runtime.setEnvironment(env);
-		
-		if (dest.getLabel() != null)
-			runtime.getEvaluatorContext().declareVariable(
-				String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+        runtime.setEnvironment(env);
 
-		if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime)) {
-			terminalSlot.recordFailure(i);
-			return;
-		}
+        if (dest.getLabel() != null)
+            runtime.getEvaluatorContext().declareVariable(
+                String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-		T cr = terminalSlot.getResult(input, i, runtime);
-		
-		if (cr == null) {
-			runtime.recordParseError(i, input, origin, u, "Match failed");
-			return;
-		}
+        if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime)) {
+            terminalSlot.recordFailure(i);
+            return;
+        }
 
-		if (dest.getLabel() != null)
-			runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+        T cr = terminalSlot.getResult(input, i, runtime);
 
-		if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(),
-			runtime.getEvaluatorContext(), runtime)) {
-			terminalSlot.recordFailure(cr.getRightExtent());
-			return;
-		}
+        if (cr == null) {
+            runtime.recordParseError(i, input, origin, u, "Match failed");
+            return;
+        }
 
-		T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
-				
-		dest.execute(input, u, n, runtime.getEnvironment(), runtime);
-	}
-	
+        if (dest.getLabel() != null)
+            runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+
+        if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(),
+            runtime.getEvaluatorContext(), runtime)) {
+            terminalSlot.recordFailure(cr.getRightExtent());
+            return;
+        }
+
+        T n = dest.isFirst() ? cr : runtime.getResultOps().merge(null, result, cr, dest);
+
+        dest.execute(input, u, n, runtime.getEnvironment(), runtime);
+    }
+
 }

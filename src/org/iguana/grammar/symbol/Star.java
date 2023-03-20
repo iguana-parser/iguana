@@ -38,110 +38,110 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class Star extends AbstractSymbol {
 
-	private final Symbol s;
-	
-	private final List<Symbol> separators;
-	
-	public static Star from(Symbol s) {
-		return new Builder(s).build();
-	}
+    private final Symbol s;
 
-	private Star(Builder builder) {
-		super(builder);
-		this.s = builder.s;
-		this.separators = Collections.unmodifiableList(builder.separators);
-	}
+    private final List<Symbol> separators;
 
-	public List<Symbol> getSeparators() {
-		return separators;
-	}
+    public static Star from(Symbol s) {
+        return new Builder(s).build();
+    }
 
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+    private Star(Builder builder) {
+        super(builder);
+        this.s = builder.s;
+        this.separators = Collections.unmodifiableList(builder.separators);
+    }
 
-	@Override
-	public List<Symbol> getChildren() {
-		List<Symbol> children = new ArrayList<>();
-		children.add(s);
-		children.addAll(separators);
-		return children;
-	}
+    public List<Symbol> getSeparators() {
+        return separators;
+    }
 
-	public Symbol getSymbol() {
-		return s;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		
-		if (!(obj instanceof Star))
-			return false;
-		
-		Star other = (Star) obj;
-		return s.equals(other.s) && separators.equals(other.separators);
-	}
-	
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+    @Override
+    public Builder copy() {
+        return new Builder(this);
+    }
 
-	public static class Builder extends SymbolBuilder<Star> {
+    @Override
+    public List<Symbol> getChildren() {
+        List<Symbol> children = new ArrayList<>();
+        children.add(s);
+        children.addAll(separators);
+        return children;
+    }
 
-		private Symbol s;
-		private List<Symbol> separators = new ArrayList<>();
+    public Symbol getSymbol() {
+        return s;
+    }
 
-		private Builder() {}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-		public Builder(Symbol s) {
-			this.s = s;
-		}
-		
-		public Builder(Star star) {
-			super(star);
-			this.s = star.s;
+        if (!(obj instanceof Star))
+            return false;
+
+        Star other = (Star) obj;
+        return s.equals(other.s) && separators.equals(other.separators);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    public static class Builder extends SymbolBuilder<Star> {
+
+        private Symbol s;
+        private List<Symbol> separators = new ArrayList<>();
+
+        private Builder() {}
+
+        public Builder(Symbol s) {
+            this.s = s;
+        }
+
+        public Builder(Star star) {
+            super(star);
+            this.s = star.s;
             this.addSeparators(star.getSeparators());
-		}
-		
-		public Builder addSeparator(Symbol symbol) {
-			separators.add(symbol);
-			return this;
-		}
-		
-		public Builder addSeparators(List<Symbol> symbols) {
-			separators.addAll(symbols);
-			return this;
-		}
-		
-		public Builder addSeparators(Symbol...symbols) {
-			separators.addAll(Arrays.asList(symbols));
-			return this;
-		}
+        }
 
-		@Override
-		public SymbolBuilder<Star> setChildren(List<Symbol> symbols) {
-			this.s = symbols.get(0);
-			this.separators = symbols.subList(1, symbols.size());
-			return this;
-		}
+        public Builder addSeparator(Symbol symbol) {
+            separators.add(symbol);
+            return this;
+        }
 
-		@Override
-		public Star build() {
-			if (separators.isEmpty()) {
-				this.name = s.getName() + "*";
-			} else {
-				this.name = String.format("{%s %s}*", s.getName(), listToString(separators));
-			}
-			return new Star(this);
-		}
-	}
+        public Builder addSeparators(List<Symbol> symbols) {
+            separators.addAll(symbols);
+            return this;
+        }
 
-	@Override
-	public <T> T accept(ISymbolVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
+        public Builder addSeparators(Symbol...symbols) {
+            separators.addAll(Arrays.asList(symbols));
+            return this;
+        }
+
+        @Override
+        public SymbolBuilder<Star> setChildren(List<Symbol> symbols) {
+            this.s = symbols.get(0);
+            this.separators = symbols.subList(1, symbols.size());
+            return this;
+        }
+
+        @Override
+        public Star build() {
+            if (separators.isEmpty()) {
+                this.name = s.getName() + "*";
+            } else {
+                this.name = String.format("{%s %s}*", s.getName(), listToString(separators));
+            }
+            return new Star(this);
+        }
+    }
+
+    @Override
+    public <T> T accept(ISymbolVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }
