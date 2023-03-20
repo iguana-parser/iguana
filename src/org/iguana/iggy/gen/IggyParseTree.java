@@ -60,7 +60,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Rule extends NonterminalNode {
+    public abstract static class Rule extends NonterminalNode {
         public Rule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -185,7 +185,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Alternative extends NonterminalNode {
+    public abstract static class Alternative extends NonterminalNode {
         public Alternative(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -234,7 +234,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Sequence extends NonterminalNode {
+    public abstract static class Sequence extends NonterminalNode {
         public Sequence(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -345,7 +345,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Symbol extends NonterminalNode {
+    public abstract static class Symbol extends NonterminalNode {
         public Symbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -955,7 +955,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Statement extends NonterminalNode {
+    public abstract static class Statement extends NonterminalNode {
         public Statement(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1004,7 +1004,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Binding extends NonterminalNode {
+    public abstract static class Binding extends NonterminalNode {
         public Binding(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1053,7 +1053,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Regex extends NonterminalNode {
+    public abstract static class Regex extends NonterminalNode {
         public Regex(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1239,7 +1239,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class CharClass extends NonterminalNode {
+    public abstract static class CharClass extends NonterminalNode {
         public CharClass(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1284,7 +1284,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Range extends NonterminalNode {
+    public abstract static class Range extends NonterminalNode {
         public Range(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1333,7 +1333,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class Expression extends NonterminalNode {
+    public abstract static class Expression extends NonterminalNode {
         public Expression(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }
@@ -1848,7 +1848,7 @@ public class IggyParseTree {
         }
     }
 
-    public static abstract class FunName extends NonterminalNode {
+    public abstract static class FunName extends NonterminalNode {
         public FunName(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);
         }

@@ -218,7 +218,7 @@ public class ParseTreeVisitorGenerator extends Generator {
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
         // CHECKSTYLE:DISABLE:LineLength
         return
-            "    public static " + (isAbstract ? "abstract " : "") + "class " + toFirstUpperCase(symbolClass) +
+            "    public " + (isAbstract ? "abstract " : "") + "static class " + toFirstUpperCase(symbolClass) +
             " extends " + toFirstUpperCase(superType) + " {\n" +
             "        public " + toFirstUpperCase(symbolClass) +
             "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +

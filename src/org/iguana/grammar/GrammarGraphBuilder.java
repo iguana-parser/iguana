@@ -505,7 +505,7 @@ public class GrammarGraphBuilder {
         return slot;
     }
 
-    static private void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
+    private static void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
         List<String> parameters = nonterminal.getParameters();
         if ((parameters == null && arguments == null) ||
             (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length))

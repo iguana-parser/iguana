@@ -37,7 +37,7 @@ public class PersistentEnvironment implements Environment {
 
     private final PersistentEnvironment parent;
 
-    final private Map.Immutable<String, Object> bindings;
+    private final Map.Immutable<String, Object> bindings;
 
     static final Environment EMPTY = new PersistentEnvironment(null, Map.Immutable.of());
 

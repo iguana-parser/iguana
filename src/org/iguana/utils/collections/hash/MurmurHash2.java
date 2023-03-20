@@ -32,8 +32,8 @@ import org.iguana.utils.function.IntFunctionAny;
 
 public class MurmurHash2 {
 
-    private final static int m = 0x5bd1e995;
-    private final static int r = 24;
+    private static final int m = 0x5bd1e995;
+    private static final int r = 24;
 
     public static IntFunction5 hash5() {
         return hash5(19);
