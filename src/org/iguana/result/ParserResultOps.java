@@ -1,8 +1,22 @@
 package org.iguana.result;
 
-import org.iguana.grammar.slot.*;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.sppf.*;
+import org.iguana.sppf.DefaultTerminalNode;
+import org.iguana.sppf.EmptyTerminalNode;
+import org.iguana.sppf.EpsilonTerminalNode;
+import org.iguana.sppf.ErrorNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.KeywordTerminalNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.NonterminalNodeWithValue;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.SPPFVisitor;
 import org.iguana.util.ParserLogger;
 

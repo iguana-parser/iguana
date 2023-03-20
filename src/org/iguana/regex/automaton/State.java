@@ -31,7 +31,11 @@ import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
 import org.iguana.util.Tuple;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class State {
 

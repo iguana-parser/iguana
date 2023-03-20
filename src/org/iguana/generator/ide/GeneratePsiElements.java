@@ -3,7 +3,16 @@ package org.iguana.generator.ide;
 import org.iguana.generator.Generator;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parsetree.NonterminalNode;
 
 import java.io.File;

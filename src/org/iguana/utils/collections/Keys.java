@@ -1,7 +1,18 @@
 package org.iguana.utils.collections;
 
 import org.iguana.utils.collections.hash.MurmurHash3;
-import org.iguana.utils.collections.key.*;
+import org.iguana.utils.collections.key.IntArrayKey;
+import org.iguana.utils.collections.key.IntIntIntObjectKey;
+import org.iguana.utils.collections.key.IntIntObjectKey;
+import org.iguana.utils.collections.key.IntKey1;
+import org.iguana.utils.collections.key.IntKey3;
+import org.iguana.utils.collections.key.IntKey4;
+import org.iguana.utils.collections.key.IntObjectKey;
+import org.iguana.utils.collections.key.Key;
+import org.iguana.utils.collections.key.ObjectKey2;
+import org.iguana.utils.collections.key.ObjectKey3;
+import org.iguana.utils.collections.key.ObjectKey4;
+import org.iguana.utils.collections.key.ObjectKeyN;
 import org.iguana.utils.function.IntFunction3;
 import org.iguana.utils.function.IntFunction4;
 

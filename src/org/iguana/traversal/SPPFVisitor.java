@@ -27,7 +27,11 @@
 
 package org.iguana.traversal;
 
-import org.iguana.sppf.*;
+import org.iguana.sppf.ErrorNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 
 /**
  * Provides a standard interface based on the command pattern for

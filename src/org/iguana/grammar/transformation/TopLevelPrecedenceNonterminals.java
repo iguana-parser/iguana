@@ -1,6 +1,10 @@
 package org.iguana.grammar.transformation;
 
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alternative;
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.PriorityLevel;
+import org.iguana.grammar.symbol.Rule;
+import org.iguana.grammar.symbol.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -27,7 +27,11 @@
 
 package org.iguana.utils.collections.hash;
 
-import org.iguana.utils.function.*;
+import org.iguana.utils.function.IntFunction2;
+import org.iguana.utils.function.IntFunction3;
+import org.iguana.utils.function.IntFunction4;
+import org.iguana.utils.function.IntFunction5;
+import org.iguana.utils.function.IntFunctionAny;
 
 public class PrimeMultiplication {
 

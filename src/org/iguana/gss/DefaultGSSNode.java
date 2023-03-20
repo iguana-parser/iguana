@@ -42,7 +42,12 @@ import org.iguana.utils.collections.OpenAddressingHashMap;
 import org.iguana.utils.collections.key.Key;
 import org.iguana.utils.input.Input;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * If there is a cyclic GSSEdge, it's always the first one. If there is a cyclic GSS edge, there is always

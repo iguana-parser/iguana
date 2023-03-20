@@ -28,7 +28,19 @@
 package org.iguana.grammar;
 
 import org.iguana.grammar.exception.UnexpectedSymbolException;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.While;
 import org.iguana.traversal.ISymbolVisitor;
 
 public abstract class AbstractGrammarGraphSymbolVisitor<T> implements ISymbolVisitor<T> {

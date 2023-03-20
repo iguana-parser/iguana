@@ -27,11 +27,22 @@
 
 package org.iguana.grammar.runtime;
 
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.LayoutStrategy;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Symbol;
 import org.iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.grammar.slot.NonterminalNodeType;
-import org.iguana.grammar.symbol.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * 

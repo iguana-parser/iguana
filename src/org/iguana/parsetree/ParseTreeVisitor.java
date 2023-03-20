@@ -1,7 +1,11 @@
 package org.iguana.parsetree;
 
 
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Symbol;
 
 import java.util.ArrayList;
 import java.util.Collections;

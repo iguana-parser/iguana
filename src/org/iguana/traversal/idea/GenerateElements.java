@@ -28,15 +28,38 @@
 package org.iguana.traversal.idea;
 
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
 import org.iguana.grammar.symbol.Error;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Return;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.While;
 import org.iguana.traversal.ISymbolVisitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Anastasia Izmaylova on 18/12/15.

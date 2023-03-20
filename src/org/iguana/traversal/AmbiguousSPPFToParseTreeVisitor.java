@@ -8,14 +8,27 @@ import org.iguana.parsetree.MetaSymbolNode;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.VisitResult;
 import org.iguana.result.ParserResultOps;
-import org.iguana.sppf.*;
+import org.iguana.sppf.ErrorNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.traversal.exception.CyclicGrammarException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.Collections.singletonList;
-import static org.iguana.parsetree.VisitResult.*;
+import static org.iguana.parsetree.VisitResult.EBNF;
+import static org.iguana.parsetree.VisitResult.ebnf;
+import static org.iguana.parsetree.VisitResult.empty;
+import static org.iguana.parsetree.VisitResult.list;
+import static org.iguana.parsetree.VisitResult.single;
 
 public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResult> {
 

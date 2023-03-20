@@ -27,12 +27,22 @@
 
 package org.iguana.util.visualization;
 
+import org.iguana.sppf.ErrorNode;
+import org.iguana.sppf.IntermediateNode;
+import org.iguana.sppf.NonPackedNode;
+import org.iguana.sppf.NonterminalNode;
+import org.iguana.sppf.PackedNode;
+import org.iguana.sppf.SPPFNode;
+import org.iguana.sppf.TerminalNode;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.visualization.DotGraph;
-import org.iguana.sppf.*;
 import org.iguana.traversal.SPPFVisitor;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.visualization.DotGraph.newEdge;

@@ -28,7 +28,12 @@
 package org.iguana.util.visualization;
 
 import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.*;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.ConditionalTransition;
+import org.iguana.grammar.slot.EndGrammarSlot;
+import org.iguana.grammar.slot.GrammarSlot;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
+import org.iguana.grammar.slot.Transition;
 import org.iguana.utils.visualization.DotGraph;
 
 import java.util.HashMap;

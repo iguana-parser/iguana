@@ -1,6 +1,16 @@
 package org.iguana.regex.visitor;
 
-import org.iguana.regex.*;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Char;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.EOF;
+import org.iguana.regex.Epsilon;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.Reference;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Seq;
+import org.iguana.regex.Star;
 
 public interface RegularExpressionVisitor<T> {
 
