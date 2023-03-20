@@ -85,7 +85,7 @@ import java.util.Set;
 
 public class JsonSerializer {
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     static {
         mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()

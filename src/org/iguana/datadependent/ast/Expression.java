@@ -51,7 +51,7 @@ public abstract class Expression extends AbstractAST {
         return false;
     }
 
-    public static abstract class Boolean extends Expression {
+    public abstract static class Boolean extends Expression {
 
         public boolean isBoolean() {
             return true;
@@ -434,7 +434,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    public static abstract class Call extends Expression {
+    public abstract static class Call extends Expression {
 
         protected final java.lang.String fun;
         protected final Expression[] arguments;
@@ -770,7 +770,7 @@ public abstract class Expression extends AbstractAST {
 
     }
 
-    public static abstract class BinaryExpression extends Expression {
+    public abstract static class BinaryExpression extends Expression {
         protected final Expression lhs;
         protected final Expression rhs;
         private final java.lang.String symbolName;

@@ -35,10 +35,10 @@ import org.iguana.utils.function.IntFunctionAny;
 
 public class MurmurHash3 {
 
-    private final static int C1 = 0xcc9e2d51;
-    private final static int C2 = 0x1b873593;
-    private final static int M = 5;
-    private final static int N = 0xe6546b64;
+    private static final int C1 = 0xcc9e2d51;
+    private static final int C2 = 0x1b873593;
+    private static final int M = 5;
+    private static final int N = 0xe6546b64;
 
     public static IntFunction2 f2() {
         return f2(19);
@@ -207,14 +207,14 @@ public class MurmurHash3 {
         };
     }
 
-    private final static int mixK(int k) {
+    private static int mixK(int k) {
         k *= C1;
         k = Integer.rotateLeft(k, 15);
         k = k * C2;
         return k;
     }
 
-    private final static int mixH(int h, int k) {
+    private static int mixH(int h, int k) {
         h ^= k;
         h = Integer.rotateLeft(h, 13);
         h = h * M + N;
