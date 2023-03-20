@@ -27,10 +27,10 @@
 
 package org.iguana.datadependent.ast;
 
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.attrs.AbstractAttrs;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
+import org.iguana.utils.input.Input;
 
 public abstract class AbstractAST extends AbstractAttrs {
 

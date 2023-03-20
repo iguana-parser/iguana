@@ -27,12 +27,12 @@
 
 package org.iguana.grammar.condition;
 
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.GLLEvaluator;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.result.Result;
+import org.iguana.utils.input.Input;
 
 @FunctionalInterface
 public interface SlotAction {

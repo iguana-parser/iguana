@@ -164,8 +164,8 @@ public class ParseTreeVisitorGenerator extends Generator {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
-        sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
+        sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         sb.append("public interface " + className + "<T> extends ParseTreeVisitor<T> {\n\n");

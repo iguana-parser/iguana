@@ -1,7 +1,7 @@
 package org.iguana.util.config;
 
-import org.iguana.utils.logging.LogLevel;
 import org.iguana.util.Configuration;
+import org.iguana.utils.logging.LogLevel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

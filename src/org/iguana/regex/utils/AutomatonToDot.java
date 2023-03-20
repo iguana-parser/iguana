@@ -3,8 +3,8 @@ package org.iguana.regex.utils;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonVisitor;
 import org.iguana.regex.automaton.State;
-import org.iguana.utils.visualization.DotGraph;
 import org.iguana.regex.automaton.Transition;
+import org.iguana.utils.visualization.DotGraph;
 
 import java.util.IdentityHashMap;
 import java.util.Map;

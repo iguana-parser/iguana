@@ -27,13 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import org.iguana.utils.collections.IntHashMap;
-import org.iguana.utils.collections.Keys;
-import org.iguana.utils.collections.OpenAddressingHashMap;
-import org.iguana.utils.collections.OpenAddressingIntHashMap;
-import org.iguana.utils.collections.key.Key;
-import org.iguana.utils.collections.rangemap.RangeMap;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.lookahead.FollowTest;
@@ -45,6 +38,13 @@ import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.util.Configuration.EnvironmentImpl;
 import org.iguana.util.ParserLogger;
+import org.iguana.utils.collections.IntHashMap;
+import org.iguana.utils.collections.Keys;
+import org.iguana.utils.collections.OpenAddressingHashMap;
+import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.collections.key.Key;
+import org.iguana.utils.collections.rangemap.RangeMap;
+import org.iguana.utils.input.Input;
 
 import java.util.ArrayList;
 import java.util.List;

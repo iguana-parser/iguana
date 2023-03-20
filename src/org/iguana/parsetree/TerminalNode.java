@@ -5,9 +5,9 @@ import org.iguana.grammar.symbol.Terminal;
 import java.util.Collections;
 import java.util.List;
 
-import static org.iguana.utils.Assert.requireNonNegative;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
+import static org.iguana.utils.Assert.requireNonNegative;
 
 public abstract class TerminalNode implements ParseTreeNode {
 

@@ -27,9 +27,6 @@
 
 package org.iguana.traversal;
 
-import org.iguana.regex.matcher.Matcher;
-import org.iguana.regex.matcher.MatcherFactory;
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.grammar.condition.DataDependentCondition;
 import org.iguana.grammar.condition.PositionalCondition;
@@ -37,7 +34,10 @@ import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.grammar.condition.SlotAction;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.gss.GSSNode;
+import org.iguana.regex.matcher.Matcher;
+import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.result.Result;
+import org.iguana.utils.input.Input;
 
 import java.util.HashMap;
 import java.util.Map;
