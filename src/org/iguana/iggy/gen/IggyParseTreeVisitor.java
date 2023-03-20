@@ -1,8 +1,8 @@
 // This file has been generated, do not directly edit this file!
 package org.iguana.iggy.gen;
 
-import org.iguana.parsetree.ParseTreeVisitor;
 import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.ParseTreeVisitor;
 
 public interface IggyParseTreeVisitor<T> extends ParseTreeVisitor<T> {
 

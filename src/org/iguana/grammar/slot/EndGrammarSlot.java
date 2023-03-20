@@ -27,7 +27,6 @@
 
 package org.iguana.grammar.slot;
 
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.condition.Conditions;
 import org.iguana.grammar.runtime.Position;
@@ -35,6 +34,7 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
+import org.iguana.utils.input.Input;
 
 import java.util.Set;
 

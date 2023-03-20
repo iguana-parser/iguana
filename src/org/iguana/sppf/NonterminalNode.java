@@ -27,9 +27,9 @@
 
 package org.iguana.sppf;
 
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
-import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.traversal.SPPFVisitor;
 
 public class NonterminalNode extends NonPackedNode {

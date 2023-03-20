@@ -1,7 +1,7 @@
 package org.iguana.traversal.exception;
 
-import org.iguana.utils.input.Input;
 import org.iguana.sppf.NonPackedNode;
+import org.iguana.utils.input.Input;
 
 @SuppressWarnings("serial")
 public class AmbiguityException extends RuntimeException {

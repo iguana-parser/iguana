@@ -27,6 +27,9 @@
 
 package org.iguana.grammar.operations;
 
+import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
+import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Code;
 import org.iguana.grammar.symbol.Conditional;
 import org.iguana.grammar.symbol.Error;
@@ -37,9 +40,6 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
-import org.iguana.grammar.AbstractGrammarGraphSymbolVisitor;
-import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.traversal.ISymbolVisitor;
 import org.iguana.util.Tuple;
 

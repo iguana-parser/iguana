@@ -34,9 +34,9 @@ import org.iguana.sppf.NonterminalNode;
 import org.iguana.sppf.PackedNode;
 import org.iguana.sppf.SPPFNode;
 import org.iguana.sppf.TerminalNode;
+import org.iguana.traversal.SPPFVisitor;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.visualization.DotGraph;
-import org.iguana.traversal.SPPFVisitor;
 
 import java.util.HashMap;
 import java.util.HashSet;

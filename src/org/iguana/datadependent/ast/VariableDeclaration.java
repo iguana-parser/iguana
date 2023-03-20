@@ -27,9 +27,9 @@
 
 package org.iguana.datadependent.ast;
 
-import org.iguana.utils.input.Input;
 import org.iguana.datadependent.env.IEvaluatorContext;
 import org.iguana.datadependent.traversal.IAbstractASTVisitor;
+import org.iguana.utils.input.Input;
 
 import java.util.Objects;
 

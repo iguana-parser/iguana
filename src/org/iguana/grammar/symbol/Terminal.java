@@ -27,9 +27,9 @@
 
 package org.iguana.grammar.symbol;
 
+import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.regex.Epsilon;
 import org.iguana.regex.RegularExpression;
-import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol {

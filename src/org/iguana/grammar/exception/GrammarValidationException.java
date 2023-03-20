@@ -27,9 +27,9 @@
 
 package org.iguana.grammar.exception;
 
-import static org.iguana.utils.string.StringUtil.listToString;
-
 import java.util.Set;
+
+import static org.iguana.utils.string.StringUtil.listToString;
 
 @SuppressWarnings("serial")
 public class GrammarValidationException extends RuntimeException {

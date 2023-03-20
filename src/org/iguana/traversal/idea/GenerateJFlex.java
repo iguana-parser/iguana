@@ -27,12 +27,12 @@
 
 package org.iguana.traversal.idea;
 
+import org.iguana.grammar.condition.Condition;
+import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.regex.Char;
 import org.iguana.regex.EOF;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
-import org.iguana.grammar.condition.Condition;
-import org.iguana.grammar.condition.RegularExpressionCondition;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,8 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-//import iguana.util.unicode.UnicodeUtil;
 
 /**
  * Created by Anastasia Izmaylova on 17/12/15.

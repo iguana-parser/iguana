@@ -25,6 +25,11 @@
         <module name="SuppressionCommentFilter"/>
         <module name="AvoidStarImport"/>
         <module name="RedundantImport"/>
+        <module name="CustomImportOrder">
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="true"/>
+            <property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE###STATIC"/>
+        </module>
     </module>
 
     <module name="SuppressWithPlainTextCommentFilter"/>

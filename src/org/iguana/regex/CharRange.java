@@ -27,9 +27,9 @@
 
 package org.iguana.regex;
 
+import org.iguana.regex.visitor.RegularExpressionVisitor;
 import org.iguana.utils.collections.hash.MurmurHash3;
 import org.iguana.utils.collections.rangemap.Range;
-import org.iguana.regex.visitor.RegularExpressionVisitor;
 
 import java.util.Collections;
 import java.util.Set;

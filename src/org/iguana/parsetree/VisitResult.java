@@ -1,9 +1,9 @@
 package org.iguana.parsetree;
 
-import org.iguana.utils.collections.CollectionsUtil;
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.sppf.PackedNode;
+import org.iguana.utils.collections.CollectionsUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

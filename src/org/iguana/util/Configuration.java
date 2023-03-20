@@ -27,8 +27,8 @@
 
 package org.iguana.util;
 
-import org.iguana.utils.logging.LogLevel;
 import org.iguana.util.config.XMLConfigFileParser;
+import org.iguana.utils.logging.LogLevel;
 
 public class Configuration {
 
