@@ -50,15 +50,16 @@ public class ParseTreeVisitorGenerator extends Generator {
     private void generateParseTreeBuilder() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
-        sb.append("package " + packageName + ";\n\n");
+        sb.append("package " + packageName + ";\n");
+        sb.append("\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.DefaultParseTreeBuilder;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n");
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
-        sb.append("import org.iguana.utils.input.Input;\n\n");
+        sb.append("import org.iguana.utils.input.Input;\n");
+        sb.append("\n");
         sb.append("import java.util.List;\n\n");
 
-        // CHECKSTYLE:OFF: LineLength
         String className = toFirstUpperCase(grammarName) + "ParseTreeBuilder";
         sb.append("public class " + className + " extends DefaultParseTreeBuilder {\n\n");
         sb.append("    public " + className + "(Input input) {\n");
@@ -66,8 +67,11 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("    }\n\n");
 
         sb.append("    @Override\n");
-        sb.append(
-            "    public NonterminalNode nonterminalNode(RuntimeRule rule, List<ParseTreeNode> children, int leftExtent, int rightExtent) {\n");
+        sb.append("    public NonterminalNode nonterminalNode(\n");
+        sb.append("            RuntimeRule rule,\n");
+        sb.append("            List<ParseTreeNode> children,\n");
+        sb.append("            int leftExtent,\n");
+        sb.append("            int rightExtent) {\n");
         sb.append("        java.lang.String name = rule.getHead().getName();\n");
         sb.append("        java.lang.String label = rule.getLabel();\n\n");
         sb.append("        switch (name) {\n");
@@ -77,7 +81,6 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("        }\n");
         sb.append("    }\n");
         sb.append("}\n");
-        // CHECKSTYLE:ON: LineLength
 
         writeToJavaFile(sb.toString(), genDirectory, className);
         System.out.println(className + " has been generated in " + genDirectory + "/" + className + ".java");
@@ -122,10 +125,13 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
         sb.append("import org.iguana.parsetree.TerminalNode;\n");
-        sb.append("import java.util.List;\n\n");
+        sb.append("\n");
+        sb.append("import java.util.List;\n");
+        sb.append("\n");
         sb.append("import static org.iguana.parsetree.MetaSymbolNode.OptionNode;\n");
         sb.append("import static org.iguana.parsetree.MetaSymbolNode.PlusNode;\n");
         sb.append("import static org.iguana.parsetree.MetaSymbolNode.StarNode;\n");
+        sb.append("\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -164,8 +170,8 @@ public class ParseTreeVisitorGenerator extends Generator {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
-        sb.append("import org.iguana.parsetree.NonterminalNode;\n\n");
-        sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
+        sb.append("import org.iguana.parsetree.NonterminalNode;\n");
+        sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n\n");
 
         String className = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         sb.append("public interface " + className + "<T> extends ParseTreeVisitor<T> {\n\n");
