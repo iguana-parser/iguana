@@ -1,6 +1,20 @@
 package org.iguana.traversal;
 
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.While;
 
 import java.util.List;
 import java.util.stream.Collectors;

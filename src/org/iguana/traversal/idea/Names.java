@@ -31,12 +31,37 @@ import org.iguana.grammar.runtime.PrecedenceLevel;
 import org.iguana.grammar.runtime.Recursion;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Align;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Associativity;
+import org.iguana.grammar.symbol.Block;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Conditional;
 import org.iguana.grammar.symbol.Error;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.IfThen;
+import org.iguana.grammar.symbol.IfThenElse;
+import org.iguana.grammar.symbol.Ignore;
+import org.iguana.grammar.symbol.LayoutStrategy;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Offside;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Return;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.SymbolBuilder;
+import org.iguana.grammar.symbol.Terminal;
+import org.iguana.grammar.symbol.While;
 import org.iguana.grammar.transformation.GrammarTransformation;
 import org.iguana.traversal.ISymbolVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Anastasia Izmaylova on 20/10/15.

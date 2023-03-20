@@ -3,7 +3,16 @@ package org.iguana.generator.parser;
 import org.iguana.generator.Generator;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Code;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.Nonterminal;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.parsetree.NonterminalNode;
 import org.iguana.parsetree.TerminalNode;
 
@@ -13,7 +22,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
-import static org.iguana.parsetree.MetaSymbolNode.*;
+import static org.iguana.parsetree.MetaSymbolNode.AltNode;
+import static org.iguana.parsetree.MetaSymbolNode.GroupNode;
+import static org.iguana.parsetree.MetaSymbolNode.OptionNode;
+import static org.iguana.parsetree.MetaSymbolNode.PlusNode;
+import static org.iguana.parsetree.MetaSymbolNode.StarNode;
+import static org.iguana.parsetree.MetaSymbolNode.StartNode;
 import static org.iguana.utils.string.StringUtil.listToString;
 import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
 
@@ -104,9 +118,14 @@ public class ParseTreeVisitorGenerator extends Generator {
         sb.append("// This file has been generated, do not directly edit this file!\n");
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
-        sb.append("import org.iguana.parsetree.*;\n\n");
+        sb.append("import org.iguana.parsetree.NonterminalNode;\n");
+        sb.append("import org.iguana.parsetree.ParseTreeNode;\n");
+        sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n");
+        sb.append("import org.iguana.parsetree.TerminalNode;\n");
         sb.append("import java.util.List;\n\n");
-        sb.append("import static org.iguana.parsetree.MetaSymbolNode.*;\n\n");
+        sb.append("import static org.iguana.parsetree.MetaSymbolNode.OptionNode;\n");
+        sb.append("import static org.iguana.parsetree.MetaSymbolNode.PlusNode;\n");
+        sb.append("import static org.iguana.parsetree.MetaSymbolNode.StarNode;\n");
         String className = toFirstUpperCase(grammarName) + "ParseTree";
         sb.append("public class " + className + " {\n");
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {

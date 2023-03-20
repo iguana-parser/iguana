@@ -29,7 +29,10 @@ package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class Star extends AbstractRegularExpression {
 

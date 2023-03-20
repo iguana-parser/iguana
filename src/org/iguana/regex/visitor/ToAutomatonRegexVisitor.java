@@ -1,9 +1,26 @@
 package org.iguana.regex.visitor;
 
-import org.iguana.regex.*;
-import org.iguana.regex.automaton.*;
+import org.iguana.regex.Alt;
+import org.iguana.regex.Char;
+import org.iguana.regex.CharRange;
+import org.iguana.regex.EOF;
+import org.iguana.regex.Epsilon;
+import org.iguana.regex.Opt;
+import org.iguana.regex.Plus;
+import org.iguana.regex.RegularExpression;
+import org.iguana.regex.Seq;
+import org.iguana.regex.Star;
+import org.iguana.regex.automaton.Automaton;
+import org.iguana.regex.automaton.AutomatonBuilder;
+import org.iguana.regex.automaton.State;
+import org.iguana.regex.automaton.StateType;
+import org.iguana.regex.automaton.Transition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automaton> {

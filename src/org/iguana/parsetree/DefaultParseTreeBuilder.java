@@ -2,13 +2,24 @@ package org.iguana.parsetree;
 
 import org.iguana.grammar.runtime.RuntimeRule;
 import org.iguana.grammar.slot.TerminalNodeType;
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.utils.input.Input;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.iguana.parsetree.MetaSymbolNode.*;
+import static org.iguana.parsetree.MetaSymbolNode.AltNode;
+import static org.iguana.parsetree.MetaSymbolNode.GroupNode;
+import static org.iguana.parsetree.MetaSymbolNode.OptionNode;
+import static org.iguana.parsetree.MetaSymbolNode.PlusNode;
+import static org.iguana.parsetree.MetaSymbolNode.StarNode;
+import static org.iguana.parsetree.MetaSymbolNode.StartNode;
 
 public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> {
 

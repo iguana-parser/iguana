@@ -2,11 +2,16 @@
 package org.iguana.iggy.gen;
 
 import org.iguana.grammar.runtime.RuntimeRule;
-import org.iguana.parsetree.*;
+import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.ParseTreeVisitor;
+import org.iguana.parsetree.TerminalNode;
 
 import java.util.List;
 
-import static org.iguana.parsetree.MetaSymbolNode.*;
+import static org.iguana.parsetree.MetaSymbolNode.OptionNode;
+import static org.iguana.parsetree.MetaSymbolNode.PlusNode;
+import static org.iguana.parsetree.MetaSymbolNode.StarNode;
 
 public class IggyParseTree {
     // Grammar = 'grammar'? name:Identifier? defs:(Rule | TopLevelVar)+

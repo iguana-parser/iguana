@@ -23,6 +23,8 @@
         <module name="UnusedImports"/>
         <module name="WhitespaceAfter"/>
         <module name="SuppressionCommentFilter"/>
+        <module name="AvoidStarImport"/>
+        <module name="RedundantImport"/>
     </module>
 
     <module name="SuppressWithPlainTextCommentFilter"/>

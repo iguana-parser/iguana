@@ -1,6 +1,12 @@
 package org.iguana.util.visualization;
 
-import org.iguana.parsetree.*;
+import org.iguana.parsetree.AmbiguityNode;
+import org.iguana.parsetree.ErrorNode;
+import org.iguana.parsetree.MetaSymbolNode;
+import org.iguana.parsetree.NonterminalNode;
+import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.ParseTreeVisitor;
+import org.iguana.parsetree.TerminalNode;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.visualization.DotGraph;
 

@@ -1,6 +1,12 @@
 package org.iguana.parsetree;
 
-import org.iguana.grammar.symbol.*;
+import org.iguana.grammar.symbol.Alt;
+import org.iguana.grammar.symbol.Group;
+import org.iguana.grammar.symbol.Opt;
+import org.iguana.grammar.symbol.Plus;
+import org.iguana.grammar.symbol.Star;
+import org.iguana.grammar.symbol.Start;
+import org.iguana.grammar.symbol.Symbol;
 
 import java.util.Collections;
 import java.util.List;

@@ -29,7 +29,13 @@ package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Alt<T extends RegularExpression> extends AbstractRegularExpression implements Iterable<T> {
