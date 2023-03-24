@@ -23,10 +23,12 @@
     </module>
 
     <module name="TreeWalker">
-
+        <!-- See https://checkstyle.org/config_whitespace.html -->
         <module name="WhitespaceAfter"/>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
 
         <module name="SuppressionCommentFilter"/>
 

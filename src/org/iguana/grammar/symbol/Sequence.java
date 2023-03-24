@@ -19,7 +19,7 @@ public class Sequence {
 
     private final Map<String, Object> attributes;
 
-    public static Sequence from(Symbol ...symbols) {
+    public static Sequence from(Symbol... symbols) {
         return new Builder().addSymbols(List.of(symbols)).build();
     }
 

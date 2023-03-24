@@ -40,8 +40,7 @@ public enum ConditionType {
     END_OF_LINE("$", "End of line"),
     START_OF_LINE("^", "Start of line"),
     END_OF_FILE("$$", "End of file"),
-    DATA_DEPENDENT("?", "Data dependent")
-    ;
+    DATA_DEPENDENT("?", "Data dependent");
 
     private final String symbol;
     private final String description;
