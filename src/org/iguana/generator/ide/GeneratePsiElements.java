@@ -168,11 +168,11 @@ public class GeneratePsiElements extends Generator {
         private final String name;
         private final String parameter;
 
-        public Type(String name) {
+        Type(String name) {
             this(name, null);
         }
 
-        public Type(String name, String parameter) {
+        Type(String name, String parameter) {
             this.name = name;
             this.parameter = parameter;
         }

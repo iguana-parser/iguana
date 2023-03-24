@@ -163,7 +163,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
         private int i;
 
-        public DesugarAlignAndOffsideVisitor(Set<String> offsided) {
+        DesugarAlignAndOffsideVisitor(Set<String> offsided) {
             this.offsided = offsided;
         }
 
@@ -611,7 +611,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
 
         private final Set<String> offsided;
 
-        public FindOffsidesVisitor() {
+        FindOffsidesVisitor() {
             this.offsided = new HashSet<>();
         }
 
