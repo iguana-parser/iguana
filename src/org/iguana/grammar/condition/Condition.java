@@ -35,7 +35,7 @@ public abstract class Condition extends AbstractAttrs {
 
     protected final ConditionType type;
 
-    public Condition (ConditionType type) {
+    public Condition(ConditionType type) {
         this.type = type;
     }
 

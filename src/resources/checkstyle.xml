@@ -26,6 +26,7 @@
 
         <module name="WhitespaceAfter"/>
         <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
 
         <module name="SuppressionCommentFilter"/>
 
