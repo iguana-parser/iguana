@@ -23,9 +23,13 @@
     </module>
 
     <module name="TreeWalker">
-        <module name="UnusedImports"/>
+
         <module name="WhitespaceAfter"/>
+        <module name="GenericWhitespace"/>
+
         <module name="SuppressionCommentFilter"/>
+
+        <module name="UnusedImports"/>
         <module name="AvoidStarImport"/>
         <module name="RedundantImport"/>
         <module name="CustomImportOrder">
@@ -33,9 +37,11 @@
             <property name="separateLineBetweenGroups" value="true"/>
             <property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE###STATIC"/>
         </module>
+
         <module name="NoLineWrap">
             <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT"/>
         </module>
+
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
     </module>
