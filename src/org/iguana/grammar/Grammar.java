@@ -778,11 +778,11 @@ public class Grammar {
 
         private String end = "";
 
-        public IsRecursive(Nonterminal head, Recursion recursion, Set<String> ebnfs) {
+        IsRecursive(Nonterminal head, Recursion recursion, Set<String> ebnfs) {
             this(head, recursion, new HashMap<>(), ebnfs);
         }
 
-        public IsRecursive(Nonterminal head, Recursion recursion, Map<String, Set<String>> ends, Set<String> ebnfs) {
+        IsRecursive(Nonterminal head, Recursion recursion, Map<String, Set<String>> ends, Set<String> ebnfs) {
             this.recursion = recursion;
             this.head = head;
             this.ends = ends;

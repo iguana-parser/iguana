@@ -64,7 +64,7 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
     private final StringBuffer rules;
     private final StringBuffer tokens;
 
-    public GenerateJFlex(
+    GenerateJFlex(
             String language,
             String path,
             Map<String, RegularExpression> regularExpressions,

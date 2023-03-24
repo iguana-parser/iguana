@@ -145,7 +145,7 @@ public class ReachabilityGraph {
 
         private Nonterminal head;
 
-        public Visitor(Map<Nonterminal, Set<Nonterminal>> reachabilityGraph, Set<String> layouts) {
+        Visitor(Map<Nonterminal, Set<Nonterminal>> reachabilityGraph, Set<String> layouts) {
             this.reachabilityGraph = reachabilityGraph;
             this.layouts = layouts;
         }

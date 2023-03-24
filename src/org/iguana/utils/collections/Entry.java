@@ -1,6 +1,6 @@
 package org.iguana.utils.collections;
 
-class Entry<T> {
+public class Entry<T> {
 
     int key;
     T val;

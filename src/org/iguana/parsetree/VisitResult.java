@@ -63,7 +63,7 @@ public abstract class VisitResult {
 
     public static class Single extends VisitResult {
 
-        private Object value;
+        private final Object value;
 
         public Single(Object value) {
             this.value = value;
@@ -109,7 +109,7 @@ public abstract class VisitResult {
 
     public static class List extends VisitResult {
 
-        private java.util.List<Object> values;
+        private final java.util.List<Object> values;
 
         public List(java.util.List<Object> values) {
             this.values = values;
@@ -248,11 +248,11 @@ public abstract class VisitResult {
         Object visit(ListOfResult other);
     }
 
-    class SingleVisitor implements MergeResultVisitor {
+    static class SingleVisitor implements MergeResultVisitor {
 
-        private Single result;
+        private final Single result;
 
-        public SingleVisitor(Single result) {
+        SingleVisitor(Single result) {
             this.result = result;
         }
 
@@ -297,9 +297,9 @@ public abstract class VisitResult {
         }
     }
 
-    class ListVisitor implements MergeResultVisitor {
+    static class ListVisitor implements MergeResultVisitor {
 
-        private List result;
+        private final List result;
 
         ListVisitor(List result) {
             this.result = result;
@@ -337,9 +337,9 @@ public abstract class VisitResult {
         }
     }
 
-    class EBNFResultVisitor implements MergeResultVisitor {
+    static class EBNFResultVisitor implements MergeResultVisitor {
 
-        private EBNF result;
+        private final EBNF result;
 
         EBNFResultVisitor(EBNF result) {
             this.result = result;
@@ -377,9 +377,9 @@ public abstract class VisitResult {
         }
     }
 
-    class ListOfResultVisitor implements MergeResultVisitor {
+    static class ListOfResultVisitor implements MergeResultVisitor {
 
-        private ListOfResult result;
+        private final ListOfResult result;
 
         ListOfResultVisitor(ListOfResult result) {
             this.result = result;
@@ -433,7 +433,7 @@ public abstract class VisitResult {
         }
     }
 
-    class EmptyVisitor implements MergeResultVisitor {
+    static class EmptyVisitor implements MergeResultVisitor {
 
         @Override
         public VisitResult visit(Empty other) {
@@ -472,7 +472,7 @@ public abstract class VisitResult {
 
     public static class CreateParseTreeVisitor<T> implements CreateNodeVisitor<java.util.List<T>> {
 
-        private ParseTreeBuilder<T> parseTreeBuilder;
+        private final ParseTreeBuilder<T> parseTreeBuilder;
 
         public CreateParseTreeVisitor(ParseTreeBuilder<T> parseTreeBuilder) {
             this.parseTreeBuilder = parseTreeBuilder;

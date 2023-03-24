@@ -227,7 +227,7 @@ public class GenerateElements {
 
         private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();
 
-        public GetPhiElements(RuntimeRule rule, Map<String, NUM> children) {
+        GetPhiElements(RuntimeRule rule, Map<String, NUM> children) {
             this.rule = rule;
             this.children = children;
         }

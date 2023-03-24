@@ -158,8 +158,8 @@ public class EBNFToBNF implements GrammarTransformation {
 
         private static int counter = 0;
 
-        public EBNFVisitor(Set<String> state, Set<RuntimeRule> addedRules, Symbol layout, LayoutStrategy strategy,
-                           Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
+        EBNFVisitor(Set<String> state, Set<RuntimeRule> addedRules, Symbol layout, LayoutStrategy strategy,
+                    Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
             this.state = state;
             this.addedRules = addedRules;
             this.layout = layout;

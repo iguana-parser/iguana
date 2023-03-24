@@ -375,7 +375,7 @@ public class FirstFollowSets {
 
         private final Map<Nonterminal, Set<CharRange>> firstSets;
 
-        public FirstSymbolVisitor(Map<Nonterminal, Set<CharRange>> firstSets) {
+        FirstSymbolVisitor(Map<Nonterminal, Set<CharRange>> firstSets) {
             this.firstSets = firstSets;
         }
 
@@ -432,7 +432,7 @@ public class FirstFollowSets {
 
         private final Set<Nonterminal> nullableNonterminals;
 
-        public NullableSymbolVisitor(Set<Nonterminal> nullableNonterminals) {
+        NullableSymbolVisitor(Set<Nonterminal> nullableNonterminals) {
             this.nullableNonterminals = nullableNonterminals;
         }
 
