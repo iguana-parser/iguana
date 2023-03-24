@@ -209,7 +209,7 @@ public class RangeMapBuilder<T> {
         public int compareTo(Point<T> other) {
             int d = this.index - other.index;
             if (d != 0) return d;
-            return - Boolean.compare(this.isStart(), other.isStart());
+            return -Boolean.compare(this.isStart(), other.isStart());
         }
 
         @Override

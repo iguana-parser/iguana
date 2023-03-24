@@ -2621,12 +2621,12 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                     }
 
                     if (isUseOfLeftOrRight)
-                        arguments = new Expression[] { integer(0), integer(0) };
+                        arguments = new Expression[] {integer(0), integer(0)};
 
                     if (isRecursiveUseOfLeftOrRight && isFirst)
-                        arguments = new Expression[] { l1, r1 };
+                        arguments = new Expression[] {l1, r1};
                     else if (isRecursiveUseOfLeftOrRight && isLast)
-                        arguments = new Expression[] { l2, r2 };
+                        arguments = new Expression[] {l2, r2};
 
                     if (arguments != null && _not != null)
                         return symbol.copy().apply(arguments).apply(_not).build();
@@ -2690,18 +2690,18 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
                                 if (canBeFromLeft && canBeFromRight) {
                                     variable = "l";
-                                    arguments = new Expression[] { var("p" + i) };
+                                    arguments = new Expression[] {var("p" + i)};
 
                                     // TODO: if-then-else is needed for the return value
                                     throw new RuntimeException("Unsupported yet!");
 
                                 } else if (canBeFromLeft) {
                                     variable = "l";
-                                    arguments = new Expression[] { var("p" + i) };
+                                    arguments = new Expression[] {var("p" + i)};
                                     lret[i] = var("l");
                                 } else if (canBeFromRight) {
                                     variable = "r";
-                                    arguments = new Expression[] { var("p" + i) };
+                                    arguments = new Expression[] {var("p" + i)};
                                     boolean hasPrefixBelow = config.rightEndsPrefixBelow.contains(
                                         rule.getHead().getName());
                                     boolean canBecomePostfix = config.rightEndsThatCanLeadToPostfix.contains(
@@ -2717,16 +2717,16 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                             } else if (isFirst) { // X ::= E alpha
                                 variable = "l";
                                 if (canBeFromLeft && canBeFromRight)
-                                    arguments = new Expression[] { get(var("p" + i), 0) };
+                                    arguments = new Expression[] {get(var("p" + i), 0)};
                                 else if (canBeFromLeft)
-                                    arguments = new Expression[] { var("p" + i) };
+                                    arguments = new Expression[] {var("p" + i)};
                                 lret[i] = var("l");
                             } else if (isLast) { // X ::= alpha E
                                 variable = "r";
                                 if (canBeFromLeft && canBeFromRight)
-                                    arguments = new Expression[] { get(var("p" + i), 1) };
+                                    arguments = new Expression[] {get(var("p" + i), 1)};
                                 else if (canBeFromRight) {
-                                    arguments = new Expression[] { var("p" + i) };
+                                    arguments = new Expression[] {var("p" + i)};
 
                                     boolean hasPrefixBelow = config.rightEndsPrefixBelow.contains(
                                         rule.getHead().getName());
@@ -2773,10 +2773,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
                     if (isRecursiveUseOfLeftOrRight && isFirst) { // E ::= E alpha
                         variable = "l";
-                        arguments = new Expression[] { larg };
+                        arguments = new Expression[] {larg};
                     } else if (isRecursiveUseOfLeftOrRight && isLast) { // E ::= alpha E
                         variable = "r";
-                        arguments = new Expression[] { rarg };
+                        arguments = new Expression[] {rarg};
                         if (!config.hasPrefixBelow(rule.getPrecedenceLevel().getLhs()))
                             variable = "";
                     }
@@ -2799,10 +2799,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                                 if (canReachLeft && canReachRight) {
                                     lbinding = varDeclStat("l", get(var(variable), 0));
                                     rbinding = varDeclStat("r", get(var(variable), 1));
-                                    arguments = new Expression[] { tuple(larg, rarg) };
+                                    arguments = new Expression[] {tuple(larg, rarg)};
                                 } else if (canReachLeft) {
                                     variable = "l";
-                                    arguments = new Expression[] { larg };
+                                    arguments = new Expression[] {larg};
                                 } else {
                                     boolean prefixBelow = configs.get(
                                         rule.getHead().getName()).rightEndsPrefixBelow.contains(symbol.getName());
@@ -2813,7 +2813,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                                         variable = "r";
                                     else
                                         variable = "";
-                                    arguments = new Expression[] { rarg };
+                                    arguments = new Expression[] {rarg};
                                 }
                             } else {
                                 int i = config.pends.indexOf(rule.getHead().getName());
@@ -2843,11 +2843,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                                 variable = "l" + symbol.getName().toLowerCase();
                                 if (canReachLeft && canReachRight) {
                                     binding = varDeclStat("l", get(var(variable), 0));
-                                    arguments = new Expression[]{ tuple(larg,
-                                        config.parity == 2 ? tuple(integer(0), integer(0)) : integer(0)) };
+                                    arguments = new Expression[]{tuple(larg,
+                                        config.parity == 2 ? tuple(integer(0), integer(0)) : integer(0))};
                                 } else {
                                     variable = "l";
-                                    arguments = new Expression[] { larg };
+                                    arguments = new Expression[] {larg};
                                 }
                             } else {
                                 int i = config.pends.indexOf(rule.getHead().getName());
@@ -2882,7 +2882,7 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                                         variable = "r";
                                     else
                                         variable = "";
-                                    arguments = new Expression[] { rarg };
+                                    arguments = new Expression[] {rarg};
                                 }
                             } else {
                                 int i = config.pends.indexOf(rule.getHead().getName());

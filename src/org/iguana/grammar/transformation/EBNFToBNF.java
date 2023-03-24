@@ -452,8 +452,8 @@ public class EBNFToBNF implements GrammarTransformation {
                     i++;
                 }
             } else {
-                parameters = new String[] { id };
-                arguments = new Expression[] { cond };
+                parameters = new String[] {id};
+                arguments = new Expression[] {cond};
             }
 
             Nonterminal newNt = new Nonterminal.Builder("IF_" + counter++).addParameters(parameters).build();
@@ -513,8 +513,8 @@ public class EBNFToBNF implements GrammarTransformation {
                     i++;
                 }
             } else {
-                parameters = new String[] { id };
-                arguments = new Expression[] { cond };
+                parameters = new String[] {id};
+                arguments = new Expression[] {cond};
             }
 
             Nonterminal newNt = new Nonterminal.Builder("IF_THEN_ELSE_" + counter++).addParameters(parameters).build();
