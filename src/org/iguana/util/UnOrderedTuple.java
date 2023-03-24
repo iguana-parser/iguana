@@ -27,7 +27,7 @@
 
 package org.iguana.util;
 
-public class UnOrderedTuple<T, K> extends Tuple<T, K>{
+public class UnOrderedTuple<T, K> extends Tuple<T, K> {
 
     public UnOrderedTuple(T t, K k) {
         super(t, k);
