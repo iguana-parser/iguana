@@ -47,6 +47,8 @@ import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class GrammarGraphToDot {
 
+    private static final Map<GrammarSlot, Integer> ids = new HashMap<>();
+
     public static DotGraph toDot(GrammarGraph g, DotGraph.Direction direction) {
         DotGraph dotGraph = new DotGraph(direction);
         generate(dotGraph, g);
@@ -111,9 +113,6 @@ public class GrammarGraphToDot {
             toDot(t.destination(), dotGraph, visited);
         }
     }
-
-
-    private static final Map<GrammarSlot, Integer> ids = new HashMap<>();
 
     private static int getId(GrammarSlot slot) {
         return ids.computeIfAbsent(slot, k -> ids.size() + 1);

@@ -148,6 +148,8 @@ public class EBNFToBNF implements GrammarTransformation {
 
     private static class EBNFVisitor implements ISymbolVisitor<Symbol> {
 
+        private static int counter = 0;
+
         private final Set<String> state;
         private final Set<RuntimeRule> addedRules;
         private final Symbol layout;
@@ -156,7 +158,11 @@ public class EBNFToBNF implements GrammarTransformation {
         private final Map<String, Set<String>> ebnfLefts;
         private final Map<String, Set<String>> ebnfRights;
 
-        private static int counter = 0;
+        /**
+         *  Target cases:
+         */
+        private Set<String> freeVars;
+        private FreeVariableVisitor visitor;
 
         EBNFVisitor(
                 Set<String> state,
@@ -172,13 +178,6 @@ public class EBNFToBNF implements GrammarTransformation {
             this.ebnfLefts = ebnfLefts;
             this.ebnfRights = ebnfRights;
         }
-
-        /**
-         *  Target cases:
-         */
-
-        private Set<String> freeVars;
-        private FreeVariableVisitor visitor;
 
         private void init() {
             freeVars = new LinkedHashSet<>();

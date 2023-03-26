@@ -10,12 +10,12 @@ public class PriorityLevel {
 
     private final List<Alternative> alternatives;
 
-    public static PriorityLevel from(Alternative... alternatives) {
-        return new PriorityLevel.Builder().addAlternatives(List.of(alternatives)).build();
-    }
-
     public PriorityLevel(Builder builder) {
         this.alternatives = builder.alternatives;
+    }
+
+    public static PriorityLevel from(Alternative... alternatives) {
+        return new PriorityLevel.Builder().addAlternatives(List.of(alternatives)).build();
     }
 
     public List<Alternative> getAlternatives() {

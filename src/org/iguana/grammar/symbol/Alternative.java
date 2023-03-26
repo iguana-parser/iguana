@@ -9,16 +9,15 @@ import static org.iguana.utils.collections.CollectionsUtil.buildList;
 public class Alternative {
 
     private final List<Sequence> seqs;
-
-    public final Associativity associativity;
-
-    public static Alternative from(Sequence... seqs) {
-        return new Builder().addSequences(List.of(seqs)).build();
-    }
+    private final Associativity associativity;
 
     public Alternative(Builder builder) {
         this.seqs = builder.seqs;
         this.associativity = builder.associativity;
+    }
+
+    public static Alternative from(Sequence... seqs) {
+        return new Builder().addSequences(List.of(seqs)).build();
     }
 
     public Sequence first() {
@@ -128,7 +127,7 @@ public class Alternative {
 
                 List<Sequence> seqsWithAssociativity = new ArrayList<>(seqs.size());
                 for (Sequence seq : seqs) {
-                    if (seq.associativity == Associativity.UNDEFINED) {
+                    if (seq.getAssociativity() == Associativity.UNDEFINED) {
                         seqsWithAssociativity.add(seq.copy().setAssociativity(associativity).build());
                     } else {
                         seqsWithAssociativity.add(seq);

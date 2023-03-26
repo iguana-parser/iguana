@@ -10,11 +10,11 @@ import org.iguana.utils.input.Input;
 
 public class IggyParser extends IguanaParser {
 
+    private static IggyParser parser;
+
     private IggyParser(Grammar grammar) {
         super(grammar);
     }
-
-    private static IggyParser parser;
 
     public static IggyParser getInstance() {
         if (parser == null) {

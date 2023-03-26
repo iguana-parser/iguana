@@ -42,14 +42,14 @@ public class Plus extends AbstractSymbol {
 
     private final List<Symbol> separators;
 
-    public static Plus from(Symbol s) {
-        return new Builder(s).build();
-    }
-
     private Plus(Builder builder) {
         super(builder);
         this.s = builder.s;
         this.separators = Collections.unmodifiableList(builder.separators);
+    }
+
+    public static Plus from(Symbol s) {
+        return new Builder(s).build();
     }
 
     public List<Symbol> getSeparators() {

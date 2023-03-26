@@ -43,10 +43,15 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class AST {
 
+    public static final Object UNDEF = new Object() {
+        public String toString() {
+            return "UNDEF";
+        }
+    };
+
     /**
      * Expressions
      */
-
     public static final Expression TRUE = Expression.Boolean.TRUE;
     public static final Expression FALSE = Expression.Boolean.FALSE;
 
@@ -788,12 +793,6 @@ public class AST {
     public static Get2 get(Expression arg1, Expression arg2) {
         return new Get2(arg1, arg2);
     }
-
-    static final Object UNDEF = new Object() {
-        public String toString() {
-            return "UNDEF";
-        }
-    };
 
     public static class Shift extends Expression.Call {
 

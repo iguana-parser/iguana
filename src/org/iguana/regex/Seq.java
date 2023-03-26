@@ -42,6 +42,11 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 
     private final List<T> symbols;
 
+    private Seq(Builder<T> builder) {
+        super(builder);
+        this.symbols = builder.symbols;
+    }
+
     public static Seq<Char> from(String s) {
         return builder(s.chars().mapToObj(Char::from).collect(Collectors.toList())).build();
     }
@@ -58,11 +63,6 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
     @SuppressWarnings("varargs")
     public static <T extends RegularExpression> Seq<T> from(T... elements) {
         return from(Arrays.asList(elements));
-    }
-
-    private Seq(Builder<T> builder) {
-        super(builder);
-        this.symbols = builder.symbols;
     }
 
     @Override

@@ -15,13 +15,13 @@ public class RecognizerOptions {
      */
     private final boolean global;
 
-    public static RecognizerOptions defaultOptions() {
-        return new Builder().build();
-    }
-
     protected RecognizerOptions(Builder builder) {
         this.map = builder.map;
         this.global = builder.global;
+    }
+
+    public static RecognizerOptions defaultOptions() {
+        return new Builder().build();
     }
 
     public Map<String, Object> getMap() {

@@ -8,10 +8,6 @@ public class IntArray implements IntIterable {
     private final int start; // including
     private final int end;   // excluding
 
-    public static IntArray of(int... arr) {
-        return new IntArray(arr);
-    }
-
     public IntArray(int[] arr) {
         this(arr, 0, arr.length);
     }
@@ -22,6 +18,10 @@ public class IntArray implements IntIterable {
         this.arr = arr;
         this.start = start;
         this.end = end;
+    }
+
+    public static IntArray of(int... arr) {
+        return new IntArray(arr);
     }
 
     public int size() {

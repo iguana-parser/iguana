@@ -42,14 +42,14 @@ public class Star extends AbstractSymbol {
 
     private final List<Symbol> separators;
 
-    public static Star from(Symbol s) {
-        return new Builder(s).build();
-    }
-
     private Star(Builder builder) {
         super(builder);
         this.s = builder.s;
         this.separators = Collections.unmodifiableList(builder.separators);
+    }
+
+    public static Star from(Symbol s) {
+        return new Builder(s).build();
     }
 
     public List<Symbol> getSeparators() {

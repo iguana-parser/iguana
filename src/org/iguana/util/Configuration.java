@@ -46,6 +46,15 @@ public class Configuration {
 
     private final LogLevel logLevel;
 
+    private Configuration(Builder builder) {
+        this.gssLookupImpl = builder.gssLookupImpl;
+        this.lookAheadCount = builder.lookaheadCount;
+        this.matcherType = builder.matcherType;
+        this.hashmapImpl = builder.hashmapImpl;
+        this.envImpl = builder.envImpl;
+        this.logLevel = builder.logLevel;
+    }
+
     public static Configuration load() {
         Configuration configuration;
         try {
@@ -55,15 +64,6 @@ public class Configuration {
             throw new RuntimeException(e);
         }
         return configuration;
-    }
-
-    private Configuration(Builder builder) {
-        this.gssLookupImpl = builder.gssLookupImpl;
-        this.lookAheadCount = builder.lookaheadCount;
-        this.matcherType = builder.matcherType;
-        this.hashmapImpl = builder.hashmapImpl;
-        this.envImpl = builder.envImpl;
-        this.logLevel = builder.logLevel;
     }
 
     public LookupImpl getGSSLookupImpl() {

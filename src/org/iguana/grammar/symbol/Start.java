@@ -34,13 +34,13 @@ public class Start extends AbstractSymbol {
 
     private final String startSymbol;
 
-    public static Start from(String startSymbol) {
-        return new Builder(startSymbol).build();
-    }
-
     public Start(Builder builder) {
         super(builder);
         this.startSymbol = builder.startSymbol;
+    }
+
+    public static Start from(String startSymbol) {
+        return new Builder(startSymbol).build();
     }
 
     public String getStartSymbol() {

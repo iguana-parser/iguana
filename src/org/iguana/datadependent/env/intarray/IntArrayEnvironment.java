@@ -7,12 +7,12 @@ import static java.lang.Integer.toUnsignedLong;
 
 public class IntArrayEnvironment implements Environment {
 
+    static final IntArrayEnvironment EMPTY = new IntArrayEnvironment(0);
+
     /**
      * size [o6, o5] [o4, o3] o2 o1
      */
     private long value;
-
-    static final IntArrayEnvironment EMPTY = new IntArrayEnvironment(0);
 
     private IntArrayEnvironment(long value) {
         this.value = value;

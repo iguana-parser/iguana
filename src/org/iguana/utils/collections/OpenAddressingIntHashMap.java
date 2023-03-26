@@ -28,12 +28,10 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
     private T[] values;
 
+    private final IntMapIterator it = new IntMapIterator();
+
     public OpenAddressingIntHashMap() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
-    }
-
-    public OpenAddressingIntHashMap(int initalCapacity) {
-        this(initalCapacity, DEFAULT_LOAD_FACTOR);
     }
 
     public OpenAddressingIntHashMap(int initialCapacity, float loadFactor) {
@@ -254,8 +252,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
         return (h + j) & bitMask;
     }
 
-    private IntMapIterator it = new IntMapIterator();
-
     @Override
     public Iterable<T> values() {
         return () -> it.reset();
@@ -263,7 +259,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
     @Override
     public Iterator<Entry<T>> iterator() {
-        return new Iterator<Entry<T>>() {
+        return new Iterator<>() {
             int it = 0;
             int i = 0;
 
@@ -274,7 +270,9 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
             @Override
             public Entry<T> next() {
-                while (values[i++] == null);
+                while (true) {
+                    if (values[i++] != null) break;
+                }
                 it++;
                 return new Entry<>(keys[i - 1], values[i - 1]);
             }
@@ -292,7 +290,9 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
 
         @Override
         public T next() {
-            while (values[i++] == null);
+            while (true) {
+                if (values[i++] != null) break;
+            }
             count++;
             return values[i - 1];
         }

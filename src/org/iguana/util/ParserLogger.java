@@ -21,10 +21,6 @@ public class ParserLogger {
 
     private static final ParserLogger instance = new ParserLogger();
 
-    public static ParserLogger getInstance() {
-        return instance;
-    }
-
     private int descriptorsCount;
 
     private int countNonterminalNodes;
@@ -51,6 +47,10 @@ public class ParserLogger {
             logger = IguanaLogger.DEFAULT;
         else
             logger = new JavaUtilIguanaLogger("IguanaParser Logger", config.getLogLevel());
+    }
+
+    public static ParserLogger getInstance() {
+        return instance;
     }
 
     public void reset() {

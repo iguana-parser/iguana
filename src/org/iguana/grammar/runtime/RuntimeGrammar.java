@@ -80,10 +80,6 @@ public class RuntimeGrammar {
 
     private final String name;
 
-    public Builder copy() {
-        return new Builder(this);
-    }
-
     public RuntimeGrammar(Builder builder) {
         this.definitions = builder.definitions;
         this.layout = builder.layout;
@@ -95,6 +91,10 @@ public class RuntimeGrammar {
         this.literals = builder.literals;
         this.globals = builder.globals;
         this.name = builder.name;
+    }
+
+    public Builder copy() {
+        return new Builder(this);
     }
 
     public Map<Nonterminal, List<RuntimeRule>> getDefinitions() {
@@ -220,7 +220,7 @@ public class RuntimeGrammar {
 
         private Map<Nonterminal, List<RuntimeRule>> definitions = new LinkedHashMap<>();
         private List<RuntimeRule> rules = new ArrayList<>();
-        public String name;
+        private String name;
         private Symbol layout;
         private List<Start> startSymbols;
         private Map<String, RegularExpression> regularExpressionDefinitions;

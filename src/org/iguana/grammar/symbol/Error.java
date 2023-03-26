@@ -12,11 +12,11 @@ public class Error extends AbstractAttrs implements Symbol {
 
     private static final Error instance = new Error();
 
+    private Error() { }
+
     public static Error getInstance() {
         return instance;
     }
-
-    private Error() { }
 
     @Override
     public String getName() {

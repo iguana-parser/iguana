@@ -103,6 +103,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
     private final Set<java.lang.String> freeVariables;
     private final Set<java.lang.String> updates;
 
+
+    /*
+     * State variable bindings of nonterminals in the rule
+     */
+    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_uses;
+    // Given assignments to state variables within a nonterminal
+    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
+    // Given uses of updated state variables of a nonterminal after a use of a nonterminal in all the rules
+    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
+    // Given uses of updated state variables of a nonterminal after a use of the nonterminal in the current rule
+    private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
+
     public FreeVariableVisitor(Set<java.lang.String> freeVariables) {
         this(freeVariables, null);
     }
@@ -114,6 +126,18 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
         this.nonterminal_updates = null;
         this.nonterminal_returns = null;
         this.nonterminal_bindings = null;
+    }
+
+    public FreeVariableVisitor(
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_uses,
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_updates,
+            Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
+        this.freeVariables = null;
+        this.updates = null;
+        this.nonterminal_uses = nonterminal_uses;
+        this.nonterminal_updates = nonterminal_updates;
+        this.nonterminal_returns = nonterminal_returns;
+        this.nonterminal_bindings = new HashMap<>();
     }
 
     public void compute(RuntimeRule rule) {
@@ -136,29 +160,6 @@ public class FreeVariableVisitor implements IAbstractASTVisitor<Void>, ISymbolVi
             symbol.setEmpty();
         }
 
-    }
-
-    /*
-     * State variable bindings of nonterminals in the rule
-     */
-    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_uses;
-    // Given assignments to state variables within a nonterminal
-    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_updates;
-    // Given uses of updated state variables of a nonterminal after a use of a nonterminal in all the rules
-    private final Map<Nonterminal, Set<java.lang.String>> nonterminal_returns;
-    // Given uses of updated state variables of a nonterminal after a use of the nonterminal in the current rule
-    private Map<Nonterminal, Set<java.lang.String>> nonterminal_bindings;
-
-    public FreeVariableVisitor(
-            Map<Nonterminal, Set<java.lang.String>> nonterminal_uses,
-            Map<Nonterminal, Set<java.lang.String>> nonterminal_updates,
-            Map<Nonterminal, Set<java.lang.String>> nonterminal_returns) {
-        this.freeVariables = null;
-        this.updates = null;
-        this.nonterminal_uses = nonterminal_uses;
-        this.nonterminal_updates = nonterminal_updates;
-        this.nonterminal_returns = nonterminal_returns;
-        this.nonterminal_bindings = new HashMap<>();
     }
 
     public Map<Nonterminal, Set<java.lang.String>> computeBindings(RuntimeRule rule) {

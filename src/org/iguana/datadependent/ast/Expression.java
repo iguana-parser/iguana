@@ -53,10 +53,6 @@ public abstract class Expression extends AbstractAST {
 
     public abstract static class Boolean extends Expression {
 
-        public boolean isBoolean() {
-            return true;
-        }
-
         static final Boolean TRUE = new Boolean() {
 
             @Override
@@ -94,6 +90,9 @@ public abstract class Expression extends AbstractAST {
 
         };
 
+        public boolean isBoolean() {
+            return true;
+        }
     }
 
     public boolean isInteger() {

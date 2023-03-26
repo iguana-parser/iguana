@@ -34,11 +34,17 @@ import org.iguana.traversal.ISymbolVisitor;
 
 public class Terminal extends AbstractSymbol {
 
+    private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
+
     private final TerminalNodeType nodeType;
 
     private final RegularExpression regex;
 
-    private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());
+    public Terminal(Builder builder) {
+        super(builder);
+        this.regex = builder.regex;
+        this.nodeType = builder.nodeType;
+    }
 
     public static Terminal epsilon() {
         return epsilon;
@@ -48,11 +54,6 @@ public class Terminal extends AbstractSymbol {
         return new Builder(regex).build();
     }
 
-    public Terminal(Builder builder) {
-        super(builder);
-        this.regex = builder.regex;
-        this.nodeType = builder.nodeType;
-    }
 
     @Override
     public Builder copy() {

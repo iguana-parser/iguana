@@ -13,11 +13,11 @@ import static java.util.Collections.emptyList;
 
 public class RangeMapBuilder<T> {
 
-    private final List<Range> ranges = new ArrayList<>();
-    private final List<T> values = new ArrayList<>();
-
     private static final RangeMap<?> emptyRangeMap = (RangeMap<Object>) key -> emptyList();
     private static final IntRangeMap emptyIntRangeMap = key -> -2;
+
+    private final List<Range> ranges = new ArrayList<>();
+    private final List<T> values = new ArrayList<>();
 
     public RangeMapBuilder<T> put(Range range, T value) {
         ranges.add(range);

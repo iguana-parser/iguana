@@ -13,6 +13,21 @@ public class DotGraph {
 
     private final StringBuilder sb = new StringBuilder();
 
+    public DotGraph() {
+        this(Direction.TO_DOWN);
+    }
+
+    public DotGraph(Direction direction) {
+        sb.append("digraph sppf {").append("\n");
+        sb.append("layout=dot").append("\n");
+        sb.append("nodesep=.6").append("\n");
+        sb.append("ranksep=.4").append("\n");
+        sb.append("ordering=out").append("\n");
+        sb.append("forcelabels=true").append("\n");
+        if (direction == Direction.LEFT_TO_RIGHT)
+            sb.append("rankdir=LR").append("\n");
+    }
+
     public static Node newNode(int id) {
         return newNode(id, "");
     }
@@ -27,21 +42,6 @@ public class DotGraph {
 
     public static Edge newEdge(int sourceId, int targetId, String label) {
         return edgeInstance.init(sourceId, targetId).setLabel(label);
-    }
-
-    public DotGraph() {
-        this(Direction.TO_DOWN);
-    }
-
-    public DotGraph(Direction direction) {
-        sb.append("digraph sppf {").append("\n");
-        sb.append("layout=dot").append("\n");
-        sb.append("nodesep=.6").append("\n");
-        sb.append("ranksep=.4").append("\n");
-        sb.append("ordering=out").append("\n");
-        sb.append("forcelabels=true").append("\n");
-        if (direction == Direction.LEFT_TO_RIGHT)
-            sb.append("rankdir=LR").append("\n");
     }
 
     public void addNode(Node node) {

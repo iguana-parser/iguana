@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 public class ArrayEnvironment implements Environment {
 
+    static final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
+
     private final Object[] values;
     private int hashCode;
-
-    static final ArrayEnvironment EMPTY = new ArrayEnvironment(new Object[0], 0);
 
     private ArrayEnvironment(Object[] values, int hashCode) {
         this.values = values;
