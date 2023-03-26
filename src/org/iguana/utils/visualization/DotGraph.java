@@ -11,7 +11,7 @@ public class DotGraph {
     private static final Node nodeInstance = new Node();
     private static final Edge edgeInstance = new Edge();
 
-    private StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb = new StringBuilder();
 
     public static Node newNode(int id) {
         return newNode(id, "");
@@ -172,16 +172,15 @@ public class DotGraph {
         }
 
         public String toString() {
-            return String.valueOf(id) + " " +
-                    "[" +
-                    shapeToString(shape) + ", " +
-                    "width = " + width + ", " +
-                    "height = " + height + ", " +
-                    "color = " + color + ", " +
-                    "fontcolor = " + fontColor + ", " +
-                    "label = \"" + escape(label) + "\"" + ", " +
-                    "fontsize = " + fontSize +
-                    "]\n";
+            return id + " " + "["
+                   + shapeToString(shape) + ", "
+                   + "width = " + width + ", "
+                   + "height = " + height + ", "
+                   + "color = " + color + ", "
+                   + "fontcolor = " + fontColor + ", "
+                   + "label = \"" + escape(label) + "\"" + ", "
+                   + "fontsize = " + fontSize
+                   + "]\n";
         }
 
         private static String shapeToString(Shape shape) {
@@ -225,14 +224,14 @@ public class DotGraph {
 
         @Override
         public String toString() {
-            return String.valueOf(sourceId) + "->" + String.valueOf(targetId) + " " +
-                   "[" +
-                   "color = black, " +
-                   "style = solid, " +
-                   "penwidth = 0.5, " +
-                   "arrowsize = 0.7, " + "" +
-                   "label = \"" + (label == null ? "" : label) + "\"" +
-                   "];\n";
+            return sourceId + "->" + targetId + " "
+                   + "["
+                   + "color = black, "
+                   + "style = solid, "
+                   + "penwidth = 0.5, "
+                   + "arrowsize = 0.7, " + ""
+                   + "label = \"" + (label == null ? "" : label) + "\""
+                   + "];\n";
         }
     }
 }

@@ -23,12 +23,16 @@
     </module>
 
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder" />
+        <module name="SuppressionCommentFilter"/>
+
         <!-- See https://checkstyle.org/config_whitespace.html -->
         <module name="WhitespaceAfter"/>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceAfter"/>
         <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap"/>
 
         <module name="SuppressionCommentFilter"/>
 

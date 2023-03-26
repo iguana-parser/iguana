@@ -46,17 +46,15 @@ public class ObjectKey4 implements Key {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
+        if (this == obj) return true;
 
-        if (!(obj instanceof ObjectKey4))
-            return false;
+        if (!(obj instanceof ObjectKey4)) return false;
 
         ObjectKey4 other = (ObjectKey4) obj;
-        return o1.equals(other.o1) &&
-               o2.equals(other.o2) &&
-               o3.equals(other.o3) &&
-               o4.equals(other.o4);
+        return o1.equals(other.o1)
+               && o2.equals(other.o2)
+               && o3.equals(other.o3)
+               && o4.equals(other.o4);
     }
 
     @Override

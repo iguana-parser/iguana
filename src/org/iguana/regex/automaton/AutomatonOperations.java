@@ -310,8 +310,8 @@ public class AutomatonOperations {
                 }
 
                 // Differentiate between final states
-                if (states[i].isFinalState() &&
-                   states[j].isFinalState()) {
+                if (states[i].isFinalState()
+                    && states[j].isFinalState()) {
                     table[i][j] = EPSILON;
                 }
             }

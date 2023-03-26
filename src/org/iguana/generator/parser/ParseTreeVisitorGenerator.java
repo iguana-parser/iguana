@@ -93,21 +93,21 @@ public class ParseTreeVisitorGenerator extends Generator {
 
             sb.append("            case \"" + nonterminalName + "\":\n");
             if (alternatives.size() == 0) {
-                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." +
-                          toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "."
+                          + toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
             } else if (alternatives.size() == 1) {
-                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "." +
-                          toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
+                sb.append("                return new " + toFirstUpperCase(grammarName) + "ParseTree" + "."
+                          + toFirstUpperCase(nonterminalName) + "(rule, children, leftExtent, rightExtent);\n");
             } else {
                 sb.append("                switch (label) {\n");
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
                     sb.append("                    case \"" + alternative.getLabel() + "\":\n");
-                    String className = toFirstUpperCase(grammarName) + "ParseTree" + "." +
-                                       toFirstUpperCase(alternative.getLabel()) + toFirstUpperCase(nonterminalName);
-                    sb.append("                        return new " + toFirstUpperCase(className) +
-                              "(rule, children, leftExtent, rightExtent);\n");
+                    String className = toFirstUpperCase(grammarName) + "ParseTree" + "."
+                                       + toFirstUpperCase(alternative.getLabel()) + toFirstUpperCase(nonterminalName);
+                    sb.append("                        return new " + toFirstUpperCase(className)
+                              + "(rule, children, leftExtent, rightExtent);\n");
                 }
                 sb.append("                    default:\n");
                 sb.append("                        throw new RuntimeException(\"Unexpected label:\" + label);\n");
@@ -153,8 +153,8 @@ public class ParseTreeVisitorGenerator extends Generator {
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
-                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() +
-                                      nonterminalName.substring(1);
+                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase()
+                                      + nonterminalName.substring(1);
                     sb.append("    // " + nonterminalName + " = " + listToString(alternative.getBody().stream()
                         .map(this::symbolToString).collect(Collectors.toList())) + "\n");
                     sb.append(generateSymbolClass(nodeName, nonterminalName, false, alternative.getBody()));
@@ -198,8 +198,8 @@ public class ParseTreeVisitorGenerator extends Generator {
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
-                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() +
-                                      nonterminalName.substring(1);
+                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase()
+                                      + nonterminalName.substring(1);
                     sb.append(generateVisitorMethod(nodeName));
                 }
             }
@@ -208,47 +208,42 @@ public class ParseTreeVisitorGenerator extends Generator {
 
     private String generateVisitorMethod(String name) {
         String className = toFirstUpperCase(grammarName) + "ParseTree";
-        // CHECKSTYLE:DISABLE:LineLength
+        // CHECKSTYLE:OFF LineLength
         if (name.startsWith("$_")) {
-            return "    default T visit" + toFirstUpperCase(name) + "(" + className + "." + toFirstUpperCase(name) +
-                   " node) {\n" +
-                   "        return node.child().accept(this);\n" +
-                   "    }\n\n";
+            return   "    default T visit" + toFirstUpperCase(name) + "(" + className + "." + toFirstUpperCase(name) + " node) {\n"
+                   + "        return node.child().accept(this);\n"
+                   + "    }\n\n";
         } else {
-            return "    T visit" + toFirstUpperCase(name) + "(" + className + "." + toFirstUpperCase(name) +
-                   " node);\n\n";
+            return "    T visit" + toFirstUpperCase(name) + "(" + className + "." + toFirstUpperCase(name) + " node);\n\n";
         }
-        // CHECKSTYLE:ENABLE:LineLength
+        // CHECKSTYLE:ON LineLength
     }
 
     private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
-        // CHECKSTYLE:DISABLE:LineLength
+        // CHECKSTYLE:OFF LineLength
         return
-            "    public " + (isAbstract ? "abstract " : "") + "static class " + toFirstUpperCase(symbolClass) +
-            " extends " + toFirstUpperCase(superType) + " {\n" +
-            "        public " + toFirstUpperCase(symbolClass) +
-            "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n" +
-            "            super(rule, children, start, end);\n" +
-            "        }\n\n" +
-            generateSymbols(symbols) +
-            (isAbstract ? "" : generateAcceptMethod(symbolClass)) +
-            "    }\n\n";
-        // CHECKSTYLE:ENABLE:LineLength
+              "    public " + (isAbstract ? "abstract " : "") + "static class " + toFirstUpperCase(symbolClass) + " extends " + toFirstUpperCase(superType) + " {\n"
+            + "        public " + toFirstUpperCase(symbolClass) + "(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {\n"
+            + "            super(rule, children, start, end);\n"
+            + "        }\n\n"
+            + generateSymbols(symbols)
+            + (isAbstract ? "" : generateAcceptMethod(symbolClass))
+            + "    }\n\n";
+        // CHECKSTYLE:ON LineLength
     }
 
     private String generateAcceptMethod(String symbolClass) {
-        // CHECKSTYLE:DISABLE:LineLength
+        // CHECKSTYLE:OFF LineLength
         String visitorName = toFirstUpperCase(grammarName) + "ParseTreeVisitor";
         return
-            "        @Override\n" +
-            "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n" +
-            "            if (visitor instanceof " + visitorName + ") {\n" +
-            "                return ((" + visitorName + "<T>) visitor).visit" + toFirstUpperCase(symbolClass) +
-            "(this);\n" +
-            "            }\n" +
-            "            return visitor.visitNonterminalNode(this);\n" +
-            "        }\n";
-        // CHECKSTYLE:ENABLE:LineLength
+              "        @Override\n"
+            + "        public <T> T accept(ParseTreeVisitor<T> visitor) {\n"
+            + "            if (visitor instanceof " + visitorName + ") {\n"
+            + "                return ((" + visitorName + "<T>) visitor).visit" + toFirstUpperCase(symbolClass) + "(this);\n"
+            + "            }\n"
+            + "            return visitor.visitNonterminalNode(this);\n"
+            + "        }\n";
+        // CHECKSTYLE:ON LineLength
     }
 
     private String generateSymbols(List<Symbol> symbols) {

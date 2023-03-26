@@ -98,7 +98,7 @@ public class Block extends AbstractSymbol {
             this.symbols = block.symbols;
         }
 
-        public Builder(Symbol...symbols) {
+        public Builder(Symbol... symbols) {
             assert symbols.length != 0;
 
             this.symbols = Arrays.asList(symbols);

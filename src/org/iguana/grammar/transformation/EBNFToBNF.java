@@ -139,10 +139,10 @@ public class EBNFToBNF implements GrammarTransformation {
         if (separators.isEmpty() && layout == null) {
             return symbol.getName();
         } else {
-            return "{" + symbol.getName() +
-                      " " +  separators.stream().map(Symbol::getName).collect(Collectors.joining(" ")) +
-                      (layout == null ? "" : " " + layout) +
-                   "}";
+            return "{" + symbol.getName()
+                   + " " + separators.stream().map(Symbol::getName).collect(Collectors.joining(" "))
+                   + (layout == null ? "" : " " + layout)
+                   + "}";
         }
     }
 
@@ -158,8 +158,13 @@ public class EBNFToBNF implements GrammarTransformation {
 
         private static int counter = 0;
 
-        EBNFVisitor(Set<String> state, Set<RuntimeRule> addedRules, Symbol layout, LayoutStrategy strategy,
-                    Map<String, Set<String>> ebnfLefts, Map<String, Set<String>> ebnfRights) {
+        EBNFVisitor(
+                Set<String> state,
+                Set<RuntimeRule> addedRules,
+                Symbol layout,
+                LayoutStrategy strategy,
+                Map<String, Set<String>> ebnfLefts,
+                Map<String, Set<String>> ebnfRights) {
             this.state = state;
             this.addedRules = addedRules;
             this.layout = layout;

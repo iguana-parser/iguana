@@ -43,7 +43,7 @@ public class CharacterRanges {
         return toNonOverlapping(toList(ranges));
     }
 
-    public static Map<CharRange, List<CharRange>> toNonOverlapping(CharRange...ranges) {
+    public static Map<CharRange, List<CharRange>> toNonOverlapping(CharRange... ranges) {
         return toNonOverlapping(Arrays.asList(ranges));
     }
 

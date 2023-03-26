@@ -188,8 +188,8 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             Environment newEnv = runtime.getEnvironment();
 
             if (data != null) {
-                if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY ||
-                    runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.INT_ARRAY)
+                if (runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.ARRAY
+                    || runtime.getConfiguration().getEnvImpl() == EnvironmentImpl.INT_ARRAY)
                     newEnv = runtime.getEmptyEnvironment().declare(data);
                 else
                     newEnv = runtime.getEmptyEnvironment().declare(

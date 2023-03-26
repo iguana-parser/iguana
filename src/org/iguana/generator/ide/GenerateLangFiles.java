@@ -21,6 +21,7 @@ public class GenerateLangFiles {
         generateLang();
     }
 
+    // CHECKSTYLE:OFF OperatorWrap
     private void generateFileType() {
         String className = toFirstUpperCase(grammarName);
         String content =
@@ -102,4 +103,5 @@ public class GenerateLangFiles {
             "\n";
         writeToJavaFile(content, langGenDirectory, className + "Lang");
     }
+    // CHECKSTYLE:ON OperatorWrap
 }

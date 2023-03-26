@@ -56,7 +56,7 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T extends RegularExpression> Seq<T> from(T...elements) {
+    public static <T extends RegularExpression> Seq<T> from(T... elements) {
         return from(Arrays.asList(elements));
     }
 
@@ -156,7 +156,7 @@ public class Seq<T extends RegularExpression> extends AbstractRegularExpression 
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
+    public static <T extends RegularExpression> Builder<T> builder(T... symbols) {
         return builder(Arrays.asList(symbols));
     }
 

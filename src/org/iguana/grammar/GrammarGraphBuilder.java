@@ -360,10 +360,10 @@ public class GrammarGraphBuilder {
          */
         private void visitSymbol(Symbol symbol) {
 
-            if (symbol instanceof Nonterminal ||
-                symbol instanceof Terminal ||
-                symbol instanceof Error ||
-                symbol instanceof Return) { // TODO: I think this can be unified
+            if (symbol instanceof Nonterminal
+                || symbol instanceof Terminal
+                || symbol instanceof Error
+                || symbol instanceof Return) { // TODO: I think this can be unified
                 symbol.accept(this);
                 return;
             }
@@ -507,16 +507,16 @@ public class GrammarGraphBuilder {
 
     private static void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
         List<String> parameters = nonterminal.getParameters();
-        if ((parameters == null && arguments == null) ||
-            (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length))
+        if ((parameters == null && arguments == null)
+            || (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length)) {
             return;
+        }
 
         throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);
     }
 
     private Conditions getConditions(List<Condition> conditions) {
-        if (conditions.isEmpty())
-            return ConditionsFactory.DEFAULT;
+        if (conditions.isEmpty()) return ConditionsFactory.DEFAULT;
         return ConditionsFactory.getConditions(conditions, matcherFactory);
     }
 }

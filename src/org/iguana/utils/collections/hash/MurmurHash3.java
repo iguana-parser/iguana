@@ -185,7 +185,7 @@ public class MurmurHash3 {
     }
 
     public static IntFunctionAny fn(int seed) {
-        return (Integer...elements) -> {
+        return (Integer... elements) -> {
             int h = seed;
 
             int k = 0;

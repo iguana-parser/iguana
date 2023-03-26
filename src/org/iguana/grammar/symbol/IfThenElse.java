@@ -88,9 +88,9 @@ public class IfThenElse extends AbstractSymbol {
         if (this == o) return true;
         if (!(o instanceof IfThenElse)) return false;
         IfThenElse that = (IfThenElse) o;
-        return Objects.equals(expression, that.expression) &&
-            Objects.equals(thenPart, that.thenPart) &&
-            Objects.equals(elsePart, that.elsePart);
+        return Objects.equals(expression, that.expression)
+               && Objects.equals(thenPart, that.thenPart)
+               && Objects.equals(elsePart, that.elsePart);
     }
 
     @Override

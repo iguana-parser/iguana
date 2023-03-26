@@ -144,8 +144,8 @@ public class LayoutWeaver implements GrammarTransformation {
     private Set<Condition> getIgnoreLayoutConditions(Symbol s) {
         Set<Condition> conditions = new LinkedHashSet<>();
         for (Condition c : s.getPostConditions()) {
-            if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT ||
-                c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
+            if (c.getType() == ConditionType.NOT_FOLLOW_IGNORE_LAYOUT
+                || c.getType() == ConditionType.FOLLOW_IGNORE_LAYOUT) {
                 conditions.add(c);
             }
         }

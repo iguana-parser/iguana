@@ -39,6 +39,7 @@ public class GenerateTermBuilder {
     /*
      * <Lang>TermBuilder.java
      */
+    // CHECKSTYLE:OFF OperatorWrap
     public static void generate(String language, String path) {
         File file = new File(path + language.toLowerCase() + "/gen/parser/" + language + "TermBuilder.java");
         try {
@@ -148,4 +149,5 @@ public class GenerateTermBuilder {
             e.printStackTrace();
         }
     }
+    // CHECKSTYLE:ON OperatorWrap
 }

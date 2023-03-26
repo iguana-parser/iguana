@@ -218,7 +218,7 @@ public class Nonterminal extends AbstractSymbol {
             return this;
         }
 
-        public Builder addParameters(String...parameters) {
+        public Builder addParameters(String... parameters) {
             addParameters(Arrays.asList(parameters));
             return this;
         }

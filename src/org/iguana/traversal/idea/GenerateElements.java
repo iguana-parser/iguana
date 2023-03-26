@@ -64,8 +64,8 @@ import java.util.Set;
 /**
  * Created by Anastasia Izmaylova on 18/12/15.
  */
-public class GenerateElements {
 
+public class GenerateElements {
     /*
      * <Lang>ElementTypes.java
      * gen.psi.*
@@ -89,6 +89,7 @@ public class GenerateElements {
         generatePhiElements(rules, language, path);
     }
 
+    // CHECKSTYLE:OFF OperatorWrap
     private static void generateElementTypes(Map<String, Set<String>> elements, String language, String path) {
         File file = new File(path + language.toLowerCase() + "/gen/psi/" + language + "ElementTypes.java");
         try {
@@ -173,6 +174,7 @@ public class GenerateElements {
             e.printStackTrace();
         }
     }
+    // CHECKSTYLE:ON OperatorWrap
 
     private static void generatePhiElements(List<RuntimeRule> rules, String language, String path) {
         new File(path + language.toLowerCase() + "/gen/psi/impl").mkdir();
@@ -477,29 +479,29 @@ public class GenerateElements {
                             case ONE:
                                 if (symbol.endsWith("$Ebnf"))
                                     writer.println(
-                                        "    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) +
-                                        "List();");
+                                        "    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$"))
+                                        + "List();");
                                 else
                                     writer.println("    I" + symbol + " get" + symbol + "();");
                                 break;
                             case MORE_THAN_ONE:
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    List<List<PsiElement>> getAll" +
-                                                   symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                    writer.println("    List<List<PsiElement>> getAll"
+                                                   + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
                                     writer.println("    List<I" + symbol + "> getAll" + symbol + "();");
                                 break;
                             case ONE_AND_MORE:
                                 if (symbol.endsWith("$Ebnf"))
                                     writer.println(
-                                        "    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$")) +
-                                        "List();");
+                                        "    List<PsiElement> get" + symbol.substring(0, symbol.lastIndexOf("$"))
+                                        + "List();");
                                 else
                                     writer.println("    I" + symbol + " get" + symbol + "();");
 
                                 if (symbol.endsWith("$Ebnf"))
-                                    writer.println("    List<List<PsiElement>> getAll" +
-                                                   symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
+                                    writer.println("    List<List<PsiElement>> getAll"
+                                                   + symbol.substring(0, symbol.lastIndexOf("$")) + "List();");
                                 else
                                     writer.println("    List<I" + symbol + "> getAll" + symbol + "();");
                                 break;
@@ -617,110 +619,110 @@ public class GenerateElements {
                                 case ONE:
                                     if (num2 == null) {
                                         if (symbol.endsWith("$Ebnf"))
-                                            writer.println("    public List<PsiElement> get" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                           "List() { return null; }");
+                                            writer.println("    public List<PsiElement> get"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                           + "List() { return null; }");
                                         else
                                             writer.println(
                                                 "    public I" + symbol + " get" + symbol + "() { return null; }");
                                     } else {
                                         if (symbol.endsWith("$Ebnf"))
-                                            writer.println("    public List<PsiElement> get" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                           "List() { return findNotNullChildByClass(" +
-                                                           "IEbnfElement.class).getElements(); }");
+                                            writer.println("    public List<PsiElement> get"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                           + "List() { return findNotNullChildByClass("
+                                                           + "IEbnfElement.class).getElements(); }");
                                         else
-                                            writer.println("    public I" + symbol + " get" + symbol +
-                                                           "() { return findNotNullChildByClass(I" + symbol +
-                                                           ".class); }");
+                                            writer.println("    public I" + symbol + " get" + symbol
+                                                           + "() { return findNotNullChildByClass(I" + symbol
+                                                           + ".class); }");
                                     }
                                     break;
                                 case MORE_THAN_ONE:
                                     if (num2 == null) {
                                         if (symbol.endsWith("$Ebnf"))
-                                            writer.println("    public List<List<PsiElement>> getAll" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                           "List() { return null; }");
+                                            writer.println("    public List<List<PsiElement>> getAll"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                           + "List() { return null; }");
                                         else
-                                            writer.println("    public List<I" + symbol + "> getAll" + symbol +
-                                                           "() { return null; }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol
+                                                           + "() { return null; }");
                                     } else {
                                         if (symbol.endsWith("$Ebnf")) {
-                                            writer.println("    public List<List<PsiElement>> getAll" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) + "List() {");
+                                            writer.println("    public List<List<PsiElement>> getAll"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$")) + "List() {");
                                             writer.println(
                                                 "        List<List<PsiElement>> result = new ArrayList<>();");
                                             writer.println(
-                                                "        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(" +
-                                                "this, IEbnfElement.class))");
+                                                "        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList("
+                                                + "this, IEbnfElement.class))");
                                             writer.println("            result.add(e.getElements());");
                                             writer.println("        return result;");
                                             writer.println("    }");
                                         } else
-                                            writer.println("    public List<I" + symbol + "> getAll" + symbol +
-                                                           "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I" +
-                                                           symbol + ".class); }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol
+                                                           + "() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I"
+                                                           + symbol + ".class); }");
                                     }
                                     break;
                                 case ONE_AND_MORE:
                                     if (num2 == null) {
                                         if (symbol.endsWith("$Ebnf")) {
-                                            writer.println("    public List<PsiElement> get" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                           "List() { return null; }");
-                                            writer.println("    public List<List<PsiElement>> getAll" +
-                                                           symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                           "List() { return null; }");
+                                            writer.println("    public List<PsiElement> get"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                           + "List() { return null; }");
+                                            writer.println("    public List<List<PsiElement>> getAll"
+                                                           + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                           + "List() { return null; }");
                                         } else {
                                             writer.println(
                                                 "    public I" + symbol + " get" + symbol + "() { return null; }");
-                                            writer.println("    public List<I" + symbol + "> getAll" + symbol +
-                                                           "() { return null; }");
+                                            writer.println("    public List<I" + symbol + "> getAll" + symbol
+                                                           + "() { return null; }");
                                         }
                                     } else {
                                         switch (num2) {
                                             case ONE:
                                                 if (symbol.endsWith("$Ebnf")) {
-                                                    writer.println("    public List<PsiElement> get" +
-                                                                   symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                                   "List() { return findNotNullChildByClass(" +
-                                                                   "IEbnfElement.class).getElements(); }");
-                                                    writer.println("    public List<List<PsiElement>> getAll" +
-                                                                   symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                                   "List() { return null; }");
+                                                    writer.println("    public List<PsiElement> get"
+                                                                   + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                                   + "List() { return findNotNullChildByClass("
+                                                                   + "IEbnfElement.class).getElements(); }");
+                                                    writer.println("    public List<List<PsiElement>> getAll"
+                                                                   + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                                   + "List() { return null; }");
                                                 } else {
-                                                    writer.println("    public I" + symbol + " get" + symbol +
-                                                                   "() { return findNotNullChildByClass(I" + symbol +
-                                                                   ".class); }");
-                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol +
-                                                                   "() { return null; }");
+                                                    writer.println("    public I" + symbol + " get" + symbol
+                                                                   + "() { return findNotNullChildByClass(I" + symbol
+                                                                   + ".class); }");
+                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol
+                                                                   + "() { return null; }");
                                                 }
                                                 break;
                                             case MORE_THAN_ONE:
                                             case ONE_AND_MORE:
                                                 if (symbol.endsWith("$Ebnf")) {
-                                                    writer.println("    public List<PsiElement> get" +
-                                                                   symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                                   "List() { return null; }");
-                                                    writer.println("    public List<List<PsiElement>> getAll" +
-                                                                   symbol.substring(0, symbol.lastIndexOf("$")) +
-                                                                   "List() {");
+                                                    writer.println("    public List<PsiElement> get"
+                                                                   + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                                   + "List() { return null; }");
+                                                    writer.println("    public List<List<PsiElement>> getAll"
+                                                                   + symbol.substring(0, symbol.lastIndexOf("$"))
+                                                                   + "List() {");
                                                     writer.println(
                                                         "        List<List<PsiElement>> result = new ArrayList<>();");
                                                     writer.println(
-                                                        "        for (IEbnfElement e : " +
-                                                        "PsiTreeUtil.getChildrenOfTypeAsList(this, " +
-                                                        "IEbnfElement.class))");
+                                                        "        for (IEbnfElement e : "
+                                                        + "PsiTreeUtil.getChildrenOfTypeAsList(this, "
+                                                        + "IEbnfElement.class))");
                                                     writer.println("            result.add(e.getElements());");
                                                     writer.println("        return result;");
                                                     writer.println("    }");
                                                 } else {
-                                                    writer.println("    public I" + symbol + " get" + symbol +
-                                                                   "() { return null; }");
-                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol +
-                                                                   "() { return PsiTreeUtil.getChildrenOfTypeAsList" +
-                                                                   "(this, I" +
-                                                                   symbol + ".class); }");
+                                                    writer.println("    public I" + symbol + " get" + symbol
+                                                                   + "() { return null; }");
+                                                    writer.println("    public List<I" + symbol + "> getAll" + symbol
+                                                                   + "() { return PsiTreeUtil.getChildrenOfTypeAsList"
+                                                                   + "(this, I"
+                                                                   + symbol + ".class); }");
                                                 }
                                                 break;
                                         }
@@ -736,8 +738,8 @@ public class GenerateElements {
                             writer.println();
                             writer.println(
                                 "    public PsiElement setName(String name) throws IncorrectOperationException {");
-                            writer.println("        ASTNode node = " + language + "ElementFactory.create" +
-                                           head.substring(0, head.length() - 12) + "(getProject(), name);");
+                            writer.println("        ASTNode node = " + language + "ElementFactory.create"
+                                           + head.substring(0, head.length() - 12) + "(getProject(), name);");
                             writer.println("        ASTNode first = getResult().getFirstChildNode();");
                             writer.println("        getResult().replaceChild(first, node);");
                             writer.println("        return this;");
@@ -754,35 +756,35 @@ public class GenerateElements {
                             writer.println("    public PsiElement getElement() { return this; }");
                             writer.println();
                             writer.println(
-                                "    public TextRange getRangeInElement() { return new TextRange(0, " +
-                                "getTextLength()); }");
+                                "    public TextRange getRangeInElement() { return new TextRange(0, "
+                                + "getTextLength()); }");
                             writer.println();
                             writer.println("    public PsiElement resolve() {");
-                            writer.println("        PsiElement element = " + language + "Util.find" +
-                                           head.substring(0, head.length() - 10) + "(getProject(), this);");
+                            writer.println("        PsiElement element = " + language + "Util.find"
+                                           + head.substring(0, head.length() - 10) + "(getProject(), this);");
                             writer.println("        return element;");
                             writer.println("    }");
                             writer.println();
                             writer.println("    public String getCanonicalText() { return this.getText(); }");
                             writer.println();
                             writer.println(
-                                "    public PsiElement handleElementRename(String name) throws " +
-                                "IncorrectOperationException {");
-                            writer.println("        ASTNode node = " + language + "ElementFactory.create" +
-                                           head.substring(0, head.length() - 10) + "(getProject(), name);");
+                                "    public PsiElement handleElementRename(String name) throws "
+                                + "IncorrectOperationException {");
+                            writer.println("        ASTNode node = " + language + "ElementFactory.create"
+                                           + head.substring(0, head.length() - 10) + "(getProject(), name);");
                             writer.println("        ASTNode first = getResult().getFirstChildNode();");
                             writer.println("        getResult().replaceChild(first, node);");
                             writer.println("        return this;");
                             writer.println("    }");
                             writer.println();
                             writer.println(
-                                "    public PsiElement bindToElement(PsiElement element) throws " +
-                                "IncorrectOperationException { return null; }");
+                                "    public PsiElement bindToElement(PsiElement element) throws "
+                                + "IncorrectOperationException { return null; }");
                             writer.println();
                             writer.println("    public boolean isReferenceTo(PsiElement element) {");
                             writer.println(
-                                "        return element instanceof " + head.substring(0, head.length() - 10) +
-                                "$DeclarationImpl");
+                                "        return element instanceof " + head.substring(0, head.length() - 10)
+                                + "$DeclarationImpl");
                             writer.println("                 && element.getTextLength() == this.getTextLength()");
                             writer.println("                 && element.getText().equals(this.getText());");
                             writer.println("    }");

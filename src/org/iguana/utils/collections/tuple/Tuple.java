@@ -27,6 +27,8 @@
 
 package org.iguana.utils.collections.tuple;
 
+import java.util.Objects;
+
 public class Tuple<T, K> {
 
     protected T t;
@@ -63,8 +65,7 @@ public class Tuple<T, K> {
         @SuppressWarnings("unchecked")
         Tuple<T, K> other = (Tuple<T, K>) obj;
 
-        return t == null ? other.t == null : t.equals(other.t) &&
-               k == null ? other.k == null : k.equals(other.k);
+        return Objects.equals(t, other.t) && Objects.equals(k, other.k);
     }
 
     @Override

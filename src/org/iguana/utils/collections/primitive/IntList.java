@@ -11,7 +11,7 @@ public class IntList implements IntStack {
     private int[] arr;
     private int size;
 
-    public static IntList of(int...elements) {
+    public static IntList of(int... elements) {
         IntList list = new IntList();
         for (int e : elements) list.add(e);
         return list;

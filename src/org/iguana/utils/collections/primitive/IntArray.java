@@ -8,7 +8,7 @@ public class IntArray implements IntIterable {
     private final int start; // including
     private final int end;   // excluding
 
-    public static IntArray of(int...arr) {
+    public static IntArray of(int... arr) {
         return new IntArray(arr);
     }
 

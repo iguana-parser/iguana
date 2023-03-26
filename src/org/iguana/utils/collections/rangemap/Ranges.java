@@ -59,7 +59,7 @@ public class Ranges {
         return toNonOverlapping(toList(ranges));
     }
 
-    public static Map<Range, List<Range>> toNonOverlapping(Range...ranges) {
+    public static Map<Range, List<Range>> toNonOverlapping(Range... ranges) {
         return toNonOverlapping(Arrays.asList(ranges));
     }
 

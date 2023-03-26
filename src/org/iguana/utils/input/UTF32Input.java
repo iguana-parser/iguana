@@ -45,8 +45,8 @@ class UTF32Input extends AbstractInput {
 
         UTF32Input other = (UTF32Input) obj;
 
-        return this.length() == other.length() &&
-                Arrays.equals(characters, other.characters);
+        return this.length() == other.length()
+               && Arrays.equals(characters, other.characters);
     }
 
     /**

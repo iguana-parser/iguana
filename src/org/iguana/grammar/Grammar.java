@@ -158,8 +158,8 @@ public class Grammar {
                 } else if (newLayout instanceof Nonterminal) {
                     newLayout = ((Nonterminal) newLayout).copy().setNodeType(NonterminalNodeType.Layout).build();
                 } else {
-                    throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was " +
-                                                   newLayout.getClass().getSimpleName());
+                    throw new RuntimeException("Layout can only be an instance of a terminal or nonterminal, but was "
+                                               + newLayout.getClass().getSimpleName());
                 }
             }
 
