@@ -27,9 +27,9 @@
 
 package org.iguana.utils.collections;
 
+import org.iguana.util.Tuple;
 import org.iguana.utils.collections.primitive.IntIterable;
 import org.iguana.utils.collections.primitive.IntIterator;
-import org.iguana.utils.collections.tuple.Tuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
