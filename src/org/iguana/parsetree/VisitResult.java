@@ -13,8 +13,11 @@ import java.util.Set;
 public abstract class VisitResult {
 
     public abstract MergeResultVisitor visitor();
+
     public abstract VisitResult merge(VisitResult other);
+
     public abstract <T> T accept(CreateNodeVisitor<T> visitor, PackedNode packedNode);
+
     public abstract java.util.List<Object> getValues();
 
     public static Empty empty() {
@@ -242,9 +245,13 @@ public abstract class VisitResult {
 
     interface MergeResultVisitor {
         Object visit(Empty other);
+
         Object visit(Single other);
+
         Object visit(List other);
+
         Object visit(EBNF other);
+
         Object visit(ListOfResult other);
     }
 
@@ -463,9 +470,13 @@ public abstract class VisitResult {
 
     public interface CreateNodeVisitor<T> {
         T visit(Empty result, PackedNode packedNode);
+
         T visit(Single result, PackedNode packedNode);
+
         T visit(List result, PackedNode packedNode);
+
         T visit(EBNF result, PackedNode packedNode);
+        
         T visit(ListOfResult result, PackedNode packedNode);
     }
 

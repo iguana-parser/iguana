@@ -121,6 +121,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     }
 
     private int id = 0;
+
     private int nextId() {
         return id++;
     }

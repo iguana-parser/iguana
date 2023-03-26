@@ -24,6 +24,7 @@
  * OF SUCH DAMAGE.
  *
  */
+
 package org.iguana.regex;
 
 import java.util.ArrayList;

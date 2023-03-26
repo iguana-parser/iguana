@@ -32,7 +32,8 @@ import io.usethesource.capsule.Set;
 public interface Attr {
 
     Set.Immutable<String> getEnv();
-    void setEnv(Set.Immutable<String> env);
-    void setEmpty();
 
+    void setEnv(Set.Immutable<String> env);
+
+    void setEmpty();
 }

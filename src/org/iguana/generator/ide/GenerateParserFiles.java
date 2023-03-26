@@ -29,6 +29,7 @@ public class GenerateParserFiles extends Generator {
     private void generateIggyElementTypes() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + grammarName.toLowerCase() + ".ide.parser;\n");
         sb.append("\n");
         sb.append("import com.intellij.psi.tree.IElementType;\n");

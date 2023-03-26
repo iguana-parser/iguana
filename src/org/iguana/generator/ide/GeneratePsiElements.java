@@ -43,6 +43,7 @@ public class GeneratePsiElements extends Generator {
     private void generatePsiElements() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + grammarName.toLowerCase() + ".ide.psi;\n");
         sb.append("\n");
         sb.append("import com.intellij.extapi.psi.ASTWrapperPsiElement;\n");
@@ -89,6 +90,7 @@ public class GeneratePsiElements extends Generator {
     private void generatePsiElementFactory() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + grammarName.toLowerCase() + ".ide.psi;\n");
         sb.append("\n");
         sb.append("import com.intellij.lang.ASTNode;\n");

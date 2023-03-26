@@ -50,6 +50,7 @@ public class ParseTreeVisitorGenerator extends Generator {
     private void generateParseTreeBuilder() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + packageName + ";\n");
         sb.append("\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
@@ -119,6 +120,7 @@ public class ParseTreeVisitorGenerator extends Generator {
     private void generateParseTreeTypes() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.grammar.runtime.RuntimeRule;\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n");
@@ -169,6 +171,7 @@ public class ParseTreeVisitorGenerator extends Generator {
     private void generateVisitor() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
+        sb.append("\n");
         sb.append("package " + packageName + ";\n\n");
         sb.append("import org.iguana.parsetree.NonterminalNode;\n");
         sb.append("import org.iguana.parsetree.ParseTreeVisitor;\n\n");
