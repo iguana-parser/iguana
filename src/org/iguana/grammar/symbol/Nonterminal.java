@@ -118,14 +118,14 @@ public class Nonterminal extends AbstractSymbol {
 
     @Override
     public String toString() {
-        return (variable != null? variable + (state == null || state.isEmpty()? "=" : ":") : "")
-                + (state != null && !state.isEmpty()? listToString(state, ":") + "=" : "")
-                + (getPreConditions().isEmpty()? "" : listToString(getPreConditions(), ","))
-                + (label != null? label + ":" : "")
+        return (variable != null ? variable + (state == null || state.isEmpty() ? "=" : ":") : "")
+                + (state != null && !state.isEmpty() ? listToString(state, ":") + "=" : "")
+                + (getPreConditions().isEmpty() ? "" : listToString(getPreConditions(), ","))
+                + (label != null ? label + ":" : "")
                 + name + (index > 0 ? index : "")
-                + (arguments == null && parameters != null? "(" + listToString(parameters, ",") + ")" : "")
-                + (arguments != null? "(" + listToString(arguments, ",") + ")" : "")
-                + (getPostConditions().isEmpty()? "" : listToString(getPostConditions(), ","));
+                + (arguments == null && parameters != null ? "(" + listToString(parameters, ",") + ")" : "")
+                + (arguments != null ? "(" + listToString(arguments, ",") + ")" : "")
+                + (getPostConditions().isEmpty() ? "" : listToString(getPostConditions(), ","));
     }
 
     @Override

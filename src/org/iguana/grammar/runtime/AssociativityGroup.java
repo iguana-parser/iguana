@@ -139,7 +139,7 @@ public class AssociativityGroup {
         return associativity.name() + "("
                     + lhs + ","
                     + rhs + ","
-                    + (precedence != -1? precedence + (map.keySet().isEmpty()? "" : ",") : "")
+                    + (precedence != -1 ? precedence + (map.keySet().isEmpty() ? "" : ",") : "")
                     + listToString(map.keySet(), ",") + ")";
     }
 

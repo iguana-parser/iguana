@@ -61,7 +61,7 @@ public class TerminalTransition extends AbstractTransition {
 
     @Override
     public String getLabel() {
-        return (dest.getLabel() != null? dest.getLabel() + ":" : "") + getTerminalSlot();
+        return (dest.getLabel() != null ? dest.getLabel() + ":" : "") + getTerminalSlot();
     }
 
     @Override

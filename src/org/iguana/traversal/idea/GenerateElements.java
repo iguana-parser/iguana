@@ -72,7 +72,11 @@ public class GenerateElements {
      * gen.psi.impl.*
      */
 
-    enum NUM {ONE, MORE_THAN_ONE, ONE_AND_MORE}
+    enum NUM {
+        ONE,
+        MORE_THAN_ONE,
+        ONE_AND_MORE
+    }
 
     public static void generate(List<RuntimeRule> rules, String language, String path) {
         Map<String, Set<String>> elements = new LinkedHashMap<>();

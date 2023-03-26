@@ -217,7 +217,7 @@ public class EBNFToBNF implements GrammarTransformation {
                 .setDefinition(symbol)
                 .build()));
 
-            Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
+            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);
             return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
         }
 
@@ -258,7 +258,7 @@ public class EBNFToBNF implements GrammarTransformation {
                                     .setDefinition(symbol)
                                     .build());
 
-            Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
+            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);
             return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
         }
 
@@ -321,7 +321,7 @@ public class EBNFToBNF implements GrammarTransformation {
                 .setDefinition(symbol)
                 .build());
 
-            Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
+            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);
             return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
         }
 
@@ -360,7 +360,7 @@ public class EBNFToBNF implements GrammarTransformation {
                 .setDefinition(symbol)
                 .build());
 
-            Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
+            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);
             return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
         }
 
@@ -411,7 +411,7 @@ public class EBNFToBNF implements GrammarTransformation {
                 .setDefinition(symbol)
                 .build());
 
-            Builder copyBuilder = arguments == null? newNt.copy() : newNt.copy().apply(arguments);
+            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);
             return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();
         }
 
@@ -551,7 +551,7 @@ public class EBNFToBNF implements GrammarTransformation {
         public Symbol visit(Align symbol) {
             Symbol sym = symbol.getSymbol().accept(this);
 
-            return sym == symbol.getSymbol()? symbol
+            return sym == symbol.getSymbol() ? symbol
                     : new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
         }
 
@@ -568,7 +568,8 @@ public class EBNFToBNF implements GrammarTransformation {
                     modified |= true;
                 j++;
             }
-            return modified? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
+            return modified
+                    ? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()
                     : symbol;
         }
 
@@ -601,7 +602,8 @@ public class EBNFToBNF implements GrammarTransformation {
         public Symbol visit(Ignore symbol) {
             Symbol sym = symbol.getSymbol().accept(this);
 
-            return sym == symbol.getSymbol()? symbol
+            return sym == symbol.getSymbol()
+                    ? symbol
                     : new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
         }
 
@@ -614,7 +616,8 @@ public class EBNFToBNF implements GrammarTransformation {
         public Symbol visit(Offside symbol) {
             Symbol sym = symbol.getSymbol().accept(this);
 
-            return sym == symbol.getSymbol()? symbol
+            return sym == symbol.getSymbol()
+                    ? symbol
                     : new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();
         }
 

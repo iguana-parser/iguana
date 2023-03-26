@@ -82,12 +82,12 @@ public class IfThen extends AbstractSymbol {
         return String.format("if (%s) { %s } else %s",
                                 expression.toString(),
                                 thenPart.toString(j),
-                                j - thenPart.size() <= 1? epsilonToString(j - thenPart.size())
+                                j - thenPart.size() <= 1 ? epsilonToString(j - thenPart.size())
                                                           : Epsilon.getInstance().toString());
     }
 
     public String epsilonToString(int j) {
-        return Epsilon.getInstance().toString() + (j == 1? " . " : "");
+        return Epsilon.getInstance().toString() + (j == 1 ? " . " : "");
     }
 
     public static class Builder extends SymbolBuilder<IfThen> {

@@ -43,7 +43,7 @@ public class IdeaIDEGenerator {
 
     public void generate(RuntimeGrammar grammar, String language, String extension, String path) {
 
-        path = path.endsWith("/")? path : path + "/";
+        path = path.endsWith("/") ? path : path + "/";
 
         Set<String> tokenTypes = new HashSet<>();
         Map<String, RegularExpression> terminals = new LinkedHashMap<>();

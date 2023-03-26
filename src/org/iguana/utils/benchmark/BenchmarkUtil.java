@@ -37,8 +37,7 @@ public class BenchmarkUtil {
     public static int getMemoryUsed() {
         int mb = 1024 * 1024;
         Runtime runtime = Runtime.getRuntime();
-        int memoryUsed = (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
-        return memoryUsed;
+        return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
     }
 
     public static long getUserTime() {
@@ -49,7 +48,8 @@ public class BenchmarkUtil {
     public static long getSystemTime() {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
-                ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
+                ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
+                : 0L;
     }
 
     public static void awaitFullGC() {

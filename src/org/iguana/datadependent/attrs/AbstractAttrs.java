@@ -36,7 +36,7 @@ public abstract class AbstractAttrs implements Attr {
 
     @Override
     public Set.Immutable<String> getEnv() {
-        return env == null? Set.Immutable.of() : env;
+        return env == null ? Set.Immutable.of() : env;
     }
 
     @Override

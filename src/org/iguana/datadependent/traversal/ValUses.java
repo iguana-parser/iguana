@@ -189,12 +189,12 @@ public class ValUses implements IAbstractASTVisitor<Void>, ISymbolVisitor<Void>,
     }
 
     private void visitSymbol(Symbol symbol) {
-        for (Condition cond: symbol.getPreConditions())
+        for (Condition cond : symbol.getPreConditions())
             cond.accept(this);
 
         symbol.accept(this);
 
-        for (Condition cond: symbol.getPostConditions())
+        for (Condition cond : symbol.getPostConditions())
             cond.accept(this);
     }
 
