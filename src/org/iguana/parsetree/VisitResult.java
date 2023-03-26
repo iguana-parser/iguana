@@ -517,7 +517,7 @@ public abstract class VisitResult {
         @Override
         public java.util.List<T> visit(ListOfResult result, PackedNode packedNode) {
             Set<T> set = new LinkedHashSet<>();
-            for (VisitResult vResult :result.getVisitResults()) {
+            for (VisitResult vResult : result.getVisitResults()) {
                 set.add(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(),
                     (java.util.List<T>) vResult.getValues(), packedNode.getLeftExtent(), packedNode.getRightExtent()));
             }

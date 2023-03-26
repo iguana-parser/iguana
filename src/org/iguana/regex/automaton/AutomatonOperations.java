@@ -461,7 +461,7 @@ public class AutomatonOperations {
 
     private static Set<State> move(Set<State> state, CharRange r) {
         Set<State> result = new HashSet<>();
-        for (State s: state) {
+        for (State s : state) {
             State dest = s.getState(r);
             if (dest != null) {
                 result.add(dest);

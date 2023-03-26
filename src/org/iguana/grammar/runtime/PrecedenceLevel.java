@@ -139,8 +139,8 @@ public class PrecedenceLevel {
         next.hasPrefixUnaryBelow = hasPrefixUnary || hasPrefixUnaryBelow;
         next.hasPostfixUnaryBelow = hasPostfixUnary || hasPostfixUnaryBelow;
 
-        next.prefixUnaryBelow = Arrays.copyOf(prefixUnaryBelow, (hasPrefixUnary? 1 : 0) + prefixUnaryBelow.length);
-        next.postfixUnaryBelow = Arrays.copyOf(postfixUnaryBelow, (hasPostfixUnary? 1 : 0) + postfixUnaryBelow.length);
+        next.prefixUnaryBelow = Arrays.copyOf(prefixUnaryBelow, (hasPrefixUnary ? 1 : 0) + prefixUnaryBelow.length);
+        next.postfixUnaryBelow = Arrays.copyOf(postfixUnaryBelow, (hasPostfixUnary ? 1 : 0) + postfixUnaryBelow.length);
 
         if (hasPrefixUnary)
             next.prefixUnaryBelow[next.prefixUnaryBelow.length - 1] = rhs;
@@ -209,7 +209,7 @@ public class PrecedenceLevel {
 
     public void setUndefinedIfNeeded() {
         if (undefined == -1) {
-            int rhs = index == lhs? index : index - 1;
+            int rhs = index == lhs ? index : index - 1;
             if (lhs != rhs && !(containsAssociativityGroup && lhs == assoc_lhs && rhs == assoc_rhs))
                 undefined = index++;
         }
@@ -226,11 +226,11 @@ public class PrecedenceLevel {
     }
 
     public void done() {
-        rhs = index == lhs? index : index - 1;
+        rhs = index == lhs ? index : index - 1;
     }
 
     int getCurrent() {
-        return index == lhs? index : index - 1;
+        return index == lhs ? index : index - 1;
     }
 
     public void containsAssociativityGroup(int l, int r) {

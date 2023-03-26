@@ -21,7 +21,7 @@ public class RecognizerOptions {
 
     protected RecognizerOptions(Builder builder) {
         this.map = builder.map;
-        this.global= builder.global;
+        this.global = builder.global;
     }
 
     public Map<String, Object> getMap() {

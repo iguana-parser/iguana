@@ -104,7 +104,10 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
     private Map<String, Map<String, Integer>> headsWithLabeledRules; // excepts
 
-    private enum OP {_1, _2}
+    private enum OP {
+        _1,
+        _2
+    }
 
     private OP config_op = OP._2;
 

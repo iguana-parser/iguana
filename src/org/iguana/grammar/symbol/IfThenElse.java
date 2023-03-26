@@ -101,10 +101,11 @@ public class IfThenElse extends AbstractSymbol {
     @Override
     public String toString(int j) {
         return String.format("if (%s) { %s } else { %s }",
-                                expression.toString(),
-                                thenPart.toString(j),
-                                j - thenPart.size() <= 1? elsePart.toString(j - thenPart.size())
-                                                       : elsePart.toString());
+                             expression.toString(),
+                             thenPart.toString(j),
+                             j - thenPart.size() <= 1
+                                     ? elsePart.toString(j - thenPart.size())
+                                     : elsePart.toString());
     }
 
     public static class Builder extends SymbolBuilder<IfThenElse> {

@@ -235,7 +235,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     public String toString() {
         return "{" + StreamSupport.stream(this.spliterator(), false)
                                   .map(e -> e.key + "=" + e.val)
-                                  .collect(Collectors.joining(", "))+ "}";
+                                  .collect(Collectors.joining(", ")) + "}";
     }
 
     @Override

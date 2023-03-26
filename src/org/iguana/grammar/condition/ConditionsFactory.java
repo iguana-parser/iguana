@@ -104,7 +104,7 @@ public class ConditionsFactory {
 
                 @Override
                 public String toString() {
-                    return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
+                    return conditions.isEmpty() ? "" : "[" + listToString(conditions, ";") + "]";
                 }
 
             };
@@ -133,7 +133,7 @@ public class ConditionsFactory {
 
             @Override
             public String toString() {
-                return conditions.isEmpty()? "" : "[" + listToString(conditions, ";") + "]";
+                return conditions.isEmpty() ? "" : "[" + listToString(conditions, ";") + "]";
             }
         };
 

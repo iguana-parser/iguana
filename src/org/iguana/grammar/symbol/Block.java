@@ -65,7 +65,7 @@ public class Block extends AbstractSymbol {
     @Override
     public int size() {
         int size = 0;
-        for (Symbol symbol: symbols)
+        for (Symbol symbol : symbols)
             size = size + symbol.size();
         return size;
     }
@@ -81,7 +81,7 @@ public class Block extends AbstractSymbol {
 
         int k = 0;
         for (Symbol symbol : symbols) {
-            strings.set(k, j <= 1? symbol.toString(j) : symbol.toString());
+            strings.set(k, j <= 1 ? symbol.toString(j) : symbol.toString());
             j = j - symbol.size();
             k++;
         }
