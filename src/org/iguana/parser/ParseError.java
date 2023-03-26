@@ -83,9 +83,9 @@ public class ParseError<T extends Result> {
         if (this == obj) return true;
         if (!(obj instanceof ParseError)) return false;
         ParseError<?> other = (ParseError<?>) obj;
-        return inputIndex == other.inputIndex &&
-               lineNumber == other.lineNumber &&
-               columnNumber == other.columnNumber;
+        return inputIndex == other.inputIndex
+               && lineNumber == other.lineNumber
+               && columnNumber == other.columnNumber;
     }
 
     public GSSNode<T> getGssNode() {

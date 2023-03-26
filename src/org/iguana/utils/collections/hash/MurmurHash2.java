@@ -181,7 +181,7 @@ public class MurmurHash2 {
     }
 
     public static IntFunctionAny hashN(int seed) {
-        return (Integer...elements) -> {
+        return (Integer... elements) -> {
 
             int h = seed ^ 4;
 

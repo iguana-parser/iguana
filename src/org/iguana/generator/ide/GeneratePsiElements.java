@@ -13,7 +13,6 @@ import org.iguana.grammar.symbol.Star;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
-import org.iguana.parsetree.NonterminalNode;
 
 import java.io.File;
 import java.util.Arrays;
@@ -59,7 +58,7 @@ public class GeneratePsiElements extends Generator {
         sb.append("\n");
 
         metaSymbolNodes.forEach(node ->
-            sb.append(generateSymbolClass(node, null, false, Collections.emptyList())));
+            sb.append(generateSymbolClass(node, false, Collections.emptyList())));
         sb.append("\n");
 
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
@@ -67,20 +66,17 @@ public class GeneratePsiElements extends Generator {
             List<RuntimeRule> alternatives = entry.getValue();
 
             if (alternatives.size() == 0) {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,
-                    Collections.emptyList()));
+                sb.append(generateSymbolClass(nonterminalName, false, Collections.emptyList()));
             } else if (alternatives.size() == 1) {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,
-                    alternatives.get(0).getBody()));
+                sb.append(generateSymbolClass(nonterminalName, false, alternatives.get(0).getBody()));
             } else {
-                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), true,
-                    Collections.emptyList()));
+                sb.append(generateSymbolClass(nonterminalName, true, Collections.emptyList()));
                 for (RuntimeRule alternative : alternatives) {
                     if (alternative.getLabel() == null)
                         throw new RuntimeException("All alternatives must have a label: " + alternative);
-                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase() +
-                                      nonterminalName.substring(1);
-                    sb.append(generateSymbolClass(nodeName, nonterminalName, false, alternative.getBody()));
+                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase()
+                                      + nonterminalName.substring(1);
+                    sb.append(generateSymbolClass(nodeName, false, alternative.getBody()));
                 }
             }
         }
@@ -89,6 +85,7 @@ public class GeneratePsiElements extends Generator {
         System.out.println(className + " has been generated.");
     }
 
+    // CHECKSTYLE:OFF LineLength
     private void generatePsiElementFactory() {
         StringBuilder sb = new StringBuilder();
         sb.append("// This file has been generated, do not directly edit this file!\n");
@@ -106,9 +103,7 @@ public class GeneratePsiElements extends Generator {
         sb.append("\n");
         sb.append("public class " + className + "PsiElementFactory {\n");
         sb.append("\n");
-        sb.append(
-            "    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap " +
-            "= new IdentityHashMap<>();\n");
+        sb.append("    private static final Map<IElementType, Function<ASTNode, PsiElement>> elementTypeToPsiElementMap = new IdentityHashMap<>();\n");
         sb.append("\n");
         sb.append("    static {\n");
         metaSymbolNodes.forEach(s -> sb.append(generateTypeToPsiElementMapEntry(s)));
@@ -123,20 +118,21 @@ public class GeneratePsiElements extends Generator {
 
         writeToJavaFile(sb.toString(), psiGenDirectory, className + "PsiElementFactory");
     }
+    // CHECKSTYLE:ON LineLength
 
     private String generateTypeToPsiElementMapEntry(String type) {
         return "        elementTypeToPsiElementMap.put(" + type + ", node -> new IggyPsiElement." + type + "(node));\n";
     }
 
-    private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List<Symbol> symbols) {
+    private String generateSymbolClass(String symbolClass, boolean isAbstract, List<Symbol> symbols) {
         return
-            "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass +
-            " extends ASTWrapperPsiElement {\n" +
-            "        public " + symbolClass + "(@NotNull ASTNode node) {\n" +
-            "            super(node);\n" +
-            "        }\n\n" +
-            generateSymbols(symbols) +
-            "    }\n\n";
+            "    public static " + (isAbstract ? "abstract " : "") + "class " + symbolClass
+            + " extends ASTWrapperPsiElement {\n"
+            + "        public " + symbolClass + "(@NotNull ASTNode node) {\n"
+            + "            super(node);\n"
+            + "        }\n\n"
+            + generateSymbols(symbols)
+            + "    }\n\n";
     }
 
     private String generateSymbols(List<Symbol> symbols) {

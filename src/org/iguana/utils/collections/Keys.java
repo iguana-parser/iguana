@@ -74,7 +74,7 @@ public class Keys {
         return new ObjectKey4(a, b, c, d, f.apply(a, b, c, d));
     }
 
-    public static Key from(Object...elements) {
+    public static Key from(Object... elements) {
         return new ObjectKeyN(MurmurHash3.fn(), elements);
     }
 

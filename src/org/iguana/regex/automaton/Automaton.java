@@ -213,8 +213,8 @@ public class Automaton {
 
         // Covers the case of the automaton for the empty regular expression
         if (startState.getStateType() == StateType.FINAL) {
-            if (startState.getCountTransitions() == 1 &&
-               startState.getTransitions().iterator().next().isEpsilonTransition()) {
+            if (startState.getCountTransitions() == 1
+                && startState.getTransitions().iterator().next().isEpsilonTransition()) {
                 return true;
             }
         }

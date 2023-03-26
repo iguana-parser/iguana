@@ -19,9 +19,9 @@ public class ObjectKey2 implements Key {
         if (!(o instanceof ObjectKey2)) return false;
 
         ObjectKey2 that = (ObjectKey2) o;
-        return hash == that.hash &&
-                o1.equals(that.o1) &&
-                o2.equals(that.o2);
+        return hash == that.hash
+               && o1.equals(that.o1)
+               && o2.equals(that.o2);
     }
 
     @Override

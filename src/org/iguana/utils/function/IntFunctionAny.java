@@ -30,9 +30,9 @@ package org.iguana.utils.function;
 @FunctionalInterface
 public interface IntFunctionAny {
 
-    int apply(Integer...elements);
+    int apply(Integer... elements);
 
-    default int apply(Object...elements) {
+    default int apply(Object... elements) {
         Integer[] res = new Integer[elements.length];
         for (int i = 0; i < elements.length; i++) {
             res[i] = elements[i].hashCode();

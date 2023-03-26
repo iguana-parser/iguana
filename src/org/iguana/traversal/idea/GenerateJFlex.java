@@ -118,9 +118,9 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
                     if (!seenTokenTypes.contains(tokenType)) {
                         seenTokenTypes.add(tokenType);
                         tokens.append(
-                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\"" +
-                                        tokenType +
-                                        "\");")
+                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\""
+                                        + tokenType
+                                        + "\");")
                                 .append("\n");
                     }
 
@@ -138,9 +138,9 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
                     if (!seenTokenTypes.contains(tokenType)) {
                         seenTokenTypes.add(tokenType);
                         tokens.append(
-                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\"" +
-                                        tokenType +
-                                        "\");")
+                                        "    IElementType " + tokenType + " = new " + language + "TokenType(\""
+                                        + tokenType
+                                        + "\");")
                                 .append("\n");
                     }
 

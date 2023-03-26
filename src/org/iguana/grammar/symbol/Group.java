@@ -47,7 +47,7 @@ public class Group extends AbstractSymbol {
         return new Builder(symbols).build();
     }
 
-    public static Group from(Symbol...symbols) {
+    public static Group from(Symbol... symbols) {
         return from(Arrays.asList(symbols));
     }
 
@@ -115,7 +115,7 @@ public class Group extends AbstractSymbol {
 
         private Builder() { }
 
-        public Builder(Symbol...symbols) {
+        public Builder(Symbol... symbols) {
             this(Arrays.asList(symbols));
         }
 

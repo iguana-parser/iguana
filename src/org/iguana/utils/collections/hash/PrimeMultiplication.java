@@ -81,7 +81,7 @@ public class PrimeMultiplication {
     }
 
     public static IntFunctionAny fn() {
-        return (Integer...elements) -> {
+        return (Integer... elements) -> {
             int result = P1;
             for (int k : elements) {
                 result = P2 * result + k;

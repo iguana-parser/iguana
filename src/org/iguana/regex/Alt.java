@@ -49,7 +49,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T extends RegularExpression> Alt<T> from(T...symbols) {
+    public static <T extends RegularExpression> Alt<T> from(T... symbols) {
         return from(Arrays.asList(symbols));
     }
 
@@ -132,7 +132,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
         return symbols;
     }
 
-    public static Alt<CharRange> not(RegularExpression...rs) {
+    public static Alt<CharRange> not(RegularExpression... rs) {
         return not(Arrays.asList(rs));
     }
 
@@ -188,7 +188,7 @@ public class Alt<T extends RegularExpression> extends AbstractRegularExpression 
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T extends RegularExpression> Builder<T> builder(T...symbols) {
+    public static <T extends RegularExpression> Builder<T> builder(T... symbols) {
         return new Builder<>(Arrays.asList(symbols));
     }
 

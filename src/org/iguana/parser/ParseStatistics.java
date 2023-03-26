@@ -78,30 +78,28 @@ public class ParseStatistics extends RecognizerStatistics {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
+        if (this == obj) return true;
 
-        if (!(obj instanceof ParseStatistics))
-            return false;
+        if (!(obj instanceof ParseStatistics)) return false;
 
         ParseStatistics other = (ParseStatistics) obj;
 
-        return super.equals(obj) &&
-                nonterminalNodesCount == other.nonterminalNodesCount &&
-                terminalNodesCount == other.terminalNodesCount &&
-                intermediateNodesCount == other.intermediateNodesCount &&
-                packedNodesCount == other.packedNodesCount &&
-                ambiguousNodesCount == other.ambiguousNodesCount;
+        return super.equals(obj)
+               && nonterminalNodesCount == other.nonterminalNodesCount
+               && terminalNodesCount == other.terminalNodesCount
+               && intermediateNodesCount == other.intermediateNodesCount
+               && packedNodesCount == other.packedNodesCount
+               && ambiguousNodesCount == other.ambiguousNodesCount;
     }
 
     @Override
     public String toString() {
-        return super.toString() +
-               "Nonterminal nodes: " + nonterminalNodesCount + "\n" +
-               "Terminal nodes: " + terminalNodesCount + "\n" +
-               "Intermediate nodes: " + intermediateNodesCount + "\n" +
-               "Packed nodes: " + packedNodesCount + "\n" +
-               "Ambiguities: " + ambiguousNodesCount + "\n";
+        return super.toString()
+               + "Nonterminal nodes: " + nonterminalNodesCount + "\n"
+               + "Terminal nodes: " + terminalNodesCount + "\n"
+               + "Intermediate nodes: " + intermediateNodesCount + "\n"
+               + "Packed nodes: " + packedNodesCount + "\n"
+               + "Ambiguities: " + ambiguousNodesCount + "\n";
     }
 
     public static class Builder extends RecognizerStatistics.Builder<ParseStatistics> {

@@ -27,12 +27,16 @@
 
 package org.iguana.util;
 
+import java.util.Objects;
+
 public class Tuple<T, K> {
 
     protected T t;
     protected K k;
 
     public Tuple(T t, K k) {
+        Objects.requireNonNull(t);
+        Objects.requireNonNull(k);
         this.t = t;
         this.k = k;
     }
@@ -51,20 +55,12 @@ public class Tuple<T, K> {
 
     @Override
     public boolean equals(Object obj) {
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof Tuple)) {
-            return false;
-        }
-
+        if (this == obj) return true;
+        if (!(obj instanceof Tuple)) return false;
         @SuppressWarnings("unchecked")
         Tuple<T, K> other = (Tuple<T, K>) obj;
 
-        return t == null ? other.t == null : t.equals(other.t) &&
-               k == null ? other.k == null : k.equals(other.k);
+        return t.equals(other.t) && k.equals(other.k);
     }
 
     @Override

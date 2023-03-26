@@ -33,24 +33,20 @@ public class RecognizerStatistics {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof RecognizerStatistics))
-            return false;
-
+        if (this == obj) return true;
+        if (!(obj instanceof RecognizerStatistics)) return false;
         RecognizerStatistics other = (RecognizerStatistics) obj;
 
-        return descriptorsCount == other.descriptorsCount &&
-                gssNodesCount == other.gssNodesCount &&
-                gssEdgesCount == other.gssEdgesCount;
+        return descriptorsCount == other.descriptorsCount
+               && gssNodesCount == other.gssNodesCount
+               && gssEdgesCount == other.gssEdgesCount;
     }
 
     @Override
     public String toString() {
-        return "Descriptors: " + descriptorsCount + "\n" +
-               "GSS Nodes: " + gssNodesCount + "\n" +
-               "GSS Edges: " + gssEdgesCount + "\n";
+        return "Descriptors: " + descriptorsCount + "\n"
+               + "GSS Nodes: " + gssNodesCount + "\n"
+               + "GSS Edges: " + gssEdgesCount + "\n";
     }
 
     public static Builder<? extends RecognizerStatistics> builder() {

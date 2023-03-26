@@ -74,10 +74,10 @@ public class NonterminalNode implements ParseTreeNode {
         if (this == obj) return true;
         if (!(obj instanceof NonterminalNode)) return false;
         NonterminalNode other = (NonterminalNode) obj;
-        return this.start == other.start &&
-               this.end == other.end &&
-               this.rule.equals(other.rule) &&
-               this.children.equals(other.children);
+        return this.start == other.start
+               && this.end == other.end
+               && this.rule.equals(other.rule)
+               && this.children.equals(other.children);
     }
 
     @Override

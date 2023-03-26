@@ -671,10 +671,10 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof OrIndent)) return false;
             OrIndent other = (OrIndent) obj;
-            return this.index.equals(other.index) &&
-                this.ind.equals(other.ind) &&
-                this.first.equals(other.first) &&
-                this.lExt.equals(other.lExt);
+            return this.index.equals(other.index)
+                   && this.ind.equals(other.ind)
+                   && this.first.equals(other.first)
+                   && this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -752,9 +752,9 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof AndIndent)) return false;
             AndIndent other = (AndIndent) obj;
-            return this.index.equals(other.index) &&
-                this.first.equals(other.first) &&
-                this.lExt.equals(other.lExt);
+            return this.index.equals(other.index)
+                   && this.first.equals(other.first)
+                   && this.lExt.equals(other.lExt);
         }
 
         @Override
@@ -799,9 +799,9 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof BinaryExpression)) return false;
             BinaryExpression other = (BinaryExpression) obj;
-            return this.lhs.equals(other.lhs) &&
-                   this.rhs.equals(other.rhs) &&
-                   Objects.equals(this.symbolName, other.symbolName);
+            return this.lhs.equals(other.lhs)
+                   && this.rhs.equals(other.rhs)
+                   && Objects.equals(this.symbolName, other.symbolName);
         }
 
         @Override
@@ -1456,9 +1456,9 @@ public abstract class Expression extends AbstractAST {
             if (this == obj) return true;
             if (!(obj instanceof IfThenElse)) return false;
             IfThenElse other = (IfThenElse) obj;
-            return this.condition.equals(other.condition) &&
-                this.thenPart.equals(other.thenPart) &&
-                this.elsePart.equals(other.elsePart);
+            return this.condition.equals(other.condition)
+                   && this.thenPart.equals(other.thenPart)
+                   && this.elsePart.equals(other.elsePart);
         }
 
         @Override

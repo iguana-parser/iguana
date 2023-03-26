@@ -118,7 +118,7 @@ public class Plus extends AbstractSymbol {
             return this;
         }
 
-        public Builder addSeparators(Symbol...symbols) {
+        public Builder addSeparators(Symbol... symbols) {
             separators.addAll(Arrays.asList(symbols));
             return this;
         }

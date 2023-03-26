@@ -69,9 +69,9 @@ public class Sequence {
         if (this == obj) return true;
         if (!(obj instanceof Sequence)) return false;
         Sequence other = (Sequence) obj;
-        return Objects.equals(this.symbols, other.symbols) &&
-               Objects.equals(this.associativity, other.associativity) &&
-               Objects.equals(this.label, other.label);
+        return Objects.equals(this.symbols, other.symbols)
+               && Objects.equals(this.associativity, other.associativity)
+               && Objects.equals(this.label, other.label);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class Sequence {
         private Associativity associativity = Associativity.UNDEFINED;
         private String label;
 
-        public Builder() { }
+        public Builder() {}
 
         public Builder(Sequence seq) {
             this.attributes = new HashMap<>(seq.getAttributes());

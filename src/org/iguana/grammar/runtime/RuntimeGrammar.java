@@ -278,7 +278,7 @@ public class RuntimeGrammar {
             return this;
         }
 
-        public Builder addRules(RuntimeRule...rules) {
+        public Builder addRules(RuntimeRule... rules) {
             addRules(Arrays.asList(rules));
             return this;
         }

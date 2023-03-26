@@ -72,11 +72,11 @@ public class GenerateBasicHighlighter {
                         color = "HighlighterColors.TEXT";
                     else
                         color = "DefaultLanguageHighlighterColors." + color;
-                    writer.println((i == 0 ? "        if " : "        else if ") + "(tokenType.equals(" + language +
-                                   "TokenTypes." + tokenType + "))");
+                    writer.println((i == 0 ? "        if " : "        else if ") + "(tokenType.equals(" + language
+                                   + "TokenTypes." + tokenType + "))");
                     writer.println(
-                        "            return new TextAttributesKey[] {TextAttributesKey.createTextAttributesKey(\"" +
-                        tokenType + "\", " + color + ")};");
+                        "            return new TextAttributesKey[] {TextAttributesKey.createTextAttributesKey(\""
+                        + tokenType + "\", " + color + ")};");
                     i++;
                 }
             }
@@ -105,8 +105,8 @@ public class GenerateBasicHighlighter {
             writer.println();
             writer.println("public class " + language + "SyntaxHighlighterFactory extends SyntaxHighlighterFactory {");
             writer.println(
-                "    public SyntaxHighlighter getSyntaxHighlighter(Project project, VirtualFile virtualFile) { " +
-                "return new " + language + "SyntaxHighlighter(); }");
+                "    public SyntaxHighlighter getSyntaxHighlighter(Project project, VirtualFile virtualFile) { "
+                + "return new " + language + "SyntaxHighlighter(); }");
             writer.println("}");
             writer.println();
             writer.close();

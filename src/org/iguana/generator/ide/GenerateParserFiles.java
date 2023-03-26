@@ -59,8 +59,8 @@ public class GenerateParserFiles extends Generator {
     }
 
     private String generateElementType(String type) {
-        return "    public static IElementType " + type + " = new IggyElementType(\"" + type +
-               "\", IggyLang.instance);\n";
+        return "    public static IElementType " + type + " = new IggyElementType(\"" + type
+               + "\", IggyLang.instance);\n";
     }
 
     private String generateStringToElementTypetMapEntry(String type) {

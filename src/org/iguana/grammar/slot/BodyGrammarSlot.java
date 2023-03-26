@@ -274,14 +274,14 @@ public class BodyGrammarSlot implements GrammarSlot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BodyGrammarSlot that = (BodyGrammarSlot) o;
-        return i1 == that.i1 &&
-               i2 == that.i2 &&
-               Objects.equals(position, that.position) &&
-               Objects.equals(conditions, that.conditions) &&
-               Objects.equals(label, that.label) &&
-               Objects.equals(variable, that.variable) &&
-               Objects.equals(state, that.state) &&
-               Objects.equals(followTest, that.followTest);
+        return i1 == that.i1
+               && i2 == that.i2
+               && Objects.equals(position, that.position)
+               && Objects.equals(conditions, that.conditions)
+               && Objects.equals(label, that.label)
+               && Objects.equals(variable, that.variable)
+               && Objects.equals(state, that.state)
+               && Objects.equals(followTest, that.followTest);
     }
 
     @Override

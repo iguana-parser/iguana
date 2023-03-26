@@ -47,17 +47,15 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
+        if (this == obj) return true;
 
-        if (!(obj instanceof IntKey4))
-            return false;
+        if (!(obj instanceof IntKey4)) return false;
 
         IntKey4 other = (IntKey4) obj;
-        return k1 == other.k1 &&
-               k2 == other.k2 &&
-               k3 == other.k3 &&
-               k4 == other.k4;
+        return k1 == other.k1
+               && k2 == other.k2
+               && k3 == other.k3
+               && k4 == other.k4;
     }
 
     @Override
@@ -68,10 +66,10 @@ public class IntKey4 implements Key, Comparable<IntKey4> {
     @Override
     public int compareTo(IntKey4 o) {
         int r;
-        return (r = k1 - o.k1) != 0 ? r :
-               (r = k2 - o.k2) != 0 ? r :
-               (r = k3 - o.k3) != 0 ? r :
-               k4 - o.k4;
+        return (r = k1 - o.k1) != 0 ? r
+                : (r = k2 - o.k2) != 0 ? r
+                : (r = k3 - o.k3) != 0 ? r
+                : k4 - o.k4;
     }
 
     @Override

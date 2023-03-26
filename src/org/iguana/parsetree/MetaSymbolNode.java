@@ -67,10 +67,10 @@ public abstract class MetaSymbolNode implements ParseTreeNode {
         if (this == o) return true;
         if (!(o instanceof MetaSymbolNode)) return false;
         MetaSymbolNode that = (MetaSymbolNode) o;
-        return Objects.equals(symbol, that.symbol) &&
-            start == that.start &&
-            end == that.end &&
-            Objects.equals(children(), that.children());
+        return Objects.equals(symbol, that.symbol)
+               && start == that.start
+               && end == that.end
+               && Objects.equals(children(), that.children());
     }
 
     @Override

@@ -48,8 +48,8 @@ public class BenchmarkUtil {
 
     public static long getSystemTime() {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-        return bean.isCurrentThreadCpuTimeSupported() ?
-                (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
+        return bean.isCurrentThreadCpuTimeSupported()
+                ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime()): 0L;
     }
 
     public static void awaitFullGC() {

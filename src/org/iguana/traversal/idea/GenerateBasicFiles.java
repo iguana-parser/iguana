@@ -43,6 +43,7 @@ public class GenerateBasicFiles {
      * <Lang>ElementType.java
      * <Lang>TokenType.java
      */
+    // CHECKSTYLE:OFF LineLength
     public static void generate(String language, String extension, String path) {
         // Create the respective directories
         String name = path + language.toLowerCase();
@@ -178,4 +179,5 @@ public class GenerateBasicFiles {
             e.printStackTrace();
         }
     }
+    // CHECKSTYLE:ON LineLength
 }

@@ -56,8 +56,8 @@ public class InlineReferences {
 
     private static void visit(String node, Map<String, List<String>> map, LinkedHashSet<String> visited) {
         if (visited.contains(node)) {
-            throw new RuntimeException("Regular expression references cannot be cyclic: " +
-                String.join("->", visited) + "->" + node);
+            throw new RuntimeException("Regular expression references cannot be cyclic: "
+                                       + String.join("->", visited) + "->" + node);
         }
 
         visited.add(node);

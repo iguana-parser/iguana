@@ -42,7 +42,7 @@ public class GLLEvaluator {
     }
 
     public static IEvaluatorContext getEvaluatorContext(Configuration config) {
-        switch(config.getEnvImpl()) {
+        switch (config.getEnvImpl()) {
             case ARRAY:
                 return new ArrayEvaluatorContext();
             case INT_ARRAY:

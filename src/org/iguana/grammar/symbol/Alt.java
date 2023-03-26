@@ -43,7 +43,7 @@ public class Alt extends AbstractSymbol {
         this.symbols = builder.symbols;
     }
 
-    public static Alt from(Symbol...symbols) {
+    public static Alt from(Symbol... symbols) {
         return from(Arrays.asList(symbols));
     }
 
@@ -97,7 +97,7 @@ public class Alt extends AbstractSymbol {
 
         private Builder() {}
 
-        public Builder(Symbol...symbols) {
+        public Builder(Symbol... symbols) {
             this(Arrays.asList(symbols));
         }
 
