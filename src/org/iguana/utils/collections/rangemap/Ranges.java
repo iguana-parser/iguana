@@ -24,6 +24,7 @@
  * OF SUCH DAMAGE.
  *
  */
+
 package org.iguana.utils.collections.rangemap;
 
 import java.util.ArrayList;

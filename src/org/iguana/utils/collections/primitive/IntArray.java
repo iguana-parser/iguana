@@ -51,7 +51,9 @@ public class IntArray implements IntIterable {
     public IntIterator iterator() {
         return new IntIterator() {
             int i = start;
+
             @Override public boolean hasNext() { return i < end; }
+
             @Override public int next() { return arr[i++]; }
         };
     }

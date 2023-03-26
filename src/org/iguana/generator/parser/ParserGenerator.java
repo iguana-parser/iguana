@@ -16,6 +16,7 @@ public class ParserGenerator extends Generator {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n"
+            + "\n"
             + "package " + packageName + ";\n"
             + "\n"
             + "import org.iguana.grammar.Grammar;\n"
@@ -56,6 +57,7 @@ public class ParserGenerator extends Generator {
         String className = toFirstUpperCase(grammarName);
         String content =
             "// This file has been generated, do not directly edit this file!\n"
+            + "\n"
             + "package " + packageName + ";\n"
             + "\n"
             + "import org.iguana.grammar.Grammar;\n"
