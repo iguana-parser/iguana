@@ -47,14 +47,6 @@ public class CharRange extends AbstractRegularExpression implements Range {
 
     private final int end;
 
-    public static CharRange from(int c) {
-        return in(c, c);
-    }
-
-    public static CharRange in(int start, int end) {
-        return new Builder(start, end).build();
-    }
-
     private CharRange(Builder builder) {
         super(builder);
 
@@ -63,6 +55,14 @@ public class CharRange extends AbstractRegularExpression implements Range {
 
         this.start = builder.start;
         this.end = builder.end;
+    }
+
+    public static CharRange from(int c) {
+        return in(c, c);
+    }
+
+    public static CharRange in(int start, int end) {
+        return new Builder(start, end).build();
     }
 
     public static String getName(int start, int end) {

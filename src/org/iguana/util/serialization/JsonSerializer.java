@@ -406,14 +406,15 @@ public class JsonSerializer {
     abstract static class ParseTreeNodeMixIn {}
 
     abstract static class DefaultTerminalNodeMixIn {
+        @JsonIgnore
+        Input input;
+
         DefaultTerminalNodeMixIn(
                 @JsonProperty("terminal") Terminal terminal,
                 @JsonProperty("start") int start,
                 @JsonProperty("end") int end,
                 @JsonProperty("input") Input input) {}
 
-        @JsonIgnore
-        Input input;
     }
 
     abstract static class KeywordTerminalNodeMixIn {
@@ -424,13 +425,13 @@ public class JsonSerializer {
     }
 
     abstract static class ErrorNodeMixIn {
+        @JsonIgnore
+        Input input;
+
         ErrorNodeMixIn(
                 @JsonProperty("start") int start,
                 @JsonProperty("end") int end,
                 @JsonProperty("input") Input input) {}
-
-        @JsonIgnore
-        Input input;
     }
 
     abstract static class NonterminalNodeMixIn {
@@ -1022,6 +1023,9 @@ public class JsonSerializer {
 
     abstract static class ParseErrorMixIn {
         @JsonIgnore
+        GSSNode<?> gssNode;
+
+        @JsonIgnore
         GrammarSlot slot;
 
         ParseErrorMixIn(
@@ -1031,9 +1035,6 @@ public class JsonSerializer {
                 @JsonProperty("lineNumber") int lineNumber,
                 @JsonProperty("columnNumber") int columnNumber,
                 @JsonProperty("description") String description) {}
-
-        @JsonIgnore
-        GSSNode<?> gssNode;
     }
 
     abstract static class PrecedenceLevelMixIn {

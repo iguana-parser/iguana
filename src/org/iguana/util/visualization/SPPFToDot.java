@@ -50,15 +50,21 @@ import static org.iguana.utils.visualization.DotGraph.newNode;
 
 public class SPPFToDot implements SPPFVisitor<Void>  {
 
+    protected Input input;
+
     private final boolean showPackedNodeLabel;
 
     private final Map<SPPFNode, Integer> ids = new HashMap<>();
 
     private final DotGraph dotGraph;
 
-    protected Input input;
-
     private final Set<NonPackedNode> visited = new HashSet<>();
+
+    public SPPFToDot(Input input, DotGraph dotGraph, boolean showPackedNodeLabel) {
+        this.input = input;
+        this.showPackedNodeLabel = showPackedNodeLabel;
+        this.dotGraph = dotGraph;
+    }
 
     public static DotGraph getDotGraph(SPPFNode root, Input input) {
         return getDotGraph(root, input, false);
@@ -69,12 +75,6 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
         SPPFToDot sppfToDot = new SPPFToDot(input, dotGraph, showPackedNodeLabel);
         root.accept(sppfToDot);
         return dotGraph;
-    }
-
-    public SPPFToDot(Input input, DotGraph dotGraph, boolean showPackedNodeLabel) {
-        this.input = input;
-        this.showPackedNodeLabel = showPackedNodeLabel;
-        this.dotGraph = dotGraph;
     }
 
     @Override

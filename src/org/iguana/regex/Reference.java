@@ -9,13 +9,13 @@ public class Reference extends AbstractRegularExpression {
 
     private final String name;
 
-    public static Reference from(String name) {
-        return new Builder(name).build();
-    }
-
     public Reference(Builder builder) {
         super(builder);
         this.name = builder.name;
+    }
+
+    public static Reference from(String name) {
+        return new Builder(name).build();
     }
 
     public String getName() {

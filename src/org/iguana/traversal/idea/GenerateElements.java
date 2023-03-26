@@ -228,10 +228,10 @@ public class GenerateElements {
 
     private static class GetPhiElements implements ISymbolVisitor<String> {
 
+        private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();
+
         private final RuntimeRule rule;
         private final Map<String, NUM> children;
-
-        private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();
 
         GetPhiElements(RuntimeRule rule, Map<String, NUM> children) {
             this.rule = rule;

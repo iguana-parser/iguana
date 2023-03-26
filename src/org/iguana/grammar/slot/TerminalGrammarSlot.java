@@ -38,12 +38,12 @@ import org.iguana.utils.input.Input;
 
 public class TerminalGrammarSlot implements GrammarSlot {
 
+    // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
+    private static final Object failure = "failure";
+
     private final Terminal terminal;
     private final Matcher matcher;
     private IntHashMap<Object> terminalNodes;
-
-    // Record failures, it's cheaper for some complex regular expressions to do a lookup than to match again
-    private static final Object failure = "failure";
 
     public TerminalGrammarSlot(Terminal terminal, MatcherFactory factory) {
         this.terminal = terminal;

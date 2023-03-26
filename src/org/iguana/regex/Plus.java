@@ -40,14 +40,14 @@ public class Plus extends AbstractRegularExpression {
 
     private final List<RegularExpression> separators;
 
-    public static Plus from(RegularExpression s) {
-        return builder(s).build();
-    }
-
     private Plus(Builder builder) {
         super(builder);
         this.regex = builder.regex;
         this.separators = Collections.unmodifiableList(builder.separators);
+    }
+
+    public static Plus from(RegularExpression s) {
+        return builder(s).build();
     }
 
     @Override

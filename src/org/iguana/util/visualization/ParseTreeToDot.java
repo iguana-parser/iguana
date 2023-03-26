@@ -23,6 +23,13 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
     private final DotGraph dotGraph;
     private final Input input;
     private final Set<String> exclude;
+    private int id = 0;
+
+    private ParseTreeToDot(DotGraph dotGraph, Input input, Set<String> exclude) {
+        this.dotGraph = dotGraph;
+        this.input = input;
+        this.exclude = exclude;
+    }
 
     public static DotGraph getDotGraph(ParseTreeNode node, Input input) {
         return getDotGraph(node, input, Collections.emptySet());
@@ -32,12 +39,6 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
         DotGraph dotGraph = new DotGraph();
         node.accept(new ParseTreeToDot(dotGraph, input, exclude));
         return dotGraph;
-    }
-
-    private ParseTreeToDot(DotGraph dotGraph, Input input, Set<String> exclude) {
-        this.dotGraph = dotGraph;
-        this.input = input;
-        this.exclude = exclude;
     }
 
     @Override
@@ -119,8 +120,6 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
         return id;
     }
-
-    private int id = 0;
 
     private int nextId() {
         return id++;

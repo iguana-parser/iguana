@@ -33,6 +33,9 @@ import java.util.Arrays;
 
 public class PrecedenceLevel {
 
+    public Integer[] prefixUnaryBelow = new Integer[0];
+    public Integer[] postfixUnaryBelow = new Integer[0];
+
     private final int lhs;
     private int rhs = -1;
 
@@ -41,9 +44,6 @@ public class PrecedenceLevel {
 
     private boolean hasPostfixUnary = false;
     private boolean hasPostfixUnaryBelow = false;
-
-    public Integer[] prefixUnaryBelow = new Integer[0];
-    public Integer[] postfixUnaryBelow = new Integer[0];
 
     private int undefined = -1;
 

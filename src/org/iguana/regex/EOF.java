@@ -42,6 +42,15 @@ public class EOF extends AbstractRegularExpression {
 
     private static EOF instance;
 
+    private EOF() {
+        super(new RegexBuilder<EOF>() {
+            @Override
+            public EOF build() {
+                return EOF.getInstance();
+            }
+        });
+    }
+
     public static EOF getInstance() {
         if (instance == null) {
             instance = new EOF();
@@ -51,15 +60,6 @@ public class EOF extends AbstractRegularExpression {
 
     public static CharRange asCharRange() {
         return CharRange.in(VALUE, VALUE);
-    }
-
-    private EOF() {
-        super(new RegexBuilder<EOF>() {
-            @Override
-            public EOF build() {
-                return EOF.getInstance();
-            }
-        });
     }
 
     @Override

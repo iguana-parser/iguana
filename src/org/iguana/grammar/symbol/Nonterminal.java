@@ -64,10 +64,6 @@ public class Nonterminal extends AbstractSymbol {
      */
     private final NonterminalNodeType nodeType;
 
-    public static Nonterminal withName(String name) {
-        return new Builder(name).build();
-    }
-
     protected Nonterminal(Builder builder) {
         super(builder);
         this.ebnfList = builder.ebnfList;
@@ -78,6 +74,10 @@ public class Nonterminal extends AbstractSymbol {
         this.arguments = builder.arguments;
         this.excepts = builder.excepts;
         this.nodeType = builder.nodeType;
+    }
+
+    public static Nonterminal withName(String name) {
+        return new Builder(name).build();
     }
 
     public boolean isEbnfList() {

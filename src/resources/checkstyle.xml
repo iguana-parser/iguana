@@ -64,6 +64,16 @@
 
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
+
+        <module name="AvoidNoArgumentSuperConstructorCall"/>
+        <module name="UnusedLocalVariable"/>
+        <module name="UnnecessarySemicolonAfterOuterTypeDeclaration" />
+        <module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
+        <module name="SimplifyBooleanReturn"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="EmptyStatement"/>
+        <module name="ModifiedControlVariable"/>
+        <module name="DeclarationOrder"/>
     </module>
 
     <module name="SuppressWithPlainTextCommentFilter"/>

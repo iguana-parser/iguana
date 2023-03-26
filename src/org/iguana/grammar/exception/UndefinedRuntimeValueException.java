@@ -30,10 +30,10 @@ package org.iguana.grammar.exception;
 @SuppressWarnings("serial")
 public class UndefinedRuntimeValueException extends RuntimeException {
 
+    public static UndefinedRuntimeValueException instance = new UndefinedRuntimeValueException();
+
     private UndefinedRuntimeValueException() {
         super("Undefined runtime value.");
     }
-
-    public static UndefinedRuntimeValueException instance = new UndefinedRuntimeValueException();
 
 }

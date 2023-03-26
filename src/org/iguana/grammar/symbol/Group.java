@@ -43,17 +43,17 @@ public class Group extends AbstractSymbol {
 
     private final List<Symbol> symbols;
 
+    private Group(Builder builder) {
+        super(builder);
+        this.symbols = builder.symbols;
+    }
+
     public static Group from(List<Symbol> symbols) {
         return new Builder(symbols).build();
     }
 
     public static Group from(Symbol... symbols) {
         return from(Arrays.asList(symbols));
-    }
-
-    private Group(Builder builder) {
-        super(builder);
-        this.symbols = builder.symbols;
     }
 
     public int size() {

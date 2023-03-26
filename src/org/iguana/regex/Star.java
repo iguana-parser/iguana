@@ -40,14 +40,14 @@ public class Star extends AbstractRegularExpression {
 
     private final List<RegularExpression> separators;
 
-    public static Star from(RegularExpression s) {
-        return builder(s).build();
-    }
-
     private Star(Builder builder) {
         super(builder);
         this.regex = builder.regex;
         this.separators = Collections.unmodifiableList(builder.separators);
+    }
+
+    public static Star from(RegularExpression s) {
+        return builder(s).build();
     }
 
     @Override

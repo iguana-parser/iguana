@@ -35,14 +35,6 @@ public class IntHashSet {
 
     private int[] table;
 
-    public static IntHashSet from(int... elements) {
-        IntHashSet set = new IntHashSet();
-        for (int e : elements) {
-            set.add(e);
-        }
-        return set;
-    }
-
     public IntHashSet() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
@@ -67,6 +59,14 @@ public class IntHashSet {
         threshold = (int) (loadFactor * capacity);
         table = new int[capacity];
         Arrays.fill(table, -1);
+    }
+
+    public static IntHashSet from(int... elements) {
+        IntHashSet set = new IntHashSet();
+        for (int e : elements) {
+            set.add(e);
+        }
+        return set;
     }
 
     public boolean contains(int key) {

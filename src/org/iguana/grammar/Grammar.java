@@ -378,14 +378,15 @@ public class Grammar {
             while (altIt.hasPrevious()) {
                 Alternative alternative = altIt.previous();
                 if (alternative.rest() != null) { // Associativity group
-                    AssociativityGroup assocGroup = new AssociativityGroup(alternative.associativity, level);
+                    AssociativityGroup assocGroup = new AssociativityGroup(alternative.getAssociativity(), level);
                     List<Sequence> sequences = new ArrayList<>(Arrays.asList(alternative.first()));
                     sequences.addAll(alternative.rest());
                     ListIterator<Sequence> seqIt = sequences.listIterator(sequences.size());
                     while (seqIt.hasPrevious()) {
                         Sequence sequence = seqIt.previous();
-                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.associativity, sequence.label,
-                                                   highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
+                        RuntimeRule rule = getRule(head, sequence.getSymbols(), sequence.getAssociativity(),
+                                                   sequence.getLabel(), highLevelRule.getLayoutStrategy(), leftEnds,
+                                                   rightEnds, ebnfs);
                         int precedence = assocGroup.getPrecedence(rule);
                         rule = rule.copy()
                             .setPrecedence(precedence)
@@ -401,7 +402,7 @@ public class Grammar {
                     List<Symbol> symbols = new ArrayList<>();
                     if (alternative.first().isEmpty()) { // Empty alternative
                         Sequence sequence = alternative.first();
-                        String label = sequence.label;
+                        String label = sequence.getLabel();
                         RuntimeRule rule = getRule(head, symbols, Associativity.UNDEFINED, label,
                                                    highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
@@ -416,7 +417,7 @@ public class Grammar {
                         symbols.add(sequence.first());
                         if (sequence.rest() != null)
                             addAll(symbols, sequence.rest());
-                        RuntimeRule rule = getRule(head, symbols, sequence.associativity, sequence.label,
+                        RuntimeRule rule = getRule(head, symbols, sequence.getAssociativity(), sequence.getLabel(),
                                                    highLevelRule.getLayoutStrategy(), leftEnds, rightEnds, ebnfs);
                         int precedence = level.getPrecedence(rule);
                         rule = rule.copy()

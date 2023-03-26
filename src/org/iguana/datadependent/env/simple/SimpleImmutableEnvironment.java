@@ -41,13 +41,13 @@ import static org.iguana.utils.string.StringUtil.listToString;
 
 public class SimpleImmutableEnvironment implements Environment {
 
+    static final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>(), 0);
+
     private final SimpleImmutableEnvironment parent;
 
     private final Map<String, Object> bindings;
 
     private final int hashCode;
-
-    static final Environment EMPTY = new SimpleImmutableEnvironment(null, new HashMap<>(), 0);
 
     private SimpleImmutableEnvironment(SimpleImmutableEnvironment parent, Map<String, Object> bindings, int hashCode) {
         this.parent = parent;

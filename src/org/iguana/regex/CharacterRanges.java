@@ -40,6 +40,8 @@ import static org.iguana.utils.collections.CollectionsUtil.toList;
 
 public class CharacterRanges {
 
+    public static final int MAX_UTF32_VAL = 0x10FFFF;
+
     public static Map<CharRange, List<CharRange>> toNonOverlapping(Iterable<CharRange> ranges) {
         return toNonOverlapping(toList(ranges));
     }
@@ -124,8 +126,6 @@ public class CharacterRanges {
 
         return rangesMap;
     }
-
-    public static final int MAX_UTF32_VAL = 0x10FFFF;
 
     public static boolean isPrintableAscii(int codePoint) {
         return '\u0020' < codePoint && codePoint < '\u007f';

@@ -113,6 +113,9 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
     private class Configuration {
 
+        private static final String left = "left";
+        private static final String right = "right";
+
         // Of associativity groups, rules that specify an associativity different from the group
         public Map<Integer, Set<Integer>> left_assoc_rules = new HashMap<>();
         public Map<Integer, Set<Integer>> right_assoc_rules = new HashMap<>();
@@ -128,9 +131,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
         public Map<Integer, Set<Integer>> ipostfix_rules = new HashMap<>();
 
         public Map<String, RuntimeRule> right_rec_rules = new HashMap<>();
-
-        int prefixBelow = -1;
-        int postfixBelow = -1;
 
         public Set<String> leftEnds = new HashSet<>(); // left ends (transitive)
         public Set<String> rightEnds = new HashSet<>(); // right ends (transitive)
@@ -149,8 +149,11 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
         // Encoding: 2 is 2 & 1; 3 is 1 & 2; 4 is 2 & 2 (l-value & p-arg)
         public Map<Integer, Integer> groups = new HashMap<>();
 
-        int larity = 1;
-        int parity = 1;
+        private int prefixBelow = -1;
+        private int postfixBelow = -1;
+
+        private int larity = 1;
+        private int parity = 1;
 
         public void arity() {
             Collection<Integer> values = groups.values();
@@ -224,9 +227,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
 
             return false;
         }
-
-        static final String left = "left";
-        static final String right = "right";
 
         @SuppressWarnings("unused")
         boolean can_be_reached_via(String nt, String via, String from) {
@@ -1331,10 +1331,6 @@ public class DesugarPrecedenceAndAssociativity implements GrammarTransformation 
                 larg = tuple(pprec, integer(0));
             else
                 larg = pprec;
-
-            @SuppressWarnings("unused")
-            boolean canBeBinary = ((rule.isLeftRecursive() || rule.isILeftRecursive()) && rule.isIRightRecursive())
-                                  || (rule.isILeftRecursive() && (rule.isRightRecursive() || rule.isIRightRecursive()));
 
             boolean canBePrefix = false;
             boolean canBePostfix = false;

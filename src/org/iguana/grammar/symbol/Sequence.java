@@ -13,15 +13,11 @@ public class Sequence {
 
     private final List<Symbol> symbols;
 
-    public final Associativity associativity;
+    private final Associativity associativity;
 
-    public final String label;
+    private final String label;
 
     private final Map<String, Object> attributes;
-
-    public static Sequence from(Symbol... symbols) {
-        return new Builder().addSymbols(List.of(symbols)).build();
-    }
 
     public Sequence(Builder builder) {
         this.symbols = builder.symbols;
@@ -30,9 +26,14 @@ public class Sequence {
         this.attributes = builder.attributes;
     }
 
+    public static Sequence from(Symbol... symbols) {
+        return new Builder().addSymbols(List.of(symbols)).build();
+    }
+
     public boolean isEmpty() {
         return symbols.isEmpty();
     }
+
 
     public Symbol first() {
         if (symbols.isEmpty()) return null;

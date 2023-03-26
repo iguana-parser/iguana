@@ -249,15 +249,14 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
             public boolean hasNext() {
                 if (current == null) {
                     current = nextInTable();
-                    return current == null ? false : true;
+                    return current != null;
                 }
 
                 current = nextInChain();
                 if (current == null) {
                     i++;
                     current = nextInTable();
-                    if (current == null)
-                        return false;
+                    return current != null;
                 }
 
                 return true;
@@ -273,7 +272,6 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
                 while ((current = table[i]) == null) {
                     i++;
                     if (i == table.length) {
-                        current = null;
                         break;
                     }
                 }

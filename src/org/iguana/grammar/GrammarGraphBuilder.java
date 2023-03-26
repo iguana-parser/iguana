@@ -84,6 +84,8 @@ import static org.iguana.grammar.GrammarGraph.epsilonSlot;
 
 public class GrammarGraphBuilder {
 
+    private static final MatcherFactory matcherFactory = new DFAMatcherFactory();
+
     private final Map<Nonterminal, NonterminalGrammarSlot> nonterminalsMap;
 
     private final Map<Terminal, TerminalGrammarSlot> terminalsMap;
@@ -100,10 +102,21 @@ public class GrammarGraphBuilder {
 
     private Map<String, Integer> current;
 
-    private static final MatcherFactory matcherFactory = new DFAMatcherFactory();
+    private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {
+        if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
+            // TODO: move this transformation to IguanaRecognizer
+            VarToInt transformer = new VarToInt();
+            this.grammar = transformer.transform(grammar);
+            this.mapping = transformer.getMapping();
+        } else {
+            this.grammar = grammar;
+            this.mapping = new HashMap<>();
+        }
 
-    public static GrammarGraph from(RuntimeGrammar grammar) {
-        return from(grammar, Configuration.load());
+        this.config = config;
+        this.nonterminalsMap = new LinkedHashMap<>();
+        this.terminalsMap = new LinkedHashMap<>();
+        this.bodyGrammarSlots = new ArrayList<>();
     }
 
     public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
@@ -114,6 +127,10 @@ public class GrammarGraphBuilder {
         grammarSlots.addAll(builder.terminalsMap.values());
         grammarSlots.addAll(builder.bodyGrammarSlots);
         return new GrammarGraph(grammarSlots, builder.nonterminalsMap, grammar.getGlobals());
+    }
+
+    public static GrammarGraph from(RuntimeGrammar grammar) {
+        return from(grammar, Configuration.load());
     }
 
     private void convert() {
@@ -132,23 +149,6 @@ public class GrammarGraphBuilder {
         }
 
         nonterminals.forEach(this::setFirstFollowTests);
-    }
-
-    private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {
-        if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {
-            // TODO: move this transformation to IguanaRecognizer
-            VarToInt transformer = new VarToInt();
-            this.grammar = transformer.transform(grammar);
-            this.mapping = transformer.getMapping();
-        } else {
-            this.grammar = grammar;
-            this.mapping = new HashMap<>();
-        }
-
-        this.config = config;
-        this.nonterminalsMap = new LinkedHashMap<>();
-        this.terminalsMap = new LinkedHashMap<>();
-        this.bodyGrammarSlots = new ArrayList<>();
     }
 
     public NonterminalGrammarSlot getHead(Nonterminal start) {
