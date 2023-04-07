@@ -1,12 +1,12 @@
-package org.iguana.utils.collections;
+package org.iguana.utils.collections.primitive;
 
-public class Entry<T> {
+public class IntKeyEntry<T> {
 
     int key;
     T val;
-    Entry<T> next;
+    IntKeyEntry<T> next;
 
-    public Entry(int key, T val) {
+    public IntKeyEntry(int key, T val) {
         this.key = key;
         this.val = val;
     }

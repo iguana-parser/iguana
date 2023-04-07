@@ -1,5 +1,7 @@
 package org.iguana.utils.collections;
 
+import org.iguana.utils.collections.primitive.IntHashMap;
+import org.iguana.utils.collections.primitive.OpenAddressingIntHashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +17,7 @@ public class TestIntHashMap {
 
     @BeforeEach
     public void init() {
-        map = new org.iguana.utils.collections.OpenAddressingIntHashMap<>();
+        map = new OpenAddressingIntHashMap<>();
         map.put(1, "a");
         map.put(2, "b");
         map.put(3, "c");

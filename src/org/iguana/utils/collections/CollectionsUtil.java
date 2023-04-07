@@ -28,7 +28,6 @@
 package org.iguana.utils.collections;
 
 import org.iguana.util.Tuple;
-import org.iguana.utils.collections.primitive.IntIterable;
 import org.iguana.utils.collections.primitive.IntIterator;
 
 import java.util.ArrayList;
@@ -129,11 +128,7 @@ public class CollectionsUtil {
         return list.get(list.size() - 1);
     }
 
-    public static boolean isEqual(
-            org.iguana.utils.collections.primitive.IntIterable iterables1,
-            IntIterable iterables2) {
-        org.iguana.utils.collections.primitive.IntIterator it1 = iterables1.iterator();
-        IntIterator it2 = iterables2.iterator();
+    public static boolean isEqual(IntIterator it1, IntIterator it2) {
         while (it1.hasNext()) {
             if (!it2.hasNext()) return false;
             int t1 = it1.next();

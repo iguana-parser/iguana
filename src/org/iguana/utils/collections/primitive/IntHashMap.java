@@ -1,5 +1,7 @@
-package org.iguana.utils.collections;
+package org.iguana.utils.collections.primitive;
 
+
+import org.iguana.utils.collections.IntKeyMapper;
 
 import java.util.function.IntFunction;
 
@@ -8,7 +10,7 @@ import java.util.function.IntFunction;
  * @author Ali Afroozeh
  *
  */
-public interface IntHashMap<T> extends Iterable<Entry<T>> {
+public interface IntHashMap<T> extends Iterable<IntKeyEntry<T>> {
 
     boolean containsKey(int key);
 
@@ -26,8 +28,6 @@ public interface IntHashMap<T> extends Iterable<Entry<T>> {
     T get(int key);
 
     int size();
-
-    int getInitialCapacity();
 
     boolean isEmpty();
 

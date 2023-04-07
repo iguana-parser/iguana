@@ -7,8 +7,8 @@ import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
 import org.iguana.util.ParserLogger;
-import org.iguana.utils.collections.IntHashMap;
-import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.collections.primitive.IntHashMap;
+import org.iguana.utils.collections.primitive.OpenAddressingIntHashMap;
 import org.iguana.utils.input.Input;
 
 import java.util.Collections;

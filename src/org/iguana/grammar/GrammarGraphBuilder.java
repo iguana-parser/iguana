@@ -371,13 +371,13 @@ public class GrammarGraphBuilder {
             Conditions preconditions = i == 0 ? ConditionsFactory.DEFAULT : getConditions(symbol.getPreConditions());
 
             if (symbol.getLabel() != null) {
-                BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);
+                BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i), null, null, null);
                 EpsilonTransition transition = new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(),
                     preconditions, currentSlot, declared);
                 setTransition(transition);
                 currentSlot = declared;
             } else {
-                BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);
+                BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i), null, null, null);
                 EpsilonTransition transition = new EpsilonTransition(preconditions, currentSlot, checked);
                 setTransition(transition);
                 currentSlot = checked;

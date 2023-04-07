@@ -41,7 +41,6 @@ import org.iguana.utils.collections.key.Key;
 import org.iguana.utils.input.Input;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class BodyGrammarSlot implements GrammarSlot {
@@ -113,8 +112,7 @@ public class BodyGrammarSlot implements GrammarSlot {
             T rightResult,
             Environment env,
             IguanaRuntime<T> runtime) {
-        if (isFirst())
-            return rightResult;
+        if (isFirst()) return rightResult;
 
         Key key = Keys.from(destinationIndex, rightResult.getRightExtent(), env);
 
@@ -267,25 +265,5 @@ public class BodyGrammarSlot implements GrammarSlot {
 
     public FollowTest getFollowTest() {
         return followTest;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BodyGrammarSlot that = (BodyGrammarSlot) o;
-        return i1 == that.i1
-               && i2 == that.i2
-               && Objects.equals(position, that.position)
-               && Objects.equals(conditions, that.conditions)
-               && Objects.equals(label, that.label)
-               && Objects.equals(variable, that.variable)
-               && Objects.equals(state, that.state)
-               && Objects.equals(followTest, that.followTest);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(position, conditions, label, i1, variable, i2, state, followTest);
     }
 }

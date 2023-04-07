@@ -91,8 +91,9 @@ public class TerminalTransition extends AbstractTransition {
             return;
         }
 
-        if (dest.getLabel() != null)
+        if (dest.getLabel() != null) {
             runtime.getEvaluatorContext().declareVariable(dest.getLabel(), cr);
+        }
 
         if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(),
             runtime.getEvaluatorContext(), runtime)) {
