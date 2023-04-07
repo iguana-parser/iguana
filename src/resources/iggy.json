@@ -2736,6 +2736,43 @@
                 }
               ],
               "associativity" : "UNDEFINED"
+            },
+            {
+              "seqs" : [
+                {
+                  "symbols" : [
+                    {
+                      "kind" : "Terminal",
+                      "name" : "'NL'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "regex.Seq",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
+                        "symbols" : [
+                          {
+                            "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "val" : 78
+                          },
+                          {
+                            "kind" : "Char",
+                            "lookaheads" : [ ],
+                            "lookbehinds" : [ ],
+                            "val" : 76
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "associativity" : "UNDEFINED",
+                  "label" : "NewLine"
+                }
+              ],
+              "associativity" : "UNDEFINED"
             }
           ]
         }
@@ -7109,6 +7146,25 @@
               "val" : 114
             }
           ]
+        },
+        {
+          "kind" : "regex.Seq",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "symbols" : [
+            {
+              "kind" : "Char",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
+              "val" : 78
+            },
+            {
+              "kind" : "Char",
+              "lookaheads" : [ ],
+              "lookbehinds" : [ ],
+              "val" : 76
+            }
+          ]
         }
       ]
     }
@@ -7813,6 +7869,25 @@
           "lookaheads" : [ ],
           "lookbehinds" : [ ],
           "val" : 114
+        }
+      ]
+    },
+    "NL" : {
+      "kind" : "regex.Seq",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
+      "symbols" : [
+        {
+          "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "val" : 78
+        },
+        {
+          "kind" : "Char",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ],
+          "val" : 76
         }
       ]
     },

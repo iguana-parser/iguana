@@ -30,6 +30,7 @@ import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.Reference;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
@@ -170,6 +171,11 @@ public interface SymbolToSymbolVisitor
     @Override
     default RegularExpression visit(EOF eof) {
         return eof;
+    }
+
+    @Override
+    default RegularExpression visit(NewLine newLine) {
+        return newLine;
     }
 
     @Override

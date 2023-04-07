@@ -40,6 +40,7 @@ import org.iguana.iggy.gen.IggyParseTreeVisitor;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
 import org.iguana.util.Tuple;
@@ -464,6 +465,11 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     @Override
     public Object visitErrorSymbol(IggyParseTree.ErrorSymbol node) {
         return Error.getInstance();
+    }
+
+    @Override
+    public Terminal visitNewLineSymbol(IggyParseTree.NewLineSymbol node) {
+        return new Terminal.Builder(NewLine.getInstance()).build();
     }
 
     @Override

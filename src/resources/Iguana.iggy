@@ -6,7 +6,7 @@ start Grammar
   = "grammar"? name:Identifier? defs:(Rule | TopLevelVar)+
 
 TopLevelVar
- = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
+  = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
 
 Rule
   = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body    %ContextFree
@@ -65,6 +65,7 @@ Symbol
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
   | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
   | "error"                                                      %Error
+  | "NL"                                                         %NewLine
 
 Arguments
   = "(" {Expression ","}* ")"
@@ -211,3 +212,4 @@ regex Keywords
   | "grammar"
   | "global"
   | "error"
+  | "NL"

@@ -5,6 +5,7 @@ import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.Opt;
 import org.iguana.regex.Plus;
 import org.iguana.regex.RegularExpression;
@@ -61,6 +62,16 @@ public class ToAutomatonRegexVisitor implements RegularExpressionVisitor<Automat
     @Override
     public Automaton visit(EOF eof) {
         return memoize(eof, regex -> {
+            State startState = new State();
+            State finalState = new State(StateType.FINAL);
+            startState.addTransition(new Transition(EOF.VALUE, finalState));
+            return Automaton.builder(startState).build();
+        });
+    }
+
+    @Override
+    public Automaton visit(NewLine newLine) {
+        return memoize(newLine, regex -> {
             State startState = new State();
             State finalState = new State(StateType.FINAL);
             startState.addTransition(new Transition(EOF.VALUE, finalState));

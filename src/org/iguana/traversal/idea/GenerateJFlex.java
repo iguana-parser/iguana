@@ -31,6 +31,7 @@ import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.RegularExpressionCondition;
 import org.iguana.regex.Char;
 import org.iguana.regex.EOF;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.visitor.RegularExpressionVisitor;
 
@@ -225,6 +226,11 @@ class GenerateJFlex implements RegularExpressionVisitor<String> {
 
     @Override
     public String visit(EOF eof) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String visit(NewLine newLine) {
         throw new UnsupportedOperationException();
     }
 

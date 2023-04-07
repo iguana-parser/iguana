@@ -48,6 +48,7 @@ import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
 import org.iguana.regex.InlineReferences;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.Reference;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
@@ -717,6 +718,11 @@ public class Grammar {
         }
 
         @Override
+        public Void visit(NewLine newLine) {
+            return null;
+        }
+
+        @Override
         public Void visit(Epsilon e) {
             return null;
         }
@@ -835,6 +841,11 @@ public class Grammar {
 
         @Override
         public Boolean visit(EOF symbol) {
+            return false;
+        }
+
+        @Override
+        public Boolean visit(NewLine newLine) {
             return false;
         }
 

@@ -941,6 +941,21 @@ public class IggyParseTree {
         }
     }
 
+    // Symbol = 'NL'
+    public static class NewLineSymbol extends Symbol {
+        public NewLineSymbol(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
+            super(rule, children, start, end);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<T> visitor) {
+            if (visitor instanceof IggyParseTreeVisitor) {
+                return ((IggyParseTreeVisitor<T>) visitor).visitNewLineSymbol(this);
+            }
+            return visitor.visitNonterminalNode(this);
+        }
+    }
+
     // Arguments = '(' {Expression ','}* ')'
     public static class Arguments extends NonterminalNode {
         public Arguments(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {

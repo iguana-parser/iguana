@@ -1,6 +1,7 @@
 package org.iguana.regex.visitor;
 
 import org.iguana.regex.EOF;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.RegularExpression;
 
 import java.util.List;
@@ -28,6 +29,11 @@ public class InlineReferencesVisitor implements RegularExpressionVisitor<Regular
     @Override
     public RegularExpression visit(EOF eof) {
         return eof;
+    }
+
+    @Override
+    public RegularExpression visit(NewLine newLine) {
+        return newLine;
     }
 
     @Override
