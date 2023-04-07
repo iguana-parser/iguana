@@ -88,14 +88,14 @@ public class GrammarGraphToDot {
         dotGraph.addNode(node);
 
         slot.getFirstSlots().forEach(s -> dotGraph.addEdge(newEdge(slotId, getId(s), "")));
-        slot.getFirstSlots().forEach(s -> toDot(s, dotGraph, visited));
+        slot.getFirstSlots().forEach(s -> toDot(s, dotGraph));
     }
 
-    private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph, Set<Integer> visited) {
+    private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph) {
         if (slot instanceof EndGrammarSlot) {
-            dotGraph.addNode(newNode(getId(slot)).setShape(DotGraph.Shape.DOUBLE_CIRCLE));
+            dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
         } else {
-            dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.CIRCLE));
+            dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
 
             // TODO: improve this code
             Transition t = slot.getOutTransition();
@@ -110,7 +110,7 @@ public class GrammarGraphToDot {
                 dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));
             }
 
-            toDot(t.destination(), dotGraph, visited);
+            toDot(t.destination(), dotGraph);
         }
     }
 

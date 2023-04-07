@@ -55,9 +55,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
             terminalNodes = new OpenAddressingIntHashMap<>();
         }
         Object node = terminalNodes.get(i);
-        if (node == failure) {
-            return null;
-        }
+        if (node == failure) return null;
 
         @SuppressWarnings("unchecked")
         T terminalNode = (T) node;
