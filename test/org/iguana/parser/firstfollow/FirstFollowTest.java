@@ -6,6 +6,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
+import org.iguana.regex.Epsilon;
 import org.junit.jupiter.api.Test;
 
 import static org.iguana.iggy.IggyParserUtils.fromIggyGrammar;
@@ -30,9 +31,37 @@ public class FirstFollowTest {
 
         FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
         assertEquals(set(a, b), firstFollowSets.getFirstSet(A));
-		assertEquals(set(a, b), firstFollowSets.getFirstSet(B));
-		assertEquals(set(c), firstFollowSets.getFirstSet(C));
-		assertEquals(set(c, EOF.asCharRange()), firstFollowSets.getFollowSet(A));
-		assertEquals(set(c, EOF.asCharRange()), firstFollowSets.getFollowSet(B));
+        assertEquals(set(a, b), firstFollowSets.getFirstSet(B));
+        assertEquals(set(c), firstFollowSets.getFirstSet(C));
+        assertEquals(set(c, EOF.asCharRange()), firstFollowSets.getFollowSet(A));
+        assertEquals(set(c, EOF.asCharRange()), firstFollowSets.getFollowSet(B));
+    }
+
+    @Test
+    public void testWithLayout() {
+        RuntimeGrammar grammar = GrammarTransformer.transform(fromIggyGrammar(
+                "A = B C 'd'\n" +
+                "B = 'b' | \n" +
+                "C = 'c'\n" +
+                "layout regex Layout = [\\ \\n]*").toRuntimeGrammar());
+
+        Nonterminal A = Nonterminal.withName("A");
+        Nonterminal B = Nonterminal.withName("B");
+        Nonterminal C = Nonterminal.withName("C");
+        CharRange b = CharRange.from('b');
+        CharRange c = CharRange.from('c');
+        CharRange d = CharRange.from('d');
+        CharRange newLine = CharRange.from('\n');
+        CharRange space = CharRange.from(' ');
+
+        FirstFollowSets firstFollowSets = new FirstFollowSets(grammar);
+        assertEquals(set(space, newLine, b, c), firstFollowSets.getFirstSet(A));
+        assertEquals(set(EOF.asCharRange()), firstFollowSets.getFollowSet(A));
+
+        assertEquals(set(b, Epsilon.asCharRange()), firstFollowSets.getFirstSet(B));
+        assertEquals(set(space, newLine, c, EOF.asCharRange()), firstFollowSets.getFollowSet(B));
+
+        assertEquals(set(c), firstFollowSets.getFirstSet(C));
+        assertEquals(set(d, space, newLine, EOF.asCharRange()), firstFollowSets.getFollowSet(C));
     }
 }
