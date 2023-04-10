@@ -1,4 +1,6 @@
-package org.iguana.utils.collections;
+package org.iguana.utils.collections.primitive;
+
+import org.iguana.utils.collections.IntKeyMapper;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
      */
     private int bitMask;
 
-    private Entry<T>[] table;
+    private IntKeyEntry<T>[] table;
 
     public ChainingIntHashMap() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -56,7 +58,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
         bitMask = capacity - 1;
 
         threshold = (int) (loadFactor * capacity);
-        table = new Entry[capacity];
+        table = new IntKeyEntry[capacity];
     }
 
     private int hash(int key) {
@@ -72,10 +74,10 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     public T computeIfAbsent(int key, IntFunction<T> f) {
         int index = hash(key);
 
-        Entry<T> entry = table[index];
+        IntKeyEntry<T> entry = table[index];
 
         if (entry == null) {
-            entry = new Entry<>(key, f.apply(key));
+            entry = new IntKeyEntry<>(key, f.apply(key));
             table[index] = entry;
             size++;
             if (size >= threshold) rehash();
@@ -90,7 +92,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
 
             while (entry.next != null) entry = entry.next;
 
-            Entry<T> newEntry = new Entry<>(key, f.apply(key));
+            IntKeyEntry<T> newEntry = new IntKeyEntry<>(key, f.apply(key));
             entry.next = newEntry;
             size++;
             return null;
@@ -101,10 +103,10 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     public T compute(int key, IntKeyMapper<T> f) {
         int index = hash(key);
 
-        Entry<T> entry = table[index];
+        IntKeyEntry<T> entry = table[index];
 
         if (entry == null) {
-            entry = new Entry<>(key, f.apply(key, null));
+            entry = new IntKeyEntry<>(key, f.apply(key, null));
             table[index] = entry;
             size++;
             if (size >= threshold) rehash();
@@ -119,7 +121,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
 
             while (entry.next != null) entry = entry.next;
 
-            Entry<T> newEntry = new Entry<>(key, f.apply(key, null));
+            IntKeyEntry<T> newEntry = new IntKeyEntry<>(key, f.apply(key, null));
             entry.next = newEntry;
             size++;
             return null;
@@ -130,10 +132,10 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     public T put(int key, T value) {
         int index = hash(key);
 
-        Entry<T> entry = table[index];
+        IntKeyEntry<T> entry = table[index];
 
         if (entry == null) {
-            entry = new Entry<>(key, value);
+            entry = new IntKeyEntry<>(key, value);
             table[index] = entry;
             size++;
             if (size >= threshold) rehash();
@@ -148,7 +150,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
 
             while (entry.next != null) entry = entry.next;
 
-            Entry<T> newEntry = new Entry<>(key, value);
+            IntKeyEntry<T> newEntry = new IntKeyEntry<>(key, value);
             entry.next = newEntry;
             size++;
             return null;
@@ -167,19 +169,19 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
         bitMask = capacity - 1;
 
         @SuppressWarnings({"unchecked", "rawtypes"})
-        Entry<T>[] newTable = new Entry[capacity];
+        IntKeyEntry<T>[] newTable = new IntKeyEntry[capacity];
 
-        for (Entry<T> e : this) {
+        for (IntKeyEntry<T> e : this) {
             int index = hash(e.key);
-            Entry<T> entry = newTable[index];
+            IntKeyEntry<T> entry = newTable[index];
 
             if (entry == null) {
-                newTable[index] = new Entry<>(e.key, e.val);
+                newTable[index] = new IntKeyEntry<>(e.key, e.val);
                 continue;
             } else {
                 while (entry.next != null) entry = entry.next;
 
-                Entry<T> newEntry = new Entry<>(e.key, e.val);
+                IntKeyEntry<T> newEntry = new IntKeyEntry<>(e.key, e.val);
                 entry.next = newEntry;
                 entry = newEntry;
             }
@@ -194,7 +196,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     @Override
     public T get(int key) {
         int index = hash(key);
-        Entry<T> entry = table[index];
+        IntKeyEntry<T> entry = table[index];
 
         while (true) {
             if (entry.val == null)
@@ -209,11 +211,6 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     @Override
     public int size() {
         return size;
-    }
-
-    @Override
-    public int getInitialCapacity() {
-        return initialCapacity;
     }
 
     @Override
@@ -239,11 +236,11 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
     }
 
     @Override
-    public Iterator<Entry<T>> iterator() {
-        return new Iterator<Entry<T>>() {
+    public Iterator<IntKeyEntry<T>> iterator() {
+        return new Iterator<IntKeyEntry<T>>() {
 
             int i = 0;
-            Entry<T> current;
+            IntKeyEntry<T> current;
 
             @Override
             public boolean hasNext() {
@@ -262,12 +259,12 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
                 return true;
             }
 
-            private Entry<T> nextInChain() {
+            private IntKeyEntry<T> nextInChain() {
                 if (current.next == null) return null;
                 return current = current.next;
             }
 
-            private Entry<T> nextInTable() {
+            private IntKeyEntry<T> nextInTable() {
                 if (i == table.length) return null;
                 while ((current = table[i]) == null) {
                     i++;
@@ -279,7 +276,7 @@ public class ChainingIntHashMap<T> implements IntHashMap<T> {
             }
 
             @Override
-            public Entry<T> next() {
+            public IntKeyEntry<T> next() {
                 return current;
             }
         };

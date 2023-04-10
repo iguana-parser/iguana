@@ -1,6 +1,8 @@
 package org.iguana.regex;
 
 import org.iguana.regex.visitor.RegularExpressionVisitor;
+import org.iguana.utils.collections.primitive.IntSet;
+import org.iguana.utils.collections.primitive.IntSetFactory;
 
 import java.util.Collections;
 import java.util.Set;
@@ -9,7 +11,11 @@ import static org.iguana.utils.collections.CollectionsUtil.immutableSet;
 
 public class NewLine extends AbstractRegularExpression {
 
-    private static final Set<CharRange> firstSet = immutableSet(CharRange.in('\r', '\r'), CharRange.in('\n', '\n'));
+    public static final IntSet newLineChars = IntSetFactory.create('\r', '\n');
+
+    private static final int VALUE = -3;
+
+    private static final Set<CharRange> firstSet = immutableSet(CharRange.in(VALUE, VALUE));
 
     private static NewLine instance;
 
@@ -62,5 +68,15 @@ public class NewLine extends AbstractRegularExpression {
     @Override
     public String toString() {
         return "NL";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == instance;
+    }
+
+    @Override
+    public int hashCode() {
+        return VALUE;
     }
 }

@@ -9,11 +9,15 @@
     },
     "body" : [
       {
-        "kind" : "Nonterminal",
-        "name" : "NL*",
+        "kind" : "Terminal",
+        "name" : "NL",
         "preConditions" : [ ],
         "postConditions" : [ ],
-        "nodeType" : "Star"
+        "regex" : {
+          "kind" : "NewLine",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ]
+        }
       }
     ],
     "recursion" : "NON_REC",
@@ -42,75 +46,18 @@
   },
   "children" : [
     {
-      "kind" : "StarNode",
-      "symbol" : {
-        "kind" : "Star",
-        "name" : "NL*",
+      "kind" : "TerminalNode",
+      "terminal" : {
+        "kind" : "Terminal",
+        "name" : "NL",
         "preConditions" : [ ],
         "postConditions" : [ ],
-        "s" : {
-          "kind" : "Terminal",
-          "name" : "NL",
-          "preConditions" : [ ],
-          "postConditions" : [ ],
-          "regex" : {
-            "kind" : "NewLine",
-            "lookaheads" : [ ],
-            "lookbehinds" : [ ]
-          }
-        },
-        "separators" : [ ]
-      },
-      "children" : [
-        {
-          "kind" : "TerminalNode",
-          "terminal" : {
-            "kind" : "Terminal",
-            "name" : "NL",
-            "preConditions" : [ ],
-            "postConditions" : [ ],
-            "regex" : {
-              "kind" : "NewLine",
-              "lookaheads" : [ ],
-              "lookbehinds" : [ ]
-            }
-          },
-          "start" : 0,
-          "end" : 1
-        },
-        {
-          "kind" : "TerminalNode",
-          "terminal" : {
-            "kind" : "Terminal",
-            "name" : "NL",
-            "preConditions" : [ ],
-            "postConditions" : [ ],
-            "regex" : {
-              "kind" : "NewLine",
-              "lookaheads" : [ ],
-              "lookbehinds" : [ ]
-            }
-          },
-          "start" : 1,
-          "end" : 2
-        },
-        {
-          "kind" : "TerminalNode",
-          "terminal" : {
-            "kind" : "Terminal",
-            "name" : "NL",
-            "preConditions" : [ ],
-            "postConditions" : [ ],
-            "regex" : {
-              "kind" : "NewLine",
-              "lookaheads" : [ ],
-              "lookbehinds" : [ ]
-            }
-          },
-          "start" : 2,
-          "end" : 3
+        "regex" : {
+          "kind" : "NewLine",
+          "lookaheads" : [ ],
+          "lookbehinds" : [ ]
         }
-      ],
+      },
       "start" : 0,
       "end" : 3
     }

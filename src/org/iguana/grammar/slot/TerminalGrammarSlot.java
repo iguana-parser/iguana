@@ -32,8 +32,8 @@ import org.iguana.parser.IguanaRuntime;
 import org.iguana.regex.matcher.Matcher;
 import org.iguana.regex.matcher.MatcherFactory;
 import org.iguana.result.Result;
-import org.iguana.utils.collections.IntHashMap;
-import org.iguana.utils.collections.OpenAddressingIntHashMap;
+import org.iguana.utils.collections.primitive.IntHashMap;
+import org.iguana.utils.collections.primitive.OpenAddressingIntHashMap;
 import org.iguana.utils.input.Input;
 
 public class TerminalGrammarSlot implements GrammarSlot {

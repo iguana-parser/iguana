@@ -32,6 +32,7 @@ import org.iguana.regex.CharRange;
 import org.iguana.regex.Epsilon;
 import org.iguana.regex.NewLine;
 import org.iguana.regex.RegularExpression;
+import org.iguana.utils.collections.primitive.IntSet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class DFAMatcherFactory implements MatcherFactory {
         if (regex == Epsilon.getInstance()) return epsilonMatcher();
         if (regex instanceof Char)          return characterMatcher((Char) regex);
         if (regex instanceof CharRange)     return characterRangeMatcher((CharRange) regex);
-        if (regex instanceof NewLine)       return newLineMatcher((NewLine) regex);
+        if (regex instanceof NewLine)       return newLineMatcher();
         return matcherCache.computeIfAbsent(regex, DFAMatcher::new);
     }
 
@@ -72,14 +73,15 @@ public class DFAMatcherFactory implements MatcherFactory {
         return (input, i) -> input.charAt(i) >= range.getStart() && input.charAt(i) <= range.getEnd() ? 1 : -1;
     }
 
-    public static Matcher newLineMatcher(NewLine newLine) {
+    public static Matcher newLineMatcher() {
         return (input, i) -> {
-            if (input.charAt(i) == '\n') return 1;
-            if (input.charAt(i) == '\r') {
-                if (i + 1 < input.length() && input.charAt(i + 1) == '\n') return 2;
-                return 1;
+            IntSet newLineChars = NewLine.newLineChars;
+            int matchLength = 0;
+            for (int j = i; j < input.length(); j++) {
+                if (!newLineChars.contains(input.charAt(j))) break;
+                matchLength++;
             }
-            return -1;
+            return matchLength;
         };
     }
 

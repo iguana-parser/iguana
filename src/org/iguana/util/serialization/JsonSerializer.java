@@ -67,6 +67,7 @@ import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.Epsilon;
+import org.iguana.regex.NewLine;
 import org.iguana.regex.Reference;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
@@ -211,6 +212,7 @@ public class JsonSerializer {
         mapper.addMixIn(CharRange.class, CharRangeMixIn.class);
         mapper.addMixIn(Reference.class, ReferenceMixIn.class);
         mapper.addMixIn(Epsilon.class, EpsilonMixIn.class);
+        mapper.addMixIn(NewLine.class, NewLineMixIn.class);
 
         // Parse tree
         mapper.addMixIn(ParseTreeNode.class, ParseTreeNodeMixIn.class);
@@ -380,7 +382,8 @@ public class JsonSerializer {
             @JsonSubTypes.Type(value = org.iguana.regex.Char.class, name = "Char"),
             @JsonSubTypes.Type(value = org.iguana.regex.CharRange.class, name = "CharRange"),
             @JsonSubTypes.Type(value = org.iguana.regex.Reference.class, name = "Reference"),
-            @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name = "Epsilon")
+            @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name = "Epsilon"),
+            @JsonSubTypes.Type(value = org.iguana.regex.NewLine.class, name = "NewLine")
     })
     abstract static class RegularExpressionMixIn {}
 
@@ -594,6 +597,11 @@ public class JsonSerializer {
     abstract static class EpsilonMixIn extends AbstractRegularExpressionMixIn {
         @JsonCreator
         public abstract Epsilon getInstance();
+    }
+
+    abstract static class NewLineMixIn extends AbstractRegularExpressionMixIn {
+        @JsonCreator
+        public abstract NewLine getInstance();
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
