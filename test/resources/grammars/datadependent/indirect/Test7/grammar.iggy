@@ -1,5 +1,7 @@
+
 start S
   = E
+  ;
 
 E = right        E '^' E
   > non-assoc    (E Arg+
@@ -7,7 +9,9 @@ E = right        E '^' E
   |               '&' E)
   > left         E '+' E
   | 'a'
+  ;
 
 Arg
   = E
   | 'b'
+  ;

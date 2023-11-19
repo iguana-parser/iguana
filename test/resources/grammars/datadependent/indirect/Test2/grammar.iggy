@@ -1,10 +1,15 @@
+
 start S
   = E
+  ;
 
 E = left    E X
   > left    E '+' E
   | 'a'
+  ;
 
 X = '*' Y
+  ;
 
 Y = '*' E
+  ;

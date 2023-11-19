@@ -4,37 +4,47 @@ var env = set()
 
 start Grammar
   = "grammar"? name:Identifier? defs:(Rule | TopLevelVar)+
+  ;
 
 TopLevelVar
   = "global"? "var" id:Identifier "=" exp:Expression env=put(env,id.yield)
+  ;
 
 Rule
-  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body    %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                  %Regex
+  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body ";"    %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                      %Regex
+  ;
 
 Parameters
   = "(" {id:Identifier env=put(env, id.yield) ","}* ")"
+  ;
 
 RegexBody
   = { Regex+ "|" }*
+  ;
 
 Body
   = {PriorityLevels ">"}+
+  ;
 
 PriorityLevels
   = {Alternative "|"}+
+  ;
 
 Alternative
   = seq:Sequence                                        %Sequence
   | assoc:Associativity "(" seqs: {Sequence "|"}+ ")"   %Associativity
+  ;
 
 Sequence
   = assoc:Associativity? cond:Condition? first:Symbol rest:Symbol+ ret:ReturnExpression? label:Label?   %MoreThanOneElem
   | cond:Condition? sym:Symbol ret:ReturnExpression? label:Label?                                       %SingleElem
   | label:Label?                                                                                        %Empty
+  ;
 
 Condition
   = "{" {Expression ","}* "}" "?"
+  ;
 
 Symbol
   = id:Identifier args:Arguments                                 %Call
@@ -65,17 +75,21 @@ Symbol
   | "{" sym:Symbol sep:Symbol+ "}" "*"                           %StarSep
   | "{" sym:Symbol sep:Symbol+ "}" "+"                           %PlusSep
   | "error"                                                      %Error
+  ;
 
 Arguments
   = "(" {Expression ","}* ")"
+  ;
 
 Statement
   = fun:FunName args:Arguments ";"?    %Call
   | bindings:Binding ";"?              %Binding
+  ;
 
 Binding
   = varName:VarName "=" exp:Expression                                      %Assign
   | "var" decls:{(id:Name env=put(env, id.yield) "=" Expression) ","}+      %Declare
+  ;
 
 Regex
   = reg:Regex "*"                                       %Star
@@ -87,14 +101,17 @@ Regex
   | name:Name                                           %Nont
   | charClass:CharClass                                 %CharClass
   | string:String                                       %String
+  ;
 
 CharClass
   = "[" ranges:Range* "]"      %Chars
   | "!" "[" ranges:Range* "]"  %NotChars
+  ;
 
 Range
   = first:RangeChar "-" second:RangeChar   %Range
   | range:RangeChar                        %Character
+  ;
 
 Expression
   =           fun:FunName args:Arguments            %Call
@@ -118,15 +135,19 @@ Expression
   |           varName:VarName                       %Name
   |           number:Number                         %Number
   |           "(" exp:Expression ")"                %Bracket
+  ;
 
 ReturnExpression
   = "{" exp:Expression "}"
+  ;
 
 VarName
   = id:Identifier {contains(env,id.yield)}?
+  ;
 
 Name
   = id:Identifier {!contains(env,id.yield)}?
+  ;
 
 FunName
   = "println"       %Println
@@ -135,15 +156,19 @@ FunName
   | "set"           %Set
   | "contains"      %Contains
   | "put"           %Put
+  ;
 
 Identifier
   = [A-Z_a-z] !<< LetterOrDigits \ Keywords
+  ;
 
 lexical Label
   = '%' id:Identifier
+  ;
 
 layout Layout
   = (WhiteSpace | SingleLineComment | MultiLineComment)* !>> WhiteSpace !>> "//" !>> "/*"
+  ;
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*

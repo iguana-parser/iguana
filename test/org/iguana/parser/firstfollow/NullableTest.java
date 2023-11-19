@@ -16,8 +16,8 @@ public class NullableTest {
     @Test
     public void test1() {
         RuntimeGrammar grammar = GrammarTransformer.transform(fromIggyGrammar(
-            "start A = B A 'd' | 'a'\n" +
-            "B = 'b' | \n").toRuntimeGrammar());
+            "start A = B A 'd' | 'a';\n" +
+            "B = 'b' | ;\n").toRuntimeGrammar());
 
         Nonterminal A = Nonterminal.withName("A");
         Nonterminal B = Nonterminal.withName("B");
@@ -34,9 +34,12 @@ public class NullableTest {
             "  = B 'c'\n" +
             "  | C 'd'\n" +
             "  | 'e'\n" +
+            "  ;\n" +
             "B = A 'f'\n" +
             "  | A 'g'\n" +
-            "C = A 'g'").toRuntimeGrammar());
+            "  ;\n" +
+            "C = A 'g'" +
+            "  ;\n").toRuntimeGrammar());
 
         Nonterminal A = Nonterminal.withName("A");
         Nonterminal B = Nonterminal.withName("B");
@@ -45,6 +48,4 @@ public class NullableTest {
         assertFalse(firstFollowSets.isNullable(A));
         assertFalse(firstFollowSets.isNullable(B));
     }
-
-
 }

@@ -5,3 +5,4 @@ start E
   > 'if' E 'then' E
   | '(' E ')'
   | 'a'
+  ;

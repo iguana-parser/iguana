@@ -1,17 +1,23 @@
 start X
   = S(1,2)
+  ;
 
 // The input aab is ambiguous, so the first alternative can have either 1 or 2 as left extent
 S(a,b)
   = l1:A assert(l1.l == 0, l1.r == 1 || l1.r == 2, a == 1, b == 2) l2:B assert(l2.l == 1 || l2.l == 2, l2.r == 3)
   | l1:C l2:A assert(l1.l == 0, l1.r == 1, l2.l == 1, l2.r == 2, a == 1, b == 2) D
+  ;
 
 A = 'a' 'a'
   | 'a'
+  ;
 
 B = 'b'
   | 'a' 'b'
+  ;
 
 C = 'a'
+  ;
 
 D = 'b'
+  ;

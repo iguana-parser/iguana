@@ -2,8 +2,11 @@
 start A
   = B C
   | 'a'
+  ;
 
 B = A
   | 'b'
+  ;
 
 C = 'c'
+  ;

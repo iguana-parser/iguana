@@ -3,3 +3,4 @@ start E
   = right E '^' E
   > E '&'
   | 'a'
+  ;

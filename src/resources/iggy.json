@@ -526,6 +526,19 @@
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "excepts" : [ ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "';'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
+                        "val" : 59
+                      }
                     }
                   ],
                   "associativity" : "UNDEFINED",
@@ -7366,6 +7379,12 @@
         }
       ]
     },
+    ";" : {
+      "kind" : "Char",
+      "lookaheads" : [ ],
+      "lookbehinds" : [ ],
+      "val" : 59
+    },
     "regex" : {
       "kind" : "regex.Seq",
       "lookaheads" : [ ],
@@ -7815,12 +7834,6 @@
           "val" : 114
         }
       ]
-    },
-    ";" : {
-      "kind" : "Char",
-      "lookaheads" : [ ],
-      "lookbehinds" : [ ],
-      "val" : 59
     },
     "[" : {
       "kind" : "Char",

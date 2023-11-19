@@ -1,13 +1,17 @@
 
 start S
   = E
+  ;
 
 E =        E Y
   > right  E ';' E
   > '-' E
   | 'a'
+  ;
 
 Y = X
+  ;
 
 X = X ',' E
   | ',' E
+  ;

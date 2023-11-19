@@ -2,11 +2,14 @@
 start S
   = 'for' L? Id
   | 'forall'
+  ;
 
 Id
   = [a-z] !<< Char+ !>> [a-z]
+  ;
 
 L = ' '
+  ;
 
 regex Char
   = [a-z]

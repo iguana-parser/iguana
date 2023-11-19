@@ -1,5 +1,7 @@
+
 start S
   = E
+  ;
 
 E =       '-' E
   > left  E '*' E
@@ -9,3 +11,4 @@ E =       '-' E
   > left  E '-' E
   |       '(' E ')'
   |       'a'
+  ;

@@ -1,8 +1,10 @@
 
 start S
   = A A A+ A
+  ;
 
 A = 'a'
   | 'b'
   | 'c'
   | 'd'
+  ;

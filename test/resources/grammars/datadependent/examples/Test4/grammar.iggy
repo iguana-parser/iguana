@@ -2,18 +2,22 @@
 
 start Start
   = Exp
+  ;
 
 Exp
   = left   Exp '+' Exp
   > 'let' Decls 'in' Exp
   | Num
+  ;
 
 Decls
   = align offside Decl*
   | ignore '{' Decl (';' Decl)* '}'
+  ;
 
 Decl
   = Id '=' Exp
+  ;
 
 regex Id
   = [a-zA-Z][a-zA-Z0-9]*

@@ -10,6 +10,7 @@ start expr
   > right  expr ';' expr
   |        '(' expr ')'
   |        num
+  ;
 
 regex field
   = [a-zA-Z][a-zA-Z0-9]*

@@ -1,9 +1,11 @@
 
 start S
   = Label !>> '3' Nums
+  ;
 
 Label
   = Char+ !>> [a-z]
+  ;
 
 regex Char
   = [a-z]

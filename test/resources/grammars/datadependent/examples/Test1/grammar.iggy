@@ -2,15 +2,19 @@
 
 start Element
   = s:STag Content ETag(s.val)
+  ;
 
 STag
   = '<' n:Name '>' { n.yield }
+  ;
 
 Content
   = CharData (Element CharData)*
+  ;
 
 ETag(s)
   = '</' n:Name {n.yield == s}? '>'
+  ;
 
 layout regex L
   = [\t\n\r\ ]*

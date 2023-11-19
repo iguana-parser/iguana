@@ -1,8 +1,10 @@
 
 start S
   = E
+  ;
 
 E = 'z' E
   > E 'x'
   > 'w' E
   | 'a'
+  ;

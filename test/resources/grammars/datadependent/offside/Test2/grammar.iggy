@@ -1,12 +1,16 @@
+
 start S
   = align {offside Stat ";"}+
+  ;
 
 Stat
   = 'x' '=' Exp
+  ;
 
 Exp
   = Exp '+' 'a'
   | 'a'
+  ;
 
 layout regex Layout
   = WhiteSpace

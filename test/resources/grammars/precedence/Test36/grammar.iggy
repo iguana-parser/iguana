@@ -1,6 +1,8 @@
 
-start S =
-  E
+start S
+  = E
+  ;
 
 E = left (E '+' E | E '-' E | right E '^' E)
   | 'a'
+  ;

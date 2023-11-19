@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 public class ErrorRecoveryTest extends ParserTestRunner {
 
     private final String grammar =
-        "program = stmt+\n" +
-        "stmt = expr error ';' | '{' stmt+ error '}' \n" +
-        "expr = expr '*' expr > expr '+' expr | [0-9]+\n" +
-        "layout l = ' '*\n";
+        "program = stmt+;\n" +
+        "stmt = expr error ';' | '{' stmt+ error '}';\n" +
+        "expr = expr '*' expr > expr '+' expr | [0-9]+;\n" +
+        "layout l = ' '*;\n";
 
     private final ParseOptions parseOptions = new ParseOptions.Builder().setErrorRecoveryEnabled(true).build();
 

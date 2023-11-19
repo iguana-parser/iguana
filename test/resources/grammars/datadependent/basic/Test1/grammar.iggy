@@ -1,9 +1,13 @@
 start X
   = S(1,2)
+  ;
 
 S(a,b)
   = l:A assert(a == 1, b == 2, l.l == 0, l.r == 1) B
+  ;
 
 A = 'a'
+  ;
 
 B = 'b'
+  ;

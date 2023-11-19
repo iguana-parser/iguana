@@ -29,7 +29,7 @@ public class GSSNodeTest {
 
     @BeforeEach
     public void init() {
-        RuntimeGrammar grammar = fromIggyGrammar("A = 'a'").toRuntimeGrammar();
+        RuntimeGrammar grammar = fromIggyGrammar("A = 'a';").toRuntimeGrammar();
 
         grammarGraph = GrammarGraphBuilder.from(grammar);
         input = Input.fromString("Test");

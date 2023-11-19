@@ -1,6 +1,7 @@
 
 start Id
   = Char+ !>> [a-z] \ ('if' | 'while' | 'do')
+  ;
 
 regex Char
   = [a-z]
