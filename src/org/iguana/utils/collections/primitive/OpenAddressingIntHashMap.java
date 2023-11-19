@@ -1,4 +1,6 @@
-package org.iguana.utils.collections;
+package org.iguana.utils.collections.primitive;
+
+import org.iguana.utils.collections.IntKeyMapper;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -207,11 +209,6 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
     }
 
     @Override
-    public int getInitialCapacity() {
-        return initialCapacity;
-    }
-
-    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -227,10 +224,10 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
 
-        Iterator<Entry<T>> it = iterator();
+        Iterator<IntKeyEntry<T>> it = iterator();
 
         while (true) {
-            Entry<T> next = it.next();
+            IntKeyEntry<T> next = it.next();
             sb.append(next);
             if (!it.hasNext()) {
                 sb.append("}");
@@ -258,7 +255,7 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
     }
 
     @Override
-    public Iterator<Entry<T>> iterator() {
+    public Iterator<IntKeyEntry<T>> iterator() {
         return new Iterator<>() {
             int it = 0;
             int i = 0;
@@ -269,12 +266,12 @@ public class OpenAddressingIntHashMap<T> implements IntHashMap<T> {
             }
 
             @Override
-            public Entry<T> next() {
+            public IntKeyEntry<T> next() {
                 while (true) {
                     if (values[i++] != null) break;
                 }
                 it++;
-                return new Entry<>(keys[i - 1], values[i - 1]);
+                return new IntKeyEntry<>(keys[i - 1], values[i - 1]);
             }
         };
     }

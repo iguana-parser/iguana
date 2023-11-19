@@ -39,6 +39,8 @@ import org.iguana.result.Result;
 import org.iguana.util.Tuple;
 import org.iguana.utils.input.Input;
 
+import java.util.Objects;
+
 public class EpsilonTransition extends AbstractTransition {
 
     private final Type type;
@@ -63,7 +65,10 @@ public class EpsilonTransition extends AbstractTransition {
             BodyGrammarSlot origin,
             BodyGrammarSlot dest) {
         super(origin, dest);
-
+        if (Objects.equals(origin.position, dest.position)) {
+            throw new IllegalArgumentException("Origin and destination positions must be the same for epsilon "
+                + "transitions: " + origin.position + " is not equal to " + dest.position);
+        }
         assert label != null && (type == Type.DECLARE_LABEL || type == Type.STORE_LABEL);
 
         this.type = type;

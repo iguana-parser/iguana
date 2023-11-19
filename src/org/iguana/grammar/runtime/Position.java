@@ -37,7 +37,6 @@ import java.util.Objects;
 public class Position {
 
     private final RuntimeRule rule;
-
     private final int posInRule;
     private final int posInSymbol;
 
@@ -69,15 +68,12 @@ public class Position {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof Position))
-            return false;
-
+        if (this == obj) return true;
+        if (!(obj instanceof Position)) return false;
         Position other = (Position) obj;
-
-        return rule.equals(other.rule) && posInRule == other.posInRule && posInSymbol == other.posInSymbol;
+        return rule.equals(other.rule)
+               && posInRule == other.posInRule
+               && posInSymbol == other.posInSymbol;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.iguana.utils.collections;
+package org.iguana.utils.collections.primitive;
 
 
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Arrays;
  * @author Ali Afroozeh
  *
  */
-public class IntHashSet {
+public class OpenAddressingIntHashSet implements IntSet {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.7f;
@@ -35,15 +35,15 @@ public class IntHashSet {
 
     private int[] table;
 
-    public IntHashSet() {
+    public OpenAddressingIntHashSet() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
 
-    public IntHashSet(int initialCapacity) {
+    public OpenAddressingIntHashSet(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
 
-    public IntHashSet(int initialCapacity, float loadFactor) {
+    public OpenAddressingIntHashSet(int initialCapacity, float loadFactor) {
 
         this.initialCapacity = initialCapacity;
 
@@ -61,47 +61,44 @@ public class IntHashSet {
         Arrays.fill(table, -1);
     }
 
-    public static IntHashSet from(int... elements) {
-        IntHashSet set = new IntHashSet();
+    public static OpenAddressingIntHashSet from(int... elements) {
+        OpenAddressingIntHashSet set = new OpenAddressingIntHashSet(elements.length);
         for (int e : elements) {
             set.add(e);
         }
         return set;
     }
 
+    @Override
     public boolean contains(int key) {
         return get(key) != -1;
     }
 
-    public int add(int key) {
+    @Override
+    public boolean add(int element) {
+        if (element < 0) throw new IllegalArgumentException("Element " + element + " is negative");
 
-        int index = hash(key);
+        int index = hash(element);
 
         do {
             if (table[index] == -1) {
-                table[index] = key;
+                table[index] = element;
                 size++;
                 if (size >= threshold) {
                     rehash();
                 }
-                return -1;
+                return true;
             }
-
-            else if (table[index] == key) {
-                return table[index];
+            if (table[index] == element) {
+                return false;
             }
-
             collisionsCount++;
-
             index = (index + 1) & bitMask;
-
         } while (true);
     }
 
     private void rehash() {
-
         capacity <<= 1;
-
         bitMask = capacity - 1;
 
         int[] newTable = new int[capacity];
@@ -110,17 +107,13 @@ public class IntHashSet {
         label:
         for (int key : table) {
             if (key != -1) {
-
                 int index = hash(key);
-
                 do {
                     if (newTable[index] == -1) {
                         newTable[index] = key;
                         continue label;
                     }
-
                     index = (index + 1) & bitMask;
-
                 } while (true);
             }
         }
@@ -139,6 +132,7 @@ public class IntHashSet {
         return table[hash(key)];
     }
 
+    @Override
     public int size() {
         return size;
     }
@@ -155,14 +149,9 @@ public class IntHashSet {
         return rehashCount;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public void clear() {
-        for (int i = 0; i < table.length; i++) {
-            table[i] = -1;
-        }
+        Arrays.fill(table, -1);
         size = 0;
     }
 
@@ -182,5 +171,27 @@ public class IntHashSet {
 
         sb.append("}");
         return sb.toString();
+    }
+
+    @Override
+    public IntIterator iterator() {
+        return new IntIterator() {
+            int i = 0;      // index to the next element in the table to check
+            int count = 0;  // the number of iterated elements
+
+            @Override
+            public boolean hasNext() {
+                return count < size;
+            }
+
+            @Override
+            public int next() {
+                while (true) {
+                    if (table[i++] != -1) break;
+                }
+                count++;
+                return table[i - 1];
+            }
+        };
     }
 }
