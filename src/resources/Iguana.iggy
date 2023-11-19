@@ -12,7 +12,7 @@ TopLevelVar
 
 Rule
   = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body ";"    %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody                                      %Regex
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody ";"                                  %Regex
   ;
 
 Parameters
@@ -172,46 +172,58 @@ layout Layout
 
 regex LetterOrDigits
   = Letter (Letter | LetterOrDigit)*
+  ;
 
 regex LetterOrDigit
   = [A-Za-z_0-9]
+  ;
 
 regex Letter
   = [A-Za-z_]
+  ;
 
 regex Number
   = [0]
   | [1-9][0-9]*
+  ;
 
 regex Character
   = "\\" [' " \\ t f r n]
   | ![' " \\]
+  ;
 
 regex String
   = "\"" Character* "\""
   | "\'" Character* "\'"
+  ;
 
 regex WhiteSpace
   = [\ \t \f \r \n]+
+  ;
 
 regex SingleLineComment
   = "//" ![\r \n]* [\r\n]
+  ;
 
 regex MultiLineComment
   = "/*" CommentChar* [*]+  "/"
+  ;
 
 regex CommentChar
   = [/]
   | [*]* ![/ *]
+  ;
 
 regex Associativity
   = "left"
   | "right"
   | "non-assoc"
+  ;
 
 regex RangeChar
   = "\\" [\\ \[ \] \- t f r n \ ]
   | ![\\ \[ \] \- \t \f \r \n \ ]
+  ;
 
 regex Keywords
   = "start"
@@ -236,3 +248,4 @@ regex Keywords
   | "grammar"
   | "global"
   | "error"
+  ;

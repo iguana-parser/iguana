@@ -680,6 +680,19 @@
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "excepts" : [ ]
+                    },
+                    {
+                      "kind" : "Terminal",
+                      "name" : "';'",
+                      "preConditions" : [ ],
+                      "postConditions" : [ ],
+                      "nodeType" : "Literal",
+                      "regex" : {
+                        "kind" : "Char",
+                        "lookaheads" : [ ],
+                        "lookbehinds" : [ ],
+                        "val" : 59
+                      }
                     }
                   ],
                   "associativity" : "UNDEFINED",

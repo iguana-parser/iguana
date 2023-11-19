@@ -14,10 +14,13 @@ start expr
 
 regex field
   = [a-zA-Z][a-zA-Z0-9]*
+  ;
 
 regex num
   = [0] | [1-9][0-9]*
+  ;
 
 layout regex whitespaces
   = [\n\r\t\f\ ]*
+  ;
 

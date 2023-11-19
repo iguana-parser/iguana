@@ -9,3 +9,4 @@ Label
 
 regex Char
   = [a-z]
+  ;

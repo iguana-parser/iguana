@@ -16,6 +16,8 @@ E =         E '.' Id
 
 regex Id
   = 'id'
+  ;
 
 layout regex Whitespaces
   = [\t\n\r\ ]*
+  ;

@@ -5,3 +5,4 @@ start Id
 
 regex Char
   = [a-z]
+  ;

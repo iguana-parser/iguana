@@ -14,6 +14,8 @@ Exp
 
 layout regex Layout
   = WhiteSpace
+  ;
 
 regex WhiteSpace
   = [\ \t \f \r \n]*
+  ;

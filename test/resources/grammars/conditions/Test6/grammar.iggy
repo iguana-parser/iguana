@@ -13,3 +13,4 @@ L = ' '
 
 regex Char
   = [a-z]
+  ;

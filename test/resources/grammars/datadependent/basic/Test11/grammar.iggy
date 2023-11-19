@@ -8,3 +8,4 @@ S = a:'a' {a.l == 0}? assert(a.r == 1, indent(a.r) == 2) Layout b:'b' {b.l == 5}
 
 regex Layout
   = [\ ]*
+  ;

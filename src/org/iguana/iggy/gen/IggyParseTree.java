@@ -99,7 +99,7 @@ public class IggyParseTree {
         }
     }
 
-    // Rule = modifier:'layout'? 'regex' name:Name '=' body:RegexBody
+    // Rule = modifier:'layout'? 'regex' name:Name '=' body:RegexBody ';'
     public static class RegexRule extends Rule {
         public RegexRule(RuntimeRule rule, List<ParseTreeNode> children, int start, int end) {
             super(rule, children, start, end);

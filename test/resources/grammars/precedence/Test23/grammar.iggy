@@ -12,3 +12,4 @@ E =       '-' E
 
 layout regex Whitespaces
   = [\t\n\r\ ]*
+  ;

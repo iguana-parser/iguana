@@ -10,6 +10,7 @@ Id
 
 regex Chars
   = [a-z]+
+  ;
 
 L = ' '
   ;

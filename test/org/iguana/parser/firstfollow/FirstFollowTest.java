@@ -43,7 +43,7 @@ public class FirstFollowTest {
                 "A = B C 'd';\n" +
                 "B = 'b' | ;\n" +
                 "C = 'c';\n" +
-                "layout regex Layout = [\\ \\n]*").toRuntimeGrammar());
+                "layout regex Layout = [\\ \\n]*;").toRuntimeGrammar());
 
         Nonterminal A = Nonterminal.withName("A");
         Nonterminal B = Nonterminal.withName("B");

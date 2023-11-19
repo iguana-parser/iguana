@@ -18,9 +18,12 @@ ETag(s)
 
 layout regex L
   = [\t\n\r\ ]*
+  ;
 
 regex CharData
   = [A-Za-z]*
+  ;
 
 regex Name
   = [a-z]+
+  ;

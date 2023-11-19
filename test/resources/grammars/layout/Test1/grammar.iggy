@@ -11,3 +11,4 @@ B = 'b'
 
 layout regex L
   = ' '?
+  ;

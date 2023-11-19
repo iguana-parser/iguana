@@ -9,6 +9,8 @@ Label
 
 regex Char
   = [a-z]
+  ;
 
 regex Nums
   = [0-9]
+  ;
