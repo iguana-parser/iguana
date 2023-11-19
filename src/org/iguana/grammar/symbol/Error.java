@@ -12,7 +12,8 @@ public class Error extends AbstractAttrs implements Symbol {
 
     private static final Error instance = new Error();
 
-    private Error() { }
+    private Error() {
+    }
 
     public static Error getInstance() {
         return instance;
@@ -61,15 +62,5 @@ public class Error extends AbstractAttrs implements Symbol {
     @Override
     public String toString() {
         return "Error";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj == instance;
-    }
-
-    @Override
-    public int hashCode() {
-        return System.identityHashCode(instance);
     }
 }

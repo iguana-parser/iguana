@@ -11,8 +11,8 @@ TopLevelVar
   ;
 
 Rule
-  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body ";"    %ContextFree
-  | modifier: "layout"? "regex" name:Name "=" body:RegexBody ";"                                  %Regex
+  = modifier: ("start" | "layout" | "lexical")? name:Name params:Parameters? "=" body:Body error ";"    %ContextFree
+  | modifier: "layout"? "regex" name:Name "=" body:RegexBody error ";"                                  %Regex
   ;
 
 Parameters

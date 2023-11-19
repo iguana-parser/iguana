@@ -564,7 +564,9 @@ public class JsonSerializer {
 
     abstract static class ErrorMixIn extends AbstractAttrsMixIn {
         @JsonCreator
-        public abstract Error getInstance();
+        public static Error getInstance() {
+            return Error.getInstance();
+        }
     }
 
     @JsonDeserialize(builder = org.iguana.regex.Seq.Builder.class)
@@ -593,7 +595,9 @@ public class JsonSerializer {
 
     abstract static class EpsilonMixIn extends AbstractRegularExpressionMixIn {
         @JsonCreator
-        public abstract Epsilon getInstance();
+        public static Epsilon getInstance() {
+            return Epsilon.getInstance();
+        }
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")

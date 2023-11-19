@@ -528,6 +528,9 @@
                       "excepts" : [ ]
                     },
                     {
+                      "kind" : "Error"
+                    },
+                    {
                       "kind" : "Terminal",
                       "name" : "';'",
                       "preConditions" : [ ],
@@ -680,6 +683,9 @@
                       "preConditions" : [ ],
                       "postConditions" : [ ],
                       "excepts" : [ ]
+                    },
+                    {
+                      "kind" : "Error"
                     },
                     {
                       "kind" : "Terminal",
