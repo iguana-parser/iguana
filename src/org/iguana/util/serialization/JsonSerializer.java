@@ -380,7 +380,7 @@ public class JsonSerializer {
             @JsonSubTypes.Type(value = org.iguana.regex.Char.class, name = "Char"),
             @JsonSubTypes.Type(value = org.iguana.regex.CharRange.class, name = "CharRange"),
             @JsonSubTypes.Type(value = org.iguana.regex.Reference.class, name = "Reference"),
-            @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name = "Epsilon"),
+            @JsonSubTypes.Type(value = org.iguana.regex.Epsilon.class, name = "Epsilon")
     })
     abstract static class RegularExpressionMixIn {}
 
