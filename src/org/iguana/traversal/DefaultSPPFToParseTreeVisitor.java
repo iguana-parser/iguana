@@ -210,8 +210,9 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
     }
 
     private T convertStart(NonPackedNode node, Start symbol, int leftExtent, int rightExtent) {
-        List<T> children = new ArrayList<>(
-                ignoreLayout ? 3 : 1); // Layout is inserted before and after the start symbol
+        // Layout is inserted before and after the start symbol
+        int length = ignoreLayout ? 3 : 1;
+        List<T> children = new ArrayList<>(length);
         addChildren(node.accept(this), children);
         reverse(children);
         return parseTreeBuilder.metaSymbolNode(symbol, children, leftExtent, rightExtent);
