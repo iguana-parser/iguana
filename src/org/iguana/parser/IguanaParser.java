@@ -121,8 +121,18 @@ public class IguanaParser extends IguanaRecognizer {
                 PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
                 outer:
                 while (!parseErrors.isEmpty()) {
+                    ParseError<NonPackedNode> error = parseErrors.poll();
+                    GSSNode<NonPackedNode> gssNode = error.getGssNode();
                     List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
-                    GSSNode<NonPackedNode> gssNode = parseErrors.poll().getGssNode();
+                    ErrorTransition errorTransition = runtime.getErrorTransition(error.getGrammarSlot());
+                    if (errorTransition != null) {
+                        runtime.recoverFromError(errorTransition, gssNode, error.getResult(), error.getEnv(), input);
+                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                        if (recoveryResult != null) {
+                            sppf = (NonterminalNode) recoveryResult;
+                            break;
+                        }
+                    }
                     runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
                     for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
                         runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
@@ -134,6 +144,7 @@ public class IguanaParser extends IguanaRecognizer {
                     }
                 }
             }
+            // When error recovery does not work, create a single error node for the whole input.
             if (sppf == null) {
                 this.parseError = runtime.getParseErrors().peek();
                 if (parseOptions.isErrorRecoveryEnabled()) {

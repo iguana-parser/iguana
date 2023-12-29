@@ -54,6 +54,7 @@ public class ConditionsFactory {
                 GSSNode<T> u,
                 int leftExtent,
                 int rightExtent,
+                T result,
                 IEvaluatorContext ctx,
                 IguanaRuntime<T> runtime) {
             return false;
@@ -90,12 +91,14 @@ public class ConditionsFactory {
                         GSSNode<T> gssNode,
                         int lefExtent,
                         int rightExtent,
+                        T result,
                         IEvaluatorContext ctx,
                         IguanaRuntime<T> runtime) {
                     for (int j = 0; j < actions.size(); j++) {
                         SlotAction slotAction = actions.get(j);
                         if (slotAction.execute(input, slot, gssNode, lefExtent, rightExtent, ctx)) {
-                            runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+                            runtime.recordParseError(rightExtent, input, slot, gssNode, result,
+                                                     ctx.getEmptyEnvironment(), slotAction.toString());
                             return true;
                         }
                     }
@@ -119,12 +122,14 @@ public class ConditionsFactory {
                     GSSNode<T> gssNode,
                     int leftExtent,
                     int rightExtent,
+                    T result,
                     IEvaluatorContext ctx,
                     IguanaRuntime<T> runtime) {
                 for (int j = 0; j < actions.size(); j++) {
                     SlotAction slotAction = actions.get(j);
                     if (slotAction.execute(input, slot, gssNode, leftExtent, rightExtent, ctx)) {
-                        runtime.recordParseError(rightExtent, input, slot, gssNode, slotAction.toString());
+                        runtime.recordParseError(rightExtent, input, slot, gssNode, result, ctx.getEnvironment(),
+                                                 slotAction.toString());
                         return true;
                     }
                 }

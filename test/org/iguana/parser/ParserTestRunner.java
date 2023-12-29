@@ -48,7 +48,10 @@ public abstract class ParserTestRunner {
     }
 
     protected void run(ParserTest parserTest) {
-        Grammar grammar = IggyParserUtils.fromIggyGrammar(parserTest.getGrammar());
+        run(parserTest, IggyParserUtils.fromIggyGrammar(parserTest.getGrammar()));
+    }
+
+    protected void run(ParserTest parserTest, Grammar grammar) {
         Input input = Input.fromString(parserTest.getInput());
         IguanaParser parser = new IguanaParser(grammar);
         try {

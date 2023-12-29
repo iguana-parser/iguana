@@ -19,6 +19,7 @@ import org.iguana.datadependent.ast.Expression;
 import org.iguana.datadependent.ast.Statement;
 import org.iguana.datadependent.ast.VariableDeclaration;
 import org.iguana.datadependent.attrs.AbstractAttrs;
+import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.condition.Condition;
 import org.iguana.grammar.condition.ConditionType;
@@ -71,6 +72,7 @@ import org.iguana.regex.Reference;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.Seq;
 import org.iguana.regex.automaton.Automaton;
+import org.iguana.result.Result;
 import org.iguana.utils.input.Input;
 
 import java.io.FileOutputStream;
@@ -1025,19 +1027,27 @@ public class JsonSerializer {
         io.usethesource.capsule.Set.Immutable<String> env;
     }
 
-    abstract static class ParseErrorMixIn {
+    abstract static class ParseErrorMixIn<T extends Result> {
         @JsonIgnore
-        GSSNode<?> gssNode;
+        GSSNode<T> gssNode;
 
         @JsonIgnore
         GrammarSlot slot;
 
+        @JsonIgnore
+        T result;
+
+        @JsonIgnore
+        Environment env;
+
         ParseErrorMixIn(
                 @JsonProperty("slot") GrammarSlot slot,
-                @JsonProperty("gssNode") GSSNode<?> gssNode,
+                @JsonProperty("gssNode") GSSNode<T> gssNode,
                 @JsonProperty("inputIndex") int inputIndex,
                 @JsonProperty("lineNumber") int lineNumber,
                 @JsonProperty("columnNumber") int columnNumber,
+                @JsonProperty("result") T result,
+                @JsonProperty("env") Environment env,
                 @JsonProperty("description") String description) {}
     }
 

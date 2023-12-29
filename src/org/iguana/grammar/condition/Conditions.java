@@ -38,33 +38,26 @@ import org.iguana.utils.input.Input;
 
 public interface Conditions {
 
+    <T extends Result> boolean execute(
+            Input input,
+            BodyGrammarSlot slot,
+            GSSNode<T> u,
+            int leftExtent,
+            int rightExtent,
+            T result,
+            IEvaluatorContext ctx,
+            IguanaRuntime<T> runtime);
+
     default <T extends Result> boolean execute(
             Input input,
             BodyGrammarSlot slot,
             GSSNode<T> u,
             int leftExtent,
             int rightExtent,
+            T result,
             IguanaRuntime<T> runtime) {
-        return execute(input, slot, u, leftExtent, rightExtent, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
-    }
-
-    <T extends Result> boolean execute(
-        Input input,
-        BodyGrammarSlot slot,
-        GSSNode<T> u,
-        int leftExtent,
-        int rightExtent,
-        IEvaluatorContext ctx,
-        IguanaRuntime<T> runtime
-    );
-
-    default <T extends Result> boolean execute(
-            Input input,
-            BodyGrammarSlot slot,
-            GSSNode<T> u,
-            int inputIndex,
-            IguanaRuntime<T> runtime) {
-        return execute(input, slot, u, inputIndex, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+        return execute(input, slot, u, leftExtent, rightExtent, result, GLLEvaluator.getDefaultEvaluatorContext(),
+                       runtime);
     }
 
     default <T extends Result> boolean execute(
@@ -72,9 +65,19 @@ public interface Conditions {
             BodyGrammarSlot slot,
             GSSNode<T> u,
             int inputIndex,
+            T result,
             IEvaluatorContext ctx,
             IguanaRuntime<T> runtime) {
-        return execute(input, slot, u, inputIndex, inputIndex, ctx, runtime);
+        return execute(input, slot, u, inputIndex, inputIndex, result, ctx, runtime);
     }
 
+    default <T extends Result> boolean execute(
+            Input input,
+            BodyGrammarSlot slot,
+            GSSNode<T> u,
+            int inputIndex,
+            T result,
+            IguanaRuntime<T> runtime) {
+        return execute(input, slot, u, inputIndex, result, GLLEvaluator.getDefaultEvaluatorContext(), runtime);
+    }
 }
