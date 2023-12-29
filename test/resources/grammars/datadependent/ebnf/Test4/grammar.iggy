@@ -1,10 +1,15 @@
 start S
   = X
+  ;
 
 X = a:A b:(B {a.r == b.l}? assert(b.l == 1) b:C assert(b.l == 2 || b.l == 4 || b.l == 6))*  // shadowing (b:C)
+  ;
 
 A = 'a'
+  ;
 
 B = 'b'
+  ;
 
 C = 'c'
+  ;

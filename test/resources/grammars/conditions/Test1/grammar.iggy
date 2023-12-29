@@ -1,9 +1,12 @@
 
 start S
   = Label !>> ":"
+  ;
 
 Label
   = Char+ !>> [a-z]
+  ;
 
 regex Char
   = [a-z]
+  ;

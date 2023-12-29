@@ -4518,13 +4518,13 @@
         {
           "kind" : "Nonterminal",
           "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
-          "preConditions" : [
+          "preConditions" : [ ],
+          "postConditions" : [
             {
               "kind" : "PositionalCondition",
               "type" : "END_OF_LINE"
             }
           ],
-          "postConditions" : [ ],
           "nodeType" : "Star"
         }
       ],
@@ -5011,13 +5011,13 @@
       "definition" : {
         "kind" : "Star",
         "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
-        "preConditions" : [
+        "preConditions" : [ ],
+        "postConditions" : [
           {
             "kind" : "PositionalCondition",
             "type" : "END_OF_LINE"
           }
         ],
-        "postConditions" : [ ],
         "s" : {
           "kind" : "Terminal",
           "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",
@@ -5084,13 +5084,13 @@
       "definition" : {
         "kind" : "Star",
         "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)*",
-        "preConditions" : [
+        "preConditions" : [ ],
+        "postConditions" : [
           {
             "kind" : "PositionalCondition",
             "type" : "END_OF_LINE"
           }
         ],
-        "postConditions" : [ ],
         "s" : {
           "kind" : "Terminal",
           "name" : "(\\u0001-\\t | \\u000B-\\u10FFFF)",

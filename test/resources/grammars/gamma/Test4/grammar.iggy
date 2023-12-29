@@ -6,3 +6,4 @@ start S
   | S S
   | 'b'
   |
+  ;

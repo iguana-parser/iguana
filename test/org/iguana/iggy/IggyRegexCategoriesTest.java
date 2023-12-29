@@ -7,13 +7,18 @@ import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
 import org.iguana.regex.Token;
+import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.utils.input.Input;
 import org.iguana.utils.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +29,9 @@ public class IggyRegexCategoriesTest {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
         String inputString = FileUtils.readFile(path);
 
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
+        Map<RegularExpression, String> categories = IggyRegexCategories.getCategories();
+        DFAMatcher matcher = IguanaTokenizer.createMatcher(categories.keySet());
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(categories, matcher);
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
         StringBuilder sb = new StringBuilder();
         while (iguanaTokenizer.hasNextToken()) {
@@ -37,7 +44,9 @@ public class IggyRegexCategoriesTest {
     @Test
     public void testOrderOfRegularExpressions() {
         Grammar grammar = IggyGrammar.getGrammar();
-        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
+        Map<RegularExpression, String> categories = IggyRegexCategories.getCategories();
+        DFAMatcher matcher = IguanaTokenizer.createMatcher(categories.keySet());
+        IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(categories, matcher);
         Input input = Input.fromString(
             "// this is a comment\n" +
             "     " +
@@ -75,12 +84,13 @@ public class IggyRegexCategoriesTest {
 
     @Test
     public void testBadInput() {
-        Map<RegularExpression, String> regularExpressions = new HashMap<>();
+        Map<RegularExpression, String> categories = new HashMap<>();
         RegularExpression id = RegularExpressionExamples.getId();
         RegularExpression floatNumber = RegularExpressionExamples.getFloat();
-        regularExpressions.put(floatNumber, "Float");
-        regularExpressions.put(id, "Identifier");
-        IguanaTokenizer tokenizer = new IguanaTokenizer(regularExpressions);
+        categories.put(floatNumber, "Float");
+        categories.put(id, "Identifier");
+        DFAMatcher matcher = IguanaTokenizer.createMatcher(categories.keySet());
+        IguanaTokenizer tokenizer = new IguanaTokenizer(categories, matcher);
         Input input = Input.fromString("aaa 123 3.7 bbb 3.7");
         tokenizer.prepare(input, 0);
 

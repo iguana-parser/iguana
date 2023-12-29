@@ -1,8 +1,10 @@
 
 start S
   = E
+  ;
 
 E = left   E '*' E
   > left   E '+' E
   >        '-' E
   |        'a'
+  ;

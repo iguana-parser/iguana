@@ -27,12 +27,12 @@
 
 package org.iguana.parser;
 
+import org.iguana.datadependent.env.Environment;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.gss.GSSNode;
 import org.iguana.result.Result;
 
 import java.util.Objects;
-
 
 public class ParseError<T extends Result> {
 
@@ -41,6 +41,8 @@ public class ParseError<T extends Result> {
     private final int lineNumber;
     private final int columnNumber;
     private final GSSNode<T> gssNode;
+    private final T result;
+    private final Environment env;
     private final String description;
 
     public ParseError(
@@ -49,13 +51,17 @@ public class ParseError<T extends Result> {
             int inputIndex,
             int lineNumber,
             int columnNumber,
+            T result,
+            Environment env,
             String description) {
         this.slot = slot;
         this.inputIndex = inputIndex;
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
-        this.description = description;
         this.gssNode = gssNode;
+        this.result = result;
+        this.env = env;
+        this.description = description;
     }
 
     public int getInputIndex() {
@@ -95,6 +101,14 @@ public class ParseError<T extends Result> {
     @Override
     public int hashCode() {
         return Objects.hash(inputIndex, lineNumber, columnNumber);
+    }
+
+    public Environment getEnv() {
+        return env;
+    }
+
+    public T getResult() {
+        return result;
     }
 
     @Override

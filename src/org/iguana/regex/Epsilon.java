@@ -43,21 +43,21 @@ public class Epsilon extends AbstractRegularExpression {
     private static Epsilon instance;
 
     private static final RegexBuilder<Epsilon> builder =
-            new RegexBuilder<Epsilon>() {
-                @Override
-                public Epsilon build() {
-                    return Epsilon.getInstance();
-                }
-            };
+        new RegexBuilder<>() {
+            @Override
+            public Epsilon build() {
+                return Epsilon.getInstance();
+            }
+        };
 
     private Epsilon() {
         super(builder);
     }
 
     public static Epsilon getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new Epsilon();
-
+        }
         return instance;
     }
 

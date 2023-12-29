@@ -2,3 +2,4 @@
 start E
   = right E '^' E
   |      'a'
+  ;

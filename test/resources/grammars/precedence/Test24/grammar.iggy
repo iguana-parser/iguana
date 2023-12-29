@@ -1,6 +1,7 @@
 
 start S
   = E
+  ;
 
 E =         E '.' Id
   > left    E E
@@ -11,9 +12,12 @@ E =         E '.' Id
   > right   E ';' E
   |         '(' E ')'
   |         'a'
+  ;
 
 regex Id
   = 'id'
+  ;
 
 layout regex Whitespaces
   = [\t\n\r\ ]*
+  ;

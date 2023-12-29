@@ -79,7 +79,7 @@ public class TerminalTransition extends AbstractTransition {
             runtime.getEvaluatorContext().declareVariable(
                 String.format(Expression.LeftExtent.format, dest.getLabel()), i);
 
-        if (preConditions.execute(input, origin, u, i, runtime.getEvaluatorContext(), runtime)) {
+        if (preConditions.execute(input, origin, u, i, result, runtime.getEvaluatorContext(), runtime)) {
             terminalSlot.recordFailure(i);
             return;
         }
@@ -87,7 +87,7 @@ public class TerminalTransition extends AbstractTransition {
         T cr = terminalSlot.getResult(input, i, runtime);
 
         if (cr == null) {
-            runtime.recordParseError(i, input, origin, u, "Match failed");
+            runtime.recordParseError(i, input, origin, u, result, env, "Terminal match failed");
             return;
         }
 
@@ -96,7 +96,7 @@ public class TerminalTransition extends AbstractTransition {
         }
 
         if (postConditions.execute(input, origin, u, cr.getLeftExtent(), cr.getRightExtent(),
-            runtime.getEvaluatorContext(), runtime)) {
+            result, runtime.getEvaluatorContext(), runtime)) {
             terminalSlot.recordFailure(cr.getRightExtent());
             return;
         }

@@ -248,8 +248,8 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
         runtime.setEnvironment(env);
 
-        if (returnSlot.getConditions().execute(input, returnSlot, source, inputIndex, runtime.getEvaluatorContext(),
-                runtime)) {
+        if (returnSlot.getConditions().execute(input, returnSlot, source, inputIndex, result,
+                                               runtime.getEvaluatorContext(), runtime)) {
             EnvironmentPool.returnToPool(env);
             return null;
         }

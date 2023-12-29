@@ -37,7 +37,9 @@ import org.iguana.grammar.symbol.Terminal;
 import org.iguana.iggy.gen.IggyParseTree;
 import org.iguana.iggy.gen.IggyParseTree.RegexRule;
 import org.iguana.iggy.gen.IggyParseTreeVisitor;
+import org.iguana.parsetree.ErrorNode;
 import org.iguana.parsetree.ParseTreeNode;
+import org.iguana.parsetree.TerminalNode;
 import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.RegularExpression;
@@ -890,5 +892,15 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
                 return '-';
         }
         return s.charAt(0);
+    }
+
+    @Override
+    public Object visitTerminalNode(TerminalNode node) {
+        return null;
+    }
+
+    @Override
+    public Object visitErrorNode(ErrorNode node) {
+        throw new UnsupportedOperationException();
     }
 }

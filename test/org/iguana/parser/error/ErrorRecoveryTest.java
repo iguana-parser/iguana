@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 public class ErrorRecoveryTest extends ParserTestRunner {
 
     private final String grammar =
-        "program = stmt+\n" +
-        "stmt = expr error ';' | '{' stmt+ error '}' \n" +
-        "expr = expr '*' expr > expr '+' expr | [0-9]+\n" +
-        "layout l = ' '*\n";
+        "program = stmt+;\n" +
+        "stmt = expr error ';' | '{' stmt+ error '}';\n" +
+        "expr = expr '*' expr > expr '+' expr | [0-9]+;\n" +
+        "layout l = ' '*;\n";
 
     private final ParseOptions parseOptions = new ParseOptions.Builder().setErrorRecoveryEnabled(true).build();
 
@@ -193,6 +193,45 @@ public class ErrorRecoveryTest extends ParserTestRunner {
             .setParseOptions(parseOptions)
             .setStartSymbol(Nonterminal.withName("program"))
             .setInput("{1  /   2   ;     3 +         4}")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test8() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setParseOptions(parseOptions)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("1")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test9() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setParseOptions(parseOptions)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{@1;}")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test10() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setParseOptions(parseOptions)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("{   @     1      ;     }")
             .verifyParseTree()
             .build();
 

@@ -1,10 +1,13 @@
 
 start S
   = E
+  ;
 
 E = left  E '+' E
   >       'if' E 'then' E 'else' E
   |       'a'
+  ;
 
 layout regex Whitespaces
   = [\t\n\r\ ]*
+  ;

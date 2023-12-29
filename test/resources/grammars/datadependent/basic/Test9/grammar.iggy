@@ -1,5 +1,6 @@
 start S =
   E(0,0)
+  ;
 
 E(l,r)
   = {5 >= r}? E(5,r) 'z'   // propagate r down
@@ -7,3 +8,4 @@ E(l,r)
   | {3 >= r}? E(3,0) 'w'
   | {2 >= l}? 'y' E(0,0)
   | 'a'
+  ;

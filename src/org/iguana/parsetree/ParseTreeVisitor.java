@@ -16,15 +16,13 @@ public interface ParseTreeVisitor<T> {
 
     T visitNonterminalNode(NonterminalNode node);
 
+    T visitTerminalNode(TerminalNode node);
+
+    T visitErrorNode(ErrorNode node);
+
     default List<T> visitAmbiguityNode(AmbiguityNode node) {
         throw new RuntimeException("Ambiguity");
     }
-
-    default T visitTerminalNode(TerminalNode node) {
-        return null;
-    }
-
-    default T visitErrorNode(ErrorNode node) { return null; }
 
     default List<T> visitStarNode(MetaSymbolNode.StarNode node) {
         return visitStarOrPlusNode(node);
@@ -35,7 +33,7 @@ public interface ParseTreeVisitor<T> {
     }
 
     default Optional<T> visitOptionNode(MetaSymbolNode.OptionNode node) {
-        if (node.children().size() == 0) {
+        if (node.children().isEmpty()) {
             return Optional.empty();
         }
         return Optional.of((T) node.childAt(0).accept(this));

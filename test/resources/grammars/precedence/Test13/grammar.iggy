@@ -1,9 +1,11 @@
 
 start S
   = E
+  ;
 
 E = E !brackets !unaryStar !unaryPlus '[' E ']'    %brackets
   | E '+'                                          %unaryPlus
   | E '*'                                          %unaryStar
   > E '+' E
   | 'a'
+  ;

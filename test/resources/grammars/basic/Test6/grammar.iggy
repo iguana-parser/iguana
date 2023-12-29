@@ -1,7 +1,10 @@
 
 start A
   = B C
+  ;
 
 B = 'b'
+  ;
 
 C = 'c'
+  ;

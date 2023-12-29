@@ -11,6 +11,7 @@ import org.iguana.grammar.slot.ErrorTransition;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.slot.Transition;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.gss.CyclicDummyGSSEdges;
 import org.iguana.gss.CyclicDummyGSSEdgesWithEnv;
@@ -74,8 +75,9 @@ public class IguanaRuntime<T extends Result> {
 
         IEvaluatorContext ctx = getEvaluatorContext();
 
-        if (global)
+        if (global) {
             map.forEach(ctx::declareGlobalVariable);
+        }
 
         Environment env = ctx.getEmptyEnvironment();
 
@@ -88,6 +90,9 @@ public class IguanaRuntime<T extends Result> {
         }
 
         NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
+        if (startSlot == null) {
+            throw new IllegalArgumentException(start + " is not a valid nonterminal name in this grammar");
+        }
         List<String> parameters = startSlot.getParameters();
         // TODO: Make parameters an empty list by default
         if (parameters != null && !parameters.isEmpty()) {
@@ -152,9 +157,11 @@ public class IguanaRuntime<T extends Result> {
             Input input,
             GrammarSlot slot,
             GSSNode<T> gssNode,
+            T result,
+            Environment env,
             String description) {
         ParseError<T> error = new ParseError<>(slot, gssNode, inputIndex, input.getLineNumber(inputIndex),
-                input.getColumnNumber(inputIndex), description);
+                input.getColumnNumber(inputIndex), result, env, description);
         parseErrors.add(error);
         logger.error(error);
     }
@@ -165,7 +172,16 @@ public class IguanaRuntime<T extends Result> {
     public void recoverFromError(GSSEdge<T> edge, ErrorTransition errorTransition, Input input) {
         T result = edge instanceof DummyGSSEdge<?> ? resultOps.dummy() : edge.getResult();
         Environment env = edge.getEnv();
-        errorTransition.handleError(input, edge.getDestination(), result, env, this);
+        recoverFromError(errorTransition, edge.getDestination(), result, env, input);
+    }
+
+    public void recoverFromError(
+            ErrorTransition errorTransition,
+            GSSNode<T> gssNode,
+            T result,
+            Environment env,
+            Input input) {
+        errorTransition.handleError(input, gssNode, result, env, this);
     }
 
     // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
@@ -178,7 +194,7 @@ public class IguanaRuntime<T extends Result> {
         visited.add(gssNode);
         if (gssNode == null) return;
         for (GSSEdge<T> edge : gssNode.getGSSEdges()) {
-            ErrorTransition errorTransition = getErrorTransition(edge);
+            ErrorTransition errorTransition = getErrorTransition(edge.getReturnSlot());
             if (errorTransition != null) {
                 result.add(Tuple.of(edge, errorTransition));
             }
@@ -186,20 +202,13 @@ public class IguanaRuntime<T extends Result> {
         }
     }
 
-    private ErrorTransition getErrorTransition(GSSEdge<T> edge) {
-        if (edge.getReturnSlot() == null) return null;
-        // This covers the cases with no layout insertion: X alpha . Error
-        if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {
-            return (ErrorTransition) edge.getReturnSlot().getOutTransition();
-        }
-        // This covers cases where the layout is inserted.
-        // X = alpha . Layout Error
-        if (edge.getReturnSlot().getOutTransition() != null
-            && edge.getReturnSlot().getOutTransition().destination() != null
-            && edge.getReturnSlot().getOutTransition().destination().getOutTransition() instanceof ErrorTransition) {
-            return (ErrorTransition) edge.getReturnSlot().getOutTransition().destination().getOutTransition();
-        }
-        return null;
+    public ErrorTransition getErrorTransition(GrammarSlot slot) {
+        if (!(slot instanceof BodyGrammarSlot)) return null;
+        BodyGrammarSlot bodyGrammarSlot = (BodyGrammarSlot) slot;
+        Transition outTransition = bodyGrammarSlot.getOutTransition();
+        if (outTransition == null) return null;
+        if (outTransition instanceof ErrorTransition) return (ErrorTransition) outTransition;
+        return getErrorTransition(outTransition.destination());
     }
 
     public boolean hasDescriptor() {
@@ -313,7 +322,6 @@ public class IguanaRuntime<T extends Result> {
                     .setGSSEdgesCount(logger.getCountGSSEdges())
                     .build();
         }
-
     }
 
     public Configuration getConfiguration() {

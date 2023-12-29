@@ -18,9 +18,9 @@ public class FirstFollowTest {
     @Test
     public void test() {
         RuntimeGrammar grammar = GrammarTransformer.transform(fromIggyGrammar(
-            "start A = B C | 'a'\n" +
-            "B = A | 'b'\n" +
-            "C = 'c'").toRuntimeGrammar());
+            "start A = B C | 'a';\n" +
+            "B = A | 'b';\n" +
+            "C = 'c';").toRuntimeGrammar());
 
         Nonterminal A = Nonterminal.withName("A");
         Nonterminal B = Nonterminal.withName("B");
@@ -40,10 +40,10 @@ public class FirstFollowTest {
     @Test
     public void testWithLayout() {
         RuntimeGrammar grammar = GrammarTransformer.transform(fromIggyGrammar(
-                "A = B C 'd'\n" +
-                "B = 'b' | \n" +
-                "C = 'c'\n" +
-                "layout regex Layout = [\\ \\n]*").toRuntimeGrammar());
+                "A = B C 'd';\n" +
+                "B = 'b' | ;\n" +
+                "C = 'c';\n" +
+                "layout regex Layout = [\\ \\n]*;").toRuntimeGrammar());
 
         Nonterminal A = Nonterminal.withName("A");
         Nonterminal B = Nonterminal.withName("B");

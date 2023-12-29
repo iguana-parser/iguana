@@ -146,9 +146,11 @@ public class GrammarTest {
 
             String resultPath = testPath + "/result" + j + ".json";
 
+            boolean hasParseError = false;
             try {
                 parser.parse(input, start);
             } catch (ParseErrorException e) {
+                hasParseError = true;
                 Assertions.assertNotNull(parser.getParseError());
                 if (REGENERATE_FILES || !Files.exists(Paths.get(resultPath))) {
                     record(parser.getParseError(), resultPath);
@@ -165,6 +167,8 @@ public class GrammarTest {
                 ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
                 assertEquals(expectedStatistics, parser.getStatistics());
             }
+
+            if (hasParseError) return;
 
             try {
                 actualParseTree = parser.getParseTree();

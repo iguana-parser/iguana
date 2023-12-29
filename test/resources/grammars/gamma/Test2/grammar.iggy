@@ -3,9 +3,12 @@ start S
   = A S 'd'
   | B S
   |
+  ;
 
 A = 'a'
   | 'c'
+  ;
 
 B = 'a'
   | 'b'
+  ;

@@ -6,6 +6,7 @@ import org.iguana.regex.automaton.State;
 import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.utils.input.Input;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class IguanaTokenizer {
@@ -17,13 +18,16 @@ public class IguanaTokenizer {
     private int inputIndex;
     private Token nextToken;
 
-    public IguanaTokenizer(Map<RegularExpression, String> regularExpressionCategories) {
+    public IguanaTokenizer(Map<RegularExpression, String> regularExpressionCategories, DFAMatcher matcher) {
         this.regularExpressionCategories = regularExpressionCategories;
+        this.matcher = matcher;
+    }
 
+    public static DFAMatcher createMatcher(Collection<RegularExpression> regularExpressions) {
         int order = 0;
         State startState = new State();
         State finalState = new State();
-        for (RegularExpression regularExpression : regularExpressionCategories.keySet()) {
+        for (RegularExpression regularExpression : regularExpressions) {
             Automaton automaton = regularExpression.getAutomaton();
             for (State state : automaton.getFinalStates()) {
                 state.addRegularExpression(regularExpression, order++);
@@ -34,7 +38,7 @@ public class IguanaTokenizer {
             }
         }
         Automaton automaton = new AutomatonBuilder(startState).build();
-        this.matcher = new DFAMatcher(automaton);
+        return new DFAMatcher(automaton);
     }
 
     public void prepare(Input input, int inputIndex) {

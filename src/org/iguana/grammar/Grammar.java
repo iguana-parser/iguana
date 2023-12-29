@@ -279,7 +279,10 @@ public class Grammar {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Rule rule : rules) {
-            sb.append(rule).append("\n");
+            sb.append(rule)
+              .append("  ;")
+              .append("\n");
+            sb.append("\n");
         }
         sb.delete(sb.length() - 1, sb.length());
         return sb.toString();

@@ -29,7 +29,11 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
+import org.iguana.grammar.slot.BodyGrammarSlot;
+import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.ErrorTransition;
+import org.iguana.grammar.slot.GrammarSlotUtil;
+import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
@@ -41,6 +45,7 @@ import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
+import org.iguana.sppf.ErrorNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
@@ -116,8 +121,18 @@ public class IguanaParser extends IguanaRecognizer {
                 PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
                 outer:
                 while (!parseErrors.isEmpty()) {
+                    ParseError<NonPackedNode> error = parseErrors.poll();
+                    GSSNode<NonPackedNode> gssNode = error.getGssNode();
                     List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
-                    GSSNode<NonPackedNode> gssNode = parseErrors.poll().getGssNode();
+                    ErrorTransition errorTransition = runtime.getErrorTransition(error.getGrammarSlot());
+                    if (errorTransition != null) {
+                        runtime.recoverFromError(errorTransition, gssNode, error.getResult(), error.getEnv(), input);
+                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                        if (recoveryResult != null) {
+                            sppf = (NonterminalNode) recoveryResult;
+                            break;
+                        }
+                    }
                     runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
                     for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
                         runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
@@ -129,12 +144,26 @@ public class IguanaParser extends IguanaRecognizer {
                     }
                 }
             }
+            // When error recovery does not work, create a single error node for the whole input.
             if (sppf == null) {
                 this.parseError = runtime.getParseErrors().peek();
-                throw new ParseErrorException(parseError);
+                if (parseOptions.isErrorRecoveryEnabled()) {
+                    NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
+                    if (!startSlot.getFirstSlots().isEmpty()) {
+                        BodyGrammarSlot firstSlot = startSlot.getFirstSlots().get(0);
+                        EndGrammarSlot endSlot = GrammarSlotUtil.getEndSlot(firstSlot);
+                        int inputLength = input.length() - 1;
+                        ErrorNode errorNode = new ErrorNode(endSlot, 0, inputLength);
+                        sppf = new NonterminalNode(endSlot, errorNode, 0, inputLength);
+                    }
+                } else {
+                    throw new ParseErrorException(parseError);
+                }
+            } else {
+                System.out.println("Parsing finished with error recovery " + (endTime - startTime) / 1000_000 + "ms.");
             }
         } else {
-            System.out.println("Parsing finished in " + (endTime - startTime) / 1000_000 + "ms.");
+            System.out.println("Parsing finished successfully in " + (endTime - startTime) / 1000_000 + "ms.");
         }
     }
 

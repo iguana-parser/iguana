@@ -1,5 +1,7 @@
 
 start A
   = B 'a' 'c'
+  ;
 
 B = 'b'
+  ;

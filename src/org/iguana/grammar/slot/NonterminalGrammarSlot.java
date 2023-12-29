@@ -173,9 +173,9 @@ public class NonterminalGrammarSlot implements GrammarSlot {
         }
 
         if (gssNode == null) {
-
             List<BodyGrammarSlot> firstSlots = getFirstSlots(input.charAt(i));
             if (firstSlots == null || firstSlots.isEmpty()) {
+                runtime.recordParseError(i, input, returnSlot, u, result, env, "Prediction failed");
                 return;
             }
 
@@ -205,8 +205,8 @@ public class NonterminalGrammarSlot implements GrammarSlot {
                             String.format(Expression.LeftExtent.format, slot.getLabel()), i);
 
                 int inputIndex = result.isDummy() ? gssNode.getInputIndex() : result.getRightExtent();
-                if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, runtime.getEvaluatorContext(),
-                                                  runtime)) {
+                if (!slot.getConditions().execute(input, returnSlot, gssNode, inputIndex, result,
+                                                  runtime.getEvaluatorContext(), runtime)) {
                     runtime.scheduleDescriptor(slot, gssNode, runtime.getResultOps().dummy(), runtime.getEnvironment());
                 }
 
@@ -221,5 +221,4 @@ public class NonterminalGrammarSlot implements GrammarSlot {
             gssNode.addGSSEdge(input, returnSlot, i, u, result, env, runtime);
         }
     }
-
 }
