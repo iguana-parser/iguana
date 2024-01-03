@@ -37,6 +37,7 @@ import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Return;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.symbol.Terminal;
+import org.iguana.regex.Char;
 import org.iguana.regex.CharRange;
 import org.iguana.regex.EOF;
 import org.iguana.regex.Epsilon;
@@ -110,8 +111,9 @@ public class FirstFollowSets {
 
     public Set<CharRange> getFirstSet(Nonterminal nonterminal) {
         Set<CharRange> firstSet = new HashSet<>(firstSets.get(nonterminal));
-        if (isNullable(nonterminal))
+        if (isNullable(nonterminal)) {
             firstSet.addAll(Epsilon.getInstance().getFirstSet());
+        }
         return firstSet;
     }
 
@@ -384,7 +386,8 @@ public class FirstFollowSets {
 
         @Override
         public Set<CharRange> visit(Error error) {
-            return Collections.emptySet();
+            return Collections.singleton(CharRange.in(Char.MIN_VALUE, Char.MAX_VALUE));
+//            return Collections.emptySet();
         }
 
         @Override

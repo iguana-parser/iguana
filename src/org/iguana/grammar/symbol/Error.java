@@ -21,7 +21,7 @@ public class Error extends AbstractAttrs implements Symbol {
 
     @Override
     public String getName() {
-        return "Error";
+        return "error";
     }
 
     @Override
@@ -61,6 +61,6 @@ public class Error extends AbstractAttrs implements Symbol {
 
     @Override
     public String toString() {
-        return "Error";
+        return "error";
     }
 }

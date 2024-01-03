@@ -34,6 +34,7 @@ import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
 import org.iguana.result.Result;
+import org.iguana.sppf.ErrorNode;
 import org.iguana.utils.input.Input;
 
 import java.util.Set;
@@ -106,5 +107,4 @@ public class EndGrammarSlot extends BodyGrammarSlot {
                     "Expected " + followTest + " but was " + (char) nextChar);
         }
     }
-
 }

@@ -57,7 +57,7 @@ import org.iguana.utils.input.Input;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Queue;
 
 import static org.iguana.parser.options.ParseOptions.defaultOptions;
 
@@ -116,55 +116,60 @@ public class IguanaParser extends IguanaRecognizer {
             parseOptions.isGlobal());
         long endTime = System.nanoTime();
         this.statistics = runtime.getStatistics();
-        if (sppf == null) {
-            if (parseOptions.isErrorRecoveryEnabled()) {
-                PriorityQueue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
-                outer:
-                while (!parseErrors.isEmpty()) {
-                    ParseError<NonPackedNode> error = parseErrors.poll();
-                    GSSNode<NonPackedNode> gssNode = error.getGssNode();
-                    List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
-                    ErrorTransition errorTransition = runtime.getErrorTransition(error.getGrammarSlot());
-                    if (errorTransition != null) {
-                        runtime.recoverFromError(errorTransition, gssNode, error.getResult(), error.getEnv(), input);
-                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
-                        if (recoveryResult != null) {
-                            sppf = (NonterminalNode) recoveryResult;
-                            break;
-                        }
-                    }
-                    runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
-                    for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
-                        runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
-                        NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
-                        if (recoveryResult != null) {
-                            sppf = (NonterminalNode) recoveryResult;
-                            break outer;
-                        }
-                    }
-                }
+
+        long parsingTime = (endTime - startTime) / 1000_000;
+        if (sppf != null) {
+            System.out.printf("Parsing finished %s in %d ms.", "successfully", parsingTime);
+            return;
+        }
+        if (parseOptions.isErrorRecoveryEnabled()) {
+            sppf = recoverFromErrors(runtime, start);
+            if (sppf != null) {
+                System.out.printf("Parsing finished %s in %d ms.", "with error recovery", parsingTime);
+                return;
             }
-            // When error recovery does not work, create a single error node for the whole input.
-            if (sppf == null) {
-                this.parseError = runtime.getParseErrors().peek();
-                if (parseOptions.isErrorRecoveryEnabled()) {
-                    NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
-                    if (!startSlot.getFirstSlots().isEmpty()) {
-                        BodyGrammarSlot firstSlot = startSlot.getFirstSlots().get(0);
-                        EndGrammarSlot endSlot = GrammarSlotUtil.getEndSlot(firstSlot);
-                        int inputLength = input.length() - 1;
-                        ErrorNode errorNode = new ErrorNode(endSlot, 0, inputLength);
-                        sppf = new NonterminalNode(endSlot, errorNode, 0, inputLength);
-                    }
-                } else {
-                    throw new ParseErrorException(parseError);
+        }
+
+        System.out.printf("Parsing finished %s in %d ms.", "with parse error", parsingTime);
+        throw new ParseErrorException(parseError);
+    }
+
+    private NonterminalNode recoverFromErrors(IguanaRuntime<NonPackedNode> runtime,  Nonterminal start) {
+        Queue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
+
+        while (!parseErrors.isEmpty()) {
+            ParseError<NonPackedNode> error = parseErrors.poll();
+            GSSNode<NonPackedNode> gssNode = error.getGssNode();
+            List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
+            ErrorTransition errorTransition = runtime.getErrorTransition(error.getGrammarSlot());
+            if (errorTransition != null) {
+                runtime.recoverFromError(errorTransition, gssNode, error.getResult(), error.getEnv(), input);
+                NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                if (recoveryResult != null) {
+                    return (NonterminalNode) recoveryResult;
                 }
             } else {
-                System.out.println("Parsing finished with error recovery " + (endTime - startTime) / 1000_000 + "ms.");
+                runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
+                for (Tuple<GSSEdge<NonPackedNode>, ErrorTransition> t : errorSlots) {
+                    runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
+                    NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
+                    if (recoveryResult != null) {
+                        return (NonterminalNode) recoveryResult;
+                    }
+                }
             }
-        } else {
-            System.out.println("Parsing finished successfully in " + (endTime - startTime) / 1000_000 + "ms.");
         }
+
+        // When error recovery fails, create a single error node for the whole input.
+        NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
+        if (!startSlot.getFirstSlots().isEmpty()) {
+            BodyGrammarSlot firstSlot = startSlot.getFirstSlots().get(0);
+            EndGrammarSlot endSlot = GrammarSlotUtil.getEndSlot(firstSlot);
+            int inputLength = input.length() - 1;
+            ErrorNode errorNode = new ErrorNode(endSlot, 0, inputLength);
+            sppf = new NonterminalNode(endSlot, errorNode, 0, inputLength);
+        }
+        return null;
     }
 
     @Override

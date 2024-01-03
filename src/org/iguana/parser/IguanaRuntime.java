@@ -38,6 +38,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -55,9 +56,7 @@ public class IguanaRuntime<T extends Result> {
 
     private final ResultOps<T> resultOps;
 
-    // A priority queue (max heap) containing the parse errors thrown the parsing, sorted by the input index.
-    // The top of the priority queue is the parse error thrown at the last input position.
-    private final PriorityQueue<ParseError<T>> parseErrors;
+    private final Queue<ParseError<T>> parseErrors;
 
     private StartGSSNode<T> startGSSNode;
 
@@ -67,7 +66,10 @@ public class IguanaRuntime<T extends Result> {
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
-        this.parseErrors = new PriorityQueue<>((error1, error2) -> error2.getInputIndex() - error1.getInputIndex());
+        // A priority queue (max heap) containing the parse errors thrown the parsing, sorted by the input index.
+        // The top of the priority queue is the parse error thrown at the last input position.
+//        this.parseErrors = new PriorityQueue<>((error1, error2) -> error2.getInputIndex() - error1.getInputIndex());
+        this.parseErrors = new ArrayDeque<>();
     }
 
     public T run(Input input, Nonterminal start, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
@@ -160,6 +162,12 @@ public class IguanaRuntime<T extends Result> {
             T result,
             Environment env,
             String description) {
+        if (slot instanceof BodyGrammarSlot) {
+            BodyGrammarSlot bodyGrammarSlot = (BodyGrammarSlot) slot;
+            if (bodyGrammarSlot.getInTransition() instanceof ErrorTransition) {
+                slot = bodyGrammarSlot.getInTransition().origin();
+            }
+        }
         ParseError<T> error = new ParseError<>(slot, gssNode, inputIndex, input.getLineNumber(inputIndex),
                 input.getColumnNumber(inputIndex), result, env, description);
         parseErrors.add(error);
@@ -252,9 +260,12 @@ public class IguanaRuntime<T extends Result> {
     public GSSEdge<T> createGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode<T> gssNode, Environment env) {
         if (result.isDummy()) {
             if (env.isEmpty()) {
-                return gssNode != null ? new DummyGSSEdge<>(returnSlot, gssNode) : new CyclicDummyGSSEdges<>();
+                return gssNode != null
+                        ? new DummyGSSEdge<>(returnSlot, gssNode)
+                        : new CyclicDummyGSSEdges<>();
             } else {
-                return gssNode != null ? new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env)
+                return gssNode != null
+                        ? new DummyGSSEdgeWithEnv<>(returnSlot, gssNode, env)
                         : new CyclicDummyGSSEdgesWithEnv<>(env);
             }
         }
@@ -299,8 +310,12 @@ public class IguanaRuntime<T extends Result> {
         return values;
     }
 
-    public PriorityQueue<ParseError<T>> getParseErrors() {
-        return new PriorityQueue<>(parseErrors);
+    public Queue<ParseError<T>> getParseErrors() {
+        return parseErrors;
+    }
+
+    public void clearParseErrors() {
+        parseErrors.clear();
     }
 
     public RecognizerStatistics getStatistics() {

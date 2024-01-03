@@ -40,6 +40,16 @@ import java.util.Set;
  */
 public class Char extends AbstractRegularExpression {
 
+    /**
+     * Corresponds to min unicode code point U+0000.
+     */
+    public static final int MIN_VALUE = 0;
+
+    /**
+     * Corresponds to max unicode code point U+10FFFF.
+     */
+    public static final int MAX_VALUE = 1_114_112;
+
     private final int val;
 
     private Char(Builder builder) {

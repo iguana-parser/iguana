@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 public class ErrorRecoveryTest extends ParserTestRunner {
 
     private final String grammar =
-        "program = stmt+;\n" +
+        "program = stmt+ error;\n" +
         "stmt = expr error ';' | '{' stmt+ error '}';\n" +
-        "expr = expr '*' expr > expr '+' expr | [0-9]+;\n" +
+        "expr = expr '*' expr > expr '+' expr | [0-9];\n" +
         "layout l = ' '*;\n";
 
     private final ParseOptions parseOptions = new ParseOptions.Builder().setErrorRecoveryEnabled(true).build();
@@ -226,12 +226,25 @@ public class ErrorRecoveryTest extends ParserTestRunner {
     }
 
     @Test
-    public void test10() {
+    public void test9WithLayout() {
         ParserTest test = ParserTest.newTest()
             .setGrammar(grammar)
             .setParseOptions(parseOptions)
             .setStartSymbol(Nonterminal.withName("program"))
             .setInput("{   @     1      ;     }")
+            .verifyParseTree()
+            .build();
+
+        run(test);
+    }
+
+    @Test
+    public void test10() {
+        ParserTest test = ParserTest.newTest()
+            .setGrammar(grammar)
+            .setParseOptions(parseOptions)
+            .setStartSymbol(Nonterminal.withName("program"))
+            .setInput("1/3;@")
             .verifyParseTree()
             .build();
 
