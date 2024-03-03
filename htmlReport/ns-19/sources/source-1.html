@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IggyGrammar</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.iggy.gen</a>
+</div>
+
+<h1>Coverage Summary for Class: IggyGrammar (org.iguana.iggy.gen)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IggyGrammar</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;// This file has been generated, do not directly edit this file!
+&nbsp;
+&nbsp;package org.iguana.iggy.gen;
+&nbsp;
+&nbsp;import org.iguana.grammar.Grammar;
+&nbsp;import org.iguana.util.serialization.JsonSerializer;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;
+<b class="nc">&nbsp;public class IggyGrammar {</b>
+&nbsp;
+&nbsp;    private static final String grammarName = &quot;iggy&quot;;
+&nbsp;
+&nbsp;    private static Grammar grammar;
+&nbsp;
+&nbsp;    public static Grammar getGrammar() {
+<b class="fc">&nbsp;        if (grammar == null) {</b>
+<b class="fc">&nbsp;            grammar = loadGrammar();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return grammar;</b>
+&nbsp;     }
+&nbsp;
+&nbsp;    private static Grammar loadGrammar() {
+<b class="fc">&nbsp;        String grammarJsonFile = grammarName + &quot;.json&quot;;</b>
+<b class="fc">&nbsp;        try (InputStream in = IggyParser.class.getResourceAsStream(&quot;/&quot; + grammarJsonFile)) {</b>
+<b class="fc">&nbsp;            if (in == null) throw new RuntimeException(&quot;Grammar json file &quot; + grammarJsonFile + &quot; is not found.&quot;);</b>
+<b class="fc">&nbsp;            return JsonSerializer.deserialize(in, Grammar.class);</b>
+<b class="fc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

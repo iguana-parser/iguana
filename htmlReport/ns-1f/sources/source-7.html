@@ -1,0 +1,234 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Transition</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex.automaton</a>
+</div>
+
+<h1>Coverage Summary for Class: Transition (org.iguana.regex.automaton)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Transition</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (10/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (20/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.regex.automaton;
+&nbsp;
+&nbsp;import org.iguana.regex.CharRange;
+&nbsp;import org.iguana.regex.EOF;
+&nbsp;import org.iguana.utils.collections.hash.MurmurHash3;
+&nbsp;
+&nbsp;public class Transition implements Comparable&lt;Transition&gt; {
+&nbsp;
+&nbsp;    private final CharRange range;
+&nbsp;
+&nbsp;    private final State destination;
+&nbsp;
+&nbsp;    public Transition(int start, int end, State destination) {
+<b class="fc">&nbsp;        this(CharRange.in(start, end), destination);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Transition(int c, State destination) {
+<b class="fc">&nbsp;        this(c, c, destination);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public Transition(CharRange range, State destination) {</b>
+<b class="fc">&nbsp;        if (range.getEnd() &lt; range.getStart())</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;start cannot be less than end.&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (destination == null)</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Destination cannot be null.&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.range = range;</b>
+<b class="fc">&nbsp;        this.destination = destination;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Transition EOFTransition(State destination) {
+<b class="nc">&nbsp;        return new Transition(EOF.VALUE, destination);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getStart() {
+<b class="fc">&nbsp;        return range.getStart();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getEnd() {
+<b class="fc">&nbsp;        return range.getEnd();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public CharRange getRange() {
+<b class="fc">&nbsp;        return range;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State getDestination() {
+<b class="fc">&nbsp;        return destination;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isEpsilonTransition() {
+<b class="fc">&nbsp;        return range.getStart() == -1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isLoop(State source) {
+<b class="nc">&nbsp;        return source == destination;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean canMove(int c) {
+<b class="nc">&nbsp;        return range.contains(c);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean overlaps(Transition t) {
+<b class="nc">&nbsp;        return range.overlaps(t.range);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+&nbsp;
+<b class="fc">&nbsp;        if (this == obj)</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!(obj instanceof Transition))</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        Transition other = (Transition) obj;</b>
+&nbsp;
+<b class="fc">&nbsp;        return isEpsilonTransition() ? other.isEpsilonTransition() &amp;&amp; this == other : range.equals(other.range);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+&nbsp;
+<b class="fc">&nbsp;        if (isEpsilonTransition())</b>
+<b class="fc">&nbsp;            return super.hashCode();</b>
+&nbsp;
+<b class="fc">&nbsp;        return MurmurHash3.f2().apply(range.getStart(), range.getEnd());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        if (isEpsilonTransition()) return &quot;-1&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        return range.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compareTo(Transition t) {
+<b class="nc">&nbsp;        return range.compareTo(t.range);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,321 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > MurmurHash2</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections.hash</a>
+</div>
+
+<h1>Coverage Summary for Class: MurmurHash2 (org.iguana.utils.collections.hash)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MurmurHash2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/91)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.utils.collections.hash;
+&nbsp;
+&nbsp;import org.iguana.utils.function.IntFunction5;
+&nbsp;import org.iguana.utils.function.IntFunctionAny;
+&nbsp;
+<b class="nc">&nbsp;public class MurmurHash2 {</b>
+&nbsp;
+&nbsp;    private static final int m = 0x5bd1e995;
+&nbsp;    private static final int r = 24;
+&nbsp;
+&nbsp;    public static IntFunction5 hash5() {
+<b class="nc">&nbsp;        return hash5(19);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static IntFunction5 hash5(int seed) {
+<b class="nc">&nbsp;        return (a, b, c, d, e) -&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = seed ^ 4;</b>
+&nbsp;
+&nbsp;            // a
+<b class="nc">&nbsp;            int k = a;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // b
+<b class="nc">&nbsp;            k = b;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // c
+<b class="nc">&nbsp;            k = c;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // d
+<b class="nc">&nbsp;            k = d;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // last mix
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 13;</b>
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 15;</b>
+&nbsp;
+<b class="nc">&nbsp;            return h;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction4 hash4() {
+<b class="nc">&nbsp;        return hash4(19);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction4 hash4(int seed) {
+<b class="nc">&nbsp;        return (a, b, c, d) -&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = seed ^ 4;</b>
+&nbsp;
+&nbsp;            // a
+<b class="nc">&nbsp;            int k = a;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // b
+<b class="nc">&nbsp;            k = b;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // c
+<b class="nc">&nbsp;            k = c;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // d
+<b class="nc">&nbsp;            k = d;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // last mix
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 13;</b>
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 15;</b>
+&nbsp;
+<b class="nc">&nbsp;            return h;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction3 hash3() {
+<b class="nc">&nbsp;        return hash3(19);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction3 hash3(int seed) {
+<b class="nc">&nbsp;        return (a, b, c) -&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = seed ^ 4;</b>
+&nbsp;
+&nbsp;            // a
+<b class="nc">&nbsp;            int k = a;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // b
+<b class="nc">&nbsp;            k = b;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // c
+<b class="nc">&nbsp;            k = c;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // last mix
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 13;</b>
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 15;</b>
+&nbsp;
+<b class="nc">&nbsp;            return h;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction2 hash2() {
+<b class="nc">&nbsp;        return hash2(19);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunction2 hash2(int seed) {
+<b class="nc">&nbsp;        return (a, b) -&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = seed ^ 4;</b>
+&nbsp;
+&nbsp;            // a
+<b class="nc">&nbsp;            int k = a;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // b
+<b class="nc">&nbsp;            k = b;</b>
+<b class="nc">&nbsp;            k = mixK(k);</b>
+<b class="nc">&nbsp;            h = mixH(h, k);</b>
+&nbsp;
+&nbsp;            // last mix
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 13;</b>
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 15;</b>
+&nbsp;
+<b class="nc">&nbsp;            return h;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    public static org.iguana.utils.function.IntFunctionAny hashN() {
+<b class="nc">&nbsp;        return hashN(19);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static IntFunctionAny hashN(int seed) {
+<b class="nc">&nbsp;        return (Integer... elements) -&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = seed ^ 4;</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int element : elements) {</b>
+<b class="nc">&nbsp;                int k = element;</b>
+<b class="nc">&nbsp;                k = mixK(k);</b>
+<b class="nc">&nbsp;                h = mixH(h, k);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            // last mix
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 13;</b>
+<b class="nc">&nbsp;            h *= m;</b>
+<b class="nc">&nbsp;            h ^= h &gt;&gt;&gt; 15;</b>
+&nbsp;
+<b class="nc">&nbsp;            return h;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    private static int mixK(int k) {
+<b class="nc">&nbsp;        k *= m;</b>
+<b class="nc">&nbsp;        k ^= k &gt;&gt;&gt; r;</b>
+<b class="nc">&nbsp;        k *= m;</b>
+<b class="nc">&nbsp;        return k;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static int mixH(int h, int k) {
+<b class="nc">&nbsp;        h *= m;</b>
+<b class="nc">&nbsp;        h ^= k;</b>
+<b class="nc">&nbsp;        return h;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

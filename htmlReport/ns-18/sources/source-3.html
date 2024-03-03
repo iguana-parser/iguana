@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IggyRegexCategories</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.iggy</a>
+</div>
+
+<h1>Coverage Summary for Class: IggyRegexCategories (org.iguana.iggy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IggyRegexCategories</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.5%
+  </span>
+  <span class="absValue">
+    (19/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.iggy;
+&nbsp;
+&nbsp;import org.iguana.grammar.runtime.RuntimeGrammar;
+&nbsp;import org.iguana.iggy.gen.IggyGrammar;
+&nbsp;import org.iguana.regex.Alt;
+&nbsp;import org.iguana.regex.RegularExpression;
+&nbsp;
+&nbsp;import java.util.LinkedHashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+<b class="nc">&nbsp;public class IggyRegexCategories {</b>
+&nbsp;
+<b class="fc">&nbsp;    private static final Map&lt;RegularExpression, String&gt; regularExpressionCategories = new LinkedHashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;    static {
+<b class="fc">&nbsp;        RuntimeGrammar runtimeGrammar = IggyGrammar.getGrammar().toRuntimeGrammar();</b>
+&nbsp;
+&nbsp;        // TODO: this is a hack, find a better solution to mark keywords
+<b class="fc">&nbsp;        RegularExpression keywords = runtimeGrammar.getRegularExpressionDefinitions().get(&quot;Keywords&quot;);</b>
+<b class="fc">&nbsp;        if (keywords != null) {</b>
+<b class="fc">&nbsp;            Alt&lt;?&gt; alt = (Alt&lt;?&gt;) keywords;</b>
+<b class="fc">&nbsp;            for (RegularExpression regex : alt.getSymbols()) {</b>
+<b class="fc">&nbsp;                regularExpressionCategories.put(regex, &quot;Keyword&quot;);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (Map.Entry&lt;String, RegularExpression&gt; entry : runtimeGrammar.getLiterals().entrySet()) {</b>
+<b class="fc">&nbsp;            if (!regularExpressionCategories.containsKey(entry.getValue())) {</b>
+<b class="fc">&nbsp;                regularExpressionCategories.put(entry.getValue(), entry.getKey());</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Map.Entry&lt;String, RegularExpression&gt; entry : runtimeGrammar.getRegularExpressionDefinitions().entrySet()) {</b>
+<b class="fc">&nbsp;            RegularExpression regularExpression = entry.getValue();</b>
+<b class="fc">&nbsp;            String category = entry.getKey();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!category.equals(&quot;Keywords&quot;)) {</b>
+<b class="fc">&nbsp;                regularExpressionCategories.put(regularExpression, category);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Map&lt;RegularExpression, String&gt; getCategories() {
+<b class="fc">&nbsp;        return regularExpressionCategories;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String getCategory(RegularExpression regex) {
+<b class="nc">&nbsp;        return regularExpressionCategories.get(regex);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

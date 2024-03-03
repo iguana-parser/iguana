@@ -1,0 +1,499 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IguanaRuntime</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.parser</a>
+</div>
+
+<h1>Coverage Summary for Class: IguanaRuntime (org.iguana.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IguanaRuntime</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.2%
+  </span>
+  <span class="absValue">
+    (25/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.9%
+  </span>
+  <span class="absValue">
+    (133/185)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.parser;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.datadependent.ast.Statement;
+&nbsp;import org.iguana.datadependent.env.Environment;
+&nbsp;import org.iguana.datadependent.env.GLLEvaluator;
+&nbsp;import org.iguana.datadependent.env.IEvaluatorContext;
+&nbsp;import org.iguana.grammar.GrammarGraph;
+&nbsp;import org.iguana.grammar.slot.BodyGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.ErrorTransition;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.TerminalGrammarSlot;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.gss.CyclicDummyGSSEdges;
+&nbsp;import org.iguana.gss.CyclicDummyGSSEdgesWithEnv;
+&nbsp;import org.iguana.gss.DefaultGSSEdge;
+&nbsp;import org.iguana.gss.DefaultGSSEdgeWithEnv;
+&nbsp;import org.iguana.gss.DummyGSSEdge;
+&nbsp;import org.iguana.gss.DummyGSSEdgeWithEnv;
+&nbsp;import org.iguana.gss.GSSEdge;
+&nbsp;import org.iguana.gss.GSSNode;
+&nbsp;import org.iguana.gss.StartGSSNode;
+&nbsp;import org.iguana.parser.descriptor.Descriptor;
+&nbsp;import org.iguana.result.ParserResultOps;
+&nbsp;import org.iguana.result.Result;
+&nbsp;import org.iguana.result.ResultOps;
+&nbsp;import org.iguana.util.Configuration;
+&nbsp;import org.iguana.util.ParserLogger;
+&nbsp;import org.iguana.util.Tuple;
+&nbsp;import org.iguana.utils.input.Input;
+&nbsp;
+&nbsp;import java.util.ArrayDeque;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Deque;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.PriorityQueue;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.function.Function;
+&nbsp;
+<b class="fc">&nbsp;public class IguanaRuntime&lt;T extends Result&gt; {</b>
+&nbsp;
+&nbsp;    private final Deque&lt;Descriptor&lt;T&gt;&gt; descriptorPool;
+&nbsp;
+&nbsp;    private final Deque&lt;Descriptor&lt;T&gt;&gt; descriptorsStack;
+&nbsp;
+&nbsp;    private final IEvaluatorContext ctx;
+&nbsp;
+&nbsp;    private final Configuration config;
+&nbsp;
+<b class="fc">&nbsp;    private final ParserLogger logger = ParserLogger.getInstance();</b>
+&nbsp;
+&nbsp;    private final ResultOps&lt;T&gt; resultOps;
+&nbsp;
+&nbsp;    // A priority queue (max heap) containing the parse errors thrown the parsing, sorted by the input index.
+&nbsp;    // The top of the priority queue is the parse error thrown at the last input position.
+&nbsp;    private final PriorityQueue&lt;ParseError&lt;T&gt;&gt; parseErrors;
+&nbsp;
+&nbsp;    private StartGSSNode&lt;T&gt; startGSSNode;
+&nbsp;
+<b class="fc">&nbsp;    public IguanaRuntime(Configuration config, ResultOps&lt;T&gt; resultOps) {</b>
+<b class="fc">&nbsp;        this.config = config;</b>
+<b class="fc">&nbsp;        this.resultOps = resultOps;</b>
+<b class="fc">&nbsp;        this.descriptorsStack = new ArrayDeque&lt;&gt;(512);</b>
+<b class="fc">&nbsp;        this.descriptorPool = new ArrayDeque&lt;&gt;(512);</b>
+<b class="fc">&nbsp;        this.ctx = GLLEvaluator.getEvaluatorContext(config);</b>
+<b class="fc">&nbsp;        this.parseErrors = new PriorityQueue&lt;&gt;((error1, error2) -&gt; error2.getInputIndex() - error1.getInputIndex());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public T run(Input input, Nonterminal start, GrammarGraph grammarGraph, Map&lt;String, Object&gt; map, boolean global) {
+<b class="fc">&nbsp;        clearState(grammarGraph);</b>
+&nbsp;
+<b class="fc">&nbsp;        IEvaluatorContext ctx = getEvaluatorContext();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (global)</b>
+<b class="nc">&nbsp;            map.forEach(ctx::declareGlobalVariable);</b>
+&nbsp;
+<b class="fc">&nbsp;        Environment env = ctx.getEmptyEnvironment();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</b>
+<b class="nc">&nbsp;            env = env._declare(entry.getKey(), entry.getValue());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Map.Entry&lt;String, Expression&gt; entry : grammarGraph.getGlobals().entrySet()) {</b>
+<b class="fc">&nbsp;            env = env._declare(entry.getKey(), entry.getValue().interpret(ctx, input));</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);</b>
+<b class="fc">&nbsp;        List&lt;String&gt; parameters = startSlot.getParameters();</b>
+&nbsp;        // TODO: Make parameters an empty list by default
+<b class="fc">&nbsp;        if (parameters != null &amp;&amp; !parameters.isEmpty()) {</b>
+<b class="fc">&nbsp;            if (!global &amp;&amp; !env.isEmpty()) {</b>
+<b class="fc">&nbsp;                Object[] arguments = new Object[parameters.size()];</b>
+&nbsp;
+<b class="fc">&nbsp;                int i = 0;</b>
+<b class="fc">&nbsp;                for (String parameter : startSlot.getParameters()) {</b>
+<b class="fc">&nbsp;                    arguments[i++] = env.lookup(parameter);</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+<b class="fc">&nbsp;                startGSSNode = new StartGSSNode&lt;&gt;(startSlot, 0, arguments);</b>
+<b class="fc">&nbsp;                env = env.declare(startSlot.getParameters().toArray(new String[0]), arguments);</b>
+<b class="fc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                startSlot = grammarGraph.getStartSlot(Nonterminal.withName(&quot;$_&quot; + start.getName()));</b>
+<b class="nc">&nbsp;                if (startSlot == null) {</b>
+<b class="nc">&nbsp;                    throw new RuntimeException(</b>
+<b class="nc">&nbsp;                            &quot;No top level definition exists for &quot; + start.getName() + &quot; &quot; + parameters);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                startGSSNode = new StartGSSNode&lt;&gt;(startSlot, 0);</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="fc">&nbsp;            startGSSNode = new StartGSSNode&lt;&gt;(startSlot, 0);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        ParserLogger logger = ParserLogger.getInstance();</b>
+<b class="fc">&nbsp;        logger.reset();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (BodyGrammarSlot slot : startSlot.getFirstSlots()) {</b>
+<b class="fc">&nbsp;            scheduleDescriptor(slot, startGSSNode, getResultOps().dummy(), env);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return runParserLoop(startGSSNode, input);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public T runParserLoop(StartGSSNode&lt;T&gt; startGSSNode, Input input) {
+<b class="fc">&nbsp;        while (hasDescriptor()) {</b>
+<b class="fc">&nbsp;            Descriptor&lt;T&gt; descriptor = nextDescriptor();</b>
+<b class="fc">&nbsp;            logger.processDescriptor(descriptor);</b>
+<b class="fc">&nbsp;            descriptor.getGrammarSlot().execute(input, descriptor.getGSSNode(), descriptor.getResult(),</b>
+<b class="fc">&nbsp;                    descriptor.getEnv(), this);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        int inputLength = input.length() - 1;</b>
+<b class="fc">&nbsp;        T result = startGSSNode.getResult(inputLength);</b>
+&nbsp;        // If there was a successful parse (covering the whole input range) for the start symbol
+<b class="fc">&nbsp;        if (result != null &amp;&amp; result.getRightExtent() == inputLength) {</b>
+<b class="fc">&nbsp;            return result;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void clearState(GrammarGraph grammarGraph) {
+<b class="fc">&nbsp;        grammarGraph.clear();</b>
+<b class="fc">&nbsp;        descriptorPool.clear();</b>
+<b class="fc">&nbsp;        descriptorsStack.clear();</b>
+<b class="fc">&nbsp;        parseErrors.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void recordParseError(
+&nbsp;            int inputIndex,
+&nbsp;            Input input,
+&nbsp;            GrammarSlot slot,
+&nbsp;            GSSNode&lt;T&gt; gssNode,
+&nbsp;            String description) {
+<b class="fc">&nbsp;        ParseError&lt;T&gt; error = new ParseError&lt;&gt;(slot, gssNode, inputIndex, input.getLineNumber(inputIndex),</b>
+<b class="fc">&nbsp;                input.getColumnNumber(inputIndex), description);</b>
+<b class="fc">&nbsp;        parseErrors.add(error);</b>
+<b class="fc">&nbsp;        logger.error(error);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;     * Tries to recover the error from an error edge, i.e., of the form X = alpha . Error beta
+&nbsp;     */
+&nbsp;    public void recoverFromError(GSSEdge&lt;T&gt; edge, ErrorTransition errorTransition, Input input) {
+<b class="fc">&nbsp;        T result = edge instanceof DummyGSSEdge&lt;?&gt; ? resultOps.dummy() : edge.getResult();</b>
+<b class="fc">&nbsp;        Environment env = edge.getEnv();</b>
+<b class="fc">&nbsp;        errorTransition.handleError(input, edge.getDestination(), result, env, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Collects all the GSS edges with the label of the form X = alpha . Error beta that are reachable
+&nbsp;    // from the current GSS node to the start symbol GSS node.
+&nbsp;    public void collectErrorSlots(
+&nbsp;            GSSNode&lt;T&gt; gssNode,
+&nbsp;            List&lt;Tuple&lt;GSSEdge&lt;T&gt;, ErrorTransition&gt;&gt; result,
+&nbsp;            Set&lt;GSSNode&lt;T&gt;&gt; visited) {
+<b class="fc">&nbsp;        if (visited.contains(gssNode)) return;</b>
+<b class="fc">&nbsp;        visited.add(gssNode);</b>
+<b class="fc">&nbsp;        if (gssNode == null) return;</b>
+<b class="fc">&nbsp;        for (GSSEdge&lt;T&gt; edge : gssNode.getGSSEdges()) {</b>
+<b class="fc">&nbsp;            ErrorTransition errorTransition = getErrorTransition(edge);</b>
+<b class="fc">&nbsp;            if (errorTransition != null) {</b>
+<b class="fc">&nbsp;                result.add(Tuple.of(edge, errorTransition));</b>
+&nbsp;            }
+<b class="fc">&nbsp;            collectErrorSlots(edge.getDestination(), result, visited);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private ErrorTransition getErrorTransition(GSSEdge&lt;T&gt; edge) {
+<b class="fc">&nbsp;        if (edge.getReturnSlot() == null) return null;</b>
+&nbsp;        // This covers the cases with no layout insertion: X alpha . Error
+<b class="fc">&nbsp;        if (edge.getReturnSlot().getOutTransition() instanceof ErrorTransition) {</b>
+<b class="fc">&nbsp;            return (ErrorTransition) edge.getReturnSlot().getOutTransition();</b>
+&nbsp;        }
+&nbsp;        // This covers cases where the layout is inserted.
+&nbsp;        // X = alpha . Layout Error
+<b class="fc">&nbsp;        if (edge.getReturnSlot().getOutTransition() != null</b>
+<b class="fc">&nbsp;            &amp;&amp; edge.getReturnSlot().getOutTransition().destination() != null</b>
+<b class="fc">&nbsp;            &amp;&amp; edge.getReturnSlot().getOutTransition().destination().getOutTransition() instanceof ErrorTransition) {</b>
+<b class="fc">&nbsp;            return (ErrorTransition) edge.getReturnSlot().getOutTransition().destination().getOutTransition();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean hasDescriptor() {
+<b class="fc">&nbsp;        return !descriptorsStack.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Descriptor&lt;T&gt; nextDescriptor() {
+<b class="fc">&nbsp;        Descriptor&lt;T&gt; descriptor = descriptorsStack.pop();</b>
+<b class="fc">&nbsp;        descriptorPool.push(descriptor);</b>
+<b class="fc">&nbsp;        return descriptor;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void scheduleDescriptor(BodyGrammarSlot grammarSlot, GSSNode&lt;T&gt; gssNode, T result, Environment env) {
+&nbsp;        Descriptor&lt;T&gt; descriptor;
+<b class="fc">&nbsp;        if (!descriptorPool.isEmpty()) {</b>
+<b class="fc">&nbsp;            descriptor = descriptorPool.pop();</b>
+<b class="fc">&nbsp;            descriptor.init(grammarSlot, gssNode, result, env);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            descriptor = new Descriptor&lt;&gt;(grammarSlot, gssNode, result, env);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        descriptorsStack.push(descriptor);</b>
+<b class="fc">&nbsp;        logger.descriptorAdded(descriptor);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public IEvaluatorContext getEvaluatorContext() {
+<b class="fc">&nbsp;        return ctx;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Environment getEnvironment() {
+<b class="fc">&nbsp;        return ctx.getEnvironment();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEnvironment(Environment env) {
+<b class="fc">&nbsp;        ctx.setEnvironment(env);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Environment getEmptyEnvironment() {
+<b class="fc">&nbsp;        return ctx.getEmptyEnvironment();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GSSEdge&lt;T&gt; createGSSEdge(BodyGrammarSlot returnSlot, T result, GSSNode&lt;T&gt; gssNode, Environment env) {
+<b class="fc">&nbsp;        if (result.isDummy()) {</b>
+<b class="fc">&nbsp;            if (env.isEmpty()) {</b>
+<b class="fc">&nbsp;                return gssNode != null ? new DummyGSSEdge&lt;&gt;(returnSlot, gssNode) : new CyclicDummyGSSEdges&lt;&gt;();</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return gssNode != null ? new DummyGSSEdgeWithEnv&lt;&gt;(returnSlot, gssNode, env)</b>
+<b class="fc">&nbsp;                        : new CyclicDummyGSSEdgesWithEnv&lt;&gt;(env);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (env.isEmpty()) {</b>
+<b class="fc">&nbsp;            return new DefaultGSSEdge&lt;&gt;(returnSlot, result, gssNode);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return new DefaultGSSEdgeWithEnv&lt;&gt;(returnSlot, result, gssNode, env);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void evaluate(Statement[] statements, Environment env, Input input) {
+<b class="fc">&nbsp;        assert statements.length &gt; 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        ctx.setEnvironment(env);</b>
+&nbsp;
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        while (i &lt; statements.length) {</b>
+<b class="fc">&nbsp;            statements[i].interpret(ctx, input);</b>
+<b class="fc">&nbsp;            i++;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public Object evaluate(Expression expression, Environment env, Input input) {
+<b class="fc">&nbsp;        ctx.setEnvironment(env);</b>
+<b class="fc">&nbsp;        return expression.interpret(ctx, input);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Object[] evaluate(Expression[] arguments, Environment env, Input input) {
+<b class="fc">&nbsp;        if (arguments == null) return null;</b>
+&nbsp;
+<b class="fc">&nbsp;        ctx.setEnvironment(env);</b>
+&nbsp;
+<b class="fc">&nbsp;        Object[] values = new Object[arguments.length];</b>
+&nbsp;
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        while (i &lt; arguments.length) {</b>
+<b class="fc">&nbsp;            values[i] = arguments[i].interpret(ctx, input);</b>
+<b class="fc">&nbsp;            i++;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return values;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PriorityQueue&lt;ParseError&lt;T&gt;&gt; getParseErrors() {
+<b class="fc">&nbsp;        return new PriorityQueue&lt;&gt;(parseErrors);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RecognizerStatistics getStatistics() {
+<b class="fc">&nbsp;        if (resultOps instanceof ParserResultOps) {</b>
+<b class="fc">&nbsp;            return ParseStatistics.builder()</b>
+<b class="fc">&nbsp;                    .setDescriptorsCount(logger.getDescriptorsCount())</b>
+<b class="fc">&nbsp;                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node</b>
+<b class="fc">&nbsp;                    .setGSSEdgesCount(logger.getCountGSSEdges())</b>
+<b class="fc">&nbsp;                    .setNonterminalNodesCount(logger.getCountNonterminalNodes())</b>
+<b class="fc">&nbsp;                    .setTerminalNodesCount(logger.getCountTerminalNodes())</b>
+<b class="fc">&nbsp;                    .setIntermediateNodesCount(logger.getCountIntermediateNodes())</b>
+<b class="fc">&nbsp;                    .setPackedNodesCount(logger.getCountPackedNodes())</b>
+<b class="fc">&nbsp;                    .setAmbiguousNodesCount(logger.getCountAmbiguousNodes())</b>
+<b class="fc">&nbsp;                    .build();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return RecognizerStatistics.builder()</b>
+<b class="fc">&nbsp;                    .setDescriptorsCount(logger.getDescriptorsCount())</b>
+<b class="fc">&nbsp;                    .setGSSNodesCount(logger.getCountGSSNodes() + 1) // + start gss node</b>
+<b class="fc">&nbsp;                    .setGSSEdgesCount(logger.getCountGSSEdges())</b>
+<b class="fc">&nbsp;                    .build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Configuration getConfiguration() {
+<b class="fc">&nbsp;        return config;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getDescriptorPoolSize() {
+<b class="nc">&nbsp;        return descriptorPool.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ResultOps&lt;T&gt; getResultOps() {
+<b class="fc">&nbsp;        return resultOps;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public StartGSSNode&lt;T&gt; getStartGSSNode() {
+<b class="fc">&nbsp;        return startGSSNode;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void printStats(GrammarGraph grammarGraph) {
+<b class="nc">&nbsp;        for (TerminalGrammarSlot slot : grammarGraph.getTerminalGrammarSlots()) {</b>
+<b class="nc">&nbsp;            System.out.println(slot.getTerminal().getName() + &quot; : &quot; + slot.countTerminalNodes());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {</b>
+<b class="nc">&nbsp;            System.out.print(slot.getNonterminal().getName());</b>
+<b class="nc">&nbsp;            System.out.println(&quot; GSS nodes: &quot; + slot.countGSSNodes());</b>
+<b class="nc">&nbsp;            double[] poppedElementStats = stats(slot.getGSSNodes(), GSSNode::countPoppedElements);</b>
+<b class="nc">&nbsp;            double[] gssEdgesStats = stats(slot.getGSSNodes(), GSSNode::countGSSEdges);</b>
+<b class="nc">&nbsp;            if (poppedElementStats == null)</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Popped Elements: empty&quot;);</b>
+&nbsp;            else
+<b class="nc">&nbsp;                System.out.printf(&quot;Popped Elements (min: %d, max: %d, mean: %.2f)%n&quot;, (int) poppedElementStats[0],</b>
+<b class="nc">&nbsp;                        (int) poppedElementStats[1], poppedElementStats[2]);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (gssEdgesStats == null)</b>
+<b class="nc">&nbsp;                System.out.println(&quot;GSS Edges: empty&quot;);</b>
+&nbsp;            else
+<b class="nc">&nbsp;                System.out.printf(&quot;GSS Edges (min: %d, max: %d, mean: %.2f)%n&quot;, (int) gssEdgesStats[0],</b>
+<b class="nc">&nbsp;                        (int) gssEdgesStats[1], gssEdgesStats[2]);</b>
+<b class="nc">&nbsp;            System.out.println(&quot;---------------&quot;);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void printGSSInfo(GrammarGraph grammarGraph) {
+<b class="nc">&nbsp;        Comparator&lt;GSSNode&lt;?&gt;&gt; edgeComparator = (node1, node2) -&gt; node2.countGSSEdges() - node1.countGSSEdges();</b>
+<b class="nc">&nbsp;        List&lt;GSSNode&lt;?&gt;&gt; gssNodes = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (NonterminalGrammarSlot slot : grammarGraph.getNonterminalGrammarSlots()) {</b>
+<b class="nc">&nbsp;            for (GSSNode&lt;?&gt; gssNode : slot.getGSSNodes()) {</b>
+<b class="nc">&nbsp;                gssNodes.add(gssNode);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        gssNodes.sort(edgeComparator);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (GSSNode&lt;?&gt; gssNode : gssNodes) {</b>
+<b class="nc">&nbsp;            System.out.println(</b>
+<b class="nc">&nbsp;                    gssNode + &quot;, edges: &quot; + gssNode.countGSSEdges() + &quot;, poppedElements: &quot;</b>
+<b class="nc">&nbsp;                    + gssNode.countPoppedElements());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static double[] stats(Iterable&lt;GSSNode&lt;?&gt;&gt; gssNodes, Function&lt;GSSNode&lt;?&gt;, Integer&gt; f) {
+<b class="nc">&nbsp;        if (!gssNodes.iterator().hasNext()) return null;</b>
+&nbsp;
+<b class="nc">&nbsp;        int min = Integer.MAX_VALUE;</b>
+<b class="nc">&nbsp;        int max = Integer.MIN_VALUE;</b>
+<b class="nc">&nbsp;        int sum = 0;</b>
+<b class="nc">&nbsp;        int count = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;        for (GSSNode&lt;?&gt; gssNode : gssNodes) {</b>
+<b class="nc">&nbsp;            min = Integer.min(min, f.apply(gssNode));</b>
+<b class="nc">&nbsp;            max = Integer.max(max, f.apply(gssNode));</b>
+<b class="nc">&nbsp;            sum += f.apply(gssNode);</b>
+<b class="nc">&nbsp;            count++;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return new double[]{min, max, (double) sum / count};</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

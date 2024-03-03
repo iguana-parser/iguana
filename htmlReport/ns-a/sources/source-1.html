@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Stack</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.datadependent.values</a>
+</div>
+
+<h1>Coverage Summary for Class: Stack (org.iguana.datadependent.values)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Stack</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.datadependent.values;
+&nbsp;
+&nbsp;import org.iguana.utils.collections.hash.MurmurHash3;
+&nbsp;
+&nbsp;public class Stack&lt;T&gt; {
+&nbsp;
+<b class="nc">&nbsp;    private static MurmurHash3 f = new MurmurHash3();</b>
+&nbsp;
+&nbsp;    private final Stack&lt;T&gt; parent;
+&nbsp;    private final T top;
+&nbsp;
+&nbsp;    private int size;
+&nbsp;    private int hash;
+&nbsp;
+<b class="nc">&nbsp;    Stack(T top) {</b>
+<b class="nc">&nbsp;        this.parent = null;</b>
+<b class="nc">&nbsp;        this.top = top;</b>
+<b class="nc">&nbsp;        this.size = 1;</b>
+<b class="nc">&nbsp;        this.hash = top.hashCode();</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    Stack(T top, Stack&lt;T&gt; parent) {</b>
+<b class="nc">&nbsp;        this.parent = parent;</b>
+<b class="nc">&nbsp;        this.top = top;</b>
+<b class="nc">&nbsp;        this.size = parent.size + 1;</b>
+&nbsp;
+<b class="nc">&nbsp;        int[] hs = new int[this.size];</b>
+<b class="nc">&nbsp;        Stack&lt;T&gt; root = this;</b>
+<b class="nc">&nbsp;        int i = 0;</b>
+<b class="nc">&nbsp;        while (root != null) {</b>
+<b class="nc">&nbsp;            hs[i++] = root.top.hashCode();</b>
+<b class="nc">&nbsp;            root = root.parent;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        this.hash = MurmurHash3.fn().apply(hs);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static &lt;T&gt; Stack&lt;T&gt; from(T top) {
+<b class="nc">&nbsp;        return new Stack&lt;&gt;(top);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public T top() {
+<b class="nc">&nbsp;        return this.top;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Stack&lt;T&gt; push(T top) {
+<b class="nc">&nbsp;        return new Stack&lt;&gt;(top, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Stack&lt;T&gt; pop() {
+<b class="nc">&nbsp;        return parent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="nc">&nbsp;        if (this == obj)</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!(obj instanceof Stack&lt;?&gt;))</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;
+<b class="nc">&nbsp;        Stack&lt;?&gt; other = (Stack&lt;?&gt;) obj;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (top.equals(other.top)) {</b>
+<b class="nc">&nbsp;            if (parent == null)</b>
+<b class="nc">&nbsp;                return other.parent == null;</b>
+&nbsp;            else
+<b class="nc">&nbsp;                return parent.equals(other.parent);</b>
+&nbsp;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return hash;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        if (parent == null)</b>
+<b class="nc">&nbsp;            return top.toString();</b>
+&nbsp;
+<b class="nc">&nbsp;        return top.toString() + &quot;,&quot; + parent.toString();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

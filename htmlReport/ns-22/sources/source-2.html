@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > InlineReferencesVisitor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex.visitor</a>
+</div>
+
+<h1>Coverage Summary for Class: InlineReferencesVisitor (org.iguana.regex.visitor)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InlineReferencesVisitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (9/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (19/22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.regex.visitor;
+&nbsp;
+&nbsp;import org.iguana.regex.EOF;
+&nbsp;import org.iguana.regex.RegularExpression;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;public class InlineReferencesVisitor implements RegularExpressionVisitor&lt;RegularExpression&gt; {
+&nbsp;
+&nbsp;    private final Map&lt;String, RegularExpression&gt; definitions;
+&nbsp;
+<b class="fc">&nbsp;    public InlineReferencesVisitor(Map&lt;String, RegularExpression&gt; definitions) {</b>
+<b class="fc">&nbsp;        this.definitions = definitions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Char c) {
+<b class="fc">&nbsp;        return c;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.CharRange r) {
+<b class="fc">&nbsp;        return r;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(EOF eof) {
+<b class="nc">&nbsp;        return eof;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Epsilon e) {
+<b class="nc">&nbsp;        return e;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Star s) {
+<b class="fc">&nbsp;        RegularExpression newSymbol = s.getSymbol().accept(this);</b>
+<b class="fc">&nbsp;        return s.copy().setSymbol(newSymbol).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Plus p) {
+<b class="fc">&nbsp;        RegularExpression newSymbol = p.getSymbol().accept(this);</b>
+<b class="fc">&nbsp;        return p.copy().setSymbol(newSymbol).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Opt o) {
+<b class="fc">&nbsp;        RegularExpression newSymbol = o.getSymbol().accept(this);</b>
+<b class="fc">&nbsp;        return o.copy().setSymbol(newSymbol).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;E extends RegularExpression&gt; RegularExpression visit(org.iguana.regex.Alt&lt;E&gt; alt) {
+<b class="fc">&nbsp;        List&lt;RegularExpression&gt; newSymbols = alt.getSymbols().stream().map(symbol -&gt; symbol.accept(this))</b>
+<b class="fc">&nbsp;            .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        return alt.copy().setSymbols((List&lt;E&gt;) newSymbols).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;E extends RegularExpression&gt; RegularExpression visit(org.iguana.regex.Seq&lt;E&gt; seq) {
+<b class="fc">&nbsp;        List&lt;RegularExpression&gt; newSymbols = seq.getSymbols().stream().map(symbol -&gt; symbol.accept(this))</b>
+<b class="fc">&nbsp;            .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        return seq.copy().setSymbols((List&lt;E&gt;) newSymbols).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RegularExpression visit(org.iguana.regex.Reference ref) {
+<b class="fc">&nbsp;        RegularExpression regularExpression = definitions.get(ref.getName());</b>
+<b class="fc">&nbsp;        if (regularExpression != null) {</b>
+<b class="fc">&nbsp;            return regularExpression;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return ref;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AbstractSymbol</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractSymbol (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractSymbol</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import org.iguana.datadependent.attrs.AbstractAttrs;
+&nbsp;import org.iguana.grammar.condition.Condition;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import static org.iguana.utils.string.StringUtil.listToString;
+&nbsp;
+&nbsp;public abstract class AbstractSymbol extends AbstractAttrs implements Symbol {
+&nbsp;
+&nbsp;    protected final String name;
+&nbsp;
+&nbsp;    protected final String label;
+&nbsp;
+&nbsp;    protected final List&lt;Condition&gt; preConditions;
+&nbsp;
+&nbsp;    protected final List&lt;Condition&gt; postConditions;
+&nbsp;
+&nbsp;    private final Map&lt;String, Object&gt; attributes;
+&nbsp;
+<b class="fc">&nbsp;    public AbstractSymbol(SymbolBuilder&lt;? extends Symbol&gt; builder) {</b>
+<b class="fc">&nbsp;        if (builder.name == null)</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Name cannot be null&quot;);</b>
+<b class="fc">&nbsp;        this.name = builder.name;</b>
+<b class="fc">&nbsp;        this.label = builder.label;</b>
+<b class="fc">&nbsp;        this.preConditions = builder.preConditions.isEmpty() ? Collections.emptyList() : builder.preConditions;</b>
+<b class="fc">&nbsp;        this.postConditions = builder.postConditions.isEmpty() ? Collections.emptyList() : builder.postConditions;</b>
+<b class="fc">&nbsp;        this.attributes = builder.attributes.isEmpty() ? Collections.emptyMap() : builder.attributes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Condition&gt; getPreConditions() {
+<b class="fc">&nbsp;        return preConditions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Condition&gt; getPostConditions() {
+<b class="fc">&nbsp;        return postConditions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getName() {
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getLabel() {
+<b class="fc">&nbsp;        return label;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        String s = label == null ? name : label + &quot;:&quot; + name;</b>
+<b class="fc">&nbsp;        if (!preConditions.isEmpty())</b>
+<b class="nc">&nbsp;            s += &quot; &quot; + listToString(preConditions);</b>
+<b class="fc">&nbsp;        if (!postConditions.isEmpty())</b>
+<b class="fc">&nbsp;            s += &quot; &quot; + listToString(postConditions);</b>
+<b class="fc">&nbsp;        return s;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString(int j) {
+<b class="nc">&nbsp;        return this + (j == 1 ? &quot; . &quot; : &quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map&lt;String, Object&gt; getAttributes() {
+<b class="fc">&nbsp;        return attributes;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

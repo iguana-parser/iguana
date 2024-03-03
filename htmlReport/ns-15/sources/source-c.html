@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Identifier</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: Identifier (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Identifier</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Identifier$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (19/20)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class Identifier extends AbstractSymbol {
+&nbsp;
+&nbsp;    private final Set&lt;String&gt; excepts;
+&nbsp;
+&nbsp;    public Identifier(Builder builder) {
+<b class="fc">&nbsp;        super(builder);</b>
+<b class="fc">&nbsp;        this.excepts = builder.excepts;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Identifier fromName(String name) {
+<b class="fc">&nbsp;        return new Builder(name).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;String&gt; getExcepts() {
+<b class="fc">&nbsp;        return excepts;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Builder copy() {
+<b class="fc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(ISymbolVisitor&lt;T&gt; visitor) {
+<b class="fc">&nbsp;        return visitor.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (this == obj) return true;</b>
+<b class="fc">&nbsp;        if (!(obj instanceof Identifier)) return false;</b>
+<b class="fc">&nbsp;        Identifier identifier = (Identifier) obj;</b>
+<b class="fc">&nbsp;        return identifier.name.equals(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return name.hashCode();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder extends SymbolBuilder&lt;Identifier&gt; {
+&nbsp;
+<b class="fc">&nbsp;        private Set&lt;String&gt; excepts = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        private Builder() { }</b>
+&nbsp;
+<b class="fc">&nbsp;        public Builder(String name) {</b>
+<b class="fc">&nbsp;            this.name = name;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder(Identifier identifier) {
+<b class="fc">&nbsp;            super(identifier);</b>
+<b class="fc">&nbsp;            this.excepts = identifier.excepts;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder addExcept(String label) {
+<b class="fc">&nbsp;            excepts.add(label);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Identifier build() {
+<b class="fc">&nbsp;            return new Identifier(this);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,415 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AutomatonBuilder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex.automaton</a>
+</div>
+
+<h1>Coverage Summary for Class: AutomatonBuilder (org.iguana.regex.automaton)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AutomatonBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (18/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.3%
+  </span>
+  <span class="absValue">
+    (61/119)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.regex.automaton;
+&nbsp;
+&nbsp;import org.iguana.regex.CharRange;
+&nbsp;import org.iguana.regex.CharacterRanges;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.BitSet;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.LinkedHashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;public class AutomatonBuilder {
+&nbsp;
+&nbsp;    private State startState;
+&nbsp;
+&nbsp;    private boolean deterministic;
+&nbsp;
+&nbsp;    private boolean minimized;
+&nbsp;
+&nbsp;    private CharRange[] alphabet;
+&nbsp;
+&nbsp;    private State[] states;
+&nbsp;
+&nbsp;    private Set&lt;State&gt; finalStates;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * From transitions to non-overlapping transitions
+&nbsp;     */
+&nbsp;    private Map&lt;CharRange, List&lt;CharRange&gt;&gt; rangeMap;
+&nbsp;
+<b class="nc">&nbsp;    public AutomatonBuilder(Automaton automaton) {</b>
+<b class="nc">&nbsp;        this.deterministic = automaton.isDeterministic();</b>
+<b class="nc">&nbsp;        this.minimized = automaton.isMinimized();</b>
+<b class="nc">&nbsp;        this.states = automaton.getStates();</b>
+<b class="nc">&nbsp;        this.startState = automaton.getStartState();</b>
+<b class="nc">&nbsp;        this.finalStates = automaton.getFinalStates();</b>
+<b class="nc">&nbsp;        this.alphabet = automaton.getAlphabet();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!deterministic) {</b>
+<b class="nc">&nbsp;            convertToNonOverlapping(automaton.getStartState());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public AutomatonBuilder(State startState) {</b>
+<b class="fc">&nbsp;        this.states = getAllStates(startState);</b>
+<b class="fc">&nbsp;        this.startState = startState;</b>
+<b class="fc">&nbsp;        this.finalStates = computeFinalStates();</b>
+<b class="fc">&nbsp;        convertToNonOverlapping(startState);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Automaton build() {
+<b class="fc">&nbsp;        setStateIDs();</b>
+<b class="fc">&nbsp;        return new Automaton(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public CharRange[] getAlphabet() {
+<b class="fc">&nbsp;        return alphabet;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;State&gt; getFinalStates() {
+<b class="fc">&nbsp;        return finalStates;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State getStartState() {
+<b class="fc">&nbsp;        return startState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State[] getStates() {
+<b class="fc">&nbsp;        return states;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isMinimized() {
+<b class="fc">&nbsp;        return minimized;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isDeterministic() {
+<b class="fc">&nbsp;        return deterministic;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static Map&lt;CharRange, List&lt;CharRange&gt;&gt; getRangeMap(State startState) {
+<b class="fc">&nbsp;        return CharacterRanges.toNonOverlapping(getAllRanges(startState));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static CharRange[] getAlphabet(Map&lt;CharRange, List&lt;CharRange&gt;&gt; rangeMap) {
+<b class="fc">&nbsp;        Set&lt;CharRange&gt; values = rangeMap.values().stream()</b>
+<b class="fc">&nbsp;                                                      .flatMap(Collection::stream)</b>
+<b class="fc">&nbsp;                                                      .collect(Collectors.toCollection(LinkedHashSet::new));</b>
+&nbsp;
+<b class="fc">&nbsp;        CharRange[] alphabet = new CharRange[values.size()];</b>
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        for (CharRange r : values) {</b>
+<b class="fc">&nbsp;            alphabet[i++] = r;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return alphabet;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AutomatonBuilder makeDeterministic() {
+<b class="nc">&nbsp;        Automaton dfa = AutomatonOperations.makeDeterministic(startState, alphabet);</b>
+<b class="nc">&nbsp;        this.startState = dfa.getStartState();</b>
+<b class="nc">&nbsp;        this.finalStates = dfa.getFinalStates();</b>
+<b class="nc">&nbsp;        this.states = dfa.getStates();</b>
+<b class="nc">&nbsp;        this.deterministic = true;</b>
+<b class="nc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AutomatonBuilder setDeterministic(boolean deterministic) {
+<b class="fc">&nbsp;        this.deterministic = deterministic;</b>
+<b class="fc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     * Note: unreachable states are already removed as we gather the states
+&nbsp;     * reachable from the start state of the given NFA.
+&nbsp;     *
+&nbsp;     */
+&nbsp;    public AutomatonBuilder minimize() {
+<b class="nc">&nbsp;        if (!deterministic)</b>
+<b class="nc">&nbsp;            makeDeterministic();</b>
+&nbsp;
+<b class="nc">&nbsp;        Automaton automaton = AutomatonOperations.minimize(alphabet, states, startState);</b>
+<b class="nc">&nbsp;        this.startState = automaton.getStartState();</b>
+<b class="nc">&nbsp;        this.finalStates = automaton.getFinalStates();</b>
+<b class="nc">&nbsp;        this.states = automaton.getStates();</b>
+<b class="nc">&nbsp;        this.minimized = true;</b>
+<b class="nc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AutomatonBuilder setMinimized(boolean minimized) {
+<b class="nc">&nbsp;        this.minimized = minimized;</b>
+<b class="nc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * For debugging purposes
+&nbsp;     */
+&nbsp;    @SuppressWarnings(&quot;unused&quot;)
+&nbsp;    private static void printMinimizationTable(int[][] table) {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; table.length; i++) {</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt; i; j++) {</b>
+<b class="nc">&nbsp;                System.out.print(table[i][j] + &quot; &quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;\n&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static BitSet getCharacters(Automaton automaton) {
+<b class="nc">&nbsp;        final BitSet bitSet = new BitSet();</b>
+&nbsp;
+<b class="nc">&nbsp;        AutomatonVisitor.visit(automaton.getStartState(), state -&gt; {</b>
+<b class="nc">&nbsp;                for (Transition transition : state.getTransitions()) {</b>
+<b class="nc">&nbsp;                    bitSet.set(transition.getStart(), transition.getEnd() + 1);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            });
+&nbsp;
+<b class="nc">&nbsp;        return bitSet;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int[] merge(int[] i1, int[] i2) {
+<b class="nc">&nbsp;        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; i1.length; i++) {</b>
+<b class="nc">&nbsp;            set.add(i1[i]);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; i2.length; i++) {</b>
+<b class="nc">&nbsp;            set.add(i2[i]);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        int i = 0;</b>
+<b class="nc">&nbsp;        int[] merged = new int[set.size()];</b>
+<b class="nc">&nbsp;        for (int c : set) {</b>
+<b class="nc">&nbsp;            merged[i++] = c;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        Arrays.sort(merged);</b>
+&nbsp;
+<b class="nc">&nbsp;        return merged;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void convertToNonOverlapping(State startState) {
+<b class="fc">&nbsp;        this.rangeMap = getRangeMap(startState);</b>
+<b class="fc">&nbsp;        for (State state : states) {</b>
+<b class="fc">&nbsp;            List&lt;Transition&gt; removeList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            List&lt;Transition&gt; addList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            for (Transition transition : state.getTransitions()) {</b>
+<b class="fc">&nbsp;                if (!transition.isEpsilonTransition()) {</b>
+<b class="fc">&nbsp;                    removeList.add(transition);</b>
+<b class="fc">&nbsp;                    for (CharRange range : rangeMap.get(transition.getRange())) {</b>
+<b class="fc">&nbsp;                        addList.add(new Transition(range, transition.getDestination()));</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            state.removeTransitions(removeList);</b>
+<b class="fc">&nbsp;            state.addTransitions(addList);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.alphabet = getAlphabet(rangeMap);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static List&lt;CharRange&gt; getAllRanges(State startState) {
+<b class="fc">&nbsp;        final Set&lt;CharRange&gt; ranges = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        AutomatonVisitor.visit(startState, state -&gt; {</b>
+<b class="fc">&nbsp;            for (Transition transition : state.getTransitions()) {</b>
+<b class="fc">&nbsp;                if (!transition.isEpsilonTransition()) {</b>
+<b class="fc">&nbsp;                    ranges.add(transition.getRange());</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(ranges);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static int getCountStates(Automaton automaton) {
+<b class="nc">&nbsp;        final int[] count = new int[1];</b>
+&nbsp;
+<b class="nc">&nbsp;        AutomatonVisitor.visit(automaton, s -&gt; count[0]++);</b>
+&nbsp;
+<b class="nc">&nbsp;        return count[0];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static State[] getAllStates(State startState) {
+<b class="fc">&nbsp;        final Set&lt;State&gt; set = new LinkedHashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        AutomatonVisitor.visit(startState, s -&gt; set.add(s));</b>
+&nbsp;
+<b class="fc">&nbsp;        State[] states = new State[set.size()];</b>
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        for (State s : set) {</b>
+<b class="fc">&nbsp;            states[i++] = s;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return states;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStateIDs() {
+<b class="fc">&nbsp;        for (int i = 0; i &lt; states.length; i++) {</b>
+<b class="fc">&nbsp;            states[i].setId(i);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Set&lt;State&gt; computeFinalStates() {
+&nbsp;
+<b class="fc">&nbsp;        final Set&lt;State&gt; finalStates = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        AutomatonVisitor.visit(startState, s -&gt; {</b>
+<b class="fc">&nbsp;                if (s.isFinalState()) {</b>
+<b class="fc">&nbsp;                    finalStates.add(s);</b>
+&nbsp;                }
+&nbsp;            });
+&nbsp;
+<b class="fc">&nbsp;        return finalStates;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public State getState(int i) {
+<b class="nc">&nbsp;        return states[i];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Makes the transition function complete, i.e., from each state
+&nbsp;     * there will be all outgoing transitions.
+&nbsp;     */
+&nbsp;    public AutomatonBuilder makeComplete() {
+&nbsp;
+<b class="nc">&nbsp;        makeDeterministic();</b>
+&nbsp;
+<b class="nc">&nbsp;        State dummyState = new State();</b>
+&nbsp;
+<b class="nc">&nbsp;        AutomatonVisitor.visit(startState, s -&gt; {</b>
+<b class="nc">&nbsp;            for (CharRange r : alphabet) {</b>
+<b class="nc">&nbsp;                if (!s.hasTransition(r)) {</b>
+<b class="nc">&nbsp;                    s.addTransition(new Transition(r, dummyState));</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

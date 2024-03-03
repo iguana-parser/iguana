@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ParseStatisticsSerializer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.util.serialization</a>
+</div>
+
+<h1>Coverage Summary for Class: ParseStatisticsSerializer (org.iguana.util.serialization)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParseStatisticsSerializer</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.7%
+  </span>
+  <span class="absValue">
+    (7/15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ParseStatisticsSerializer$ParseStatisticsMixIn</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (2/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    43.8%
+  </span>
+  <span class="absValue">
+    (7/16)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.util.serialization;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonAutoDetect;
+&nbsp;import com.fasterxml.jackson.core.JsonProcessingException;
+&nbsp;import com.fasterxml.jackson.core.util.DefaultIndenter;
+&nbsp;import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+&nbsp;import org.iguana.parser.ParseStatistics;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="nc">&nbsp;public class ParseStatisticsSerializer {</b>
+&nbsp;
+&nbsp;    private static ObjectMapper mapper;
+&nbsp;
+&nbsp;    static {
+<b class="fc">&nbsp;        mapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()</b>
+<b class="fc">&nbsp;                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)</b>
+<b class="fc">&nbsp;                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)</b>
+<b class="fc">&nbsp;                .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));</b>
+&nbsp;
+<b class="fc">&nbsp;        mapper.addMixIn(ParseStatistics.class, ParseStatisticsMixIn.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String serialize(ParseStatistics statistics) {
+<b class="nc">&nbsp;        DefaultPrettyPrinter pp = new DefaultPrettyPrinter();</b>
+<b class="nc">&nbsp;        pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            return mapper.writer(pp).writeValueAsString(statistics);</b>
+<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ParseStatistics deserialize(String s) {
+&nbsp;        try {
+<b class="fc">&nbsp;            return mapper.readValue(s, ParseStatistics.class);</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @JsonDeserialize(builder = ParseStatistics.Builder.class)
+<b class="nc">&nbsp;    abstract static class ParseStatisticsMixIn {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

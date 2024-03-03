@@ -1,0 +1,377 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > RangeMapBuilder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections.rangemap</a>
+</div>
+
+<h1>Coverage Summary for Class: RangeMapBuilder (org.iguana.utils.collections.rangemap)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RangeMapBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.9%
+  </span>
+  <span class="absValue">
+    (71/74)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RangeMapBuilder$Point</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (15/17)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">RangeMapBuilder$Result</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.2%
+  </span>
+  <span class="absValue">
+    (96/103)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.utils.collections.rangemap;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.LinkedHashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;import static java.util.Collections.emptyList;
+&nbsp;
+<b class="fc">&nbsp;public class RangeMapBuilder&lt;T&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;    private static final RangeMap&lt;?&gt; emptyRangeMap = (RangeMap&lt;Object&gt;) key -&gt; emptyList();</b>
+<b class="fc">&nbsp;    private static final IntRangeMap emptyIntRangeMap = key -&gt; -2;</b>
+&nbsp;
+<b class="fc">&nbsp;    private final List&lt;Range&gt; ranges = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private final List&lt;T&gt; values = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public RangeMapBuilder&lt;T&gt; put(Range range, T value) {
+<b class="fc">&nbsp;        ranges.add(range);</b>
+<b class="fc">&nbsp;        values.add(value);</b>
+<b class="fc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public IntRangeMap buildIntRangeMap() {
+<b class="fc">&nbsp;        if (ranges.isEmpty()) {</b>
+<b class="fc">&nbsp;            return emptyIntRangeMap;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (ranges.size() == 1) {</b>
+<b class="fc">&nbsp;            Range range = ranges.get(0);</b>
+<b class="fc">&nbsp;            return new SingleIntRangeMap(range.getStart(), range.getEnd(), (Integer) values.get(0));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Point&lt;T&gt;&gt; points = getPoints(ranges, values);</b>
+<b class="fc">&nbsp;        if (points.get(points.size() - 1).index - points.get(0).index &lt; 256) {</b>
+<b class="fc">&nbsp;            return new ArrayIntRangeMap&lt;&gt;(points.get(0).index, points.get(points.size() - 1).index, ranges, values);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Result&lt;T&gt; result = getResult(points);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!result.canBuildIntRangeMap()) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;There are more than one values available for a range&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int[] intVals = new int[result.size];</b>
+<b class="fc">&nbsp;        Arrays.fill(intVals, IntRangeMap.EMPTY_VALUE);</b>
+<b class="fc">&nbsp;        for (int j = 0; j &lt; result.vals.length; j++) {</b>
+<b class="fc">&nbsp;            List&lt;T&gt; l = result.vals[j];</b>
+<b class="fc">&nbsp;            if (l.size() == 1) {</b>
+<b class="fc">&nbsp;                intVals[j] = (Integer) l.get(0);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (intVals.length &lt; 8) {</b>
+<b class="fc">&nbsp;            return new LinearSerachIntRangeMap&lt;&gt;(result.keys, result.starts, intVals);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return new BinarySearchIntRangeMap(result.keys, result.starts, intVals);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+&nbsp;    public static &lt;T&gt; RangeMap&lt;T&gt; emptyRangeMap() {
+<b class="nc">&nbsp;        return (RangeMap&lt;T&gt;) emptyRangeMap;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RangeMap&lt;T&gt; buildRangeMap() {
+<b class="fc">&nbsp;        if (ranges.isEmpty()) {</b>
+<b class="nc">&nbsp;            return emptyRangeMap();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (ranges.size() == 1) {</b>
+<b class="fc">&nbsp;            Range range = ranges.get(0);</b>
+<b class="fc">&nbsp;            return new SingeRangeMap&lt;&gt;(range.getStart(), range.getEnd(), values.get(0));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Point&lt;T&gt;&gt; points = getPoints(ranges, values);</b>
+&nbsp;
+<b class="fc">&nbsp;        Result&lt;T&gt; result = getResult(points);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (result.size &lt; 8) {</b>
+<b class="fc">&nbsp;            return new LinearSerachRangeMap&lt;&gt;(result.keys, result.starts, result.vals);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return new BinarySearchRangeMap&lt;&gt;(result.keys, result.starts, result.vals);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Point&lt;T&gt;&gt; getPoints(List&lt;Range&gt; ranges, List&lt;T&gt; values) {
+<b class="fc">&nbsp;        List&lt;Point&lt;T&gt;&gt; points = new ArrayList&lt;&gt;(ranges.size() * 2);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; ranges.size(); i++) {</b>
+<b class="fc">&nbsp;            Range range = ranges.get(i);</b>
+<b class="fc">&nbsp;            points.add(new Point&lt;&gt;(range, true, values.get(i)));</b>
+<b class="fc">&nbsp;            points.add(new Point&lt;&gt;(range, false, values.get(i)));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Collections.sort(points);</b>
+<b class="fc">&nbsp;        return points;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Result&lt;T&gt; getResult(List&lt;Point&lt;T&gt;&gt; points) {
+&nbsp;        // A map from each point to a multiset of values (value, count)
+<b class="fc">&nbsp;        Map&lt;Point&lt;T&gt;, Map&lt;T, Integer&gt;&gt; cumulativeValues = new LinkedHashMap&lt;&gt;(ranges.size() * 2);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; ranges.size() * 2; i++) {</b>
+<b class="fc">&nbsp;            Point&lt;T&gt; point = points.get(i);</b>
+<b class="fc">&nbsp;            Map&lt;T, Integer&gt; valuesSet = cumulativeValues.computeIfAbsent(point, k -&gt; new LinkedHashMap&lt;&gt;());</b>
+&nbsp;
+<b class="fc">&nbsp;            if (i &gt; 0) {</b>
+<b class="fc">&nbsp;                valuesSet.putAll(cumulativeValues.get(points.get(i - 1)));</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            if (point.isStart()) {</b>
+<b class="fc">&nbsp;                valuesSet.compute(point.value, (k, v) -&gt; v == null ? 1 : v + 1);</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                valuesSet.compute(point.value, (k, v) -&gt; v == null ? null : v - 1 == 0 ? null : v - 1);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int size = cumulativeValues.size();</b>
+<b class="fc">&nbsp;        int[] keys = new int[size];</b>
+<b class="fc">&nbsp;        boolean[] starts = new boolean[size];</b>
+&nbsp;        @SuppressWarnings({&quot;unchecked&quot;, &quot;rawtypes&quot;})
+<b class="fc">&nbsp;        List&lt;T&gt;[] vals = new List[size];</b>
+&nbsp;
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        for (Map.Entry&lt;Point&lt;T&gt;, Map&lt;T, Integer&gt;&gt; entry : cumulativeValues.entrySet()) {</b>
+<b class="fc">&nbsp;            Point&lt;T&gt; point = entry.getKey();</b>
+<b class="fc">&nbsp;            keys[i] = point.index;</b>
+<b class="fc">&nbsp;            if (point.isStart()) {</b>
+<b class="fc">&nbsp;                starts[i] = true;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Set&lt;T&gt; value = entry.getValue().keySet();</b>
+<b class="fc">&nbsp;            if (value.size() == 0) {</b>
+<b class="fc">&nbsp;                vals[i] = emptyList();</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;(cumulativeValues.get(point).keySet());</b>
+<b class="fc">&nbsp;                list.trimToSize();</b>
+<b class="fc">&nbsp;                vals[i] = list;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            i++;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return new Result&lt;&gt;(size, keys, starts, vals);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class Result&lt;T&gt; {
+&nbsp;        int size;
+&nbsp;        int[] keys;
+&nbsp;        boolean[] starts;
+&nbsp;        List&lt;T&gt;[] vals;
+&nbsp;
+<b class="fc">&nbsp;        Result(int size, int[] keys, boolean[] starts, List&lt;T&gt;[] vals) {</b>
+<b class="fc">&nbsp;            this.size = size;</b>
+<b class="fc">&nbsp;            this.keys = keys;</b>
+<b class="fc">&nbsp;            this.starts = starts;</b>
+<b class="fc">&nbsp;            this.vals = vals;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Returns true if the values are of type integer and there is at most one value for each key
+&nbsp;         */
+&nbsp;        boolean canBuildIntRangeMap() {
+<b class="fc">&nbsp;            boolean canBuildRangeMap = true;</b>
+<b class="fc">&nbsp;            for (List&lt;T&gt; list : vals) {</b>
+<b class="fc">&nbsp;                if (list.isEmpty()) continue;</b>
+<b class="fc">&nbsp;                if (!(list.get(0) instanceof Integer) || list.size() &gt; 1) {</b>
+<b class="nc">&nbsp;                    canBuildRangeMap = false;</b>
+<b class="nc">&nbsp;                    break;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            return canBuildRangeMap;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    static class Point&lt;T&gt; implements Comparable&lt;Point&lt;T&gt;&gt; {
+&nbsp;        int index;
+&nbsp;        boolean start;
+&nbsp;        T value;
+&nbsp;
+<b class="fc">&nbsp;        Point(Range range, boolean start, T value) {</b>
+<b class="fc">&nbsp;            if (start)</b>
+<b class="fc">&nbsp;                this.index = range.getStart();</b>
+&nbsp;            else
+<b class="fc">&nbsp;                this.index = range.getEnd();</b>
+&nbsp;
+<b class="fc">&nbsp;            this.start = start;</b>
+<b class="fc">&nbsp;            this.value = value;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public boolean isStart() {
+<b class="fc">&nbsp;            return start;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public boolean isEnd() {
+<b class="nc">&nbsp;            return !start;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String toString() {
+<b class="nc">&nbsp;            return index + (isStart() ? &quot;s&quot; : &quot;e&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public int compareTo(Point&lt;T&gt; other) {
+<b class="fc">&nbsp;            int d = this.index - other.index;</b>
+<b class="fc">&nbsp;            if (d != 0) return d;</b>
+<b class="fc">&nbsp;            return -Boolean.compare(this.isStart(), other.isStart());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public int hashCode() {
+<b class="fc">&nbsp;            return Objects.hash(index, Boolean.hashCode(start));</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public boolean equals(Object obj) {
+<b class="fc">&nbsp;            if (this == obj) return true;</b>
+<b class="fc">&nbsp;            if (!(obj instanceof Point&lt;?&gt;)) return false;</b>
+<b class="fc">&nbsp;            Point&lt;?&gt; other = (Point&lt;?&gt;) obj;</b>
+<b class="fc">&nbsp;            return this.index == other.index &amp;&amp; this.start == other.start;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

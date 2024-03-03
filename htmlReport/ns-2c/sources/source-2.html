@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GrammarGraphToDot</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.util.visualization</a>
+</div>
+
+<h1>Coverage Summary for Class: GrammarGraphToDot (org.iguana.util.visualization)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrammarGraphToDot</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.util.visualization;
+&nbsp;
+&nbsp;import org.iguana.grammar.GrammarGraph;
+&nbsp;import org.iguana.grammar.slot.BodyGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.ConditionalTransition;
+&nbsp;import org.iguana.grammar.slot.EndGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.Transition;
+&nbsp;import org.iguana.utils.visualization.DotGraph;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;import static org.iguana.utils.string.StringUtil.listToString;
+&nbsp;import static org.iguana.utils.visualization.DotGraph.newEdge;
+&nbsp;import static org.iguana.utils.visualization.DotGraph.newNode;
+&nbsp;
+<b class="nc">&nbsp;public class GrammarGraphToDot {</b>
+&nbsp;
+<b class="nc">&nbsp;    private static final Map&lt;GrammarSlot, Integer&gt; ids = new HashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public static DotGraph toDot(GrammarGraph g, DotGraph.Direction direction) {
+<b class="nc">&nbsp;        DotGraph dotGraph = new DotGraph(direction);</b>
+<b class="nc">&nbsp;        generate(dotGraph, g);</b>
+<b class="nc">&nbsp;        return dotGraph;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static DotGraph toDot(GrammarGraph g) {
+<b class="nc">&nbsp;        DotGraph dotGraph = new DotGraph();</b>
+<b class="nc">&nbsp;        generate(dotGraph, g);</b>
+<b class="nc">&nbsp;        return dotGraph;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void generate(DotGraph dotGraph, GrammarGraph g) {
+<b class="nc">&nbsp;        ids.clear();</b>
+<b class="nc">&nbsp;        Set&lt;Integer&gt; visited = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (NonterminalGrammarSlot nonterminal : g.getNonterminalGrammarSlots()) {</b>
+<b class="nc">&nbsp;            toDot(nonterminal, dotGraph, visited);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void toDot(NonterminalGrammarSlot slot, DotGraph dotGraph, Set&lt;Integer&gt; visited) {
+<b class="nc">&nbsp;        int slotId = getId(slot);</b>
+<b class="nc">&nbsp;        if (visited.contains(slotId)) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        visited.add(slotId);</b>
+<b class="nc">&nbsp;        DotGraph.Node node = newNode(slotId);</b>
+&nbsp;        String label;
+<b class="nc">&nbsp;        if (slot.getNonterminal().getParameters() != null) {</b>
+<b class="nc">&nbsp;            label = String.format(&quot;%s(%s)&quot;, slot.getNonterminal().getName(),</b>
+<b class="nc">&nbsp;                listToString(slot.getNonterminal().getParameters(), &quot;,&quot;));</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            label = slot.getNonterminal().getName();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        node.setLabel(label);</b>
+<b class="nc">&nbsp;        dotGraph.addNode(node);</b>
+&nbsp;
+<b class="nc">&nbsp;        slot.getFirstSlots().forEach(s -&gt; dotGraph.addEdge(newEdge(slotId, getId(s), &quot;&quot;)));</b>
+<b class="nc">&nbsp;        slot.getFirstSlots().forEach(s -&gt; toDot(s, dotGraph));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void toDot(BodyGrammarSlot slot, DotGraph dotGraph) {
+<b class="nc">&nbsp;        if (slot instanceof EndGrammarSlot) {</b>
+<b class="nc">&nbsp;            dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            dotGraph.addNode(newNode(getId(slot), slot.toString()).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));</b>
+&nbsp;
+&nbsp;            // TODO: improve this code
+<b class="nc">&nbsp;            Transition t = slot.getOutTransition();</b>
+<b class="nc">&nbsp;            if (t instanceof ConditionalTransition) {</b>
+<b class="nc">&nbsp;                dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));</b>
+&nbsp;
+<b class="nc">&nbsp;                BodyGrammarSlot ifFalse = ((ConditionalTransition) t).ifFalseDestination();</b>
+<b class="nc">&nbsp;                if (ifFalse != null)</b>
+<b class="nc">&nbsp;                    dotGraph.addEdge(newEdge(getId(slot), getId(ifFalse), t.getLabel()));</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            else {
+<b class="nc">&nbsp;                dotGraph.addEdge(newEdge(getId(slot), getId(t.destination()), t.getLabel()));</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            toDot(t.destination(), dotGraph);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static int getId(GrammarSlot slot) {
+<b class="nc">&nbsp;        return ids.computeIfAbsent(slot, k -&gt; ids.size() + 1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

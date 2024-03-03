@@ -1,0 +1,398 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ParseTreeVisitorGenerator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.generator.parser</a>
+</div>
+
+<h1>Coverage Summary for Class: ParseTreeVisitorGenerator (org.iguana.generator.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParseTreeVisitorGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/178)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.generator.parser;
+&nbsp;
+&nbsp;import org.iguana.generator.Generator;
+&nbsp;import org.iguana.grammar.runtime.RuntimeGrammar;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;import org.iguana.grammar.symbol.Alt;
+&nbsp;import org.iguana.grammar.symbol.Code;
+&nbsp;import org.iguana.grammar.symbol.Group;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Opt;
+&nbsp;import org.iguana.grammar.symbol.Plus;
+&nbsp;import org.iguana.grammar.symbol.Star;
+&nbsp;import org.iguana.grammar.symbol.Start;
+&nbsp;import org.iguana.grammar.symbol.Symbol;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.parsetree.NonterminalNode;
+&nbsp;import org.iguana.parsetree.TerminalNode;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.AltNode;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.GroupNode;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.OptionNode;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.PlusNode;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.StarNode;
+&nbsp;import static org.iguana.parsetree.MetaSymbolNode.StartNode;
+&nbsp;import static org.iguana.utils.string.StringUtil.listToString;
+&nbsp;import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
+&nbsp;
+&nbsp;public class ParseTreeVisitorGenerator extends Generator {
+&nbsp;
+&nbsp;    public ParseTreeVisitorGenerator(
+&nbsp;            RuntimeGrammar grammar,
+&nbsp;            String grammarName,
+&nbsp;            String packageName,
+&nbsp;            String genDirectory) {
+<b class="nc">&nbsp;        super(grammar, grammarName, packageName, genDirectory);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void generate() {
+<b class="nc">&nbsp;        generateParseTreeTypes();</b>
+<b class="nc">&nbsp;        generateVisitor();</b>
+<b class="nc">&nbsp;        generateParseTreeBuilder();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateParseTreeBuilder() {
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        sb.append(&quot;// This file has been generated, do not directly edit this file!\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;package &quot; + packageName + &quot;;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.grammar.runtime.RuntimeRule;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.DefaultParseTreeBuilder;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.NonterminalNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.ParseTreeNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.utils.input.Input;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import java.util.List;\n\n&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName) + &quot;ParseTreeBuilder&quot;;</b>
+<b class="nc">&nbsp;        sb.append(&quot;public class &quot; + className + &quot; extends DefaultParseTreeBuilder {\n\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    public &quot; + className + &quot;(Input input) {\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        super(input);\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    }\n\n&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        sb.append(&quot;    @Override\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    public NonterminalNode nonterminalNode(\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;            RuntimeRule rule,\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;            List&lt;ParseTreeNode&gt; children,\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;            int leftExtent,\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;            int rightExtent) {\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        java.lang.String name = rule.getHead().getName();\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        java.lang.String label = rule.getLabel();\n\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        switch (name) {\n&quot;);</b>
+<b class="nc">&nbsp;        generateBuilderCases(grammar, sb);</b>
+<b class="nc">&nbsp;        sb.append(&quot;            default:\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;                throw new RuntimeException(\&quot;Unexpected nonterminal:\&quot; + name);\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        }\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    }\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;}\n&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        writeToJavaFile(sb.toString(), genDirectory, className);</b>
+<b class="nc">&nbsp;        System.out.println(className + &quot; has been generated in &quot; + genDirectory + &quot;/&quot; + className + &quot;.java&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateBuilderCases(RuntimeGrammar grammar, StringBuilder sb) {
+<b class="nc">&nbsp;        for (Map.Entry&lt;Nonterminal, List&lt;RuntimeRule&gt;&gt; entry : grammar.getDefinitions().entrySet()) {</b>
+<b class="nc">&nbsp;            String nonterminalName = entry.getKey().getName();</b>
+<b class="nc">&nbsp;            List&lt;RuntimeRule&gt; alternatives = entry.getValue();</b>
+&nbsp;
+<b class="nc">&nbsp;            sb.append(&quot;            case \&quot;&quot; + nonterminalName + &quot;\&quot;:\n&quot;);</b>
+<b class="nc">&nbsp;            if (alternatives.size() == 0) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;                return new &quot; + toFirstUpperCase(grammarName) + &quot;ParseTree&quot; + &quot;.&quot;</b>
+<b class="nc">&nbsp;                          + toFirstUpperCase(nonterminalName) + &quot;(rule, children, leftExtent, rightExtent);\n&quot;);</b>
+<b class="nc">&nbsp;            } else if (alternatives.size() == 1) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;                return new &quot; + toFirstUpperCase(grammarName) + &quot;ParseTree&quot; + &quot;.&quot;</b>
+<b class="nc">&nbsp;                          + toFirstUpperCase(nonterminalName) + &quot;(rule, children, leftExtent, rightExtent);\n&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                sb.append(&quot;                switch (label) {\n&quot;);</b>
+<b class="nc">&nbsp;                for (RuntimeRule alternative : alternatives) {</b>
+<b class="nc">&nbsp;                    if (alternative.getLabel() == null)</b>
+<b class="nc">&nbsp;                        throw new RuntimeException(&quot;All alternatives must have a label: &quot; + alternative);</b>
+<b class="nc">&nbsp;                    sb.append(&quot;                    case \&quot;&quot; + alternative.getLabel() + &quot;\&quot;:\n&quot;);</b>
+<b class="nc">&nbsp;                    String className = toFirstUpperCase(grammarName) + &quot;ParseTree&quot; + &quot;.&quot;</b>
+<b class="nc">&nbsp;                                       + toFirstUpperCase(alternative.getLabel()) + toFirstUpperCase(nonterminalName);</b>
+<b class="nc">&nbsp;                    sb.append(&quot;                        return new &quot; + toFirstUpperCase(className)</b>
+&nbsp;                              + &quot;(rule, children, leftExtent, rightExtent);\n&quot;);
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;                sb.append(&quot;                    default:\n&quot;);</b>
+<b class="nc">&nbsp;                sb.append(&quot;                        throw new RuntimeException(\&quot;Unexpected label:\&quot; + label);\n&quot;);</b>
+<b class="nc">&nbsp;                sb.append(&quot;                }\n&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateParseTreeTypes() {
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        sb.append(&quot;// This file has been generated, do not directly edit this file!\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;package &quot; + packageName + &quot;;\n\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.grammar.runtime.RuntimeRule;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.NonterminalNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.ParseTreeNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.ParseTreeVisitor;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.TerminalNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import java.util.List;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import static org.iguana.parsetree.MetaSymbolNode.OptionNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import static org.iguana.parsetree.MetaSymbolNode.PlusNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import static org.iguana.parsetree.MetaSymbolNode.StarNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName) + &quot;ParseTree&quot;;</b>
+<b class="nc">&nbsp;        sb.append(&quot;public class &quot; + className + &quot; {\n&quot;);</b>
+<b class="nc">&nbsp;        for (Map.Entry&lt;Nonterminal, List&lt;RuntimeRule&gt;&gt; entry : grammar.getDefinitions().entrySet()) {</b>
+<b class="nc">&nbsp;            String nonterminalName = entry.getKey().getName();</b>
+<b class="nc">&nbsp;            List&lt;RuntimeRule&gt; alternatives = entry.getValue();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (alternatives.size() == 0) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;    // &quot; + nonterminalName + &quot; = \n&quot;);</b>
+<b class="nc">&nbsp;                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,</b>
+<b class="nc">&nbsp;                    Collections.emptyList()));</b>
+<b class="nc">&nbsp;            } else if (alternatives.size() == 1) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;    // &quot; + nonterminalName + &quot; = &quot; + listToString(alternatives.get(0).getBody().stream()</b>
+<b class="nc">&nbsp;                    .map(this::symbolToString).collect(Collectors.toList())) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), false,</b>
+<b class="nc">&nbsp;                    alternatives.get(0).getBody()));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                sb.append(generateSymbolClass(nonterminalName, NonterminalNode.class.getSimpleName(), true,</b>
+<b class="nc">&nbsp;                    Collections.emptyList()));</b>
+<b class="nc">&nbsp;                for (RuntimeRule alternative : alternatives) {</b>
+<b class="nc">&nbsp;                    if (alternative.getLabel() == null)</b>
+<b class="nc">&nbsp;                        throw new RuntimeException(&quot;All alternatives must have a label: &quot; + alternative);</b>
+<b class="nc">&nbsp;                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase()</b>
+<b class="nc">&nbsp;                                      + nonterminalName.substring(1);</b>
+<b class="nc">&nbsp;                    sb.append(&quot;    // &quot; + nonterminalName + &quot; = &quot; + listToString(alternative.getBody().stream()</b>
+<b class="nc">&nbsp;                        .map(this::symbolToString).collect(Collectors.toList())) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;                    sb.append(generateSymbolClass(nodeName, nonterminalName, false, alternative.getBody()));</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        sb.append(&quot;}\n&quot;);</b>
+<b class="nc">&nbsp;        writeToJavaFile(sb.toString(), genDirectory, className);</b>
+<b class="nc">&nbsp;        System.out.println(className + &quot; has been generated in &quot; + genDirectory + &quot;/&quot; + className + &quot;.java&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateVisitor() {
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        sb.append(&quot;// This file has been generated, do not directly edit this file!\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;package &quot; + packageName + &quot;;\n\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.NonterminalNode;\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;import org.iguana.parsetree.ParseTreeVisitor;\n\n&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName) + &quot;ParseTreeVisitor&quot;;</b>
+<b class="nc">&nbsp;        sb.append(&quot;public interface &quot; + className + &quot;&lt;T&gt; extends ParseTreeVisitor&lt;T&gt; {\n\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    @Override\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    default T visitNonterminalNode(NonterminalNode node) {\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;        throw new UnsupportedOperationException();\n&quot;);</b>
+<b class="nc">&nbsp;        sb.append(&quot;    }\n\n&quot;);</b>
+<b class="nc">&nbsp;        generateVisitMethods(grammar, sb);</b>
+<b class="nc">&nbsp;        sb.append(&quot;}\n&quot;);</b>
+<b class="nc">&nbsp;        writeToJavaFile(sb.toString(), genDirectory, className);</b>
+<b class="nc">&nbsp;        System.out.println(className + &quot; has been generated in &quot; + genDirectory + &quot;/&quot; + className + &quot;.java&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateVisitMethods(RuntimeGrammar grammar, StringBuilder sb) {
+<b class="nc">&nbsp;        for (Map.Entry&lt;Nonterminal, List&lt;RuntimeRule&gt;&gt; entry : grammar.getDefinitions().entrySet()) {</b>
+<b class="nc">&nbsp;            String nonterminalName = entry.getKey().getName();</b>
+<b class="nc">&nbsp;            List&lt;RuntimeRule&gt; alternatives = entry.getValue();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (alternatives.size() == 0) {</b>
+<b class="nc">&nbsp;                sb.append(generateVisitorMethod(nonterminalName));</b>
+<b class="nc">&nbsp;            } else if (alternatives.size() == 1) {</b>
+<b class="nc">&nbsp;                sb.append(generateVisitorMethod(nonterminalName));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                for (RuntimeRule alternative : alternatives) {</b>
+<b class="nc">&nbsp;                    if (alternative.getLabel() == null)</b>
+<b class="nc">&nbsp;                        throw new RuntimeException(&quot;All alternatives must have a label: &quot; + alternative);</b>
+<b class="nc">&nbsp;                    String nodeName = alternative.getLabel() + nonterminalName.substring(0, 1).toUpperCase()</b>
+<b class="nc">&nbsp;                                      + nonterminalName.substring(1);</b>
+<b class="nc">&nbsp;                    sb.append(generateVisitorMethod(nodeName));</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String generateVisitorMethod(String name) {
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName) + &quot;ParseTree&quot;;</b>
+&nbsp;        // CHECKSTYLE:OFF LineLength
+<b class="nc">&nbsp;        if (name.startsWith(&quot;$_&quot;)) {</b>
+<b class="nc">&nbsp;            return   &quot;    default T visit&quot; + toFirstUpperCase(name) + &quot;(&quot; + className + &quot;.&quot; + toFirstUpperCase(name) + &quot; node) {\n&quot;</b>
+&nbsp;                   + &quot;        return node.child().accept(this);\n&quot;
+&nbsp;                   + &quot;    }\n\n&quot;;
+&nbsp;        } else {
+<b class="nc">&nbsp;            return &quot;    T visit&quot; + toFirstUpperCase(name) + &quot;(&quot; + className + &quot;.&quot; + toFirstUpperCase(name) + &quot; node);\n\n&quot;;</b>
+&nbsp;        }
+&nbsp;        // CHECKSTYLE:ON LineLength
+&nbsp;    }
+&nbsp;
+&nbsp;    private String generateSymbolClass(String symbolClass, String superType, boolean isAbstract, List&lt;Symbol&gt; symbols) {
+&nbsp;        // CHECKSTYLE:OFF LineLength
+&nbsp;        return
+<b class="nc">&nbsp;              &quot;    public &quot; + (isAbstract ? &quot;abstract &quot; : &quot;&quot;) + &quot;static class &quot; + toFirstUpperCase(symbolClass) + &quot; extends &quot; + toFirstUpperCase(superType) + &quot; {\n&quot;</b>
+<b class="nc">&nbsp;            + &quot;        public &quot; + toFirstUpperCase(symbolClass) + &quot;(RuntimeRule rule, List&lt;ParseTreeNode&gt; children, int start, int end) {\n&quot;</b>
+&nbsp;            + &quot;            super(rule, children, start, end);\n&quot;
+&nbsp;            + &quot;        }\n\n&quot;
+<b class="nc">&nbsp;            + generateSymbols(symbols)</b>
+<b class="nc">&nbsp;            + (isAbstract ? &quot;&quot; : generateAcceptMethod(symbolClass))</b>
+&nbsp;            + &quot;    }\n\n&quot;;
+&nbsp;        // CHECKSTYLE:ON LineLength
+&nbsp;    }
+&nbsp;
+&nbsp;    private String generateAcceptMethod(String symbolClass) {
+&nbsp;        // CHECKSTYLE:OFF LineLength
+<b class="nc">&nbsp;        String visitorName = toFirstUpperCase(grammarName) + &quot;ParseTreeVisitor&quot;;</b>
+<b class="nc">&nbsp;        return</b>
+&nbsp;              &quot;        @Override\n&quot;
+&nbsp;            + &quot;        public &lt;T&gt; T accept(ParseTreeVisitor&lt;T&gt; visitor) {\n&quot;
+&nbsp;            + &quot;            if (visitor instanceof &quot; + visitorName + &quot;) {\n&quot;
+<b class="nc">&nbsp;            + &quot;                return ((&quot; + visitorName + &quot;&lt;T&gt;) visitor).visit&quot; + toFirstUpperCase(symbolClass) + &quot;(this);\n&quot;</b>
+&nbsp;            + &quot;            }\n&quot;
+&nbsp;            + &quot;            return visitor.visitNonterminalNode(this);\n&quot;
+&nbsp;            + &quot;        }\n&quot;;
+&nbsp;        // CHECKSTYLE:ON LineLength
+&nbsp;    }
+&nbsp;
+&nbsp;    private String generateSymbols(List&lt;Symbol&gt; symbols) {
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; symbols.size(); i++) {</b>
+<b class="nc">&nbsp;            Symbol symbol = symbols.get(i);</b>
+<b class="nc">&nbsp;            String type = getSymbolType(symbol);</b>
+&nbsp;            // When type == null, it&#39;s a data-dependent construct that does not contribute to parse trees
+<b class="nc">&nbsp;            if (type != null) {</b>
+<b class="nc">&nbsp;                String label = getLabel(symbol);</b>
+<b class="nc">&nbsp;                if (label != null) {</b>
+<b class="nc">&nbsp;                    sb.append(&quot;        public &quot; + toFirstUpperCase(type) + &quot; &quot; + label + &quot;() {\n&quot;);</b>
+<b class="nc">&nbsp;                    sb.append(&quot;           return (&quot; + toFirstUpperCase(type) + &quot;) childAt(&quot; + i + &quot;);\n&quot;);</b>
+<b class="nc">&nbsp;                    sb.append(&quot;        }\n\n&quot;);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return sb.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String getSymbolType(Symbol symbol) {
+<b class="nc">&nbsp;        if (symbol instanceof Nonterminal) {</b>
+<b class="nc">&nbsp;            return symbol.getName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Terminal) {</b>
+<b class="nc">&nbsp;            return TerminalNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Star) {</b>
+<b class="nc">&nbsp;            return StarNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Plus) {</b>
+<b class="nc">&nbsp;            return PlusNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Group) {</b>
+<b class="nc">&nbsp;            return GroupNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Alt) {</b>
+<b class="nc">&nbsp;            return AltNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Opt) {</b>
+<b class="nc">&nbsp;            return OptionNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Start) {</b>
+<b class="nc">&nbsp;            return StartNode.class.getSimpleName();</b>
+<b class="nc">&nbsp;        } else if (symbol instanceof Code) {</b>
+<b class="nc">&nbsp;            return getSymbolType(((Code) symbol).getSymbol());</b>
+&nbsp;        } else {
+&nbsp;            // Data dependent symbols do not have a type
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

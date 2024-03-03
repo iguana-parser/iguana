@@ -1,0 +1,248 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Ranges</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections.rangemap</a>
+</div>
+
+<h1>Coverage Summary for Class: Ranges (org.iguana.utils.collections.rangemap)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Ranges</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.utils.collections.rangemap;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import static org.iguana.utils.collections.CollectionsUtil.toList;
+&nbsp;
+<b class="nc">&nbsp;public class Ranges {</b>
+&nbsp;
+&nbsp;    public static Set&lt;Range&gt; toNonOverlappingSet(Iterable&lt;Range&gt; ranges) {
+<b class="nc">&nbsp;        return toNonOverlapping(toList(ranges)).values().stream().flatMap(l -&gt; l.stream()).collect(Collectors.toSet());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     * @return a map from the new, non-overlapping ranges to original ranges
+&nbsp;     */
+&nbsp;    public static Map&lt;Range, List&lt;Range&gt;&gt; toNonOverlapping2(Iterable&lt;Range&gt; ranges) {
+<b class="nc">&nbsp;        Map&lt;Range, List&lt;Range&gt;&gt; nonOverlapping = toNonOverlapping(toList(ranges));</b>
+<b class="nc">&nbsp;        Map&lt;Range, List&lt;Range&gt;&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        nonOverlapping.forEach((k, v) -&gt; v.forEach(r -&gt; map.computeIfAbsent(r, key -&gt; new ArrayList&lt;&gt;()).add(k)));</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Map&lt;Range, List&lt;Range&gt;&gt; toNonOverlapping(Iterable&lt;Range&gt; ranges) {
+<b class="nc">&nbsp;        return toNonOverlapping(toList(ranges));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Map&lt;Range, List&lt;Range&gt;&gt; toNonOverlapping(Range... ranges) {
+<b class="nc">&nbsp;        return toNonOverlapping(Arrays.asList(ranges));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Map&lt;Range, List&lt;Range&gt;&gt; toNonOverlapping(List&lt;Range&gt; ranges) {
+&nbsp;
+<b class="nc">&nbsp;        if (ranges.size() == 0)</b>
+<b class="nc">&nbsp;            return Collections.emptyMap();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (ranges.size() == 1) {</b>
+<b class="nc">&nbsp;            Map&lt;Range, List&lt;Range&gt;&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            map.computeIfAbsent(ranges.get(0), k -&gt; new ArrayList&lt;&gt;()).add(ranges.get(0));</b>
+<b class="nc">&nbsp;            return map;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Collections.sort(ranges);</b>
+&nbsp;
+<b class="nc">&nbsp;        Map&lt;Range, List&lt;Range&gt;&gt; result = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        Set&lt;Range&gt; overlapping = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; ranges.size(); i++) {</b>
+&nbsp;
+<b class="nc">&nbsp;            Range current = ranges.get(i);</b>
+<b class="nc">&nbsp;            overlapping.add(current);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (i + 1 &lt; ranges.size()) {</b>
+<b class="nc">&nbsp;                Range next = ranges.get(i + 1);</b>
+<b class="nc">&nbsp;                if (!overlaps(overlapping, next)) {</b>
+<b class="nc">&nbsp;                    result.putAll(convertOverlapping(overlapping));</b>
+<b class="nc">&nbsp;                    overlapping.clear();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        result.putAll(convertOverlapping(overlapping));</b>
+&nbsp;
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static boolean overlaps(Set&lt;Range&gt; set, Range r) {
+<b class="nc">&nbsp;        for (Range c : set) {</b>
+<b class="nc">&nbsp;            if (c.overlaps(r)) {</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static Map&lt;Range, List&lt;Range&gt;&gt; convertOverlapping(Set&lt;Range&gt; ranges) {
+&nbsp;
+<b class="nc">&nbsp;        if (ranges.isEmpty())</b>
+<b class="nc">&nbsp;            return Collections.emptyMap();</b>
+&nbsp;
+<b class="nc">&nbsp;        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Range r : ranges) {</b>
+<b class="nc">&nbsp;            set.add(r.getStart() - 1);</b>
+<b class="nc">&nbsp;            set.add(r.getEnd());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        List&lt;Integer&gt; l = new ArrayList&lt;&gt;(set);</b>
+<b class="nc">&nbsp;        Collections.sort(l);</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;Range&gt; result = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        int start = l.get(0) + 1;</b>
+<b class="nc">&nbsp;        for (int i = 1; i &lt; l.size(); i++) {</b>
+<b class="nc">&nbsp;            result.add(Range.in(start, l.get(i)));</b>
+<b class="nc">&nbsp;            start = l.get(i) + 1;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Map&lt;Range, List&lt;Range&gt;&gt; rangesMap = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Range r1 : ranges) {</b>
+<b class="nc">&nbsp;            for (Range r2 : result) {</b>
+<b class="nc">&nbsp;                if (r1.contains(r2))</b>
+<b class="nc">&nbsp;                    rangesMap.computeIfAbsent(r1, k -&gt; new ArrayList&lt;&gt;()).add(r2);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return rangesMap;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

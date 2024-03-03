@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GenerateLangFiles</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.generator.ide</a>
+</div>
+
+<h1>Coverage Summary for Class: GenerateLangFiles (org.iguana.generator.ide)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenerateLangFiles</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.generator.ide;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;
+&nbsp;import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
+&nbsp;import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
+&nbsp;
+&nbsp;public class GenerateLangFiles {
+&nbsp;
+&nbsp;    private final String grammarName;
+&nbsp;    private final String langGenDirectory;
+&nbsp;
+<b class="nc">&nbsp;    public GenerateLangFiles(String grammarName, String genDirectory) {</b>
+<b class="nc">&nbsp;        this.grammarName = grammarName;</b>
+<b class="nc">&nbsp;        this.langGenDirectory = new File(genDirectory, &quot;lang&quot;).getAbsolutePath();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void generate() {
+<b class="nc">&nbsp;        generateFileType();</b>
+<b class="nc">&nbsp;        generateIcon();</b>
+<b class="nc">&nbsp;        generateLang();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateFileType() {
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName);</b>
+<b class="nc">&nbsp;        String content =</b>
+&nbsp;            &quot;// This file has been generated, do not directly edit this file!\n&quot;
+&nbsp;            + &quot;\n&quot;
+<b class="nc">&nbsp;            + &quot;package &quot; + grammarName.toLowerCase() + &quot;.ide.lang;\n&quot;</b>
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;import com.intellij.openapi.fileTypes.LanguageFileType;\n&quot;
+&nbsp;            + &quot;import com.intellij.openapi.util.NlsContexts;\n&quot;
+&nbsp;            + &quot;import com.intellij.openapi.util.NlsSafe;\n&quot;
+&nbsp;            + &quot;import org.jetbrains.annotations.NonNls;\n&quot;
+&nbsp;            + &quot;import org.jetbrains.annotations.NotNull;\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;import javax.swing.*;\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;public class &quot; + className + &quot;FileType extends LanguageFileType {\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;public static final &quot; + className + &quot;FileType instance = new &quot; + className + &quot;FileType();\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  protected &quot; + className + &quot;FileType() {\n&quot;
+&nbsp;            + &quot;    super(&quot; + className + &quot;Lang.instance);\n&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  @Override\n&quot;
+&nbsp;            + &quot;  public @NonNls @NotNull String getName() {\n&quot;
+&nbsp;            + &quot;    return \&quot;&quot; + className + &quot;\&quot;;\n&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  public @NlsContexts.Label @NotNull String getDescription() {\n&quot;
+&nbsp;            + &quot;    return \&quot;&quot; + className + &quot; grammar definition file\&quot;\n;&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  @Override\n&quot;
+&nbsp;            + &quot;  public @NlsSafe @NotNull String getDefaultExtension() {\n&quot;
+&nbsp;            + &quot;    return \&quot;&quot; + className + &quot;\&quot;;\n&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  @Override\n&quot;
+&nbsp;            + &quot;  public Icon getIcon() {\n&quot;
+&nbsp;            + &quot;    return &quot; + className + &quot;Icon.icon;\n&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;}\n&quot;;
+&nbsp;
+<b class="nc">&nbsp;        writeToJavaFile(content, langGenDirectory, className + &quot;FileType&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateIcon() {
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName);</b>
+<b class="nc">&nbsp;        String content =</b>
+&nbsp;            &quot;// This file has been generated, do not directly edit this file!\n&quot;
+&nbsp;            + &quot;\n&quot;
+<b class="nc">&nbsp;            + &quot;package &quot; + grammarName.toLowerCase() + &quot;.ide.lang;\n&quot;</b>
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;import com.intellij.openapi.util.IconLoader;\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;import javax.swing.*;\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;public class &quot; + className + &quot;Icon {\n&quot;
+&nbsp;            + &quot;  public static final Icon icon = IconLoader.getIcon(\&quot;/META-INF/pluginIcon.svg\&quot;, &quot; + className
+&nbsp;            + &quot;Icon.class);\n&quot;
+&nbsp;            + &quot;}\n&quot;;
+<b class="nc">&nbsp;        writeToJavaFile(content, langGenDirectory, className + &quot;Icon&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void generateLang() {
+<b class="nc">&nbsp;        String className = toFirstUpperCase(grammarName);</b>
+<b class="nc">&nbsp;        String content =</b>
+&nbsp;            &quot;// This file has been generated, do not directly edit this file!\n&quot;
+&nbsp;            + &quot;\n&quot;
+<b class="nc">&nbsp;            + &quot;package &quot; + grammarName.toLowerCase() + &quot;.ide.lang;\n&quot;</b>
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;import com.intellij.lang.Language;\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;public class &quot; + className + &quot;Lang extends Language {\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  public static final &quot; + className + &quot;Lang instance = new &quot; + className + &quot;Lang();\n&quot;
+&nbsp;            + &quot;\n&quot;
+&nbsp;            + &quot;  private &quot; + className + &quot;Lang() {\n&quot;
+&nbsp;            + &quot;    super(\&quot;&quot; + className + &quot;\&quot;);\n&quot;
+&nbsp;            + &quot;  }\n&quot;
+&nbsp;            + &quot;}\n&quot;
+&nbsp;            + &quot;\n&quot;;
+<b class="nc">&nbsp;        writeToJavaFile(content, langGenDirectory, className + &quot;Lang&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

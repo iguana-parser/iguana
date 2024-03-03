@@ -1,0 +1,652 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GrammarGraphBuilder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar</a>
+</div>
+
+<h1>Coverage Summary for Class: GrammarGraphBuilder (org.iguana.grammar)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrammarGraphBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    87%
+  </span>
+  <span class="absValue">
+    (20/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82%
+  </span>
+  <span class="absValue">
+    (82/100)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GrammarGraphBuilder$GrammarGraphSymbolVisitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.5%
+  </span>
+  <span class="absValue">
+    (75/98)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (30/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.3%
+  </span>
+  <span class="absValue">
+    (157/198)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.datadependent.ast.Statement;
+&nbsp;import org.iguana.grammar.condition.Condition;
+&nbsp;import org.iguana.grammar.condition.Conditions;
+&nbsp;import org.iguana.grammar.condition.ConditionsFactory;
+&nbsp;import org.iguana.grammar.exception.IncorrectNumberOfArgumentsException;
+&nbsp;import org.iguana.grammar.operations.FirstFollowSets;
+&nbsp;import org.iguana.grammar.runtime.Position;
+&nbsp;import org.iguana.grammar.runtime.RuntimeGrammar;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;import org.iguana.grammar.slot.BodyGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.CodeTransition;
+&nbsp;import org.iguana.grammar.slot.ConditionalTransition;
+&nbsp;import org.iguana.grammar.slot.EndGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.EpsilonGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.EpsilonTransition;
+&nbsp;import org.iguana.grammar.slot.EpsilonTransition.Type;
+&nbsp;import org.iguana.grammar.slot.ErrorTransition;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalTransition;
+&nbsp;import org.iguana.grammar.slot.ReturnTransition;
+&nbsp;import org.iguana.grammar.slot.TerminalGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.TerminalTransition;
+&nbsp;import org.iguana.grammar.slot.Transition;
+&nbsp;import org.iguana.grammar.slot.lookahead.FollowTest;
+&nbsp;import org.iguana.grammar.slot.lookahead.RangeTreeFollowTest;
+&nbsp;import org.iguana.grammar.symbol.Code;
+&nbsp;import org.iguana.grammar.symbol.Conditional;
+&nbsp;import org.iguana.grammar.symbol.Error;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Return;
+&nbsp;import org.iguana.grammar.symbol.Symbol;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.grammar.transformation.VarToInt;
+&nbsp;import org.iguana.regex.CharRange;
+&nbsp;import org.iguana.regex.matcher.DFAMatcherFactory;
+&nbsp;import org.iguana.regex.matcher.MatcherFactory;
+&nbsp;import org.iguana.util.Configuration;
+&nbsp;import org.iguana.util.Configuration.EnvironmentImpl;
+&nbsp;import org.iguana.utils.collections.rangemap.RangeMap;
+&nbsp;import org.iguana.utils.collections.rangemap.RangeMapBuilder;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.LinkedHashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;import static org.iguana.grammar.GrammarGraph.epsilonSlot;
+&nbsp;
+<b class="fc">&nbsp;public class GrammarGraphBuilder {</b>
+&nbsp;
+<b class="fc">&nbsp;    private static final MatcherFactory matcherFactory = new DFAMatcherFactory();</b>
+&nbsp;
+&nbsp;    private final Map&lt;Nonterminal, NonterminalGrammarSlot&gt; nonterminalsMap;
+&nbsp;
+&nbsp;    private final Map&lt;Terminal, TerminalGrammarSlot&gt; terminalsMap;
+&nbsp;
+&nbsp;    private final List&lt;BodyGrammarSlot&gt; bodyGrammarSlots;
+&nbsp;
+&nbsp;    private FirstFollowSets firstFollow;
+&nbsp;
+&nbsp;    private final RuntimeGrammar grammar;
+&nbsp;
+&nbsp;    private final Configuration config;
+&nbsp;
+&nbsp;    private final Map&lt;Integer, Map&lt;String, Integer&gt;&gt; mapping;
+&nbsp;
+&nbsp;    private Map&lt;String, Integer&gt; current;
+&nbsp;
+<b class="fc">&nbsp;    private GrammarGraphBuilder(RuntimeGrammar grammar, Configuration config) {</b>
+<b class="fc">&nbsp;        if (config.getEnvImpl() == EnvironmentImpl.ARRAY || config.getEnvImpl() == EnvironmentImpl.INT_ARRAY) {</b>
+&nbsp;            // TODO: move this transformation to IguanaRecognizer
+<b class="nc">&nbsp;            VarToInt transformer = new VarToInt();</b>
+<b class="nc">&nbsp;            this.grammar = transformer.transform(grammar);</b>
+<b class="nc">&nbsp;            this.mapping = transformer.getMapping();</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            this.grammar = grammar;</b>
+<b class="fc">&nbsp;            this.mapping = new HashMap&lt;&gt;();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        this.config = config;</b>
+<b class="fc">&nbsp;        this.nonterminalsMap = new LinkedHashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.terminalsMap = new LinkedHashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.bodyGrammarSlots = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static GrammarGraph from(RuntimeGrammar grammar, Configuration config) {
+<b class="fc">&nbsp;        GrammarGraphBuilder builder = new GrammarGraphBuilder(grammar, config);</b>
+<b class="fc">&nbsp;        builder.convert();</b>
+<b class="fc">&nbsp;        List&lt;GrammarSlot&gt; grammarSlots = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        grammarSlots.addAll(builder.nonterminalsMap.values());</b>
+<b class="fc">&nbsp;        grammarSlots.addAll(builder.terminalsMap.values());</b>
+<b class="fc">&nbsp;        grammarSlots.addAll(builder.bodyGrammarSlots);</b>
+<b class="fc">&nbsp;        return new GrammarGraph(grammarSlots, builder.nonterminalsMap, grammar.getGlobals());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static GrammarGraph from(RuntimeGrammar grammar) {
+<b class="fc">&nbsp;        return from(grammar, Configuration.load());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void convert() {
+<b class="fc">&nbsp;        this.firstFollow = new FirstFollowSets(this.grammar);</b>
+&nbsp;
+<b class="fc">&nbsp;        terminalsMap.put(Terminal.epsilon(), epsilonSlot);</b>
+&nbsp;
+<b class="fc">&nbsp;        Set&lt;Nonterminal&gt; nonterminals = this.grammar.getNonterminals();</b>
+<b class="fc">&nbsp;        nonterminals.forEach(this::getNonterminalSlot);</b>
+&nbsp;
+<b class="fc">&nbsp;        int i = 0;</b>
+<b class="fc">&nbsp;        for (RuntimeRule r : this.grammar.getRules()) {</b>
+<b class="fc">&nbsp;            current = mapping.get(i);</b>
+<b class="fc">&nbsp;            convert(r);</b>
+<b class="fc">&nbsp;            i++;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        nonterminals.forEach(this::setFirstFollowTests);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public NonterminalGrammarSlot getHead(Nonterminal start) {
+<b class="nc">&nbsp;        return nonterminalsMap.get(start);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Collection&lt;NonterminalGrammarSlot&gt; getNonterminalGrammarSlots() {
+<b class="nc">&nbsp;        return nonterminalsMap.values();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Collection&lt;TerminalGrammarSlot&gt; getTerminalGrammarSlots() {
+<b class="nc">&nbsp;        return terminalsMap.values();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void convert(RuntimeRule rule) {
+<b class="fc">&nbsp;        Nonterminal nonterminal = rule.getHead();</b>
+<b class="fc">&nbsp;        NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(nonterminal);</b>
+<b class="fc">&nbsp;        addRule(nonterminalSlot, rule);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setFirstFollowTests(Nonterminal nonterminal) {
+<b class="fc">&nbsp;        NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(nonterminal);</b>
+<b class="fc">&nbsp;        nonterminalSlot.setLookAheadTest(getLookAheadTest(nonterminal, nonterminalSlot));</b>
+<b class="fc">&nbsp;        nonterminalSlot.setFollowTest(getFollowTest(nonterminal));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private RangeMap&lt;BodyGrammarSlot&gt; getLookAheadTest(
+&nbsp;            Nonterminal nonterminal,
+&nbsp;            NonterminalGrammarSlot nonterminalSlot) {
+<b class="fc">&nbsp;        if (config.getLookAheadCount() == 0)</b>
+<b class="nc">&nbsp;            return i -&gt; nonterminalSlot.getFirstSlots();</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;RuntimeRule&gt; alternatives = grammar.getAlternatives(nonterminal);</b>
+&nbsp;
+<b class="fc">&nbsp;        RangeMapBuilder&lt;BodyGrammarSlot&gt; builder = new RangeMapBuilder&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; alternatives.size(); i++) {</b>
+<b class="fc">&nbsp;            RuntimeRule rule = alternatives.get(i);</b>
+<b class="fc">&nbsp;            BodyGrammarSlot firstSlot = nonterminalSlot.getFirstSlots().get(i);</b>
+<b class="fc">&nbsp;            Set&lt;CharRange&gt; set = firstFollow.getPredictionSet(rule, 0);</b>
+<b class="fc">&nbsp;            set.forEach(cr -&gt; builder.put(cr, firstSlot));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return builder.buildRangeMap();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private FollowTest getFollowTest(Nonterminal nonterminal) {
+<b class="fc">&nbsp;        if (config.getLookAheadCount() == 0)</b>
+<b class="nc">&nbsp;            return FollowTest.DEFAULT;</b>
+&nbsp;
+<b class="fc">&nbsp;        return new RangeTreeFollowTest(firstFollow.getFollowSet(nonterminal));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private FollowTest getFollowTest(RuntimeRule rule, int i) {
+<b class="fc">&nbsp;        if (config.getLookAheadCount() == 0)</b>
+<b class="nc">&nbsp;            return FollowTest.DEFAULT;</b>
+&nbsp;
+<b class="fc">&nbsp;        return new RangeTreeFollowTest(firstFollow.getPredictionSet(rule, i));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void addRule(NonterminalGrammarSlot head, RuntimeRule rule) {
+<b class="fc">&nbsp;        BodyGrammarSlot firstSlot = getFirstGrammarSlot(rule, head);</b>
+<b class="fc">&nbsp;        head.addFirstSlot(firstSlot);</b>
+&nbsp;
+<b class="fc">&nbsp;        GrammarGraphSymbolVisitor rule2graph = new GrammarGraphSymbolVisitor(head, rule, firstSlot);</b>
+&nbsp;
+<b class="fc">&nbsp;        while (rule2graph.hasNext())</b>
+<b class="fc">&nbsp;            rule2graph.nextSymbol();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private class GrammarGraphSymbolVisitor extends AbstractGrammarGraphSymbolVisitor&lt;Void&gt; {
+&nbsp;
+&nbsp;        private final NonterminalGrammarSlot head;
+&nbsp;        private final RuntimeRule rule;
+&nbsp;
+&nbsp;        private BodyGrammarSlot currentSlot;
+<b class="fc">&nbsp;        private int i = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        private int j = -1;</b>
+&nbsp;
+<b class="fc">&nbsp;        GrammarGraphSymbolVisitor(NonterminalGrammarSlot head, RuntimeRule rule, BodyGrammarSlot currentSlot) {</b>
+<b class="fc">&nbsp;            this.head = head;</b>
+<b class="fc">&nbsp;            this.rule = rule;</b>
+<b class="fc">&nbsp;            this.currentSlot = currentSlot;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        boolean hasNext() {
+<b class="fc">&nbsp;            return i &lt; rule.size();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        void nextSymbol() {
+<b class="fc">&nbsp;            j = -1;</b>
+<b class="fc">&nbsp;            visitSymbol(rule.symbolAt(i));</b>
+<b class="fc">&nbsp;            i++;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Void visit(Nonterminal symbol) {
+<b class="fc">&nbsp;            NonterminalGrammarSlot nonterminalSlot = getNonterminalSlot(symbol);</b>
+&nbsp;
+&nbsp;            BodyGrammarSlot slot;
+<b class="fc">&nbsp;            if (i == rule.size() - 1 &amp;&amp; j == -1)</b>
+<b class="fc">&nbsp;                slot = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), symbol.getVariable(),</b>
+<b class="fc">&nbsp;                    symbol.getState());</b>
+&nbsp;            else
+<b class="fc">&nbsp;                slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), symbol.getVariable(),</b>
+<b class="fc">&nbsp;                    symbol.getState());</b>
+&nbsp;
+<b class="fc">&nbsp;            Expression[] arguments = symbol.getArguments();</b>
+&nbsp;
+<b class="fc">&nbsp;            validateNumberOfArguments(nonterminalSlot.getNonterminal(), arguments);</b>
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Condition&gt; preConditions = (i == 0 &amp;&amp; j == -1) ? new ArrayList&lt;&gt;() : symbol.getPreConditions();</b>
+<b class="fc">&nbsp;            setTransition(</b>
+<b class="fc">&nbsp;                new NonterminalTransition(nonterminalSlot, currentSlot, slot, arguments, getConditions(preConditions)));</b>
+&nbsp;
+<b class="fc">&nbsp;            currentSlot = slot;</b>
+&nbsp;
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Void visit(Conditional symbol) {
+&nbsp;
+<b class="nc">&nbsp;            Symbol sym = symbol.getSymbol();</b>
+<b class="nc">&nbsp;            Expression expression = symbol.getExpression();</b>
+&nbsp;
+<b class="nc">&nbsp;            visitSymbol(sym);</b>
+&nbsp;
+<b class="nc">&nbsp;            BodyGrammarSlot thenSlot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);</b>
+<b class="nc">&nbsp;            Transition transition = new ConditionalTransition(expression, currentSlot, thenSlot);</b>
+<b class="nc">&nbsp;            setTransition(transition);</b>
+<b class="nc">&nbsp;            currentSlot = thenSlot;</b>
+&nbsp;
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Void visit(Code symbol) {
+&nbsp;
+<b class="fc">&nbsp;            Symbol sym = symbol.getSymbol();</b>
+<b class="fc">&nbsp;            Statement[] statements = symbol.getStatements();</b>
+&nbsp;
+<b class="fc">&nbsp;            visitSymbol(sym);</b>
+&nbsp;
+<b class="fc">&nbsp;            BodyGrammarSlot done = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);</b>
+<b class="fc">&nbsp;            Transition transition = new CodeTransition(statements, currentSlot, done);</b>
+<b class="fc">&nbsp;            setTransition(transition);</b>
+<b class="fc">&nbsp;            currentSlot = done;</b>
+&nbsp;
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Void visit(Error error) {
+&nbsp;            BodyGrammarSlot slot;
+&nbsp;
+<b class="fc">&nbsp;            if (i == rule.size() - 1 &amp;&amp; j == -1)</b>
+<b class="nc">&nbsp;                slot = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);</b>
+&nbsp;            else
+<b class="fc">&nbsp;                slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);</b>
+&nbsp;
+<b class="fc">&nbsp;            ErrorTransition transition = new ErrorTransition(currentSlot, slot);</b>
+<b class="fc">&nbsp;            setTransition(transition);</b>
+<b class="fc">&nbsp;            currentSlot = slot;</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Void visit(Return symbol) {
+&nbsp;            BodyGrammarSlot done;
+<b class="fc">&nbsp;            if (i != rule.size() - 1)</b>
+<b class="nc">&nbsp;                throw new RuntimeException(&quot;Return symbol can only be used at the end of a grammar rule!&quot;);</b>
+&nbsp;            else {
+<b class="fc">&nbsp;                if (rule.size() == 1)</b>
+<b class="fc">&nbsp;                    done = new EpsilonGrammarSlot(rule.getPosition(i + 1), head, epsilonSlot,</b>
+&nbsp;                        ConditionsFactory.DEFAULT);
+&nbsp;                else
+<b class="fc">&nbsp;                    done = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            ReturnTransition transition = new ReturnTransition(symbol.getExpression(), currentSlot, done);</b>
+<b class="fc">&nbsp;            setTransition(transition);</b>
+<b class="fc">&nbsp;            currentSlot = done;</b>
+&nbsp;
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Void visit(Terminal symbol) {
+<b class="fc">&nbsp;            TerminalGrammarSlot terminalSlot = getTerminalGrammarSlot(symbol);</b>
+&nbsp;
+&nbsp;            BodyGrammarSlot slot;
+&nbsp;
+<b class="fc">&nbsp;            if (i == rule.size() - 1 &amp;&amp; j == -1)</b>
+<b class="fc">&nbsp;                slot = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, symbol.getLabel(), null, null);</b>
+&nbsp;            else
+<b class="fc">&nbsp;                slot = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), symbol.getLabel(), null, null);</b>
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Condition&gt; preConditions = (i == 0 &amp;&amp; j == -1) ? Collections.emptyList() : symbol.getPreConditions();</b>
+<b class="fc">&nbsp;            TerminalTransition transition = getTerminalTransition(terminalSlot, currentSlot, slot, preConditions,</b>
+<b class="fc">&nbsp;                symbol.getPostConditions());</b>
+<b class="fc">&nbsp;            setTransition(transition);</b>
+<b class="fc">&nbsp;            currentSlot = slot;</b>
+&nbsp;
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Introduces epsilon transitions to handle labels and preconditions/postconditions
+&nbsp;         */
+&nbsp;        private void visitSymbol(Symbol symbol) {
+&nbsp;
+<b class="fc">&nbsp;            if (symbol instanceof Nonterminal</b>
+&nbsp;                || symbol instanceof Terminal
+&nbsp;                || symbol instanceof Error
+&nbsp;                || symbol instanceof Return) { // TODO: I think this can be unified
+<b class="fc">&nbsp;                symbol.accept(this);</b>
+&nbsp;                return;
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Conditions preconditions = i == 0 ? ConditionsFactory.DEFAULT : getConditions(symbol.getPreConditions());</b>
+&nbsp;
+<b class="fc">&nbsp;            if (symbol.getLabel() != null) {</b>
+<b class="nc">&nbsp;                BodyGrammarSlot declared = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i), null, null, null);</b>
+<b class="nc">&nbsp;                EpsilonTransition transition = new EpsilonTransition(Type.DECLARE_LABEL, symbol.getLabel(),</b>
+&nbsp;                    preconditions, currentSlot, declared);
+<b class="nc">&nbsp;                setTransition(transition);</b>
+<b class="nc">&nbsp;                currentSlot = declared;</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="fc">&nbsp;                BodyGrammarSlot checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i), null, null, null);</b>
+<b class="fc">&nbsp;                EpsilonTransition transition = new EpsilonTransition(preconditions, currentSlot, checked);</b>
+<b class="fc">&nbsp;                setTransition(transition);</b>
+<b class="fc">&nbsp;                currentSlot = checked;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            j += 1;</b>
+&nbsp;
+<b class="fc">&nbsp;            symbol.accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            j -= 1;</b>
+&nbsp;
+<b class="fc">&nbsp;            if (symbol.getLabel() != null) {</b>
+&nbsp;
+&nbsp;                BodyGrammarSlot stored;
+<b class="nc">&nbsp;                if (i == rule.size() - 1 &amp;&amp; j == -1)</b>
+<b class="nc">&nbsp;                    stored = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);</b>
+&nbsp;                else
+<b class="nc">&nbsp;                    stored = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);</b>
+&nbsp;
+<b class="nc">&nbsp;                EpsilonTransition transition = new EpsilonTransition(Type.STORE_LABEL, symbol.getLabel(),</b>
+<b class="nc">&nbsp;                    getConditions(symbol.getPostConditions()), currentSlot, stored);</b>
+<b class="nc">&nbsp;                setTransition(transition);</b>
+<b class="nc">&nbsp;                currentSlot = stored;</b>
+<b class="nc">&nbsp;            } else {</b>
+&nbsp;
+&nbsp;                BodyGrammarSlot checked;
+<b class="fc">&nbsp;                if (i == rule.size() - 1 &amp;&amp; j == -1)</b>
+<b class="fc">&nbsp;                    checked = getEndSlot(rule, i + 1, rule.getPosition(i + 1), head, null, null, null);</b>
+&nbsp;                else
+<b class="fc">&nbsp;                    checked = getBodyGrammarSlot(rule, i + 1, rule.getPosition(i + 1), null, null, null);</b>
+&nbsp;
+<b class="fc">&nbsp;                EpsilonTransition transition = new EpsilonTransition(getConditions(symbol.getPostConditions()),</b>
+&nbsp;                    currentSlot, checked);
+<b class="fc">&nbsp;                setTransition(transition);</b>
+<b class="fc">&nbsp;                currentSlot = checked;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        private void setTransition(Transition transition) {
+<b class="fc">&nbsp;            transition.origin().setOutTransition(transition);</b>
+<b class="fc">&nbsp;            transition.destination().setInTransition(transition);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private TerminalTransition getTerminalTransition(TerminalGrammarSlot slot,
+&nbsp;                                                     BodyGrammarSlot origin,
+&nbsp;                                                     BodyGrammarSlot dest,
+&nbsp;                                                     List&lt;Condition&gt; preConditions,
+&nbsp;                                                     List&lt;Condition&gt; postConditions) {
+&nbsp;
+<b class="fc">&nbsp;        return new TerminalTransition(slot, origin, dest, getConditions(preConditions), getConditions(postConditions));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private TerminalGrammarSlot getTerminalGrammarSlot(Terminal t) {
+<b class="fc">&nbsp;        return terminalsMap.computeIfAbsent(t, k -&gt; new TerminalGrammarSlot(t, matcherFactory));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private NonterminalGrammarSlot getNonterminalSlot(Nonterminal nonterminal) {
+<b class="fc">&nbsp;        NonterminalGrammarSlot ntSlot = nonterminalsMap.computeIfAbsent(nonterminal,</b>
+<b class="fc">&nbsp;                k -&gt; new NonterminalGrammarSlot(nonterminal));</b>
+<b class="fc">&nbsp;        return ntSlot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BodyGrammarSlot getFirstGrammarSlot(RuntimeRule rule, NonterminalGrammarSlot nonterminal) {
+&nbsp;        BodyGrammarSlot slot;
+&nbsp;
+<b class="fc">&nbsp;        if (rule.size() == 0) {</b>
+<b class="fc">&nbsp;            slot = new EpsilonGrammarSlot(rule.getPosition(0, 0), nonterminal, epsilonSlot, ConditionsFactory.DEFAULT);</b>
+&nbsp;        } else {
+&nbsp;            // TODO: This is not a final solution; in particular,
+&nbsp;            //       not any precondition of the first symbol (due to labels) can currently be moved to the first slot.
+<b class="fc">&nbsp;            List&lt;Condition&gt; preConditions = new ArrayList&lt;&gt;(rule.symbolAt(0).getPreConditions());</b>
+&nbsp;
+<b class="fc">&nbsp;            slot = new BodyGrammarSlot(rule.getPosition(0, 0), rule.symbolAt(0).getLabel(), null, null,</b>
+<b class="fc">&nbsp;                getConditions(preConditions), FollowTest.DEFAULT);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        bodyGrammarSlots.add(slot);</b>
+<b class="fc">&nbsp;        return slot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BodyGrammarSlot getBodyGrammarSlot(
+&nbsp;            RuntimeRule rule,
+&nbsp;            int i,
+&nbsp;            Position position,
+&nbsp;            String label,
+&nbsp;            String variable,
+&nbsp;            Set&lt;String&gt; state) {
+<b class="fc">&nbsp;        assert (i - 1) &lt; rule.size();</b>
+&nbsp;
+&nbsp;        BodyGrammarSlot slot;
+<b class="fc">&nbsp;        if (current != null)</b>
+<b class="nc">&nbsp;            slot = new BodyGrammarSlot(position, label, (label != null &amp;&amp; !label.isEmpty()) ? current.get(label) : -1,</b>
+<b class="nc">&nbsp;                variable, (variable != null &amp;&amp; !variable.isEmpty()) ? current.get(variable) : -1, state,</b>
+<b class="nc">&nbsp;                getConditions(rule.symbolAt(i - 1).getPostConditions()), getFollowTest(rule, i));</b>
+&nbsp;        else
+<b class="fc">&nbsp;            slot = new BodyGrammarSlot(position, label, variable, state,</b>
+<b class="fc">&nbsp;                getConditions(rule.symbolAt(i - 1).getPostConditions()), getFollowTest(rule, i));</b>
+&nbsp;
+<b class="fc">&nbsp;        bodyGrammarSlots.add(slot);</b>
+<b class="fc">&nbsp;        return slot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BodyGrammarSlot getEndSlot(
+&nbsp;            RuntimeRule rule,
+&nbsp;            int i,
+&nbsp;            Position position,
+&nbsp;            NonterminalGrammarSlot nonterminal,
+&nbsp;            String label,
+&nbsp;            String variable,
+&nbsp;            Set&lt;String&gt; state) {
+<b class="fc">&nbsp;        assert i == rule.size();</b>
+&nbsp;
+&nbsp;        BodyGrammarSlot slot;
+<b class="fc">&nbsp;        if (current != null)</b>
+<b class="nc">&nbsp;            slot = new EndGrammarSlot(position, nonterminal, label,</b>
+<b class="nc">&nbsp;                (label != null &amp;&amp; !label.isEmpty()) ? current.get(label) : -1,</b>
+<b class="nc">&nbsp;                variable, (variable != null &amp;&amp; !variable.isEmpty()) ? current.get(variable) : -1, state,</b>
+<b class="nc">&nbsp;                getConditions(rule.symbolAt(i - 1).getPostConditions()), getFollowTest(rule, i));</b>
+&nbsp;        else
+<b class="fc">&nbsp;            slot = new EndGrammarSlot(position, nonterminal, label, variable, state,</b>
+<b class="fc">&nbsp;                getConditions(rule.symbolAt(i - 1).getPostConditions()), getFollowTest(rule, i));</b>
+&nbsp;
+<b class="fc">&nbsp;        bodyGrammarSlots.add(slot);</b>
+<b class="fc">&nbsp;        return slot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateNumberOfArguments(Nonterminal nonterminal, Expression[] arguments) {
+<b class="fc">&nbsp;        List&lt;String&gt; parameters = nonterminal.getParameters();</b>
+<b class="fc">&nbsp;        if ((parameters == null &amp;&amp; arguments == null)</b>
+<b class="fc">&nbsp;            || (Objects.requireNonNull(parameters).size() == Objects.requireNonNull(arguments).length)) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        throw new IncorrectNumberOfArgumentsException(nonterminal, arguments);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Conditions getConditions(List&lt;Condition&gt; conditions) {
+<b class="fc">&nbsp;        if (conditions.isEmpty()) return ConditionsFactory.DEFAULT;</b>
+<b class="fc">&nbsp;        return ConditionsFactory.getConditions(conditions, matcherFactory);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

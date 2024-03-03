@@ -1,0 +1,370 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > OpenAddressingHashMap</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections</a>
+</div>
+
+<h1>Coverage Summary for Class: OpenAddressingHashMap (org.iguana.utils.collections)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OpenAddressingHashMap</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (10/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    67.4%
+  </span>
+  <span class="absValue">
+    (58/86)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">OpenAddressingHashMap$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    41.7%
+  </span>
+  <span class="absValue">
+    (10/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.4%
+  </span>
+  <span class="absValue">
+    (58/90)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.utils.collections;
+&nbsp;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class OpenAddressingHashMap&lt;K, T&gt; implements Map&lt;K, T&gt; {
+&nbsp;
+&nbsp;    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+&nbsp;    private static final float DEFAULT_LOAD_FACTOR = 0.7f;
+&nbsp;
+&nbsp;    private final int initialCapacity;
+&nbsp;    private final float loadFactor;
+&nbsp;
+&nbsp;    private int capacity;
+&nbsp;
+&nbsp;    private int size;
+&nbsp;
+&nbsp;    private int threshold;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * capacity - 1
+&nbsp;     * The bitMask is used to adj the p most-significant bytes of the multiplicaiton.
+&nbsp;     */
+&nbsp;    private int bitMask;
+&nbsp;
+&nbsp;    private K[] keys;
+&nbsp;
+&nbsp;    private T[] values;
+&nbsp;
+&nbsp;    public OpenAddressingHashMap() {
+<b class="fc">&nbsp;        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public OpenAddressingHashMap(int initalCapacity) {
+<b class="fc">&nbsp;        this(initalCapacity, DEFAULT_LOAD_FACTOR);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public OpenAddressingHashMap(int initialCapacity, float loadFactor) {</b>
+<b class="fc">&nbsp;        this.initialCapacity = initialCapacity &lt; 0 ? DEFAULT_INITIAL_CAPACITY : initialCapacity;</b>
+<b class="fc">&nbsp;        this.loadFactor = (loadFactor &lt; 0 || loadFactor &gt; 1) ? DEFAULT_LOAD_FACTOR : loadFactor;</b>
+<b class="fc">&nbsp;        init();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+&nbsp;    private void init() {
+<b class="fc">&nbsp;        capacity = 1;</b>
+<b class="fc">&nbsp;        while (capacity &lt; initialCapacity) capacity &lt;&lt;= 1;</b>
+&nbsp;
+<b class="fc">&nbsp;        bitMask = capacity - 1;</b>
+&nbsp;
+<b class="fc">&nbsp;        threshold = (int) (loadFactor * capacity);</b>
+<b class="fc">&nbsp;        keys = (K[]) new Object[capacity];</b>
+&nbsp;
+<b class="fc">&nbsp;        values = (T[]) new Object[capacity];</b>
+&nbsp;
+<b class="fc">&nbsp;        size = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public T put(K key, T value) {
+<b class="fc">&nbsp;        int j = 0;</b>
+<b class="fc">&nbsp;        int index = hash(key, j);</b>
+&nbsp;
+&nbsp;        do {
+<b class="fc">&nbsp;            if (keys[index] == null) {</b>
+<b class="fc">&nbsp;                keys[index] = key;</b>
+<b class="fc">&nbsp;                values[index] = value;</b>
+<b class="fc">&nbsp;                size++;</b>
+<b class="fc">&nbsp;                if (size &gt;= threshold) {</b>
+<b class="fc">&nbsp;                    rehash();</b>
+&nbsp;                }
+<b class="fc">&nbsp;                return null;</b>
+<b class="fc">&nbsp;            } else if (keys[index].equals(key)) {</b>
+<b class="fc">&nbsp;                T oldValue = values[index];</b>
+<b class="fc">&nbsp;                values[index] = value;</b>
+<b class="fc">&nbsp;                return oldValue;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            index = hash(key, ++j);</b>
+&nbsp;
+<b class="fc">&nbsp;        } while (true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public T remove(Object key) {
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void putAll(Map&lt;? extends K, ? extends T&gt; m) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+&nbsp;    private void rehash() {
+<b class="fc">&nbsp;        capacity &lt;&lt;= 1;</b>
+<b class="fc">&nbsp;        bitMask = capacity - 1;</b>
+&nbsp;
+<b class="fc">&nbsp;        K[] newKeys = (K[]) new Object[capacity];</b>
+<b class="fc">&nbsp;        T[] newValues = (T[]) new Object[capacity];</b>
+&nbsp;
+&nbsp;        label:
+<b class="fc">&nbsp;        for (int i = 0; i &lt; keys.length; i++) {</b>
+<b class="fc">&nbsp;            int j = 0;</b>
+<b class="fc">&nbsp;            K key = keys[i];</b>
+&nbsp;
+<b class="fc">&nbsp;            T value = values[i];</b>
+&nbsp;
+<b class="fc">&nbsp;            if (key != null) {</b>
+&nbsp;
+<b class="fc">&nbsp;                int index = hash(key, j);</b>
+&nbsp;
+&nbsp;                do {
+<b class="fc">&nbsp;                    if (newKeys[index] == null) {</b>
+<b class="fc">&nbsp;                        newKeys[index] = key;</b>
+<b class="fc">&nbsp;                        newValues[index] = value;</b>
+<b class="fc">&nbsp;                        continue label;</b>
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    index = hash(key, ++j);</b>
+&nbsp;
+<b class="fc">&nbsp;                } while (true);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        keys = newKeys;</b>
+<b class="fc">&nbsp;        values = newValues;</b>
+<b class="fc">&nbsp;        threshold = (int) (loadFactor * capacity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public T get(Object key) {
+<b class="fc">&nbsp;        int j = 0;</b>
+<b class="fc">&nbsp;        int index = hash(key, j);</b>
+<b class="fc">&nbsp;        while (keys[index] != null &amp;&amp; !keys[index].equals(key)) {</b>
+<b class="fc">&nbsp;            index = hash(key, ++j);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return values[index];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int size() {
+<b class="fc">&nbsp;        return size;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getInitialCapacity() {
+<b class="nc">&nbsp;        return initialCapacity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isEmpty() {
+<b class="nc">&nbsp;        return size == 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean containsKey(Object key) {
+<b class="nc">&nbsp;        throw new UnsupportedOperationException();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean containsValue(Object value) {
+<b class="nc">&nbsp;        throw new UnsupportedOperationException();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void clear() {
+<b class="nc">&nbsp;        init();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        if (isEmpty()) return &quot;{ }&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        sb.append(&quot;{&quot;);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        for (Entry&lt;K, T&gt; entry : entrySet()) {</b>
+<b class="nc">&nbsp;            if (entry.getKey() != null) {</b>
+<b class="nc">&nbsp;                sb.append(&quot;(&quot; + entry.getKey() + &quot;, &quot; + entry.getValue() + &quot;)&quot;);</b>
+<b class="nc">&nbsp;                sb.append(&quot;, &quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        sb.delete(sb.length() - 2, sb.length());</b>
+<b class="nc">&nbsp;        sb.append(&quot;}&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        return sb.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private int hash(Object key, int j) {
+<b class="fc">&nbsp;        return (key.hashCode() + j) &amp; bitMask;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Set&lt;K&gt; keySet() {
+<b class="nc">&nbsp;        Set&lt;K&gt; keySet = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; keys.length; i++) {</b>
+<b class="nc">&nbsp;            if (keys[i] != null) keySet.add(keys[i]);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return keySet;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Collection&lt;T&gt; values() {
+<b class="fc">&nbsp;        Set&lt;T&gt; values = new HashSet&lt;&gt;(size);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; this.values.length; i++) {</b>
+<b class="fc">&nbsp;            if (this.values[i] != null) values.add(this.values[i]);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return values;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Set&lt;Entry&lt;K, T&gt;&gt; entrySet() {
+<b class="nc">&nbsp;        Set&lt;Entry&lt;K, T&gt;&gt; entrySet = new HashSet&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; keys.length; i++) {</b>
+<b class="nc">&nbsp;            final K key = keys[i];</b>
+<b class="nc">&nbsp;            final T value = values[i];</b>
+&nbsp;
+<b class="nc">&nbsp;            entrySet.add(new Entry&lt;K, T&gt;() {</b>
+&nbsp;                @Override
+&nbsp;                public K getKey() {
+<b class="nc">&nbsp;                    return key;</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                @Override
+&nbsp;                public T getValue() {
+<b class="nc">&nbsp;                    return value;</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                @Override
+&nbsp;                public T setValue(T value) {
+<b class="nc">&nbsp;                    return null;</b>
+&nbsp;                }
+&nbsp;            });
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return entrySet;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

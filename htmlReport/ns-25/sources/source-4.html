@@ -1,0 +1,202 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ISymbolVisitor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.traversal</a>
+</div>
+
+<h1>Coverage Summary for Class: ISymbolVisitor (org.iguana.traversal)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ISymbolVisitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.traversal;
+&nbsp;
+&nbsp;import org.iguana.grammar.symbol.Align;
+&nbsp;import org.iguana.grammar.symbol.Alt;
+&nbsp;import org.iguana.grammar.symbol.Block;
+&nbsp;import org.iguana.grammar.symbol.Code;
+&nbsp;import org.iguana.grammar.symbol.CodeHolder;
+&nbsp;import org.iguana.grammar.symbol.Conditional;
+&nbsp;import org.iguana.grammar.symbol.Error;
+&nbsp;import org.iguana.grammar.symbol.Group;
+&nbsp;import org.iguana.grammar.symbol.Identifier;
+&nbsp;import org.iguana.grammar.symbol.IfThen;
+&nbsp;import org.iguana.grammar.symbol.IfThenElse;
+&nbsp;import org.iguana.grammar.symbol.Ignore;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Offside;
+&nbsp;import org.iguana.grammar.symbol.Opt;
+&nbsp;import org.iguana.grammar.symbol.Plus;
+&nbsp;import org.iguana.grammar.symbol.Return;
+&nbsp;import org.iguana.grammar.symbol.Star;
+&nbsp;import org.iguana.grammar.symbol.Start;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.grammar.symbol.While;
+&nbsp;
+&nbsp;public interface ISymbolVisitor&lt;T&gt; {
+&nbsp;
+&nbsp;    T visit(Align align);
+&nbsp;
+&nbsp;    T visit(Block block);
+&nbsp;
+&nbsp;    T visit(Code code);
+&nbsp;
+<b class="nc">&nbsp;    default T visit(CodeHolder codeHolder) { return null; }</b>
+&nbsp;
+&nbsp;    T visit(Error error);
+&nbsp;
+&nbsp;    T visit(Conditional conditional);
+&nbsp;
+&nbsp;    T visit(IfThen ifThen);
+&nbsp;
+&nbsp;    T visit(IfThenElse ifThenElse);
+&nbsp;
+&nbsp;    T visit(Ignore ignore);
+&nbsp;
+&nbsp;    T visit(Nonterminal nonterminal);
+&nbsp;
+&nbsp;    T visit(Offside offside);
+&nbsp;
+&nbsp;    T visit(Terminal terminal);
+&nbsp;
+&nbsp;    T visit(While whileSymbol);
+&nbsp;
+&nbsp;    T visit(Return returnSymbol);
+&nbsp;
+&nbsp;    T visit(Alt alt);
+&nbsp;
+&nbsp;    T visit(Opt opt);
+&nbsp;
+&nbsp;    T visit(Plus plus);
+&nbsp;
+&nbsp;    T visit(Group group);
+&nbsp;
+&nbsp;    T visit(Star star);
+&nbsp;
+&nbsp;    T visit(Start start);
+&nbsp;
+&nbsp;    default T visit(Identifier identifier) {
+<b class="nc">&nbsp;        throw new UnsupportedOperationException();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

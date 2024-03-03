@@ -1,0 +1,337 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Automaton</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex.automaton</a>
+</div>
+
+<h1>Coverage Summary for Class: Automaton (org.iguana.regex.automaton)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Automaton</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70.6%
+  </span>
+  <span class="absValue">
+    (12/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.3%
+  </span>
+  <span class="absValue">
+    (33/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.regex.automaton;
+&nbsp;
+&nbsp;import org.iguana.regex.CharRange;
+&nbsp;import org.iguana.regex.RegularExpression;
+&nbsp;import org.iguana.util.Tuple;
+&nbsp;
+&nbsp;import java.util.BitSet;
+&nbsp;import java.util.Collection;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * 
+&nbsp; * @author Ali Afroozeh
+&nbsp; *
+&nbsp; */
+&nbsp;public class Automaton {
+&nbsp;
+&nbsp;    private final State startState;
+&nbsp;
+&nbsp;    private final State[] states;
+&nbsp;
+&nbsp;    private final Set&lt;State&gt; finalStates;
+&nbsp;
+&nbsp;    private final boolean minimized;
+&nbsp;
+&nbsp;    private final boolean deterministic;
+&nbsp;
+&nbsp;    private final CharRange[] alphabet;
+&nbsp;
+<b class="fc">&nbsp;    public Automaton(AutomatonBuilder builder) {</b>
+<b class="fc">&nbsp;        this.startState = builder.getStartState();</b>
+<b class="fc">&nbsp;        this.states = builder.getStates();</b>
+<b class="fc">&nbsp;        this.finalStates = builder.getFinalStates();</b>
+<b class="fc">&nbsp;        this.minimized = builder.isMinimized();</b>
+<b class="fc">&nbsp;        this.deterministic = builder.isDeterministic();</b>
+<b class="fc">&nbsp;        this.alphabet = builder.getAlphabet();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State getStartState() {
+<b class="fc">&nbsp;        return startState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;State&gt; getFinalStates() {
+<b class="fc">&nbsp;        return finalStates;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountStates() {
+<b class="fc">&nbsp;        return states.length;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State[] getStates() {
+<b class="fc">&nbsp;        return states;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public State getState(int id) {
+<b class="nc">&nbsp;        return states[id];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public CharRange[] getAlphabet() {
+<b class="fc">&nbsp;        return alphabet;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Collection&lt;RegularExpression&gt; getRegularExpressions() {
+<b class="nc">&nbsp;        return finalStates.stream()</b>
+<b class="nc">&nbsp;            .flatMap(state -&gt; state.getRegularExpressions().stream())</b>
+<b class="nc">&nbsp;            .sorted(Comparator.comparing(Tuple::getSecond))</b>
+<b class="nc">&nbsp;            .map(Tuple::getFirst)</b>
+<b class="nc">&nbsp;            .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isDeterministic() {
+<b class="fc">&nbsp;        return deterministic;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isMinimized() {
+<b class="nc">&nbsp;        return minimized;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * All characters accepted by this NFA.
+&nbsp;     */
+&nbsp;    public BitSet getCharacters() {
+<b class="nc">&nbsp;        return AutomatonBuilder.getCharacters(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Automaton copy() {
+&nbsp;
+<b class="fc">&nbsp;        final Map&lt;State, State&gt; newStates = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        final State[] newStartState = new State[1];</b>
+&nbsp;
+<b class="fc">&nbsp;        AutomatonVisitor.visit(startState, state -&gt; {</b>
+<b class="fc">&nbsp;            State newState = new State();</b>
+&nbsp;
+<b class="fc">&nbsp;            newStates.put(state, newState);</b>
+<b class="fc">&nbsp;            newState.setStateType(state.getStateType());</b>
+<b class="fc">&nbsp;            newState.addRegularExpressions(state.getRegularExpressions());</b>
+&nbsp;
+<b class="fc">&nbsp;            if (state == startState) {</b>
+<b class="fc">&nbsp;                newStartState[0] = newState;</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="fc">&nbsp;        AutomatonVisitor.visit(startState, state -&gt; {</b>
+<b class="fc">&nbsp;                for (Transition transition : state.getTransitions()) {</b>
+<b class="fc">&nbsp;                    State newState = newStates.get(state);</b>
+<b class="fc">&nbsp;                    newState.addTransition(new Transition(transition.getStart(),</b>
+<b class="fc">&nbsp;                                                          transition.getEnd(),</b>
+<b class="fc">&nbsp;                                                          newStates.get(transition.getDestination())));</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;            });
+&nbsp;
+<b class="fc">&nbsp;        return builder(newStartState[0]).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Determines whether two NFAs are isomorphic.
+&nbsp;     * The NFAs are first made deterministic before performing the equality check.
+&nbsp;     */
+&nbsp;//    @Override
+&nbsp;//    public boolean equals(Object obj) {
+&nbsp;//
+&nbsp;//        if(obj == this) {
+&nbsp;//            return true;
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        if(!(obj instanceof Automaton)) {
+&nbsp;//            return false;
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        Automaton other = (Automaton) obj;
+&nbsp;//
+&nbsp;//        Automaton thisNFA = AutomatonOperations.makeDeterministic(this);
+&nbsp;//        Automaton otherNFA = AutomatonOperations.makeDeterministic(other);
+&nbsp;//
+&nbsp;//        Set&lt;State&gt; visitedStates = new HashSet&lt;&gt;();
+&nbsp;//
+&nbsp;//        return isEqual(thisNFA.getStartState(), otherNFA.getStartState(), visitedStates);
+&nbsp;//    }
+&nbsp;
+&nbsp;//    private boolean isEqual(State thisState, State otherState, Set&lt;State&gt; visitedStates) {
+&nbsp;//
+&nbsp;//        if(thisState.getCountTransitions() != otherState.getCountTransitions()) {
+&nbsp;//            return false;
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        int i = 0;
+&nbsp;//        Transition[] t1 = thisState.getSortedTransitions();
+&nbsp;//        Transition[] t2 = otherState.getSortedTransitions();
+&nbsp;//        while(i &lt; thisState.getCountTransitions()) {
+&nbsp;//            if(t1[i].getStart() == t2[i].getStart() &amp;&amp; t1[i].getEnd() == t2[i].getEnd()) {
+&nbsp;//
+&nbsp;//                State d1 = t1[i].getDestination();
+&nbsp;//                State d2 = t2[i].getDestination();
+&nbsp;//
+&nbsp;//                // Avoid infinite loop
+&nbsp;//                if(!(visitedStates.contains(d1) &amp;&amp; visitedStates.contains(d2))) {
+&nbsp;//                    visitedStates.add(d1);
+&nbsp;//                    visitedStates.add(d2);
+&nbsp;//                    if(!isEqual(d1, d2, visitedStates)) {
+&nbsp;//                        return false;
+&nbsp;//                    }
+&nbsp;//                }
+&nbsp;//            }
+&nbsp;//            i++;
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        return true;
+&nbsp;//    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns true if the language accepted by this automaton is empty.
+&nbsp;     */
+&nbsp;    public boolean isLanguageEmpty() {
+&nbsp;        /*
+&nbsp;         * The final sates are calculated from the start state. This means that
+&nbsp;         * all final states returned by calling getFinalStates() are reachable.
+&nbsp;         * The language accepted by this automata is empty, if there are no reachable
+&nbsp;         * final states.
+&nbsp;         */
+&nbsp;
+&nbsp;        // Covers the case of the automaton for the empty regular expression
+<b class="fc">&nbsp;        if (startState.getStateType() == StateType.FINAL) {</b>
+<b class="nc">&nbsp;            if (startState.getCountTransitions() == 1</b>
+<b class="nc">&nbsp;                &amp;&amp; startState.getTransitions().iterator().next().isEpsilonTransition()) {</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return getFinalStates().size() == 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AutomatonBuilder builder() {
+<b class="nc">&nbsp;        return new AutomatonBuilder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static AutomatonBuilder builder(State startState) {
+<b class="fc">&nbsp;        return new AutomatonBuilder(startState);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > XMLConfigFileParser</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.util.config</a>
+</div>
+
+<h1>Coverage Summary for Class: XMLConfigFileParser (org.iguana.util.config)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">XMLConfigFileParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.util.config;
+&nbsp;
+&nbsp;import org.iguana.util.Configuration;
+&nbsp;import org.iguana.utils.logging.LogLevel;
+&nbsp;import org.w3c.dom.Document;
+&nbsp;import org.w3c.dom.Element;
+&nbsp;import org.w3c.dom.Node;
+&nbsp;import org.w3c.dom.NodeList;
+&nbsp;
+&nbsp;import javax.xml.parsers.DocumentBuilder;
+&nbsp;import javax.xml.parsers.DocumentBuilderFactory;
+&nbsp;
+&nbsp;public class XMLConfigFileParser implements ConfigFileParser {
+&nbsp;
+&nbsp;    private Element root;
+&nbsp;
+<b class="fc">&nbsp;    private XMLConfigFileParser(Element root) {</b>
+<b class="fc">&nbsp;        this.root = root;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static XMLConfigFileParser create(String name) throws Exception {
+<b class="fc">&nbsp;        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</b>
+<b class="fc">&nbsp;        DocumentBuilder builder = factory.newDocumentBuilder();</b>
+<b class="fc">&nbsp;        Document doc = builder.parse(Configuration.class.getResourceAsStream(&quot;/&quot; + name));</b>
+<b class="fc">&nbsp;        return new XMLConfigFileParser(doc.getDocumentElement());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Configuration getConfiguration() {
+<b class="fc">&nbsp;        Configuration.Builder builder = Configuration.builder();</b>
+<b class="fc">&nbsp;        getParserConfigs(builder);</b>
+<b class="fc">&nbsp;        getLoggingConfig(builder);</b>
+<b class="fc">&nbsp;        return builder.build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void getParserConfigs(Configuration.Builder builder) {
+<b class="fc">&nbsp;        Node configurationNode = root.getElementsByTagName(&quot;Parser&quot;).item(0);</b>
+<b class="fc">&nbsp;        NodeList childNodes = configurationNode.getChildNodes();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; childNodes.getLength(); i++) {</b>
+<b class="fc">&nbsp;            Node node = childNodes.item(i);</b>
+&nbsp;
+<b class="fc">&nbsp;            switch (node.getNodeName()) {</b>
+&nbsp;                case &quot;Lookahead&quot;:
+<b class="fc">&nbsp;                    builder.setLookaheadCount(Integer.parseInt(node.getTextContent().toUpperCase()));</b>
+<b class="fc">&nbsp;                    break;</b>
+&nbsp;
+&nbsp;                case &quot;GSSLookupImpl&quot;:
+<b class="fc">&nbsp;                    builder.setGSSLookupImpl(Configuration.LookupImpl.valueOf(node.getTextContent().toUpperCase()));</b>
+<b class="fc">&nbsp;                    break;</b>
+&nbsp;
+&nbsp;                case &quot;MatcherType&quot;:
+<b class="fc">&nbsp;                    builder.setMatcherType(Configuration.MatcherType.valueOf(node.getTextContent().toUpperCase()));</b>
+<b class="fc">&nbsp;                    break;</b>
+&nbsp;
+&nbsp;                case &quot;HashMapImpl&quot;:
+<b class="fc">&nbsp;                    builder.setHashmapImpl(Configuration.HashMapImpl.valueOf(node.getTextContent().toUpperCase()));</b>
+<b class="fc">&nbsp;                    break;</b>
+&nbsp;
+&nbsp;                case &quot;EnvironmentImpl&quot;:
+<b class="fc">&nbsp;                    builder.setEnvironmentImpl(</b>
+<b class="fc">&nbsp;                        Configuration.EnvironmentImpl.valueOf(node.getTextContent().toUpperCase()));</b>
+&nbsp;                    break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void getLoggingConfig(Configuration.Builder builder) {
+<b class="fc">&nbsp;        Node configurationNode = root.getElementsByTagName(&quot;Logging&quot;).item(0);</b>
+<b class="fc">&nbsp;        NodeList childNodes = configurationNode.getChildNodes();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; childNodes.getLength(); i++) {</b>
+<b class="fc">&nbsp;            Node node = childNodes.item(i);</b>
+<b class="fc">&nbsp;            switch (node.getNodeName()) {</b>
+&nbsp;
+&nbsp;                case &quot;LogLevel&quot;:
+<b class="fc">&nbsp;                    builder.setLogLevel(LogLevel.valueOf(node.getTextContent().toUpperCase()));</b>
+&nbsp;                    break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IntIntIntObjectKey</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections.key</a>
+</div>
+
+<h1>Coverage Summary for Class: IntIntIntObjectKey (org.iguana.utils.collections.key)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IntIntIntObjectKey</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.utils.collections.key;
+&nbsp;
+&nbsp;public class IntIntIntObjectKey implements Key {
+&nbsp;
+&nbsp;    private final int i1;
+&nbsp;    private final int i2;
+&nbsp;    private final int i3;
+&nbsp;    private final Object object;
+&nbsp;
+<b class="nc">&nbsp;    public IntIntIntObjectKey(int i1, int i2, int i3, Object object) {</b>
+<b class="nc">&nbsp;        this.i1 = i1;</b>
+<b class="nc">&nbsp;        this.i2 = i2;</b>
+<b class="nc">&nbsp;        this.i3 = i3;</b>
+<b class="nc">&nbsp;        this.object = object;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (!(o instanceof IntIntIntObjectKey)) return false;</b>
+&nbsp;
+<b class="nc">&nbsp;        IntIntIntObjectKey that = (IntIntIntObjectKey) o;</b>
+<b class="nc">&nbsp;        return i1 == that.i1 &amp;&amp; i2 == that.i2 &amp;&amp; i3 == that.i3 &amp;&amp; object.equals(that.object);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        int hash = i1;</b>
+<b class="nc">&nbsp;        hash *= 31 + i2;</b>
+<b class="nc">&nbsp;        hash *= 31 + i3;</b>
+<b class="nc">&nbsp;        hash *= 31 + object.hashCode();</b>
+<b class="nc">&nbsp;        return hash;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

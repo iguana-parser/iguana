@@ -1,0 +1,774 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > EBNFToBNF</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.transformation</a>
+</div>
+
+<h1>Coverage Summary for Class: EBNFToBNF (org.iguana.grammar.transformation)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EBNFToBNF</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.7%
+  </span>
+  <span class="absValue">
+    (43/44)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EBNFToBNF$EBNFVisitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.9%
+  </span>
+  <span class="absValue">
+    (17/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.4%
+  </span>
+  <span class="absValue">
+    (199/275)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    78.6%
+  </span>
+  <span class="absValue">
+    (22/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75.9%
+  </span>
+  <span class="absValue">
+    (242/319)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.transformation;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.AST;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.datadependent.traversal.FreeVariableVisitor;
+&nbsp;import org.iguana.grammar.condition.DataDependentCondition;
+&nbsp;import org.iguana.grammar.runtime.PrecedenceLevel;
+&nbsp;import org.iguana.grammar.runtime.Recursion;
+&nbsp;import org.iguana.grammar.runtime.RuntimeGrammar;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;import org.iguana.grammar.slot.NonterminalNodeType;
+&nbsp;import org.iguana.grammar.symbol.Align;
+&nbsp;import org.iguana.grammar.symbol.Alt;
+&nbsp;import org.iguana.grammar.symbol.Associativity;
+&nbsp;import org.iguana.grammar.symbol.Block;
+&nbsp;import org.iguana.grammar.symbol.Code;
+&nbsp;import org.iguana.grammar.symbol.Conditional;
+&nbsp;import org.iguana.grammar.symbol.Error;
+&nbsp;import org.iguana.grammar.symbol.Group;
+&nbsp;import org.iguana.grammar.symbol.IfThen;
+&nbsp;import org.iguana.grammar.symbol.IfThenElse;
+&nbsp;import org.iguana.grammar.symbol.Ignore;
+&nbsp;import org.iguana.grammar.symbol.LayoutStrategy;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal.Builder;
+&nbsp;import org.iguana.grammar.symbol.Offside;
+&nbsp;import org.iguana.grammar.symbol.Opt;
+&nbsp;import org.iguana.grammar.symbol.Plus;
+&nbsp;import org.iguana.grammar.symbol.Return;
+&nbsp;import org.iguana.grammar.symbol.Star;
+&nbsp;import org.iguana.grammar.symbol.Start;
+&nbsp;import org.iguana.grammar.symbol.Symbol;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.grammar.symbol.While;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.LinkedHashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * 
+&nbsp; * 
+&nbsp; * @author Ali Afroozeh
+&nbsp; * @author Anastasia Izmaylova
+&nbsp; *
+&nbsp; */
+<b class="fc">&nbsp;public class EBNFToBNF implements GrammarTransformation {</b>
+&nbsp;
+&nbsp;    private Map&lt;String, Set&lt;String&gt;&gt; ebnfLefts;
+&nbsp;    private Map&lt;String, Set&lt;String&gt;&gt; ebnfRights;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RuntimeGrammar transform(RuntimeGrammar grammar) {
+<b class="fc">&nbsp;        Set&lt;RuntimeRule&gt; newRules = new LinkedHashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        ebnfLefts = grammar.getEBNFLefts();</b>
+<b class="fc">&nbsp;        ebnfRights = grammar.getEBNFRights();</b>
+<b class="fc">&nbsp;        grammar.getRules().forEach(r -&gt; newRules.addAll(transform(r)));</b>
+<b class="fc">&nbsp;        return RuntimeGrammar.builder().addRules(newRules)</b>
+<b class="fc">&nbsp;                .addEBNFl(grammar.getEBNFLefts())</b>
+<b class="fc">&nbsp;                .addEBNFr(grammar.getEBNFRights())</b>
+<b class="fc">&nbsp;                .setLayout(grammar.getLayout())</b>
+<b class="fc">&nbsp;                .setGlobals(grammar.getGlobals())</b>
+<b class="fc">&nbsp;                .setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())</b>
+<b class="fc">&nbsp;                .setStartSymbols(grammar.getStartSymbols()).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Set&lt;RuntimeRule&gt; transform(RuntimeRule rule) {
+<b class="fc">&nbsp;        Set&lt;RuntimeRule&gt; newRules = new LinkedHashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        newRules.add(rewrite(rule, newRules));</b>
+<b class="fc">&nbsp;        return newRules;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RuntimeRule rewrite(RuntimeRule rule, Set&lt;RuntimeRule&gt; newRules) {
+&nbsp;
+<b class="fc">&nbsp;        if (rule.getBody() == null)</b>
+<b class="nc">&nbsp;            return rule;</b>
+&nbsp;
+<b class="fc">&nbsp;        RuntimeRule.Builder builder = new RuntimeRule.Builder(rule.getHead());</b>
+&nbsp;
+<b class="fc">&nbsp;        Set&lt;String&gt; state = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        new FreeVariableVisitor(state).compute(rule);</b>
+&nbsp;
+<b class="fc">&nbsp;        EBNFVisitor ebnf_visitor = new EBNFVisitor(state, newRules, rule.getLayout(), rule.getLayoutStrategy(),</b>
+&nbsp;            ebnfLefts, ebnfRights);
+&nbsp;
+<b class="fc">&nbsp;        for (Symbol s : rule.getBody())</b>
+<b class="fc">&nbsp;            builder.addSymbol(s.accept(ebnf_visitor));</b>
+&nbsp;
+<b class="fc">&nbsp;        return builder.setLayout(rule.getLayout())</b>
+<b class="fc">&nbsp;                .setLayoutStrategy(rule.getLayoutStrategy())</b>
+<b class="fc">&nbsp;                .setRecursion(rule.getRecursion())</b>
+<b class="fc">&nbsp;                .setAssociativity(rule.getAssociativity())</b>
+<b class="fc">&nbsp;                .setAssociativityGroup(rule.getAssociativityGroup())</b>
+<b class="fc">&nbsp;                .setPrecedence(rule.getPrecedence())</b>
+<b class="fc">&nbsp;                .setPrecedenceLevel(rule.getPrecedenceLevel())</b>
+<b class="fc">&nbsp;                .setiRecursion(rule.getIRecursion())</b>
+<b class="fc">&nbsp;                .setLeftEnd(rule.getLeftEnd())</b>
+<b class="fc">&nbsp;                .setRightEnd(rule.getRightEnd())</b>
+<b class="fc">&nbsp;                .setLeftEnds(rule.getLeftEnds())</b>
+<b class="fc">&nbsp;                .setRightEnds(rule.getRightEnds())</b>
+<b class="fc">&nbsp;                .setLabel(rule.getLabel())</b>
+<b class="fc">&nbsp;                .setAttributes(rule.getAttributes())</b>
+<b class="fc">&nbsp;                .setDefinition(rule.getDefinition())</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String getName(Symbol symbol, List&lt;Symbol&gt; separators, Symbol layout) {
+<b class="fc">&nbsp;        if (separators.isEmpty() &amp;&amp; layout == null) {</b>
+<b class="fc">&nbsp;            return symbol.getName();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return &quot;{&quot; + symbol.getName()</b>
+<b class="fc">&nbsp;                   + &quot; &quot; + separators.stream().map(Symbol::getName).collect(Collectors.joining(&quot; &quot;))</b>
+<b class="fc">&nbsp;                   + (layout == null ? &quot;&quot; : &quot; &quot; + layout)</b>
+&nbsp;                   + &quot;}&quot;;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class EBNFVisitor implements ISymbolVisitor&lt;Symbol&gt; {
+&nbsp;
+<b class="fc">&nbsp;        private static int counter = 0;</b>
+&nbsp;
+&nbsp;        private final Set&lt;String&gt; state;
+&nbsp;        private final Set&lt;RuntimeRule&gt; addedRules;
+&nbsp;        private final Symbol layout;
+&nbsp;        private final LayoutStrategy strategy;
+&nbsp;
+&nbsp;        private final Map&lt;String, Set&lt;String&gt;&gt; ebnfLefts;
+&nbsp;        private final Map&lt;String, Set&lt;String&gt;&gt; ebnfRights;
+&nbsp;
+&nbsp;        /**
+&nbsp;         *  Target cases:
+&nbsp;         */
+&nbsp;        private Set&lt;String&gt; freeVars;
+&nbsp;        private FreeVariableVisitor visitor;
+&nbsp;
+&nbsp;        EBNFVisitor(
+&nbsp;                Set&lt;String&gt; state,
+&nbsp;                Set&lt;RuntimeRule&gt; addedRules,
+&nbsp;                Symbol layout,
+&nbsp;                LayoutStrategy strategy,
+&nbsp;                Map&lt;String, Set&lt;String&gt;&gt; ebnfLefts,
+<b class="fc">&nbsp;                Map&lt;String, Set&lt;String&gt;&gt; ebnfRights) {</b>
+<b class="fc">&nbsp;            this.state = state;</b>
+<b class="fc">&nbsp;            this.addedRules = addedRules;</b>
+<b class="fc">&nbsp;            this.layout = layout;</b>
+<b class="fc">&nbsp;            this.strategy = strategy;</b>
+<b class="fc">&nbsp;            this.ebnfLefts = ebnfLefts;</b>
+<b class="fc">&nbsp;            this.ebnfRights = ebnfRights;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        private void init() {
+<b class="fc">&nbsp;            freeVars = new LinkedHashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;            visitor = new FreeVariableVisitor(freeVars);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * (A | B) ::= A
+&nbsp;         *           | B
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Alt symbol) {
+<b class="fc">&nbsp;            List&lt;Symbol&gt; symbols = symbol.getSymbols().stream().map(x -&gt; x.accept(this)).collect(Collectors.toList());</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+<b class="fc">&nbsp;            String[] parameters = null;</b>
+<b class="fc">&nbsp;            Expression[] arguments = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            new Alt.Builder(symbols).build().accept(visitor);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+<b class="nc">&nbsp;                freeVars.removeAll(state);</b>
+<b class="nc">&nbsp;                parameters = freeVars.toArray(new String[0]);</b>
+<b class="nc">&nbsp;                arguments = freeVars.stream().map(v -&gt; AST.var(v)).toArray(Expression[]::new);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Nonterminal newNt = parameters == null ? new Nonterminal.Builder(symbol.getName()).setNodeType(</b>
+<b class="fc">&nbsp;                NonterminalNodeType.Alt).build()</b>
+<b class="nc">&nbsp;                : new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(</b>
+<b class="nc">&nbsp;                NonterminalNodeType.Alt).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            symbols.forEach(x -&gt; addedRules.add(RuntimeRule.withHead(newNt).addSymbol(x).setLayout(layout)</b>
+<b class="fc">&nbsp;                .setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build()));</b>
+&nbsp;
+<b class="fc">&nbsp;            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);</b>
+<b class="fc">&nbsp;            return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * S? ::= S
+&nbsp;         *      | epsilon
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Opt symbol) {
+<b class="fc">&nbsp;            Symbol in = symbol.getSymbol().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+<b class="fc">&nbsp;            String[] parameters = null;</b>
+<b class="fc">&nbsp;            Expression[] arguments = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            in.setEmpty();</b>
+<b class="fc">&nbsp;            visitor.visitSymbol(in);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+<b class="nc">&nbsp;                freeVars.removeAll(state);</b>
+<b class="nc">&nbsp;                parameters = freeVars.toArray(new String[0]);</b>
+<b class="nc">&nbsp;                arguments = freeVars.stream().map(v -&gt; AST.var(v)).toArray(Expression[]::new);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Nonterminal newNt = parameters == null ? new Nonterminal.Builder(symbol.getName()).setNodeType(</b>
+<b class="fc">&nbsp;                NonterminalNodeType.Opt).build()</b>
+<b class="nc">&nbsp;                : new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(</b>
+<b class="nc">&nbsp;                NonterminalNodeType.Opt).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbol(in).setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                                    .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                                    .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                                    .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                                    .build());</b>
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt)</b>
+<b class="fc">&nbsp;                                    .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                                    .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                                    .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                                    .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);</b>
+<b class="fc">&nbsp;            return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * S+ ::= S+ S
+&nbsp;         *      | S
+&nbsp;         *
+&nbsp;         * in case of separators:
+&nbsp;         *
+&nbsp;         * (S sep)+ ::= (S sep)+ sep S
+&nbsp;         *            | S
+&nbsp;         *
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Plus symbol) {
+<b class="fc">&nbsp;            Symbol S = symbol.getSymbol().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+<b class="fc">&nbsp;            String[] parameters = null;</b>
+<b class="fc">&nbsp;            Expression[] arguments = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            S.setEmpty();</b>
+<b class="fc">&nbsp;            visitor.visitSymbol(S);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+<b class="fc">&nbsp;                freeVars.removeAll(state);</b>
+<b class="fc">&nbsp;                parameters = freeVars.toArray(new String[0]);</b>
+<b class="fc">&nbsp;                arguments = freeVars.stream().map(v -&gt; AST.var(v)).toArray(Expression[]::new);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Symbol&gt; seperators = symbol.getSeparators().stream().map(sep -&gt; sep.accept(this)).collect(</b>
+<b class="fc">&nbsp;                Collectors.toList());</b>
+&nbsp;
+<b class="fc">&nbsp;            Nonterminal newNt = parameters == null ? new Nonterminal.Builder(</b>
+<b class="fc">&nbsp;                getName(S, symbol.getSeparators(), layout) + &quot;+&quot;).setNodeType(NonterminalNodeType.Plus).build()</b>
+<b class="fc">&nbsp;                : new Nonterminal.Builder(getName(S, symbol.getSeparators(), layout) + &quot;+&quot;).addParameters(parameters)</b>
+<b class="fc">&nbsp;                .setNodeType(NonterminalNodeType.Plus).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt)</b>
+<b class="fc">&nbsp;                .addSymbol(arguments != null ? new Nonterminal.Builder(newNt).apply(arguments).build() : newNt)</b>
+<b class="fc">&nbsp;                .addSymbols(seperators)</b>
+<b class="fc">&nbsp;                .addSymbols(S).setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.LEFT_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setLeftEnd(newNt.getName())</b>
+<b class="fc">&nbsp;                .setRightEnd(S.getName())</b>
+<b class="fc">&nbsp;                .setLeftEnds(ebnfLefts.containsKey(newNt.getName()) ? ebnfLefts.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setRightEnds(</b>
+<b class="fc">&nbsp;                    ebnfRights.containsKey(newNt.getName()) ? ebnfRights.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbol(S)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setLeftEnd(S.getName())</b>
+<b class="fc">&nbsp;                .setRightEnd(S.getName())</b>
+<b class="fc">&nbsp;                .setLeftEnds(ebnfLefts.containsKey(newNt.getName()) ? ebnfLefts.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setRightEnds(</b>
+<b class="fc">&nbsp;                    ebnfRights.containsKey(newNt.getName()) ? ebnfRights.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);</b>
+<b class="fc">&nbsp;            return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * (S) ::= S
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Group symbol) {
+<b class="fc">&nbsp;            List&lt;Symbol&gt; symbols = symbol.getSymbols().stream().map(x -&gt; x.accept(this)).collect(Collectors.toList());</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+<b class="fc">&nbsp;            String[] parameters = null;</b>
+<b class="fc">&nbsp;            Expression[] arguments = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            new Group.Builder(symbols).build().accept(visitor);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+<b class="fc">&nbsp;                freeVars.removeAll(state);</b>
+<b class="fc">&nbsp;                parameters = freeVars.toArray(new String[0]);</b>
+<b class="fc">&nbsp;                arguments = freeVars.stream().map(v -&gt; AST.var(v)).toArray(Expression[]::new);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Nonterminal newNt = parameters == null ? new Nonterminal.Builder(symbol.getName()).setNodeType(</b>
+<b class="fc">&nbsp;                NonterminalNodeType.Seq).build()</b>
+<b class="fc">&nbsp;                : new Nonterminal.Builder(symbol.getName()).addParameters(parameters).setNodeType(</b>
+<b class="fc">&nbsp;                NonterminalNodeType.Seq).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbols(symbols).setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setLeftEnd(symbols.get(0).getName())</b>
+<b class="fc">&nbsp;                .setRightEnd(symbols.get(symbols.size() - 1).getName())</b>
+<b class="fc">&nbsp;                .setLeftEnds(ebnfLefts.containsKey(newNt.getName()) ? ebnfLefts.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setRightEnds(</b>
+<b class="fc">&nbsp;                    ebnfRights.containsKey(newNt.getName()) ? ebnfRights.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);</b>
+<b class="fc">&nbsp;            return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * S* ::= S+
+&nbsp;         *      | epsilon
+&nbsp;         *
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Star symbol) {
+<b class="fc">&nbsp;            Symbol S = new Plus.Builder(symbol.getSymbol()).addSeparators(symbol.getSeparators()).build().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+<b class="fc">&nbsp;            String[] parameters = null;</b>
+<b class="fc">&nbsp;            Expression[] arguments = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            S.setEmpty();</b>
+<b class="fc">&nbsp;            visitor.visitSymbol(S);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+<b class="fc">&nbsp;                freeVars.removeAll(state);</b>
+<b class="fc">&nbsp;                parameters = freeVars.toArray(new String[0]);</b>
+<b class="fc">&nbsp;                arguments = freeVars.stream().map(v -&gt; AST.var(v)).toArray(Expression[]::new);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            String base = getName(symbol.getSymbol(), symbol.getSeparators(), layout);</b>
+<b class="fc">&nbsp;            Nonterminal newNt = parameters != null ? new Nonterminal.Builder(base + &quot;*&quot;).addParameters(parameters)</b>
+<b class="fc">&nbsp;                .setNodeType(NonterminalNodeType.Star).build()</b>
+<b class="fc">&nbsp;                : new Nonterminal.Builder(base + &quot;*&quot;).setNodeType(NonterminalNodeType.Star).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbols(S)</b>
+<b class="fc">&nbsp;                .setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setLeftEnd(S.getName())</b>
+<b class="fc">&nbsp;                .setRightEnd(S.getName())</b>
+<b class="fc">&nbsp;                .setLeftEnds(ebnfLefts.containsKey(newNt.getName()) ? ebnfLefts.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setRightEnds(</b>
+<b class="fc">&nbsp;                    ebnfRights.containsKey(newNt.getName()) ? ebnfRights.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setLeftEnds(ebnfLefts.containsKey(newNt.getName()) ? ebnfLefts.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setRightEnds(</b>
+<b class="fc">&nbsp;                    ebnfRights.containsKey(newNt.getName()) ? ebnfRights.get(newNt.getName()) : new HashSet&lt;&gt;())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            Builder copyBuilder = arguments == null ? newNt.copy() : newNt.copy().apply(arguments);</b>
+<b class="fc">&nbsp;            return copyBuilder.addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Start start) {
+<b class="nc">&nbsp;            return start;</b>
+&nbsp;//            return start.getNonterminal().accept(this);
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * S_IF(cond) ::= [ cond] S
+&nbsp;         *              | [!cond] epsilon
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(IfThen symbol) {
+&nbsp;
+<b class="nc">&nbsp;            Expression cond = symbol.getExpression();</b>
+<b class="nc">&nbsp;            Symbol thenPart = symbol.getThenPart().accept(this);</b>
+&nbsp;
+<b class="nc">&nbsp;            init();</b>
+&nbsp;            String[] parameters;
+&nbsp;            Expression[] arguments;
+&nbsp;
+<b class="nc">&nbsp;            thenPart.setEmpty();</b>
+<b class="nc">&nbsp;            visitor.visitSymbol(thenPart);</b>
+&nbsp;
+<b class="nc">&nbsp;            String id = &quot;condIF&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                freeVars.removeAll(state);</b>
+&nbsp;
+<b class="nc">&nbsp;                parameters = new String[freeVars.size() + 1];</b>
+<b class="nc">&nbsp;                arguments = new Expression[freeVars.size() + 1];</b>
+&nbsp;
+<b class="nc">&nbsp;                parameters[0] = id;</b>
+<b class="nc">&nbsp;                arguments[0] = cond;</b>
+&nbsp;
+<b class="nc">&nbsp;                int i = 1;</b>
+<b class="nc">&nbsp;                for (String var : freeVars) {</b>
+<b class="nc">&nbsp;                    parameters[i] = var;</b>
+<b class="nc">&nbsp;                    arguments[i] = AST.var(var);</b>
+<b class="nc">&nbsp;                    i++;</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                parameters = new String[] {id};</b>
+<b class="nc">&nbsp;                arguments = new Expression[] {cond};</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            Nonterminal newNt = new Nonterminal.Builder(&quot;IF_&quot; + counter++).addParameters(parameters).build();</b>
+&nbsp;
+<b class="nc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbol(</b>
+<b class="nc">&nbsp;                    thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())</b>
+<b class="nc">&nbsp;                .setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="nc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="nc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="nc">&nbsp;                .setDefinition(symbol)</b>
+<b class="nc">&nbsp;                .build());</b>
+&nbsp;
+&nbsp;            // FIXME: epsilon rule can have a condition
+<b class="nc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt)</b>
+<b class="nc">&nbsp;                                    .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="nc">&nbsp;                                    .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone()).build());</b>
+&nbsp;
+<b class="nc">&nbsp;            return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * AB_IF_ELSE(cond) ::= [ cond] A
+&nbsp;         *                    | [!cond] B
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public Symbol visit(IfThenElse symbol) {
+&nbsp;
+<b class="fc">&nbsp;            Expression cond = symbol.getExpression();</b>
+<b class="fc">&nbsp;            Symbol thenPart = symbol.getThenPart().accept(this);</b>
+<b class="fc">&nbsp;            Symbol elsePart = symbol.getElsePart().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            init();</b>
+&nbsp;            String[] parameters;
+&nbsp;            Expression[] arguments;
+&nbsp;
+<b class="fc">&nbsp;            thenPart.setEmpty();</b>
+<b class="fc">&nbsp;            elsePart.setEmpty();</b>
+<b class="fc">&nbsp;            visitor.visitSymbol(thenPart);</b>
+<b class="fc">&nbsp;            visitor.visitSymbol(elsePart);</b>
+&nbsp;
+<b class="fc">&nbsp;            String id = &quot;condIF&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;            if (!freeVars.isEmpty()) {</b>
+&nbsp;
+<b class="fc">&nbsp;                freeVars.removeAll(state);</b>
+&nbsp;
+<b class="fc">&nbsp;                parameters = new String[freeVars.size() + 1];</b>
+<b class="fc">&nbsp;                arguments = new Expression[freeVars.size() + 1];</b>
+&nbsp;
+<b class="fc">&nbsp;                parameters[0] = id;</b>
+<b class="fc">&nbsp;                arguments[0] = cond;</b>
+&nbsp;
+<b class="fc">&nbsp;                int i = 1;</b>
+<b class="fc">&nbsp;                for (String var : freeVars) {</b>
+<b class="fc">&nbsp;                    parameters[i] = var;</b>
+<b class="fc">&nbsp;                    arguments[i] = AST.var(var);</b>
+<b class="fc">&nbsp;                    i++;</b>
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                parameters = new String[] {id};</b>
+<b class="nc">&nbsp;                arguments = new Expression[] {cond};</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Nonterminal newNt = new Nonterminal.Builder(&quot;IF_THEN_ELSE_&quot; + counter++).addParameters(parameters).build();</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbol(</b>
+<b class="fc">&nbsp;                    thenPart.copy().addPreCondition(DataDependentCondition.predicate(AST.var(id))).build())</b>
+<b class="fc">&nbsp;                .setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            addedRules.add(RuntimeRule.withHead(newNt).addSymbol(</b>
+<b class="fc">&nbsp;                    elsePart.copy().addPreCondition(DataDependentCondition.predicate(AST.not(AST.var(id)))).build())</b>
+<b class="fc">&nbsp;                .setLayout(layout).setLayoutStrategy(strategy)</b>
+<b class="fc">&nbsp;                .setRecursion(Recursion.NON_REC).setAssociativity(Associativity.UNDEFINED)</b>
+<b class="fc">&nbsp;                .setPrecedence(-1).setPrecedenceLevel(PrecedenceLevel.getFirstAndDone())</b>
+<b class="fc">&nbsp;                .setDefinition(symbol)</b>
+<b class="fc">&nbsp;                .build());</b>
+&nbsp;
+<b class="fc">&nbsp;            return newNt.copy().apply(arguments).addConditions(symbol).setLabel(symbol.getLabel()).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         *  The rest:
+&nbsp;         */
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Align symbol) {
+<b class="nc">&nbsp;            Symbol sym = symbol.getSymbol().accept(this);</b>
+&nbsp;
+<b class="nc">&nbsp;            return sym == symbol.getSymbol() ? symbol</b>
+<b class="nc">&nbsp;                    : new Align.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Block symbol) {
+<b class="nc">&nbsp;            List&lt;Symbol&gt; symbols = symbol.getSymbols();</b>
+<b class="nc">&nbsp;            Symbol[] syms = new Symbol[symbols.size()];</b>
+&nbsp;
+<b class="nc">&nbsp;            int j = 0;</b>
+<b class="nc">&nbsp;            boolean modified = false;</b>
+<b class="nc">&nbsp;            for (Symbol sym : symbols) {</b>
+<b class="nc">&nbsp;                syms[j] = sym.accept(this);</b>
+<b class="nc">&nbsp;                if (sym != syms[j])</b>
+<b class="nc">&nbsp;                    modified |= true;</b>
+<b class="nc">&nbsp;                j++;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return modified</b>
+<b class="nc">&nbsp;                    ? new Block.Builder(syms).setLabel(symbol.getLabel()).addConditions(symbol).build()</b>
+<b class="nc">&nbsp;                    : symbol;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Code symbol) {
+<b class="fc">&nbsp;            Symbol sym = symbol.getSymbol().accept(this);</b>
+<b class="fc">&nbsp;            if (sym == symbol.getSymbol())</b>
+<b class="fc">&nbsp;                return symbol;</b>
+&nbsp;
+<b class="nc">&nbsp;            return new Code.Builder(sym, symbol.getStatements()).setLabel(symbol.getLabel()).addConditions(symbol)</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Error error) {
+<b class="fc">&nbsp;            return error;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Conditional symbol) {
+<b class="nc">&nbsp;            Symbol sym = symbol.getSymbol().accept(this);</b>
+<b class="nc">&nbsp;            if (sym == symbol.getSymbol())</b>
+<b class="nc">&nbsp;                return symbol;</b>
+&nbsp;
+<b class="nc">&nbsp;            return new Conditional.Builder(sym, symbol.getExpression()).setLabel(symbol.getLabel()).addConditions(</b>
+<b class="nc">&nbsp;                symbol).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Ignore symbol) {
+<b class="fc">&nbsp;            Symbol sym = symbol.getSymbol().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            return sym == symbol.getSymbol()</b>
+<b class="fc">&nbsp;                    ? symbol</b>
+<b class="nc">&nbsp;                    : new Ignore.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Nonterminal symbol) {
+<b class="fc">&nbsp;            return symbol;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Offside symbol) {
+<b class="fc">&nbsp;            Symbol sym = symbol.getSymbol().accept(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            return sym == symbol.getSymbol()</b>
+<b class="fc">&nbsp;                    ? symbol</b>
+<b class="nc">&nbsp;                    : new Offside.Builder(sym).setLabel(symbol.getLabel()).addConditions(symbol).build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Terminal symbol) {
+<b class="fc">&nbsp;            return symbol;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(While symbol) {
+<b class="nc">&nbsp;            Symbol body = symbol.getBody().accept(this);</b>
+<b class="nc">&nbsp;            if (body == symbol.getBody())</b>
+<b class="nc">&nbsp;                return symbol;</b>
+&nbsp;
+<b class="nc">&nbsp;            return new While.Builder(symbol.getExpression(), body).setLabel(symbol.getLabel()).addConditions(symbol)</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Symbol visit(Return symbol) {
+<b class="fc">&nbsp;            return symbol;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

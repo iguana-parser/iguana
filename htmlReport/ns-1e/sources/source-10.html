@@ -1,0 +1,297 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Star</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex</a>
+</div>
+
+<h1>Coverage Summary for Class: Star (org.iguana.regex)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Star</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (12/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (19/22)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Star$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.5%
+  </span>
+  <span class="absValue">
+    (13/17)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (18/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.1%
+  </span>
+  <span class="absValue">
+    (32/39)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.regex;
+&nbsp;
+&nbsp;import org.iguana.regex.visitor.RegularExpressionVisitor;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class Star extends AbstractRegularExpression {
+&nbsp;
+&nbsp;    private final RegularExpression regex;
+&nbsp;
+&nbsp;    private final List&lt;RegularExpression&gt; separators;
+&nbsp;
+&nbsp;    private Star(Builder builder) {
+<b class="fc">&nbsp;        super(builder);</b>
+<b class="fc">&nbsp;        this.regex = builder.regex;</b>
+<b class="fc">&nbsp;        this.separators = Collections.unmodifiableList(builder.separators);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Star from(RegularExpression s) {
+<b class="fc">&nbsp;        return builder(s).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int length() {
+<b class="nc">&nbsp;        return regex.length();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(RegularExpressionVisitor&lt;T&gt; visitor) {
+<b class="fc">&nbsp;        return visitor.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean isNullable() {
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Set&lt;CharRange&gt; getFirstSet() {
+<b class="fc">&nbsp;        return regex.getFirstSet();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Set&lt;CharRange&gt; getNotFollowSet() {
+<b class="nc">&nbsp;        return regex.getFirstSet();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;RegularExpression&gt; getSeparators() {
+<b class="fc">&nbsp;        return separators;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Builder copy() {
+<b class="fc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RegularExpression getSymbol() {
+<b class="fc">&nbsp;        return regex;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;? extends RegularExpression&gt; getChildren() {
+<b class="nc">&nbsp;        return Collections.singletonList(regex);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (this == obj)</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!(obj instanceof Star))</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        Star other = (Star) obj;</b>
+<b class="fc">&nbsp;        return regex.equals(other.regex) &amp;&amp; separators.equals(other.separators);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="fc">&nbsp;        return regex.hashCode();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return regex.toString() + &quot;*&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Builder builder(RegularExpression s) {
+<b class="fc">&nbsp;        return new Builder(s);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder extends RegexBuilder&lt;Star&gt; {
+&nbsp;
+&nbsp;        private RegularExpression regex;
+&nbsp;
+<b class="fc">&nbsp;        private List&lt;RegularExpression&gt; separators = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        private Builder() {</b>
+<b class="fc">&nbsp;            regex = null;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        public Builder(RegularExpression regex) {</b>
+<b class="fc">&nbsp;            this.regex = regex;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder(Star star) {
+<b class="fc">&nbsp;            super(star);</b>
+<b class="fc">&nbsp;            this.regex = star.regex;</b>
+<b class="fc">&nbsp;            this.setSeparators(star.getSeparators());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder setSymbol(RegularExpression regex) {
+<b class="fc">&nbsp;            this.regex = regex;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder setSeparators(List&lt;RegularExpression&gt; separators) {
+<b class="fc">&nbsp;            this.separators = separators;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public RegexBuilder&lt;Star&gt; setChildren(List&lt;RegularExpression&gt; children) {
+<b class="nc">&nbsp;            if (children.size() != 1) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(&quot;Children size should be one.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            this.regex = children.get(0);</b>
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Star build() {
+<b class="fc">&nbsp;            return new Star(this);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

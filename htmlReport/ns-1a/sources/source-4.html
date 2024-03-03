@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ParseError</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.parser</a>
+</div>
+
+<h1>Coverage Summary for Class: ParseError (org.iguana.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParseError</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (5/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (15/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.parser;
+&nbsp;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.gss.GSSNode;
+&nbsp;import org.iguana.result.Result;
+&nbsp;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;
+&nbsp;public class ParseError&lt;T extends Result&gt; {
+&nbsp;
+&nbsp;    private final GrammarSlot slot;
+&nbsp;    private final int inputIndex;
+&nbsp;    private final int lineNumber;
+&nbsp;    private final int columnNumber;
+&nbsp;    private final GSSNode&lt;T&gt; gssNode;
+&nbsp;    private final String description;
+&nbsp;
+&nbsp;    public ParseError(
+&nbsp;            GrammarSlot slot,
+&nbsp;            GSSNode&lt;T&gt; gssNode,
+&nbsp;            int inputIndex,
+&nbsp;            int lineNumber,
+&nbsp;            int columnNumber,
+<b class="fc">&nbsp;            String description) {</b>
+<b class="fc">&nbsp;        this.slot = slot;</b>
+<b class="fc">&nbsp;        this.inputIndex = inputIndex;</b>
+<b class="fc">&nbsp;        this.lineNumber = lineNumber;</b>
+<b class="fc">&nbsp;        this.columnNumber = columnNumber;</b>
+<b class="fc">&nbsp;        this.description = description;</b>
+<b class="fc">&nbsp;        this.gssNode = gssNode;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getInputIndex() {
+<b class="fc">&nbsp;        return inputIndex;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GrammarSlot getGrammarSlot() {
+<b class="nc">&nbsp;        return slot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getLineNumber() {
+<b class="nc">&nbsp;        return lineNumber;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getColumnNumber() {
+<b class="nc">&nbsp;        return columnNumber;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescription() {
+<b class="nc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (this == obj) return true;</b>
+<b class="fc">&nbsp;        if (!(obj instanceof ParseError)) return false;</b>
+<b class="fc">&nbsp;        ParseError&lt;?&gt; other = (ParseError&lt;?&gt;) obj;</b>
+<b class="fc">&nbsp;        return inputIndex == other.inputIndex</b>
+&nbsp;               &amp;&amp; lineNumber == other.lineNumber
+&nbsp;               &amp;&amp; columnNumber == other.columnNumber;
+&nbsp;    }
+&nbsp;
+&nbsp;    public GSSNode&lt;T&gt; getGssNode() {
+<b class="fc">&nbsp;        return gssNode;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(inputIndex, lineNumber, columnNumber);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return String.format(&quot;Parse error at input index: %d, line: %d, column: %d, grammar rule: %s, description: %s&quot;,</b>
+<b class="fc">&nbsp;                inputIndex, lineNumber, columnNumber, slot, description);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

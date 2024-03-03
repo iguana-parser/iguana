@@ -1,0 +1,373 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > BodyGrammarSlot</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.slot</a>
+</div>
+
+<h1>Coverage Summary for Class: BodyGrammarSlot (org.iguana.grammar.slot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BodyGrammarSlot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (19/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.8%
+  </span>
+  <span class="absValue">
+    (69/76)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.slot;
+&nbsp;
+&nbsp;import org.iguana.datadependent.env.Environment;
+&nbsp;import org.iguana.grammar.condition.Conditions;
+&nbsp;import org.iguana.grammar.runtime.Position;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;import org.iguana.grammar.slot.lookahead.FollowTest;
+&nbsp;import org.iguana.gss.GSSNode;
+&nbsp;import org.iguana.parser.IguanaRuntime;
+&nbsp;import org.iguana.result.Result;
+&nbsp;import org.iguana.utils.collections.Keys;
+&nbsp;import org.iguana.utils.collections.OpenAddressingHashMap;
+&nbsp;import org.iguana.utils.collections.key.Key;
+&nbsp;import org.iguana.utils.input.Input;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class BodyGrammarSlot implements GrammarSlot {
+&nbsp;
+&nbsp;    protected final Position position;
+&nbsp;
+&nbsp;    private Map&lt;Key, Object&gt; intermediateNodes;
+&nbsp;
+&nbsp;    private final Conditions conditions;
+&nbsp;
+&nbsp;    private final String label;
+&nbsp;
+&nbsp;    private final int i1;
+&nbsp;
+&nbsp;    private final String variable;
+&nbsp;
+&nbsp;    private final int i2;
+&nbsp;
+&nbsp;    private final Set&lt;String&gt; state;
+&nbsp;
+&nbsp;    private final FollowTest followTest;
+&nbsp;
+&nbsp;    private Transition outTransition;
+&nbsp;
+&nbsp;    private Transition inTransition;
+&nbsp;
+&nbsp;    public BodyGrammarSlot(
+&nbsp;            Position position,
+&nbsp;            String label,
+&nbsp;            String variable,
+&nbsp;            Set&lt;String&gt; state,
+&nbsp;            Conditions conditions,
+&nbsp;            FollowTest followTest) {
+<b class="fc">&nbsp;        this(position, label, -1, variable, -1, state, conditions, followTest);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BodyGrammarSlot(
+&nbsp;            Position position,
+&nbsp;            String label,
+&nbsp;            int i1,
+&nbsp;            String variable,
+&nbsp;            int i2,
+&nbsp;            Set&lt;String&gt; state,
+&nbsp;            Conditions conditions,
+<b class="fc">&nbsp;            FollowTest followTest) {</b>
+<b class="fc">&nbsp;        this.position = position;</b>
+<b class="fc">&nbsp;        this.conditions = conditions;</b>
+<b class="fc">&nbsp;        this.label = label;</b>
+<b class="fc">&nbsp;        this.i1 = i1;</b>
+<b class="fc">&nbsp;        this.variable = variable;</b>
+<b class="fc">&nbsp;        this.i2 = i2;</b>
+<b class="fc">&nbsp;        this.state = state;</b>
+<b class="fc">&nbsp;        this.followTest = followTest;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return position.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean testFollow(int v) {
+<b class="fc">&nbsp;        return followTest.test(v);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+&nbsp;    public &lt;T extends Result&gt; T getIntermediateNode(
+&nbsp;            T leftResult,
+&nbsp;            int destinationIndex,
+&nbsp;            T rightResult,
+&nbsp;            Environment env,
+&nbsp;            IguanaRuntime&lt;T&gt; runtime) {
+<b class="fc">&nbsp;        if (isFirst()) return rightResult;</b>
+&nbsp;
+<b class="fc">&nbsp;        Key key = Keys.from(destinationIndex, rightResult.getRightExtent(), env);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (intermediateNodes == null) {</b>
+<b class="fc">&nbsp;            intermediateNodes = new OpenAddressingHashMap&lt;&gt;();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Object value = intermediateNodes.get(key);</b>
+<b class="fc">&nbsp;        if (value == null) {</b>
+<b class="fc">&nbsp;            T newNode = runtime.getResultOps().merge(null, leftResult, rightResult, this);</b>
+<b class="fc">&nbsp;            intermediateNodes.put(key, newNode);</b>
+<b class="fc">&nbsp;            return newNode;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        runtime.getResultOps().merge((T) value, leftResult, rightResult, this);</b>
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Conditions getConditions() {
+<b class="fc">&nbsp;        return conditions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void reset() {
+<b class="fc">&nbsp;        intermediateNodes = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getLabel() {
+<b class="fc">&nbsp;        return label;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getVariable() {
+<b class="nc">&nbsp;        return variable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T extends Result&gt; void execute(
+&nbsp;            Input input,
+&nbsp;            GSSNode&lt;T&gt; u,
+&nbsp;            T result,
+&nbsp;            Environment env,
+&nbsp;            IguanaRuntime&lt;T&gt; runtime) {
+<b class="fc">&nbsp;        outTransition.execute(input, u, result, env, runtime);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean requiresBinding() {
+<b class="fc">&nbsp;        return label != null || variable != null || state != null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Environment doBinding(Result result, Environment env) {
+&nbsp;
+<b class="fc">&nbsp;        if (label != null) {</b>
+<b class="fc">&nbsp;            if (i1 != -1)</b>
+<b class="nc">&nbsp;                env = env._declare(result);</b>
+&nbsp;            else
+<b class="fc">&nbsp;                env = env._declare(label, result);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (variable != null &amp;&amp; state == null) {</b>
+<b class="fc">&nbsp;            if (i2 != -1)</b>
+<b class="nc">&nbsp;                env = env._declare(result.getValue());</b>
+&nbsp;            else
+<b class="fc">&nbsp;                env = env._declare(variable, result.getValue());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (variable == null &amp;&amp; state != null) { // TODO: support for the array-based environment implementation</b>
+<b class="fc">&nbsp;            if (state.size() == 1) {</b>
+<b class="fc">&nbsp;                String v = state.iterator().next();</b>
+<b class="fc">&nbsp;                if (!v.equals(&quot;_&quot;)) {</b>
+<b class="fc">&nbsp;                    Object value = result.getValue();</b>
+<b class="fc">&nbsp;                    env = env._declare(v, value);</b>
+&nbsp;                }
+<b class="fc">&nbsp;            } else {</b>
+<b class="fc">&nbsp;                if (result.getValue() instanceof Object[]) {</b>
+<b class="fc">&nbsp;                    Object[] values = (Object[]) result.getValue();</b>
+<b class="fc">&nbsp;                    int i = 0;</b>
+<b class="fc">&nbsp;                    for (String v : state) {</b>
+<b class="fc">&nbsp;                        if (!v.equals(&quot;_&quot;)) {</b>
+<b class="fc">&nbsp;                            env = env._declare(v, values[i]);</b>
+&nbsp;                        }
+<b class="fc">&nbsp;                        i++;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (variable != null &amp;&amp; state != null) { // TODO: support for the array-based environment implementation</b>
+<b class="fc">&nbsp;            Object[] values = (Object[]) result.getValue();</b>
+<b class="fc">&nbsp;            env = env._declare(variable, values[0]);</b>
+&nbsp;
+<b class="fc">&nbsp;            int i = 1;</b>
+&nbsp;
+<b class="fc">&nbsp;            for (String v : state) {</b>
+<b class="fc">&nbsp;                if (!v.equals(&quot;_&quot;)) {</b>
+<b class="fc">&nbsp;                    env = env._declare(v, values[i]);</b>
+&nbsp;                }
+<b class="fc">&nbsp;                i++;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return env;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getPosition() {
+<b class="fc">&nbsp;        return position.getPosition();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RuntimeRule getRule() {
+<b class="fc">&nbsp;        return position.getRule();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setOutTransition(Transition outTransition) {
+<b class="fc">&nbsp;        if (this.outTransition != null) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;outTransition is already set&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.outTransition = outTransition;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setInTransition(Transition inTransition) {
+<b class="fc">&nbsp;        if (this.inTransition != null) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;inTransition is already set&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        this.inTransition = inTransition;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Transition getOutTransition() {
+<b class="fc">&nbsp;        return outTransition;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Transition getInTransition() {
+<b class="fc">&nbsp;        return inTransition;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;     * Corresponds to a grammar position A ::= B . \alpha
+&nbsp;     */
+&nbsp;    public boolean isFirst() {
+<b class="fc">&nbsp;        return getPosition() == 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;     * Corresponds to a grammar position A ::= . \alpha
+&nbsp;     */
+&nbsp;    public boolean isStart() {
+<b class="nc">&nbsp;        return getPosition() == 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isEnd() {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public FollowTest getFollowTest() {
+<b class="fc">&nbsp;        return followTest;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

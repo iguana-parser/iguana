@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IggyParserUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.iggy</a>
+</div>
+
+<h1>Coverage Summary for Class: IggyParserUtils (org.iguana.iggy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IggyParserUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.2%
+  </span>
+  <span class="absValue">
+    (15/23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.iggy;
+&nbsp;
+&nbsp;import org.iguana.grammar.Grammar;
+&nbsp;import org.iguana.grammar.symbol.Start;
+&nbsp;import org.iguana.iggy.gen.IggyGrammar;
+&nbsp;import org.iguana.iggy.gen.IggyParser;
+&nbsp;import org.iguana.parser.IguanaParser;
+&nbsp;import org.iguana.parser.ParseErrorException;
+&nbsp;import org.iguana.parsetree.ParseTreeNode;
+&nbsp;import org.iguana.utils.input.Input;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class IggyParserUtils {</b>
+&nbsp;
+&nbsp;    // Creates a Grammar form the provided .iggy file
+&nbsp;    public static Grammar fromIggyGrammarPath(String path) {
+&nbsp;        Input input;
+&nbsp;        try {
+<b class="fc">&nbsp;            input = Input.fromFile(new File(path));</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return createGrammar(input);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Creates a Grammar form the provided grammar in string form
+&nbsp;    public static Grammar fromIggyGrammar(String content) {
+<b class="fc">&nbsp;        Input input = Input.fromString(content);</b>
+<b class="fc">&nbsp;        return createGrammar(input);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static Grammar createGrammar(Input input) {
+<b class="fc">&nbsp;        Start start = IggyGrammar.getGrammar().getStartSymbols().get(0);</b>
+<b class="fc">&nbsp;        IguanaParser parser = IggyParser.getInstance();</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            parser.parse(input, start);</b>
+<b class="nc">&nbsp;        } catch (ParseErrorException e) {</b>
+<b class="nc">&nbsp;            System.out.println(parser.getParseError());</b>
+<b class="nc">&nbsp;            throw new RuntimeException(parser.getParseError().toString());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        ParseTreeNode parseTree = parser.getParseTree();</b>
+<b class="fc">&nbsp;        Object result = parseTree.accept(new IggyParseTreeToGrammarVisitor());</b>
+<b class="fc">&nbsp;        if (result instanceof List&lt;?&gt;) { // When there is a start symbol</b>
+<b class="fc">&nbsp;            List&lt;?&gt; nodes = (List&lt;?&gt;) result;</b>
+<b class="fc">&nbsp;            if (nodes.size() == 1) { // No layout definition</b>
+<b class="fc">&nbsp;                return (Grammar) nodes.get(0);</b>
+&nbsp;            } else { // Layout Grammar Layout
+<b class="nc">&nbsp;                return (Grammar) nodes.get(1);</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            return (Grammar) result;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

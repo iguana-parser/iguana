@@ -1,0 +1,1117 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GenerateElements</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.traversal.idea</a>
+</div>
+
+<h1>Coverage Summary for Class: GenerateElements (org.iguana.traversal.idea)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenerateElements</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/109)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GenerateElements$GetPhiElements</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/363)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GenerateElements$InferPsiEbnfElementType</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/58)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GenerateElements$NUM</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/49)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/534)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.traversal.idea;
+&nbsp;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;import org.iguana.grammar.symbol.Align;
+&nbsp;import org.iguana.grammar.symbol.Alt;
+&nbsp;import org.iguana.grammar.symbol.Block;
+&nbsp;import org.iguana.grammar.symbol.Code;
+&nbsp;import org.iguana.grammar.symbol.Conditional;
+&nbsp;import org.iguana.grammar.symbol.Error;
+&nbsp;import org.iguana.grammar.symbol.Group;
+&nbsp;import org.iguana.grammar.symbol.IfThen;
+&nbsp;import org.iguana.grammar.symbol.IfThenElse;
+&nbsp;import org.iguana.grammar.symbol.Ignore;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Offside;
+&nbsp;import org.iguana.grammar.symbol.Opt;
+&nbsp;import org.iguana.grammar.symbol.Plus;
+&nbsp;import org.iguana.grammar.symbol.Return;
+&nbsp;import org.iguana.grammar.symbol.Star;
+&nbsp;import org.iguana.grammar.symbol.Start;
+&nbsp;import org.iguana.grammar.symbol.Symbol;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.grammar.symbol.While;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.io.PrintWriter;
+&nbsp;import java.io.UnsupportedEncodingException;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.LinkedHashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * Created by Anastasia Izmaylova on 18/12/15.
+&nbsp; */
+&nbsp;
+<b class="nc">&nbsp;public class GenerateElements {</b>
+&nbsp;    /*
+&nbsp;     * &lt;Lang&gt;ElementTypes.java
+&nbsp;     * gen.psi.*
+&nbsp;     * gen.psi.impl.*
+&nbsp;     */
+&nbsp;
+<b class="nc">&nbsp;    enum NUM {</b>
+<b class="nc">&nbsp;        ONE,</b>
+<b class="nc">&nbsp;        MORE_THAN_ONE,</b>
+<b class="nc">&nbsp;        ONE_AND_MORE</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void generate(List&lt;RuntimeRule&gt; rules, String language, String path) {
+<b class="nc">&nbsp;        Map&lt;String, Set&lt;String&gt;&gt; elements = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (RuntimeRule rule : rules) {</b>
+&nbsp;
+<b class="nc">&nbsp;            Set&lt;String&gt; labels = elements.get(rule.getHead().getName());</b>
+<b class="nc">&nbsp;            if (labels == null) {</b>
+<b class="nc">&nbsp;                labels = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;                elements.put(rule.getHead().getName(), labels);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            labels.add(rule.getLabel() == null ? &quot;Impl&quot; : rule.getLabel());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        generateElementTypes(elements, language, path);</b>
+<b class="nc">&nbsp;        generatePhiElements(rules, language, path);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // CHECKSTYLE:OFF OperatorWrap
+&nbsp;    private static void generateElementTypes(Map&lt;String, Set&lt;String&gt;&gt; elements, String language, String path) {
+<b class="nc">&nbsp;        File file = new File(path + language.toLowerCase() + &quot;/gen/psi/&quot; + language + &quot;ElementTypes.java&quot;);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;package &quot; + language.toLowerCase() + &quot;.gen.psi;&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            writer.println(&quot;/* This file has been generated. */&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            writer.println(&quot;import com.intellij.lang.ASTNode;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;import com.intellij.psi.PsiElement;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;import com.intellij.psi.tree.IElementType;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;import &quot; + language.toLowerCase() + &quot;.gen.psi.&quot; + language + &quot;ElementType;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;import &quot; + language.toLowerCase() + &quot;.gen.psi.impl.*;&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            writer.println(&quot;public interface &quot; + language + &quot;ElementTypes {&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+&nbsp;            // ebnf related types, also data-dependent
+&nbsp;            // * and while
+<b class="nc">&nbsp;            writer.println(&quot;    public IElementType LIST = new &quot; + language + &quot;ElementType(\&quot;LIST\&quot;);&quot;);</b>
+&nbsp;            // ? and if-then
+<b class="nc">&nbsp;            writer.println(&quot;    public IElementType OPT = new &quot; + language + &quot;ElementType(\&quot;OPT\&quot;);&quot;);</b>
+&nbsp;            // | and if-then-else
+<b class="nc">&nbsp;            writer.println(&quot;    public IElementType ALT = new &quot; + language + &quot;ElementType(\&quot;ALT\&quot;);&quot;);</b>
+&nbsp;            // () and {}
+<b class="nc">&nbsp;            writer.println(&quot;    public IElementType SEQ = new &quot; + language + &quot;ElementType(\&quot;SEQ\&quot;);&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            for (String head : elements.keySet()) {</b>
+<b class="nc">&nbsp;                for (String label : elements.get(head)) {</b>
+<b class="nc">&nbsp;                    if (label.equals(&quot;Impl&quot;))</b>
+<b class="nc">&nbsp;                        writer.println(&quot;    public IElementType &quot; + head.toUpperCase() + &quot; = new &quot; + language +</b>
+<b class="nc">&nbsp;                                       &quot;ElementType(\&quot;&quot; + head.toUpperCase() + &quot;\&quot;);&quot;);</b>
+&nbsp;                    else
+<b class="nc">&nbsp;                        writer.println(</b>
+<b class="nc">&nbsp;                            &quot;    public IElementType &quot; + head.toUpperCase() + &quot;_&quot; + label.toUpperCase() + &quot; = new &quot; +</b>
+<b class="nc">&nbsp;                            language + &quot;ElementType(\&quot;&quot; + head.toUpperCase() + &quot;_&quot; + label.toUpperCase() + &quot;\&quot;);&quot;);</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            writer.println(&quot;    public static IElementType get(String name) {&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;        switch (name) {&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            case \&quot;LIST\&quot;: return LIST;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            case \&quot;OPT\&quot;: return OPT;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            case \&quot;ALT\&quot;: return ALT;&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            case \&quot;SEQ\&quot;: return SEQ;&quot;);</b>
+<b class="nc">&nbsp;            for (String head : elements.keySet()) {</b>
+<b class="nc">&nbsp;                for (String label : elements.get(head)) {</b>
+<b class="nc">&nbsp;                    if (label.equals(&quot;Impl&quot;)) writer.println(</b>
+<b class="nc">&nbsp;                        &quot;            case \&quot;&quot; + head.toUpperCase() + &quot;\&quot;: return &quot; + head.toUpperCase() + &quot;;&quot;);</b>
+&nbsp;                    else
+<b class="nc">&nbsp;                        writer.println(</b>
+<b class="nc">&nbsp;                            &quot;            case \&quot;&quot; + head.toUpperCase() + &quot;_&quot; + label.toUpperCase() + &quot;\&quot;: return &quot; +</b>
+<b class="nc">&nbsp;                            head.toUpperCase() + &quot;_&quot; + label.toUpperCase() + &quot;;&quot;);</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            writer.println(&quot;        }&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;        throw new RuntimeException(\&quot;Should not have happened!\&quot;);&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;            writer.println();</b>
+<b class="nc">&nbsp;            writer.println(&quot;    class Factory {&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;        public static PsiElement createElement(ASTNode node) {&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            IElementType type = node.getElementType();&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;            if (type == LIST || type == OPT || type == ALT || type == SEQ) &quot; +</b>
+&nbsp;                           &quot;return new EbnfElementImpl(node);&quot;);
+<b class="nc">&nbsp;            for (String head : elements.keySet()) {</b>
+<b class="nc">&nbsp;                for (String label : elements.get(head)) {</b>
+<b class="nc">&nbsp;                    if (label.equals(&quot;Impl&quot;))</b>
+<b class="nc">&nbsp;                        writer.println(</b>
+<b class="nc">&nbsp;                            &quot;            if (type == &quot; + head.toUpperCase() + &quot;) return new &quot; + head + &quot;Impl(node);&quot;);</b>
+&nbsp;                    else
+<b class="nc">&nbsp;                        writer.println(&quot;            if (type == &quot; + head.toUpperCase() + &quot;_&quot; + label.toUpperCase() +</b>
+&nbsp;                                       &quot;) return new &quot; + head + label + &quot;Impl(node);&quot;);
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            writer.println(&quot;            throw new RuntimeException(\&quot;Should not have happened!\&quot;);&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;        }&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;            writer.println(&quot;}&quot;);</b>
+<b class="nc">&nbsp;            writer.close();</b>
+<b class="nc">&nbsp;        } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;        } catch (UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;    // CHECKSTYLE:ON OperatorWrap
+&nbsp;
+&nbsp;    private static void generatePhiElements(List&lt;RuntimeRule&gt; rules, String language, String path) {
+<b class="nc">&nbsp;        new File(path + language.toLowerCase() + &quot;/gen/psi/impl&quot;).mkdir();</b>
+&nbsp;        // Symbol names with their occurrence counter; per nonterminal and per label of a rule
+<b class="nc">&nbsp;        Map&lt;String, Map&lt;String, Map&lt;String, NUM&gt;&gt;&gt; elements = new LinkedHashMap&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (RuntimeRule rule : rules) {</b>
+<b class="nc">&nbsp;            Map&lt;String, Map&lt;String, NUM&gt;&gt; m1 = elements.get(rule.getHead().getName());</b>
+<b class="nc">&nbsp;            if (m1 == null) {</b>
+<b class="nc">&nbsp;                m1 = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;                elements.put(rule.getHead().getName(), m1);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            String label = rule.getLabel();</b>
+<b class="nc">&nbsp;            if (label == null || label.isEmpty()) label = &quot;Impl&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;            Map&lt;String, NUM&gt; m2 = m1.get(label);</b>
+&nbsp;
+<b class="nc">&nbsp;            Map&lt;String, NUM&gt; m3 = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            new GetPhiElements(rule, m3).compute(language, path);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (m2 == null) {</b>
+<b class="nc">&nbsp;                m1.put(label, m3);</b>
+<b class="nc">&nbsp;                continue;</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            for (Map.Entry&lt;String, NUM&gt; entry : m3.entrySet()) {</b>
+<b class="nc">&nbsp;                NUM num = m2.get(entry.getKey());</b>
+<b class="nc">&nbsp;                if (num == null)</b>
+<b class="nc">&nbsp;                    m2.put(entry.getKey(), entry.getValue());</b>
+&nbsp;                else
+<b class="nc">&nbsp;                    switch (num) {</b>
+&nbsp;                        case ONE:
+<b class="nc">&nbsp;                            if (entry.getValue() != NUM.ONE)</b>
+<b class="nc">&nbsp;                                num = entry.getValue();</b>
+&nbsp;                            break;
+&nbsp;                        case MORE_THAN_ONE:
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case ONE_AND_MORE:
+<b class="nc">&nbsp;                            throw new RuntimeException(&quot;Should not happen!&quot;);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        GetPhiElements.generate(elements, language, path);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class GetPhiElements implements ISymbolVisitor&lt;String&gt; {
+&nbsp;
+<b class="nc">&nbsp;        private static final InferPsiEbnfElementType typer = new InferPsiEbnfElementType();</b>
+&nbsp;
+&nbsp;        private final RuntimeRule rule;
+&nbsp;        private final Map&lt;String, NUM&gt; children;
+&nbsp;
+<b class="nc">&nbsp;        GetPhiElements(RuntimeRule rule, Map&lt;String, NUM&gt; children) {</b>
+<b class="nc">&nbsp;            this.rule = rule;</b>
+<b class="nc">&nbsp;            this.children = children;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public void compute(String language, String path) {
+<b class="nc">&nbsp;            String prev_ebnf_element = null;</b>
+<b class="nc">&nbsp;            for (Symbol symbol : rule.getBody()) {</b>
+<b class="nc">&nbsp;                String child = symbol.accept(this);</b>
+<b class="nc">&nbsp;                if (child != null) {</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (child.endsWith(&quot;$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                        if (prev_ebnf_element != null &amp;&amp; !prev_ebnf_element.equals(child)) {</b>
+<b class="nc">&nbsp;                            if (!prev_ebnf_element.equals(&quot;Element$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                children.remove(prev_ebnf_element);</b>
+<b class="nc">&nbsp;                                prev_ebnf_element = &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;                                children.put(prev_ebnf_element, NUM.MORE_THAN_ONE);</b>
+<b class="nc">&nbsp;                            } else if (prev_ebnf_element.equals(&quot;Element$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                NUM num = children.get(prev_ebnf_element);</b>
+<b class="nc">&nbsp;                                if (num == NUM.ONE)</b>
+<b class="nc">&nbsp;                                    children.put(prev_ebnf_element, NUM.MORE_THAN_ONE);</b>
+<b class="nc">&nbsp;                            }</b>
+&nbsp;                            continue;
+&nbsp;                        } else
+<b class="nc">&nbsp;                            prev_ebnf_element = child;</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    NUM num = children.get(child);</b>
+<b class="nc">&nbsp;                    if (num == null)</b>
+<b class="nc">&nbsp;                        num = NUM.ONE;</b>
+&nbsp;                    else
+<b class="nc">&nbsp;                        switch (num) {</b>
+&nbsp;                            case ONE:
+<b class="nc">&nbsp;                                num = NUM.MORE_THAN_ONE;</b>
+<b class="nc">&nbsp;                                break;</b>
+&nbsp;                            case MORE_THAN_ONE:
+<b class="nc">&nbsp;                                break;</b>
+&nbsp;                            default:
+<b class="nc">&nbsp;                                throw new RuntimeException(&quot;Should not happen!&quot;);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    children.put(child, num);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Align symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Block symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Code symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Error error) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Conditional symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(IfThen symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(IfThenElse symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Ignore symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Nonterminal symbol) {
+<b class="nc">&nbsp;            return symbol.getName();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Offside symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().getName();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Terminal symbol) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(While symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Return symbol) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Alt symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Opt symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Plus symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Group symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Star symbol) {
+<b class="nc">&nbsp;            String type = typer.visit(symbol);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Start start) {
+<b class="nc">&nbsp;            String type = typer.visit(start);</b>
+<b class="nc">&nbsp;            if (type == null) return null;</b>
+<b class="nc">&nbsp;            if (type.equals(&quot;PsiElement&quot;)) return &quot;Element$Ebnf&quot;;</b>
+<b class="nc">&nbsp;            return type + &quot;$Ebnf&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public static void generate(Map&lt;String, Map&lt;String, Map&lt;String, NUM&gt;&gt;&gt; elements, String language, String path) {
+&nbsp;
+<b class="nc">&nbsp;            File file = new File(path + language.toLowerCase() + &quot;/gen/psi/IEbnfElement.java&quot;);</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                PrintWriter writer = new PrintWriter(file.getAbsolutePath(), &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;package &quot; + language.toLowerCase() + &quot;.gen.psi;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;/* This file has been generated. */&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.psi.PsiElement;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import java.util.List;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;public interface IEbnfElement&quot; + &quot; extends PsiElement {&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;    public List&lt;PsiElement&gt;&quot; + &quot; getElements&quot; + &quot;();&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;}&quot;);</b>
+<b class="nc">&nbsp;                writer.close();</b>
+<b class="nc">&nbsp;            } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+<b class="nc">&nbsp;            } catch (UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+<b class="nc">&nbsp;            Map&lt;String, Map&lt;String, NUM&gt;&gt; elements_per_nt = new HashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;            // Interfaces
+<b class="nc">&nbsp;            for (String head : elements.keySet()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                Map&lt;String, NUM&gt; symbols = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;                elements_per_nt.put(head, symbols);</b>
+&nbsp;
+<b class="nc">&nbsp;                for (Map&lt;String, NUM&gt; m : elements.get(head).values()) {</b>
+<b class="nc">&nbsp;                    for (Map.Entry&lt;String, NUM&gt; entry : m.entrySet()) {</b>
+<b class="nc">&nbsp;                        NUM num = symbols.get(entry.getKey());</b>
+<b class="nc">&nbsp;                        if (num == null)</b>
+<b class="nc">&nbsp;                            num = entry.getValue();</b>
+&nbsp;                        else
+<b class="nc">&nbsp;                            switch (num) {</b>
+&nbsp;                                case ONE:
+<b class="nc">&nbsp;                                    if (entry.getValue() != NUM.ONE)</b>
+<b class="nc">&nbsp;                                        num = NUM.ONE_AND_MORE;</b>
+&nbsp;                                    break;
+&nbsp;                                case MORE_THAN_ONE:
+<b class="nc">&nbsp;                                    if (entry.getValue() == NUM.ONE || entry.getValue() == NUM.ONE_AND_MORE)</b>
+<b class="nc">&nbsp;                                        num = NUM.ONE_AND_MORE;</b>
+&nbsp;                                    break;
+&nbsp;                                case ONE_AND_MORE:
+<b class="nc">&nbsp;                                    break;</b>
+&nbsp;                                default:
+&nbsp;                            }
+<b class="nc">&nbsp;                        symbols.put(entry.getKey(), num);</b>
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+<b class="nc">&nbsp;                file = new File(path + language.toLowerCase() + &quot;/gen/psi/I&quot; + head + &quot;.java&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                boolean declaration = head.endsWith(&quot;$Declaration&quot;);</b>
+<b class="nc">&nbsp;                boolean reference = head.endsWith(&quot;$Reference&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    PrintWriter writer = new PrintWriter(file.getAbsolutePath(), &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;                    writer.println(&quot;package &quot; + language.toLowerCase() + &quot;.gen.psi;&quot;);</b>
+<b class="nc">&nbsp;                    writer.println();</b>
+<b class="nc">&nbsp;                    writer.println(&quot;/* This file has been generated. */&quot;);</b>
+<b class="nc">&nbsp;                    writer.println();</b>
+<b class="nc">&nbsp;                    writer.println(&quot;import com.intellij.psi.PsiElement;&quot;);</b>
+<b class="nc">&nbsp;                    if (declaration) writer.println(&quot;import com.intellij.psi.PsiNamedElement;&quot;);</b>
+<b class="nc">&nbsp;                    if (reference) writer.println(&quot;import com.intellij.psi.PsiReference;&quot;);</b>
+<b class="nc">&nbsp;                    writer.println(&quot;import java.util.List;&quot;);</b>
+<b class="nc">&nbsp;                    writer.println();</b>
+<b class="nc">&nbsp;                    if (declaration)</b>
+<b class="nc">&nbsp;                        writer.println(&quot;public interface I&quot; + head + &quot; extends PsiElement, PsiNamedElement {&quot;);</b>
+<b class="nc">&nbsp;                    else if (reference)</b>
+<b class="nc">&nbsp;                        writer.println(&quot;public interface I&quot; + head + &quot; extends PsiElement, PsiReference {&quot;);</b>
+&nbsp;                    else
+<b class="nc">&nbsp;                        writer.println(&quot;public interface I&quot; + head + &quot; extends PsiElement {&quot;);</b>
+<b class="nc">&nbsp;                    for (String symbol : symbols.keySet()) {</b>
+<b class="nc">&nbsp;                        NUM num = symbols.get(symbol);</b>
+<b class="nc">&nbsp;                        switch (num) {</b>
+&nbsp;                            case ONE:
+<b class="nc">&nbsp;                                if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                    writer.println(</b>
+<b class="nc">&nbsp;                                        &quot;    List&lt;PsiElement&gt; get&quot; + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                        + &quot;List();&quot;);
+&nbsp;                                else
+<b class="nc">&nbsp;                                    writer.println(&quot;    I&quot; + symbol + &quot; get&quot; + symbol + &quot;();&quot;);</b>
+<b class="nc">&nbsp;                                break;</b>
+&nbsp;                            case MORE_THAN_ONE:
+<b class="nc">&nbsp;                                if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                    writer.println(&quot;    List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;)) + &quot;List();&quot;);</b>
+&nbsp;                                else
+<b class="nc">&nbsp;                                    writer.println(&quot;    List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol + &quot;();&quot;);</b>
+<b class="nc">&nbsp;                                break;</b>
+&nbsp;                            case ONE_AND_MORE:
+<b class="nc">&nbsp;                                if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                    writer.println(</b>
+<b class="nc">&nbsp;                                        &quot;    List&lt;PsiElement&gt; get&quot; + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                        + &quot;List();&quot;);
+&nbsp;                                else
+<b class="nc">&nbsp;                                    writer.println(&quot;    I&quot; + symbol + &quot; get&quot; + symbol + &quot;();&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                                if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                    writer.println(&quot;    List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;)) + &quot;List();&quot;);</b>
+&nbsp;                                else
+<b class="nc">&nbsp;                                    writer.println(&quot;    List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol + &quot;();&quot;);</b>
+<b class="nc">&nbsp;                                break;</b>
+&nbsp;                            default:
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                    writer.println(&quot;}&quot;);</b>
+<b class="nc">&nbsp;                    writer.close();</b>
+<b class="nc">&nbsp;                } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;                    e.printStackTrace();</b>
+<b class="nc">&nbsp;                } catch (UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;                    e.printStackTrace();</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Classes
+<b class="nc">&nbsp;            file = new File(path + language.toLowerCase() + &quot;/gen/psi/impl/EbnfElementImpl.java&quot;);</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                PrintWriter writer = new PrintWriter(file.getAbsolutePath(), &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;package &quot; + language.toLowerCase() + &quot;.gen.psi.impl;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;/* This file has been generated. */&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.psi.PsiElement;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.psi.PsiElementVisitor;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.psi.util.PsiTreeUtil;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.extapi.psi.ASTWrapperPsiElement;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import com.intellij.lang.ASTNode;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;import java.util.List;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import java.util.ArrayList;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;import &quot; + language.toLowerCase() + &quot;.gen.psi.IEbnfElement;&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(</b>
+&nbsp;                    &quot;public class EbnfElementImpl&quot; + &quot; extends ASTWrapperPsiElement implements IEbnfElement {&quot;);
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;    public EbnfElementImpl(ASTNode node) { super(node); }&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;    public void accept(PsiElementVisitor visitor) { super.accept(visitor); }&quot;);</b>
+<b class="nc">&nbsp;                writer.println();</b>
+<b class="nc">&nbsp;                writer.println(&quot;    public List&lt;PsiElement&gt;&quot; + &quot; getElements&quot; + &quot;() {&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;        List&lt;PsiElement&gt; flattened = new ArrayList&lt;&gt;();&quot;);</b>
+<b class="nc">&nbsp;                writer.println(</b>
+&nbsp;                    &quot;        for (PsiElement e : PsiTreeUtil.getChildrenOfTypeAsList(this, PsiElement.class)) {&quot;);
+<b class="nc">&nbsp;                writer.println(&quot;            if (e instanceof IEbnfElement) &quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;                flattened.addAll(((IEbnfElement) e).getElements());&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;            else &quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;                flattened.add(e);&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;        }&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;        return flattened;&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;                writer.println(&quot;}&quot;);</b>
+<b class="nc">&nbsp;                writer.close();</b>
+<b class="nc">&nbsp;            } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+<b class="nc">&nbsp;            } catch (UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+<b class="nc">&nbsp;            for (String head : elements.keySet()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                Map&lt;String, NUM&gt; symbols = elements_per_nt.get(head);</b>
+&nbsp;
+<b class="nc">&nbsp;                for (Map.Entry&lt;String, Map&lt;String, NUM&gt;&gt; entry : elements.get(head).entrySet()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                    String name = head + (entry.getKey().equals(&quot;Impl&quot;) ? entry.getKey() : entry.getKey() + &quot;Impl&quot;);</b>
+<b class="nc">&nbsp;                    file = new File(path + language.toLowerCase() + &quot;/gen/psi/impl/&quot; + name + &quot;.java&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    boolean declaration = head.endsWith(&quot;$Declaration&quot;);</b>
+<b class="nc">&nbsp;                    boolean reference = head.endsWith(&quot;$Reference&quot;);</b>
+&nbsp;                    try {
+<b class="nc">&nbsp;                        PrintWriter writer = new PrintWriter(file.getAbsolutePath(), &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;                        writer.println(&quot;package &quot; + language.toLowerCase() + &quot;.gen.psi.impl;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;/* This file has been generated. */&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import com.intellij.psi.PsiElement;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import com.intellij.psi.PsiElementVisitor;&quot;);</b>
+<b class="nc">&nbsp;                        if (reference) writer.println(&quot;import com.intellij.psi.PsiReference;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import com.intellij.psi.util.PsiTreeUtil;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import com.intellij.extapi.psi.ASTWrapperPsiElement;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import com.intellij.lang.ASTNode;&quot;);</b>
+<b class="nc">&nbsp;                        if (reference) writer.println(&quot;import com.intellij.openapi.util.TextRange;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        if (declaration || reference)</b>
+<b class="nc">&nbsp;                            writer.println(&quot;import com.intellij.util.IncorrectOperationException;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        if (declaration || reference)</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+<b class="nc">&nbsp;                                &quot;import &quot; + language.toLowerCase() + &quot;.gen.utils.&quot; + language + &quot;ElementFactory;&quot;);</b>
+<b class="nc">&nbsp;                        if (reference)</b>
+<b class="nc">&nbsp;                            writer.println(&quot;import &quot; + language.toLowerCase() + &quot;.gen.utils.&quot; + language + &quot;Util;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import java.util.List;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import java.util.ArrayList;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;import &quot; + language.toLowerCase() + &quot;.gen.psi.*;&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(</b>
+&nbsp;                            &quot;public class &quot; + name + &quot; extends ASTWrapperPsiElement implements I&quot; + head + &quot; {&quot;);
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;    public &quot; + name + &quot;(ASTNode node) { super(node); }&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+<b class="nc">&nbsp;                        writer.println(&quot;    public void accept(PsiElementVisitor visitor) { super.accept(visitor); }&quot;);</b>
+<b class="nc">&nbsp;                        writer.println();</b>
+&nbsp;
+<b class="nc">&nbsp;                        for (String symbol : symbols.keySet()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                            NUM num1 = symbols.get(symbol);</b>
+<b class="nc">&nbsp;                            NUM num2 = entry.getValue().get(symbol);</b>
+&nbsp;
+<b class="nc">&nbsp;                            switch (num1) {</b>
+&nbsp;                                case ONE:
+<b class="nc">&nbsp;                                    if (num2 == null) {</b>
+<b class="nc">&nbsp;                                        if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;PsiElement&gt; get&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                           + &quot;List() { return null; }&quot;);
+&nbsp;                                        else
+<b class="nc">&nbsp;                                            writer.println(</b>
+&nbsp;                                                &quot;    public I&quot; + symbol + &quot; get&quot; + symbol + &quot;() { return null; }&quot;);
+&nbsp;                                    } else {
+<b class="nc">&nbsp;                                        if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;PsiElement&gt; get&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                           + &quot;List() { return findNotNullChildByClass(&quot;
+&nbsp;                                                           + &quot;IEbnfElement.class).getElements(); }&quot;);
+&nbsp;                                        else
+<b class="nc">&nbsp;                                            writer.println(&quot;    public I&quot; + symbol + &quot; get&quot; + symbol</b>
+&nbsp;                                                           + &quot;() { return findNotNullChildByClass(I&quot; + symbol
+&nbsp;                                                           + &quot;.class); }&quot;);
+&nbsp;                                    }
+<b class="nc">&nbsp;                                    break;</b>
+&nbsp;                                case MORE_THAN_ONE:
+<b class="nc">&nbsp;                                    if (num2 == null) {</b>
+<b class="nc">&nbsp;                                        if (symbol.endsWith(&quot;$Ebnf&quot;))</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                           + &quot;List() { return null; }&quot;);
+&nbsp;                                        else
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol</b>
+&nbsp;                                                           + &quot;() { return null; }&quot;);
+&nbsp;                                    } else {
+<b class="nc">&nbsp;                                        if (symbol.endsWith(&quot;$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;)) + &quot;List() {&quot;);</b>
+<b class="nc">&nbsp;                                            writer.println(</b>
+&nbsp;                                                &quot;        List&lt;List&lt;PsiElement&gt;&gt; result = new ArrayList&lt;&gt;();&quot;);
+<b class="nc">&nbsp;                                            writer.println(</b>
+&nbsp;                                                &quot;        for (IEbnfElement e : PsiTreeUtil.getChildrenOfTypeAsList(&quot;
+&nbsp;                                                + &quot;this, IEbnfElement.class))&quot;);
+<b class="nc">&nbsp;                                            writer.println(&quot;            result.add(e.getElements());&quot;);</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;        return result;&quot;);</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    }&quot;);</b>
+&nbsp;                                        } else
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol</b>
+&nbsp;                                                           + &quot;() { return PsiTreeUtil.getChildrenOfTypeAsList(this, I&quot;
+&nbsp;                                                           + symbol + &quot;.class); }&quot;);
+&nbsp;                                    }
+<b class="nc">&nbsp;                                    break;</b>
+&nbsp;                                case ONE_AND_MORE:
+<b class="nc">&nbsp;                                    if (num2 == null) {</b>
+<b class="nc">&nbsp;                                        if (symbol.endsWith(&quot;$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;PsiElement&gt; get&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                           + &quot;List() { return null; }&quot;);
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                           + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                           + &quot;List() { return null; }&quot;);
+&nbsp;                                        } else {
+<b class="nc">&nbsp;                                            writer.println(</b>
+&nbsp;                                                &quot;    public I&quot; + symbol + &quot; get&quot; + symbol + &quot;() { return null; }&quot;);
+<b class="nc">&nbsp;                                            writer.println(&quot;    public List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol</b>
+&nbsp;                                                           + &quot;() { return null; }&quot;);
+&nbsp;                                        }
+&nbsp;                                    } else {
+<b class="nc">&nbsp;                                        switch (num2) {</b>
+&nbsp;                                            case ONE:
+<b class="nc">&nbsp;                                                if (symbol.endsWith(&quot;$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;PsiElement&gt; get&quot;</b>
+<b class="nc">&nbsp;                                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                                   + &quot;List() { return findNotNullChildByClass(&quot;
+&nbsp;                                                                   + &quot;IEbnfElement.class).getElements(); }&quot;);
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                                   + &quot;List() { return null; }&quot;);
+&nbsp;                                                } else {
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public I&quot; + symbol + &quot; get&quot; + symbol</b>
+&nbsp;                                                                   + &quot;() { return findNotNullChildByClass(I&quot; + symbol
+&nbsp;                                                                   + &quot;.class); }&quot;);
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol</b>
+&nbsp;                                                                   + &quot;() { return null; }&quot;);
+&nbsp;                                                }
+<b class="nc">&nbsp;                                                break;</b>
+&nbsp;                                            case MORE_THAN_ONE:
+&nbsp;                                            case ONE_AND_MORE:
+<b class="nc">&nbsp;                                                if (symbol.endsWith(&quot;$Ebnf&quot;)) {</b>
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;PsiElement&gt; get&quot;</b>
+<b class="nc">&nbsp;                                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                                   + &quot;List() { return null; }&quot;);
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;List&lt;PsiElement&gt;&gt; getAll&quot;</b>
+<b class="nc">&nbsp;                                                                   + symbol.substring(0, symbol.lastIndexOf(&quot;$&quot;))</b>
+&nbsp;                                                                   + &quot;List() {&quot;);
+<b class="nc">&nbsp;                                                    writer.println(</b>
+&nbsp;                                                        &quot;        List&lt;List&lt;PsiElement&gt;&gt; result = new ArrayList&lt;&gt;();&quot;);
+<b class="nc">&nbsp;                                                    writer.println(</b>
+&nbsp;                                                        &quot;        for (IEbnfElement e : &quot;
+&nbsp;                                                        + &quot;PsiTreeUtil.getChildrenOfTypeAsList(this, &quot;
+&nbsp;                                                        + &quot;IEbnfElement.class))&quot;);
+<b class="nc">&nbsp;                                                    writer.println(&quot;            result.add(e.getElements());&quot;);</b>
+<b class="nc">&nbsp;                                                    writer.println(&quot;        return result;&quot;);</b>
+<b class="nc">&nbsp;                                                    writer.println(&quot;    }&quot;);</b>
+&nbsp;                                                } else {
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public I&quot; + symbol + &quot; get&quot; + symbol</b>
+&nbsp;                                                                   + &quot;() { return null; }&quot;);
+<b class="nc">&nbsp;                                                    writer.println(&quot;    public List&lt;I&quot; + symbol + &quot;&gt; getAll&quot; + symbol</b>
+&nbsp;                                                                   + &quot;() { return PsiTreeUtil.getChildrenOfTypeAsList&quot;
+&nbsp;                                                                   + &quot;(this, I&quot;
+&nbsp;                                                                   + symbol + &quot;.class); }&quot;);
+&nbsp;                                                }
+&nbsp;                                                break;
+&nbsp;                                        }
+&nbsp;                                    }
+<b class="nc">&nbsp;                                    break;</b>
+&nbsp;                                default:
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+&nbsp;
+<b class="nc">&nbsp;                        if (declaration) {</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public String getName() { return getResult().getText(); }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+&nbsp;                                &quot;    public PsiElement setName(String name) throws IncorrectOperationException {&quot;);
+<b class="nc">&nbsp;                            writer.println(&quot;        ASTNode node = &quot; + language + &quot;ElementFactory.create&quot;</b>
+<b class="nc">&nbsp;                                           + head.substring(0, head.length() - 12) + &quot;(getProject(), name);&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        ASTNode first = getResult().getFirstChildNode();&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        getResult().replaceChild(first, node);&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        return this;&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    }&quot;);</b>
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                        if (reference) {</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+&nbsp;                                &quot;    public PsiReference[] getReferences() { return new PsiReference[] {this}; }&quot;);
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public PsiReference getReference() { return this; }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public PsiElement getElement() { return this; }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+&nbsp;                                &quot;    public TextRange getRangeInElement() { return new TextRange(0, &quot;
+&nbsp;                                + &quot;getTextLength()); }&quot;);
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public PsiElement resolve() {&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        PsiElement element = &quot; + language + &quot;Util.find&quot;</b>
+<b class="nc">&nbsp;                                           + head.substring(0, head.length() - 10) + &quot;(getProject(), this);&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        return element;&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public String getCanonicalText() { return this.getText(); }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+&nbsp;                                &quot;    public PsiElement handleElementRename(String name) throws &quot;
+&nbsp;                                + &quot;IncorrectOperationException {&quot;);
+<b class="nc">&nbsp;                            writer.println(&quot;        ASTNode node = &quot; + language + &quot;ElementFactory.create&quot;</b>
+<b class="nc">&nbsp;                                           + head.substring(0, head.length() - 10) + &quot;(getProject(), name);&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        ASTNode first = getResult().getFirstChildNode();&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        getResult().replaceChild(first, node);&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;        return this;&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+&nbsp;                                &quot;    public PsiElement bindToElement(PsiElement element) throws &quot;
+&nbsp;                                + &quot;IncorrectOperationException { return null; }&quot;);
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public boolean isReferenceTo(PsiElement element) {&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(</b>
+<b class="nc">&nbsp;                                &quot;        return element instanceof &quot; + head.substring(0, head.length() - 10)</b>
+&nbsp;                                + &quot;$DeclarationImpl&quot;);
+<b class="nc">&nbsp;                            writer.println(&quot;                 &amp;&amp; element.getTextLength() == this.getTextLength()&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;                 &amp;&amp; element.getText().equals(this.getText());&quot;);</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public Object[] getVariants() { return new Object[0]; }&quot;);</b>
+<b class="nc">&nbsp;                            writer.println();</b>
+<b class="nc">&nbsp;                            writer.println(&quot;    public boolean isSoft() { return false; }&quot;);</b>
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                        writer.println(&quot;}&quot;);</b>
+<b class="nc">&nbsp;                        writer.close();</b>
+<b class="nc">&nbsp;                    } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;                        e.printStackTrace();</b>
+<b class="nc">&nbsp;                    } catch (UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;                        e.printStackTrace();</b>
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private static class InferPsiEbnfElementType implements ISymbolVisitor&lt;String&gt; {</b>
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Align symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Block symbol) {
+<b class="nc">&nbsp;            String type = null;</b>
+<b class="nc">&nbsp;            for (Symbol sym : symbol.getSymbols()) {</b>
+<b class="nc">&nbsp;                String curr = sym.accept(this);</b>
+<b class="nc">&nbsp;                if (type != null &amp;&amp; curr != null &amp;&amp; !type.equals(curr))</b>
+<b class="nc">&nbsp;                    return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;                else if (type == null &amp;&amp; curr != null)</b>
+<b class="nc">&nbsp;                    type = curr;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return type;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Code symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Error error) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Conditional symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(IfThen symbol) {
+<b class="nc">&nbsp;            return symbol.getThenPart().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(IfThenElse symbol) {
+<b class="nc">&nbsp;            String thenPart = symbol.getThenPart().accept(this);</b>
+<b class="nc">&nbsp;            String elsePart = symbol.getElsePart().accept(this);</b>
+<b class="nc">&nbsp;            if (thenPart != null &amp;&amp; elsePart != null &amp;&amp; !thenPart.equals(elsePart))</b>
+<b class="nc">&nbsp;                return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;            else if (thenPart == null &amp;&amp; elsePart != null)</b>
+<b class="nc">&nbsp;                return elsePart;</b>
+<b class="nc">&nbsp;            else if (thenPart != null &amp;&amp; (elsePart == null || thenPart.equals(elsePart)))</b>
+<b class="nc">&nbsp;                return thenPart;</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Ignore symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Nonterminal symbol) {
+<b class="nc">&nbsp;            return symbol.getName();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Offside symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Terminal symbol) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(While symbol) {
+<b class="nc">&nbsp;            return symbol.getBody().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Return symbol) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Alt symbol) {
+<b class="nc">&nbsp;            String type = null;</b>
+<b class="nc">&nbsp;            for (Symbol sym : symbol.getSymbols()) {</b>
+<b class="nc">&nbsp;                String res = sym.accept(this);</b>
+<b class="nc">&nbsp;                if (type != null &amp;&amp; res != null &amp;&amp; !type.equals(res))</b>
+<b class="nc">&nbsp;                    return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;                else if (type == null &amp;&amp; res != null)</b>
+<b class="nc">&nbsp;                    type = res;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return type;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Opt symbol) {
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Plus symbol) {
+<b class="nc">&nbsp;            for (Symbol sep : symbol.getSeparators())</b>
+<b class="nc">&nbsp;                if (sep.accept(this) != null)</b>
+<b class="nc">&nbsp;                    return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Group symbol) {
+<b class="nc">&nbsp;            String type = null;</b>
+<b class="nc">&nbsp;            for (Symbol sym : symbol.getSymbols()) {</b>
+<b class="nc">&nbsp;                String res = sym.accept(this);</b>
+<b class="nc">&nbsp;                if (type != null &amp;&amp; res != null &amp;&amp; !type.equals(res))</b>
+<b class="nc">&nbsp;                    return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;                else if (type == null &amp;&amp; res != null)</b>
+<b class="nc">&nbsp;                    type = res;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return type;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Star symbol) {
+<b class="nc">&nbsp;            for (Symbol sep : symbol.getSeparators())</b>
+<b class="nc">&nbsp;                if (sep.accept(this) != null)</b>
+<b class="nc">&nbsp;                    return &quot;PsiElement&quot;;</b>
+<b class="nc">&nbsp;            return symbol.getSymbol().accept(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public String visit(Start start) {
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;//            return start.getNonterminal().accept(this);
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

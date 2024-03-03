@@ -1,0 +1,107 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GSSNode</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.gss</a>
+</div>
+
+<h1>Coverage Summary for Class: GSSNode (org.iguana.gss)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">GSSNode</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.gss;
+&nbsp;
+&nbsp;import org.iguana.datadependent.env.Environment;
+&nbsp;import org.iguana.grammar.slot.BodyGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.EndGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalGrammarSlot;
+&nbsp;import org.iguana.parser.IguanaRuntime;
+&nbsp;import org.iguana.result.Result;
+&nbsp;import org.iguana.utils.input.Input;
+&nbsp;
+&nbsp;public interface GSSNode&lt;T extends Result&gt; {
+&nbsp;
+&nbsp;    NonterminalGrammarSlot getGrammarSlot();
+&nbsp;
+&nbsp;    int getInputIndex();
+&nbsp;
+&nbsp;    Object[] getData();
+&nbsp;
+&nbsp;    void addGSSEdge(
+&nbsp;        Input input,
+&nbsp;        BodyGrammarSlot returnSlot,
+&nbsp;        int i,
+&nbsp;        GSSNode&lt;T&gt; destination,
+&nbsp;        T w,
+&nbsp;        Environment env,
+&nbsp;        IguanaRuntime&lt;T&gt; runtime);
+&nbsp;
+&nbsp;    boolean pop(Input input, EndGrammarSlot slot, T child, IguanaRuntime&lt;T&gt; runtime);
+&nbsp;
+&nbsp;    boolean pop(Input input, EndGrammarSlot slot, T result, Object value, IguanaRuntime&lt;T&gt; runtime);
+&nbsp;
+&nbsp;    int countGSSEdges();
+&nbsp;
+&nbsp;    int countPoppedElements();
+&nbsp;
+&nbsp;    Iterable&lt;GSSEdge&lt;T&gt;&gt; getGSSEdges();
+&nbsp;
+&nbsp;    Iterable&lt;T&gt; getPoppedElements();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

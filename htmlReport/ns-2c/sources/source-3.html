@@ -1,0 +1,252 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ParseTreeToDot</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.util.visualization</a>
+</div>
+
+<h1>Coverage Summary for Class: ParseTreeToDot (org.iguana.util.visualization)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParseTreeToDot</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.util.visualization;
+&nbsp;
+&nbsp;import org.iguana.parsetree.AmbiguityNode;
+&nbsp;import org.iguana.parsetree.ErrorNode;
+&nbsp;import org.iguana.parsetree.MetaSymbolNode;
+&nbsp;import org.iguana.parsetree.NonterminalNode;
+&nbsp;import org.iguana.parsetree.ParseTreeNode;
+&nbsp;import org.iguana.parsetree.ParseTreeVisitor;
+&nbsp;import org.iguana.parsetree.TerminalNode;
+&nbsp;import org.iguana.utils.input.Input;
+&nbsp;import org.iguana.utils.visualization.DotGraph;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;import static org.iguana.utils.visualization.DotGraph.newEdge;
+&nbsp;import static org.iguana.utils.visualization.DotGraph.newNode;
+&nbsp;
+&nbsp;public class ParseTreeToDot implements ParseTreeVisitor&lt;Integer&gt; {
+&nbsp;
+&nbsp;    private final DotGraph dotGraph;
+&nbsp;    private final Input input;
+&nbsp;    private final Set&lt;String&gt; exclude;
+<b class="nc">&nbsp;    private int id = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;    private ParseTreeToDot(DotGraph dotGraph, Input input, Set&lt;String&gt; exclude) {</b>
+<b class="nc">&nbsp;        this.dotGraph = dotGraph;</b>
+<b class="nc">&nbsp;        this.input = input;</b>
+<b class="nc">&nbsp;        this.exclude = exclude;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static DotGraph getDotGraph(ParseTreeNode node, Input input) {
+<b class="nc">&nbsp;        return getDotGraph(node, input, Collections.emptySet());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static DotGraph getDotGraph(ParseTreeNode node, Input input, Set&lt;String&gt; exclude) {
+<b class="nc">&nbsp;        DotGraph dotGraph = new DotGraph();</b>
+<b class="nc">&nbsp;        node.accept(new ParseTreeToDot(dotGraph, input, exclude));</b>
+<b class="nc">&nbsp;        return dotGraph;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Integer visitNonterminalNode(NonterminalNode node) {
+<b class="nc">&nbsp;        int id = nextId();</b>
+<b class="nc">&nbsp;        String label = String.format(&quot;(%s, %d, %d)&quot;, node.getGrammarDefinition().getHead().getName(), node.getStart(),</b>
+<b class="nc">&nbsp;            node.getEnd());</b>
+<b class="nc">&nbsp;        dotGraph.addNode(newNode(id, label));</b>
+&nbsp;
+<b class="nc">&nbsp;        visitChildren(node, id);</b>
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Integer&gt; visitStarNode(MetaSymbolNode.StarNode node) {
+<b class="nc">&nbsp;        return visitMetaSymbolNode(node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Integer&gt; visitPlusNode(MetaSymbolNode.PlusNode node) {
+<b class="nc">&nbsp;        return visitMetaSymbolNode(node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Optional&lt;Integer&gt; visitOptionNode(MetaSymbolNode.OptionNode node) {
+<b class="nc">&nbsp;        return Optional.of(visitMetaSymbolNode(node).get(0));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Integer&gt; visitStartNode(MetaSymbolNode.StartNode node) {
+<b class="nc">&nbsp;        return visitMetaSymbolNode(node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Integer visitAltNode(MetaSymbolNode.AltNode node) {
+<b class="nc">&nbsp;        return visitMetaSymbolNode(node).get(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Integer&gt; visitGroupNode(MetaSymbolNode.GroupNode node) {
+<b class="nc">&nbsp;        return visitMetaSymbolNode(node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Integer&gt; visitMetaSymbolNode(MetaSymbolNode node) {
+<b class="nc">&nbsp;        int id = nextId();</b>
+<b class="nc">&nbsp;        String label = String.format(&quot;%s&quot;, node.getName());</b>
+<b class="nc">&nbsp;        dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.RECTANGLE));</b>
+&nbsp;
+<b class="nc">&nbsp;        visitChildren(node, id);</b>
+<b class="nc">&nbsp;        return Collections.singletonList(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Integer&gt; visitAmbiguityNode(AmbiguityNode node) {
+<b class="nc">&nbsp;        int id = nextId();</b>
+<b class="nc">&nbsp;        dotGraph.addNode(newNode(id).setShape(DotGraph.Shape.DIAMOND).setColor(DotGraph.Color.RED));</b>
+&nbsp;
+<b class="nc">&nbsp;        visitChildren(node, id);</b>
+<b class="nc">&nbsp;        return Collections.singletonList(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Integer visitTerminalNode(TerminalNode node) {
+<b class="nc">&nbsp;        if (exclude.contains(node.getGrammarDefinition().getName())) return null;</b>
+&nbsp;
+<b class="nc">&nbsp;        String text = input.subString(node.getStart(), node.getEnd());</b>
+<b class="nc">&nbsp;        String label = String.format(&quot;(%s, %d, %d): \&quot;%s\&quot;&quot;, node.getGrammarDefinition().getName(), node.getStart(),</b>
+<b class="nc">&nbsp;            node.getEnd(), text);</b>
+<b class="nc">&nbsp;        int id = nextId();</b>
+<b class="nc">&nbsp;        dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));</b>
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Integer visitErrorNode(ErrorNode node) {
+<b class="nc">&nbsp;        String text = input.subString(node.getStart(), node.getEnd());</b>
+<b class="nc">&nbsp;        String label = String.format(&quot;(Error, %d, %d): \&quot;%s\&quot;&quot;, node.getStart(), node.getEnd(), text);</b>
+<b class="nc">&nbsp;        int id = nextId();</b>
+<b class="nc">&nbsp;        dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));</b>
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private int nextId() {
+<b class="nc">&nbsp;        return id++;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void addEdgeToChild(int parentNodeId, int childNodeId) {
+<b class="nc">&nbsp;        dotGraph.addEdge(newEdge(parentNodeId, childNodeId));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void visitChildren(ParseTreeNode node, int nodeId) {
+<b class="nc">&nbsp;        for (ParseTreeNode child : node.children()) {</b>
+<b class="nc">&nbsp;            if (child != null) {</b>
+<b class="nc">&nbsp;                Object childId = child.accept(this);</b>
+<b class="nc">&nbsp;                if (childId != null) {</b>
+<b class="nc">&nbsp;                    if (childId instanceof List&lt;?&gt;) {</b>
+<b class="nc">&nbsp;                        addEdgeToChild(nodeId, ((List&lt;Integer&gt;) childId).get(0));</b>
+<b class="nc">&nbsp;                    } else if (childId instanceof Optional&lt;?&gt;) {</b>
+<b class="nc">&nbsp;                        addEdgeToChild(nodeId, ((Optional&lt;Integer&gt;) childId).get());</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        addEdgeToChild(nodeId, (Integer) childId);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

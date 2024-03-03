@@ -1,0 +1,105 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > RegularExpressionVisitor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.regex.visitor</a>
+</div>
+
+<h1>Coverage Summary for Class: RegularExpressionVisitor (org.iguana.regex.visitor)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">RegularExpressionVisitor</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.regex.visitor;
+&nbsp;
+&nbsp;import org.iguana.regex.Alt;
+&nbsp;import org.iguana.regex.Char;
+&nbsp;import org.iguana.regex.CharRange;
+&nbsp;import org.iguana.regex.EOF;
+&nbsp;import org.iguana.regex.Epsilon;
+&nbsp;import org.iguana.regex.Opt;
+&nbsp;import org.iguana.regex.Plus;
+&nbsp;import org.iguana.regex.Reference;
+&nbsp;import org.iguana.regex.RegularExpression;
+&nbsp;import org.iguana.regex.Seq;
+&nbsp;import org.iguana.regex.Star;
+&nbsp;
+&nbsp;public interface RegularExpressionVisitor&lt;T&gt; {
+&nbsp;
+&nbsp;    T visit(Char c);
+&nbsp;
+&nbsp;    T visit(CharRange r);
+&nbsp;
+&nbsp;    T visit(EOF eof);
+&nbsp;
+&nbsp;    T visit(Epsilon e);
+&nbsp;
+&nbsp;    T visit(Star s);
+&nbsp;
+&nbsp;    T visit(Plus p);
+&nbsp;
+&nbsp;    T visit(Opt o);
+&nbsp;
+&nbsp;    &lt;E extends RegularExpression&gt; T visit(Alt&lt;E&gt; alt);
+&nbsp;
+&nbsp;    &lt;E extends RegularExpression&gt; T visit(Seq&lt;E&gt; seq);
+&nbsp;
+&nbsp;    T visit(Reference ref);
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

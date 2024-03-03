@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GrammarGraph</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar</a>
+</div>
+
+<h1>Coverage Summary for Class: GrammarGraph (org.iguana.grammar)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrammarGraph</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.grammar;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.grammar.slot.BodyGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.grammar.slot.NonterminalGrammarSlot;
+&nbsp;import org.iguana.grammar.slot.TerminalGrammarSlot;
+&nbsp;import org.iguana.grammar.symbol.Nonterminal;
+&nbsp;import org.iguana.grammar.symbol.Terminal;
+&nbsp;import org.iguana.regex.matcher.DFAMatcherFactory;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import static java.util.stream.Collectors.toList;
+&nbsp;
+&nbsp;public class GrammarGraph {
+&nbsp;
+<b class="fc">&nbsp;    public static final TerminalGrammarSlot epsilonSlot =</b>
+<b class="fc">&nbsp;        new TerminalGrammarSlot(Terminal.epsilon(), new DFAMatcherFactory());</b>
+&nbsp;    private final List&lt;GrammarSlot&gt; slots;
+&nbsp;    private final Map&lt;String, Expression&gt; globals;
+&nbsp;    private final Map&lt;Nonterminal, NonterminalGrammarSlot&gt; nonterminalsMap;
+&nbsp;
+&nbsp;    public GrammarGraph(
+&nbsp;            List&lt;GrammarSlot&gt; slots,
+&nbsp;            Map&lt;Nonterminal, NonterminalGrammarSlot&gt; nonterminalsMap,
+<b class="fc">&nbsp;            Map&lt;String, Expression&gt; globals) {</b>
+<b class="fc">&nbsp;        this.slots = slots;</b>
+<b class="fc">&nbsp;        this.nonterminalsMap = nonterminalsMap;</b>
+<b class="fc">&nbsp;        this.globals = globals;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;NonterminalGrammarSlot&gt; getNonterminalGrammarSlots() {
+<b class="fc">&nbsp;       return slots.stream().filter(slot -&gt; slot instanceof NonterminalGrammarSlot)</b>
+<b class="fc">&nbsp;                            .map(slot -&gt; (NonterminalGrammarSlot) slot).collect(toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;TerminalGrammarSlot&gt; getTerminalGrammarSlots() {
+<b class="fc">&nbsp;        return slots.stream().filter(slot -&gt; slot instanceof TerminalGrammarSlot)</b>
+<b class="fc">&nbsp;                             .map(slot -&gt; (TerminalGrammarSlot) slot).collect(toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;BodyGrammarSlot&gt; getBodyGrammarSlots() {
+<b class="fc">&nbsp;        return slots.stream().filter(slot -&gt; slot instanceof BodyGrammarSlot)</b>
+<b class="fc">&nbsp;                             .map(slot -&gt; (BodyGrammarSlot) slot).collect(toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public NonterminalGrammarSlot getStartSlot(Nonterminal nonterminal) {
+<b class="fc">&nbsp;        return nonterminalsMap.get(nonterminal);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void clear() {
+<b class="fc">&nbsp;        for (GrammarSlot slot : slots) {</b>
+<b class="fc">&nbsp;            slot.reset();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;String, Expression&gt; getGlobals() {
+<b class="fc">&nbsp;        return globals;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

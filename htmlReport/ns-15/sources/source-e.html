@@ -1,0 +1,282 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IfThenElse</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: IfThenElse (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IfThenElse</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.9%
+  </span>
+  <span class="absValue">
+    (10/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (18/26)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">IfThenElse$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (32/40)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;public class IfThenElse extends AbstractSymbol {
+&nbsp;
+&nbsp;    private final Expression expression;
+&nbsp;    private final Symbol thenPart;
+&nbsp;    private final Symbol elsePart;
+&nbsp;
+&nbsp;    IfThenElse(Builder builder) {
+<b class="fc">&nbsp;        super(builder);</b>
+<b class="fc">&nbsp;        this.expression = builder.expression;</b>
+<b class="fc">&nbsp;        this.thenPart = builder.thenPart;</b>
+<b class="fc">&nbsp;        this.elsePart = builder.elsePart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static IfThenElse ifThenElse(Expression expression, Symbol thenPart, Symbol elsePart) {
+<b class="fc">&nbsp;        return new Builder(expression, thenPart, elsePart).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Expression getExpression() {
+<b class="fc">&nbsp;        return expression;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Symbol getThenPart() {
+<b class="fc">&nbsp;        return thenPart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Symbol getElsePart() {
+<b class="fc">&nbsp;        return elsePart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Builder copy() {
+<b class="fc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Symbol&gt; getChildren() {
+<b class="fc">&nbsp;        return Arrays.asList(thenPart, elsePart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return String.format(&quot;if (%s) %s else %s&quot;, expression.toString(), thenPart.toString(), elsePart.toString());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int size() {
+<b class="nc">&nbsp;        return thenPart.size() + elsePart.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="fc">&nbsp;        if (this == o) return true;</b>
+<b class="fc">&nbsp;        if (!(o instanceof IfThenElse)) return false;</b>
+<b class="fc">&nbsp;        IfThenElse that = (IfThenElse) o;</b>
+<b class="fc">&nbsp;        return Objects.equals(expression, that.expression)</b>
+<b class="fc">&nbsp;               &amp;&amp; Objects.equals(thenPart, that.thenPart)</b>
+<b class="fc">&nbsp;               &amp;&amp; Objects.equals(elsePart, that.elsePart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="fc">&nbsp;        return Objects.hash(expression, thenPart, elsePart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString(int j) {
+<b class="nc">&nbsp;        return String.format(&quot;if (%s) { %s } else { %s }&quot;,</b>
+<b class="nc">&nbsp;                             expression.toString(),</b>
+<b class="nc">&nbsp;                             thenPart.toString(j),</b>
+<b class="nc">&nbsp;                             j - thenPart.size() &lt;= 1</b>
+<b class="nc">&nbsp;                                     ? elsePart.toString(j - thenPart.size())</b>
+<b class="nc">&nbsp;                                     : elsePart.toString());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder extends SymbolBuilder&lt;IfThenElse&gt; {
+&nbsp;
+&nbsp;        private Expression expression;
+&nbsp;        private Symbol thenPart;
+&nbsp;        private Symbol elsePart;
+&nbsp;
+<b class="fc">&nbsp;        public Builder() { }</b>
+&nbsp;
+&nbsp;        public Builder(IfThenElse ifThenElse) {
+<b class="fc">&nbsp;            super(ifThenElse);</b>
+<b class="fc">&nbsp;            this.expression = ifThenElse.expression;</b>
+<b class="fc">&nbsp;            this.thenPart = ifThenElse.thenPart;</b>
+<b class="fc">&nbsp;            this.elsePart = ifThenElse.elsePart;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        public Builder(Expression expression, Symbol thenPart, Symbol elsePart) {</b>
+<b class="fc">&nbsp;            this.expression = expression;</b>
+<b class="fc">&nbsp;            this.thenPart = thenPart;</b>
+<b class="fc">&nbsp;            this.elsePart = elsePart;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public SymbolBuilder&lt;IfThenElse&gt; setChildren(List&lt;Symbol&gt; symbols) {
+<b class="fc">&nbsp;            this.thenPart = symbols.get(0);</b>
+<b class="fc">&nbsp;            this.elsePart = symbols.get(1);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public IfThenElse build() {
+<b class="fc">&nbsp;            this.name = String.format(&quot;if (%s) %s else %s;&quot;, expression, thenPart, elsePart);</b>
+<b class="fc">&nbsp;            return new IfThenElse(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(ISymbolVisitor&lt;T&gt; visitor) {
+<b class="fc">&nbsp;        return visitor.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

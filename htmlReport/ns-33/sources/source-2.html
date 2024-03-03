@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ArrayIntRangeMap</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.utils.collections.rangemap</a>
+</div>
+
+<h1>Coverage Summary for Class: ArrayIntRangeMap (org.iguana.utils.collections.rangemap)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArrayIntRangeMap</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.utils.collections.rangemap;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class ArrayIntRangeMap&lt;T&gt; implements IntRangeMap {
+&nbsp;
+&nbsp;    private int start;
+&nbsp;    private int end;
+&nbsp;    private final int[] values;
+&nbsp;
+<b class="fc">&nbsp;    ArrayIntRangeMap(int start, int end, List&lt;Range&gt; ranges, List&lt;T&gt; rangeValues) {</b>
+<b class="fc">&nbsp;        this.start = start;</b>
+<b class="fc">&nbsp;        this.end = end;</b>
+<b class="fc">&nbsp;        this.values = new int[end - start + 1];</b>
+<b class="fc">&nbsp;        Arrays.fill(this.values, EMPTY_VALUE);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; ranges.size(); i++) {</b>
+<b class="fc">&nbsp;            Range range = ranges.get(i);</b>
+<b class="fc">&nbsp;            for (int j = range.getStart(); j &lt;= range.getEnd(); j++) {</b>
+<b class="fc">&nbsp;                if (!(rangeValues.get(i) instanceof Integer)) {</b>
+<b class="nc">&nbsp;                    throw new RuntimeException(&quot;&quot;);</b>
+&nbsp;                }
+<b class="fc">&nbsp;                values[j - start] = (Integer) rangeValues.get(i);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int get(int key) {
+<b class="fc">&nbsp;        if (key &lt; start || key &gt; end) return EMPTY_VALUE;</b>
+<b class="fc">&nbsp;        return values[key - start];</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

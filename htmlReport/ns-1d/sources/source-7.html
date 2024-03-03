@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > NonterminalNode</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.parsetree</a>
+</div>
+
+<h1>Coverage Summary for Class: NonterminalNode (org.iguana.parsetree)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NonterminalNode</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.7%
+  </span>
+  <span class="absValue">
+    (5/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.8%
+  </span>
+  <span class="absValue">
+    (14/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.parsetree;
+&nbsp;
+&nbsp;import org.iguana.grammar.runtime.RuntimeRule;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import static java.util.Objects.hash;
+&nbsp;import static java.util.Objects.requireNonNull;
+&nbsp;import static org.iguana.utils.Assert.requireNonNegative;
+&nbsp;
+&nbsp;public class NonterminalNode implements ParseTreeNode {
+&nbsp;
+&nbsp;    private final RuntimeRule rule;
+&nbsp;    private final int start;
+&nbsp;    private final int end;
+&nbsp;    private final List&lt;ParseTreeNode&gt; children;
+&nbsp;
+<b class="fc">&nbsp;    public NonterminalNode(RuntimeRule rule, List&lt;ParseTreeNode&gt; children, int start, int end) {</b>
+<b class="fc">&nbsp;        this.rule = requireNonNull(rule);</b>
+<b class="fc">&nbsp;        this.children = children == null ? Collections.emptyList() : children;</b>
+<b class="fc">&nbsp;        this.start = requireNonNegative(start);</b>
+<b class="fc">&nbsp;        this.end = requireNonNegative(end);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getName() {
+<b class="nc">&nbsp;        return rule.getHead().getName();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int getStart() {
+<b class="nc">&nbsp;        return start;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int getEnd() {
+<b class="nc">&nbsp;        return end;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;ParseTreeNode&gt; children() {
+<b class="fc">&nbsp;        return children;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean hasChildren() {
+<b class="nc">&nbsp;        return !children.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(ParseTreeVisitor&lt;T&gt; visitor) {
+<b class="nc">&nbsp;        return visitor.visitNonterminalNode(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RuntimeRule getGrammarDefinition() {
+<b class="nc">&nbsp;        return rule;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getText() {
+<b class="fc">&nbsp;        if (children.size() == 1) return children.get(0).getText();</b>
+&nbsp;
+<b class="nc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="nc">&nbsp;        for (ParseTreeNode child : children) {</b>
+<b class="nc">&nbsp;            sb.append(child.getText());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return sb.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (this == obj) return true;</b>
+<b class="fc">&nbsp;        if (!(obj instanceof NonterminalNode)) return false;</b>
+<b class="fc">&nbsp;        NonterminalNode other = (NonterminalNode) obj;</b>
+<b class="fc">&nbsp;        return this.start == other.start</b>
+&nbsp;               &amp;&amp; this.end == other.end
+<b class="fc">&nbsp;               &amp;&amp; this.rule.equals(other.rule)</b>
+<b class="fc">&nbsp;               &amp;&amp; this.children.equals(other.children);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="fc">&nbsp;        return hash(start, end, rule, children);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return String.format(&quot;(%s, %d, %d)&quot;, rule, start, end);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

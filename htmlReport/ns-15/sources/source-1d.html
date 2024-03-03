@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Terminal</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: Terminal (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Terminal</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.7%
+  </span>
+  <span class="absValue">
+    (18/19)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Terminal$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    94.1%
+  </span>
+  <span class="absValue">
+    (16/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.7%
+  </span>
+  <span class="absValue">
+    (29/30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import org.iguana.grammar.slot.TerminalNodeType;
+&nbsp;import org.iguana.regex.Epsilon;
+&nbsp;import org.iguana.regex.RegularExpression;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;public class Terminal extends AbstractSymbol {
+&nbsp;
+<b class="fc">&nbsp;    private static final Terminal epsilon = Terminal.from(Epsilon.getInstance());</b>
+&nbsp;
+&nbsp;    private final TerminalNodeType nodeType;
+&nbsp;
+&nbsp;    private final RegularExpression regex;
+&nbsp;
+&nbsp;    public Terminal(Builder builder) {
+<b class="fc">&nbsp;        super(builder);</b>
+<b class="fc">&nbsp;        this.regex = builder.regex;</b>
+<b class="fc">&nbsp;        this.nodeType = builder.nodeType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Terminal epsilon() {
+<b class="fc">&nbsp;        return epsilon;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Terminal from(RegularExpression regex) {
+<b class="fc">&nbsp;        return new Builder(regex).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Builder copy() {
+<b class="fc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public RegularExpression getRegularExpression() {
+<b class="fc">&nbsp;        return regex;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TerminalNodeType getNodeType() {
+<b class="fc">&nbsp;        return nodeType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="fc">&nbsp;        return regex.hashCode();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (obj == this)</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!(obj instanceof Terminal))</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        Terminal other = (Terminal) obj;</b>
+&nbsp;
+<b class="fc">&nbsp;        return regex.equals(other.regex);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder extends SymbolBuilder&lt;Terminal&gt; {
+&nbsp;
+&nbsp;        private TerminalNodeType nodeType;
+&nbsp;        private RegularExpression regex;
+&nbsp;
+<b class="fc">&nbsp;        public Builder(RegularExpression regex) {</b>
+<b class="fc">&nbsp;            this.regex = regex;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        private Builder() {}</b>
+&nbsp;
+&nbsp;        public Builder(Terminal terminal) {
+<b class="fc">&nbsp;            super(terminal);</b>
+<b class="fc">&nbsp;            this.regex = terminal.regex;</b>
+<b class="fc">&nbsp;            this.nodeType = terminal.getNodeType();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder setNodeType(TerminalNodeType nodeType) {
+<b class="fc">&nbsp;            this.nodeType = nodeType;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public Terminal build() {
+<b class="fc">&nbsp;            if (name == null)</b>
+<b class="fc">&nbsp;                name = regex.toString();</b>
+<b class="fc">&nbsp;            return new Terminal(this);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isNullable() {
+<b class="nc">&nbsp;        return regex.isNullable();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return regex.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(ISymbolVisitor&lt;T&gt; visitor) {
+<b class="fc">&nbsp;        return visitor.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

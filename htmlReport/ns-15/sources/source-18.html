@@ -1,0 +1,290 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Sequence</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: Sequence (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Sequence</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.4%
+  </span>
+  <span class="absValue">
+    (35/43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Sequence$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (24/24)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.1%
+  </span>
+  <span class="absValue">
+    (59/67)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;import static org.iguana.utils.collections.CollectionsUtil.buildList;
+&nbsp;import static org.iguana.utils.collections.CollectionsUtil.buildMap;
+&nbsp;
+&nbsp;public class Sequence {
+&nbsp;
+&nbsp;    private final List&lt;Symbol&gt; symbols;
+&nbsp;
+&nbsp;    private final Associativity associativity;
+&nbsp;
+&nbsp;    private final String label;
+&nbsp;
+&nbsp;    private final Map&lt;String, Object&gt; attributes;
+&nbsp;
+<b class="fc">&nbsp;    public Sequence(Builder builder) {</b>
+<b class="fc">&nbsp;        this.symbols = builder.symbols;</b>
+<b class="fc">&nbsp;        this.associativity = builder.associativity;</b>
+<b class="fc">&nbsp;        this.label = builder.label;</b>
+<b class="fc">&nbsp;        this.attributes = builder.attributes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Sequence from(Symbol... symbols) {
+<b class="fc">&nbsp;        return new Builder().addSymbols(List.of(symbols)).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isEmpty() {
+<b class="fc">&nbsp;        return symbols.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public Symbol first() {
+<b class="fc">&nbsp;        if (symbols.isEmpty()) return null;</b>
+<b class="fc">&nbsp;        return symbols.get(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Symbol&gt; rest() {
+<b class="fc">&nbsp;        if (symbols.isEmpty() || symbols.size() == 1) return null;</b>
+<b class="fc">&nbsp;        return symbols.subList(1, symbols.size());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Symbol&gt; getSymbols() {
+<b class="fc">&nbsp;        return symbols;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Associativity getAssociativity() {
+<b class="fc">&nbsp;        return associativity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getLabel() {
+<b class="fc">&nbsp;        return label;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;String, Object&gt; getAttributes() {
+<b class="fc">&nbsp;        return attributes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Builder copy() {
+<b class="fc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (this == obj) return true;</b>
+<b class="fc">&nbsp;        if (!(obj instanceof Sequence)) return false;</b>
+<b class="fc">&nbsp;        Sequence other = (Sequence) obj;</b>
+<b class="fc">&nbsp;        return Objects.equals(this.symbols, other.symbols)</b>
+<b class="fc">&nbsp;               &amp;&amp; Objects.equals(this.associativity, other.associativity)</b>
+<b class="fc">&nbsp;               &amp;&amp; Objects.equals(this.label, other.label);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="fc">&nbsp;        List&lt;Symbol&gt; symbols = getSymbols();</b>
+<b class="fc">&nbsp;        if (associativity != null &amp;&amp; associativity != Associativity.UNDEFINED) {</b>
+<b class="fc">&nbsp;            sb.append(associativity).append(&quot; &quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        for (Symbol symbol : symbols) {</b>
+<b class="fc">&nbsp;            sb.append(symbol).append(&quot; &quot;);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        if (sb.length() &gt; 0) {</b>
+<b class="fc">&nbsp;            sb.deleteCharAt(sb.length() - 1);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (label != null) {</b>
+<b class="fc">&nbsp;            sb.append(&quot;  &quot;).append(&quot;%&quot;).append(label);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!attributes.isEmpty()) {</b>
+<b class="nc">&nbsp;            sb.append(&quot;  {&quot;);</b>
+<b class="nc">&nbsp;            for (Map.Entry&lt;String, Object&gt; entry : attributes.entrySet()) {</b>
+<b class="nc">&nbsp;                if (entry.getValue() == null) {</b>
+<b class="nc">&nbsp;                    sb.append(String.format(&quot;%s &quot;, entry.getKey()));</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    sb.append(String.format(&quot;%s=%s &quot;, entry.getKey(), entry.getValue()));</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            sb.deleteCharAt(sb.length() - 1);</b>
+<b class="nc">&nbsp;            sb.append(&quot;}&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return sb.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder {
+<b class="fc">&nbsp;        private Map&lt;String, Object&gt; attributes = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        private List&lt;Symbol&gt; symbols = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        private Associativity associativity = Associativity.UNDEFINED;</b>
+&nbsp;        private String label;
+&nbsp;
+<b class="fc">&nbsp;        public Builder() {}</b>
+&nbsp;
+<b class="fc">&nbsp;        public Builder(Sequence seq) {</b>
+<b class="fc">&nbsp;            this.attributes = new HashMap&lt;&gt;(seq.getAttributes());</b>
+<b class="fc">&nbsp;            this.symbols = new ArrayList&lt;&gt;(seq.symbols);</b>
+<b class="fc">&nbsp;            this.associativity = seq.associativity;</b>
+<b class="fc">&nbsp;            this.label = seq.label;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder addSymbol(Symbol symbol) {
+<b class="fc">&nbsp;            this.symbols.add(symbol);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder clearSymbols() {
+<b class="fc">&nbsp;            this.symbols.clear();</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder addSymbols(List&lt;Symbol&gt; symbols) {
+<b class="fc">&nbsp;            this.symbols.addAll(symbols);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder setAssociativity(Associativity associativity) {
+<b class="fc">&nbsp;            this.associativity = associativity;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder setLabel(String label) {
+<b class="fc">&nbsp;            this.label = label;</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder addAttribute(String key, Object value) {
+<b class="fc">&nbsp;            this.attributes.put(key, value);</b>
+<b class="fc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Sequence build() {
+<b class="fc">&nbsp;            attributes = buildMap(attributes);</b>
+<b class="fc">&nbsp;            symbols = buildList(symbols);</b>
+<b class="fc">&nbsp;            return new Sequence(this);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ParserLogger</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.util</a>
+</div>
+
+<h1>Coverage Summary for Class: ParserLogger (org.iguana.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParserLogger</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (24/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.6%
+  </span>
+  <span class="absValue">
+    (43/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.iguana.util;
+&nbsp;
+&nbsp;import org.iguana.grammar.slot.GrammarSlot;
+&nbsp;import org.iguana.gss.GSSEdge;
+&nbsp;import org.iguana.gss.GSSNode;
+&nbsp;import org.iguana.parser.ParseError;
+&nbsp;import org.iguana.parser.descriptor.Descriptor;
+&nbsp;import org.iguana.result.Result;
+&nbsp;import org.iguana.sppf.IntermediateNode;
+&nbsp;import org.iguana.sppf.NonPackedNode;
+&nbsp;import org.iguana.sppf.NonterminalNode;
+&nbsp;import org.iguana.sppf.PackedNode;
+&nbsp;import org.iguana.sppf.TerminalNode;
+&nbsp;import org.iguana.utils.logging.IguanaLogger;
+&nbsp;import org.iguana.utils.logging.JavaUtilIguanaLogger;
+&nbsp;import org.iguana.utils.logging.LogLevel;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;public class ParserLogger {
+&nbsp;
+<b class="fc">&nbsp;    private static final ParserLogger instance = new ParserLogger();</b>
+&nbsp;
+&nbsp;    private int descriptorsCount;
+&nbsp;
+&nbsp;    private int countNonterminalNodes;
+&nbsp;
+&nbsp;    private int countIntermediateNodes;
+&nbsp;
+&nbsp;    private int countTerminalNodes;
+&nbsp;
+&nbsp;    private int countPackedNodes;
+&nbsp;
+&nbsp;    private int countAmbiguousNodes;
+&nbsp;
+&nbsp;    private int countGSSNodes;
+&nbsp;
+&nbsp;    private int countGSSEdges;
+&nbsp;
+&nbsp;    private final IguanaLogger logger;
+&nbsp;
+<b class="fc">&nbsp;    private boolean logEnabled = false;</b>
+&nbsp;
+<b class="fc">&nbsp;    public ParserLogger() {</b>
+<b class="fc">&nbsp;        Configuration config = Configuration.load();</b>
+<b class="fc">&nbsp;        if (config.getLogLevel() == LogLevel.NONE)</b>
+<b class="nc">&nbsp;            logger = IguanaLogger.DEFAULT;</b>
+&nbsp;        else
+<b class="fc">&nbsp;            logger = new JavaUtilIguanaLogger(&quot;IguanaParser Logger&quot;, config.getLogLevel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ParserLogger getInstance() {
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void reset() {
+<b class="fc">&nbsp;        descriptorsCount = 0;</b>
+<b class="fc">&nbsp;        countNonterminalNodes = 0;</b>
+<b class="fc">&nbsp;        countIntermediateNodes = 0;</b>
+<b class="fc">&nbsp;        countTerminalNodes = 0;</b>
+<b class="fc">&nbsp;        countPackedNodes = 0;</b>
+<b class="fc">&nbsp;        countAmbiguousNodes = 0;</b>
+<b class="fc">&nbsp;        countGSSNodes = 0;</b>
+<b class="fc">&nbsp;        countGSSEdges = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void enable() {
+<b class="nc">&nbsp;        logEnabled = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void terminalNodeAdded(TerminalNode node) {
+<b class="fc">&nbsp;        countTerminalNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Terminal node added %s&quot;, node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void nonterminalNodeAdded(NonterminalNode node) {
+<b class="fc">&nbsp;        countNonterminalNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Nonterminal node added %s&quot;, node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void intermediateNodeAdded(IntermediateNode node) {
+<b class="fc">&nbsp;        countIntermediateNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Intermediate node added %s&quot;, node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void packedNodeAdded(PackedNode packedNode) {
+<b class="fc">&nbsp;        countPackedNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Packed node added %s&quot;, packedNode);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void ambiguousNodeAdded(NonPackedNode node) {
+<b class="fc">&nbsp;        countAmbiguousNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Ambiguous node added: %s&quot;, node);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void gssNodeAdded(GSSNode&lt;?&gt; node, Object[] data) {
+<b class="fc">&nbsp;        countGSSNodes++;</b>
+<b class="fc">&nbsp;        if (logEnabled) {</b>
+<b class="nc">&nbsp;            if (data != null) {</b>
+<b class="nc">&nbsp;                logger.log(&quot;GSS node added %s(%s)&quot;, node, Arrays.deepToString(data));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                logger.log(&quot;GSS node added %s&quot;, node, Arrays.deepToString(data));</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void gssEdgeAdded(GSSEdge&lt;?&gt; edge) {
+<b class="fc">&nbsp;        countGSSEdges++;</b>
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;GSS Edge added %s&quot;, edge);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void descriptorAdded(Descriptor&lt;?&gt; descriptor) {
+<b class="fc">&nbsp;        descriptorsCount++;</b>
+<b class="fc">&nbsp;        if (logEnabled)</b>
+<b class="nc">&nbsp;            logger.log(&quot;Descriptor created: %s&quot;, descriptor);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T extends Result&gt; void pop(GSSNode&lt;T&gt; gssNode, int inputIndex, T child, Object value) {
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Pop %s, %d, %s, %s&quot;, gssNode, inputIndex, child, value);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void error(ParseError&lt;?&gt; error) {
+<b class="fc">&nbsp;        if (logEnabled) {</b>
+<b class="nc">&nbsp;            logger.log(&quot;Error recorded at %s %d %s&quot;, error.getGrammarSlot(), error.getInputIndex(),</b>
+<b class="nc">&nbsp;                error.getDescription());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T extends Result&gt; void processDescriptor(Descriptor&lt;T&gt; descriptor) {
+<b class="fc">&nbsp;        if (logEnabled) logger.log(&quot;Processing %s&quot;, descriptor);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void logFollowTestFailed(GrammarSlot grammarSlot, int inputIndex, int c, String expected) {
+<b class="fc">&nbsp;        if (logEnabled) {</b>
+<b class="nc">&nbsp;            logger.log(&quot;Test follow failed at %s at input index %d. Found %d but expected %s&quot;,</b>
+&nbsp;                grammarSlot,
+<b class="nc">&nbsp;                inputIndex,</b>
+<b class="nc">&nbsp;                c, expected);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getDescriptorsCount() {
+<b class="fc">&nbsp;        return descriptorsCount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountNonterminalNodes() {
+<b class="fc">&nbsp;        return countNonterminalNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountIntermediateNodes() {
+<b class="fc">&nbsp;        return countIntermediateNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountTerminalNodes() {
+<b class="fc">&nbsp;        return countTerminalNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountPackedNodes() {
+<b class="fc">&nbsp;        return countPackedNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountAmbiguousNodes() {
+<b class="fc">&nbsp;        return countAmbiguousNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountGSSNodes() {
+<b class="fc">&nbsp;        return countGSSNodes;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountGSSEdges() {
+<b class="fc">&nbsp;        return countGSSEdges;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>

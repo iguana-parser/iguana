@@ -1,0 +1,258 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > IfThen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.iguana.grammar.symbol</a>
+</div>
+
+<h1>Coverage Summary for Class: IfThen (org.iguana.grammar.symbol)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IfThen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">IfThen$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (c) 2015, Ali Afroozeh and Anastasia Izmaylova, Centrum Wiskunde &amp; Informatica (CWI)
+&nbsp; * All rights reserved.
+&nbsp; *
+&nbsp; * Redistribution and use in source and binary forms, with or without 
+&nbsp; * modification, are permitted provided that the following conditions are met:
+&nbsp; *
+&nbsp; * 1. Redistributions of source code must retain the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer.
+&nbsp; *
+&nbsp; * 2. Redistributions in binary form must reproduce the above copyright notice, this 
+&nbsp; *    list of conditions and the following disclaimer in the documentation and/or 
+&nbsp; *    other materials provided with the distribution.
+&nbsp; *
+&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND 
+&nbsp; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+&nbsp; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+&nbsp; * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+&nbsp; * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+&nbsp; * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+&nbsp; * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+&nbsp; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+&nbsp; * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+&nbsp; * OF SUCH DAMAGE.
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;package org.iguana.grammar.symbol;
+&nbsp;
+&nbsp;import org.iguana.datadependent.ast.Expression;
+&nbsp;import org.iguana.regex.Epsilon;
+&nbsp;import org.iguana.traversal.ISymbolVisitor;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class IfThen extends AbstractSymbol {
+&nbsp;
+&nbsp;    private final Expression expression;
+&nbsp;    private final Symbol thenPart;
+&nbsp;
+&nbsp;    IfThen(Builder builder) {
+<b class="nc">&nbsp;        super(builder);</b>
+<b class="nc">&nbsp;        this.expression = builder.expression;</b>
+<b class="nc">&nbsp;        this.thenPart = builder.thenPart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static IfThen ifThen(Expression expression, Symbol thenPart) {
+<b class="nc">&nbsp;        return new Builder(expression, thenPart).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Expression getExpression() {
+<b class="nc">&nbsp;        return expression;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Symbol getThenPart() {
+<b class="nc">&nbsp;        return thenPart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Builder copy() {
+<b class="nc">&nbsp;        return new Builder(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Symbol&gt; getChildren() {
+<b class="nc">&nbsp;        return Collections.singletonList(thenPart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int size() {
+<b class="nc">&nbsp;        return thenPart.size() + 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return String.format(&quot;if (%s) %s&quot;, expression.toString(), thenPart.toString());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString(int j) {
+<b class="nc">&nbsp;        return String.format(&quot;if (%s) { %s } else %s&quot;,</b>
+<b class="nc">&nbsp;                                expression.toString(),</b>
+<b class="nc">&nbsp;                                thenPart.toString(j),</b>
+<b class="nc">&nbsp;                                j - thenPart.size() &lt;= 1 ? epsilonToString(j - thenPart.size())</b>
+<b class="nc">&nbsp;                                                          : Epsilon.getInstance().toString());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String epsilonToString(int j) {
+<b class="nc">&nbsp;        return Epsilon.getInstance().toString() + (j == 1 ? &quot; . &quot; : &quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static class Builder extends SymbolBuilder&lt;IfThen&gt; {
+&nbsp;
+&nbsp;        private Expression expression;
+&nbsp;        private Symbol thenPart;
+&nbsp;
+&nbsp;        public Builder(IfThen ifThen) {
+<b class="nc">&nbsp;            super(ifThen);</b>
+<b class="nc">&nbsp;            this.expression = ifThen.expression;</b>
+<b class="nc">&nbsp;            this.thenPart = ifThen.thenPart;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        public Builder(Expression expression, Symbol thenPart) {</b>
+<b class="nc">&nbsp;            this.expression = expression;</b>
+<b class="nc">&nbsp;            this.thenPart = thenPart;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public SymbolBuilder&lt;IfThen&gt; setChildren(List&lt;Symbol&gt; symbols) {
+<b class="nc">&nbsp;            this.thenPart = symbols.get(0);</b>
+<b class="nc">&nbsp;            return this;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        @Override
+&nbsp;        public IfThen build() {
+<b class="nc">&nbsp;            this.name = String.format(&quot;if (%s) %s&quot;, expression.toString(), thenPart.toString());</b>
+<b class="nc">&nbsp;            return new IfThen(this);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;T&gt; T accept(ISymbolVisitor&lt;T&gt; visitor) {
+<b class="nc">&nbsp;        return visitor.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 17:08</div>
+</div>
+</body>
+</html>
