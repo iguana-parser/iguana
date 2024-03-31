@@ -8,15 +8,21 @@ import static org.iguana.utils.string.StringUtil.escapeNewLine;
 
 public class Token {
 
+    /**
+     * The regular expression used to match this token
+     */
     private final RegularExpression regularExpression;
-    private final String category;
+    /**
+     * A string representing the type of this token, e.g., identifier, keyword, string literal, etc.
+     */
+    private final String type;
     private final Input input;
     private final int start;
     private final int end;
 
-    public Token(RegularExpression regularExpression, String category, Input input, int start, int end) {
+    public Token(RegularExpression regularExpression, String type, Input input, int start, int end) {
         this.regularExpression = regularExpression;
-        this.category = category;
+        this.type = type;
         this.input = input;
         this.start = start;
         this.end = end;
@@ -38,8 +44,8 @@ public class Token {
         return regularExpression;
     }
 
-    public String getCategory() {
-        return category;
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -47,20 +53,20 @@ public class Token {
         if (this == o) return true;
         if (!(o instanceof Token)) return false;
         Token token = (Token) o;
-        return start == token.start
+        return input == token.input
+               && start == token.start
                && end == token.end
                && Objects.equals(regularExpression, token.regularExpression)
-               && Objects.equals(category, token.category)
-               && Objects.equals(input, token.input);
+               && Objects.equals(type, token.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(regularExpression, category, input, start, end);
+        return Objects.hash(regularExpression, type, input, start, end);
     }
 
     @Override
     public String toString() {
-        return String.format("(%s, %d, %d, \"%s\")", category, start, end, escapeNewLine(getLexeme()));
+        return String.format("(%s, %d, %d, \"%s\")", type, start, end, escapeNewLine(getLexeme()));
     }
 }

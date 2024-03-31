@@ -64,7 +64,7 @@ public class EOF extends AbstractRegularExpression {
 
     @Override
     public String toString() {
-        return "$";
+        return "EOF";
     }
 
     @Override

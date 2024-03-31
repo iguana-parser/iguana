@@ -3,6 +3,8 @@ package org.iguana.iggy;
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
 import org.iguana.iggy.gen.IggyGrammar;
+import org.iguana.regex.EOF;
+import org.iguana.regex.Error;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
@@ -34,8 +36,7 @@ public class IggyRegexCategoriesTest {
         IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(categories, matcher);
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
         StringBuilder sb = new StringBuilder();
-        while (iguanaTokenizer.hasNextToken()) {
-            Token token = iguanaTokenizer.nextToken();
+        for (Token token = iguanaTokenizer.nextToken(); token.getRegularExpression() != EOF.getInstance(); token = iguanaTokenizer.nextToken()) {
             sb.append(token.getLexeme());
         }
         assertEquals(inputString, sb.toString());
@@ -62,8 +63,7 @@ public class IggyRegexCategoriesTest {
         RegularExpression var = runtimeGrammar.getLiterals().get("var");
 
         List<Token> actual = new ArrayList<>();
-        while (iguanaTokenizer.hasNextToken()) {
-            Token token = iguanaTokenizer.nextToken();
+        for (Token token = iguanaTokenizer.nextToken(); token.getRegularExpression() != EOF.getInstance(); token = iguanaTokenizer.nextToken()) {
             actual.add(token);
         }
 
@@ -94,25 +94,25 @@ public class IggyRegexCategoriesTest {
         Input input = Input.fromString("aaa 123 3.7 bbb 3.7");
         tokenizer.prepare(input, 0);
 
-        List<Token> expected = Arrays.asList(
-            new Token(id, "Identifier", input, 0, 3),
-            new Token(null, "Error", input, 3, 4),
-            new Token(null, "Error", input, 4, 5),
-            new Token(null, "Error", input, 5, 6),
-            new Token(null, "Error", input, 6, 7),
-            new Token(null, "Error", input, 7, 8),
-            new Token(floatNumber, "Float", input, 8, 11),
-            new Token(null, "Error", input, 11, 12),
-            new Token(id, "Identifier", input, 12, 15),
-            new Token(null, "Error", input, 15, 16),
-            new Token(floatNumber, "Float", input, 16, 19)
-        );
-
         List<Token> actual = new ArrayList<>();
-        while (tokenizer.hasNextToken()) {
-            actual.add(tokenizer.nextToken());
+        for (Token token = tokenizer.nextToken(); token.getRegularExpression() != EOF.getInstance(); token = tokenizer.nextToken()) {
+            actual.add(token);
         }
 
+        Error error = Error.getInstance();
+        List<Token> expected = Arrays.asList(
+                new Token(id, "Identifier", input, 0, 3),
+                new Token(error, "error", input, 3, 4),
+                new Token(error, "error", input, 4, 5),
+                new Token(error, "error", input, 5, 6),
+                new Token(error, "error", input, 6, 7),
+                new Token(error, "error", input, 7, 8),
+                new Token(floatNumber, "Float", input, 8, 11),
+                new Token(error, "error", input, 11, 12),
+                new Token(id, "Identifier", input, 12, 15),
+                new Token(error, "error", input, 15, 16),
+                new Token(floatNumber, "Float", input, 16, 19)
+        );
         assertEquals(expected, actual);
     }
 }

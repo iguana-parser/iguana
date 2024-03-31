@@ -47,7 +47,7 @@ public class GSSNodeTest {
         TerminalNode terminalNode03 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 3);
 
         ParserResultOps resultOps = new ParserResultOps();
-        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), resultOps);
+        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), resultOps, null);
 
         // Pop ("a", 0, 1)
         assertTrue(gssNode.pop(input, endGrammarSlot, terminalNode01, runtime));

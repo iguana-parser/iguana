@@ -9,6 +9,7 @@ import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.parser.options.RecognizerOptions;
+import org.iguana.regex.IguanaTokenizer;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
@@ -61,7 +62,8 @@ public class IguanaRecognizer {
 
     public boolean recognize(Input input, Nonterminal start, RecognizerOptions options) {
         clear();
-        IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps);
+        IguanaRuntime<RecognizerResult> runtime = new IguanaRuntime<>(config, recognizerResultOps,
+            createIguanaTokenizer());
         RecognizerResult result = runtime.run(input, start, grammarGraph, options.getMap(), options.isGlobal());
         this.statistics = runtime.getStatistics();
         if (result == null) {
@@ -69,6 +71,10 @@ public class IguanaRecognizer {
             return false;
         }
         return true;
+    }
+
+    protected IguanaTokenizer createIguanaTokenizer() {
+        return new IguanaTokenizer(finalGrammar.getRegularExpressionDefinitions().values());
     }
 
     public RecognizerStatistics getStatistics() {

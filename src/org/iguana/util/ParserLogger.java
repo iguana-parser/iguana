@@ -121,8 +121,10 @@ public class ParserLogger {
 
     public void error(ParseError<?> error) {
         if (logEnabled) {
-            logger.log("Error recorded at %s %d %s", error.getGrammarSlot(), error.getInputIndex(),
-                error.getDescription());
+            logger.log("Error recorded at %s %d %s",
+                       error.getGrammarSlot(),
+                       error.getInputIndex(),
+                       error.getDescription());
         }
     }
 

@@ -23,6 +23,7 @@ import org.iguana.gss.GSSEdge;
 import org.iguana.gss.GSSNode;
 import org.iguana.gss.StartGSSNode;
 import org.iguana.parser.descriptor.Descriptor;
+import org.iguana.regex.IguanaTokenizer;
 import org.iguana.result.ParserResultOps;
 import org.iguana.result.Result;
 import org.iguana.result.ResultOps;
@@ -37,7 +38,6 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
@@ -60,16 +60,16 @@ public class IguanaRuntime<T extends Result> {
 
     private StartGSSNode<T> startGSSNode;
 
-    public IguanaRuntime(Configuration config, ResultOps<T> resultOps) {
+    private final IguanaTokenizer tokenizer;
+
+    public IguanaRuntime(Configuration config, ResultOps<T> resultOps, IguanaTokenizer tokenizer) {
         this.config = config;
         this.resultOps = resultOps;
         this.descriptorsStack = new ArrayDeque<>(512);
         this.descriptorPool = new ArrayDeque<>(512);
         this.ctx = GLLEvaluator.getEvaluatorContext(config);
-        // A priority queue (max heap) containing the parse errors thrown the parsing, sorted by the input index.
-        // The top of the priority queue is the parse error thrown at the last input position.
-//        this.parseErrors = new PriorityQueue<>((error1, error2) -> error2.getInputIndex() - error1.getInputIndex());
         this.parseErrors = new ArrayDeque<>();
+        this.tokenizer = tokenizer;
     }
 
     public T run(Input input, Nonterminal start, GrammarGraph grammarGraph, Map<String, Object> map, boolean global) {
@@ -162,12 +162,6 @@ public class IguanaRuntime<T extends Result> {
             T result,
             Environment env,
             String description) {
-        if (slot instanceof BodyGrammarSlot) {
-            BodyGrammarSlot bodyGrammarSlot = (BodyGrammarSlot) slot;
-            if (bodyGrammarSlot.getInTransition() instanceof ErrorTransition) {
-                slot = bodyGrammarSlot.getInTransition().origin();
-            }
-        }
         ParseError<T> error = new ParseError<>(slot, gssNode, inputIndex, input.getLineNumber(inputIndex),
                 input.getColumnNumber(inputIndex), result, env, description);
         parseErrors.add(error);
@@ -414,5 +408,9 @@ public class IguanaRuntime<T extends Result> {
         }
 
         return new double[]{min, max, (double) sum / count};
+    }
+
+    public IguanaTokenizer getTokenizer() {
+        return tokenizer;
     }
 }

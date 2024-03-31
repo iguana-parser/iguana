@@ -1,5 +1,6 @@
 package org.iguana.regex;
 
+import org.iguana.grammar.slot.lookahead.FollowTest;
 import org.iguana.regex.automaton.Automaton;
 import org.iguana.regex.automaton.AutomatonBuilder;
 import org.iguana.regex.automaton.State;
@@ -7,6 +8,7 @@ import org.iguana.regex.matcher.DFAMatcher;
 import org.iguana.utils.input.Input;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 public class IguanaTokenizer {
@@ -16,7 +18,10 @@ public class IguanaTokenizer {
 
     private Input input;
     private int inputIndex;
-    private Token nextToken;
+
+    public IguanaTokenizer(Collection<RegularExpression> regularExpressions) {
+        this(Collections.emptyMap(), createMatcher(regularExpressions));
+    }
 
     public IguanaTokenizer(Map<RegularExpression, String> regularExpressionCategories, DFAMatcher matcher) {
         this.regularExpressionCategories = regularExpressionCategories;
@@ -46,38 +51,33 @@ public class IguanaTokenizer {
         this.inputIndex = inputIndex;
     }
 
-    public boolean hasNextToken() {
-        if (input == null) {
-            throw new IllegalStateException("The prepare method should be called first.");
-        }
-        if (nextToken != null) return true;
-        if (inputIndex >= input.length() - 1) return false;
-        int length = matcher.match(input, inputIndex);
-        if (length == 0) {
-            if (inputIndex == input.length() - 1) {
-                nextToken = new Token(EOF.getInstance(), EOF.getInstance().toString(), input, inputIndex, inputIndex);
-                return false;
-            }
-            throw new RuntimeException();
-        } else if (length != -1) {
-            RegularExpression regularExpression = matcher.getMatchedRegularExpression();
-            String category = regularExpressionCategories.get(regularExpression);
-            nextToken = new Token(regularExpression, category, input, inputIndex, inputIndex + length);
-            inputIndex = inputIndex + length;
-            return true;
-        } else {
-            nextToken = new Token(null, "Error", input, inputIndex, inputIndex + 1);
-            inputIndex++;
-            return true;
-        }
+    public Token nextToken() {
+        return nextToken(i -> false);
     }
 
-    public Token nextToken() {
-        if (nextToken != null) {
-            Token token = nextToken;
-            nextToken = null;
-            return token;
+    /**
+     * - Returns the next token, corresponding to the longest matching regular expression, from the
+     *   current input index.
+     * - Returns an error token with length 1 when the next character cannot be matched.
+     */
+    public Token nextToken(FollowTest followTest) {
+        if (followTest.test(input.charAt(inputIndex))) {
+            return null;
         }
-        return null;
+        if (inputIndex == input.length() - 1) {
+            return new Token(EOF.getInstance(), EOF.getInstance().toString(), input, inputIndex, inputIndex);
+        }
+        int length = matcher.match(input, inputIndex);
+        if (length >= 0) {
+            RegularExpression regularExpression = matcher.getMatchedRegularExpression();
+            String category = regularExpressionCategories.get(regularExpression);
+            Token nextToken = new Token(regularExpression, category, input, inputIndex, inputIndex + length);
+            inputIndex = inputIndex + length;
+            return nextToken;
+        } else {
+            Token nextToken = new Token(Error.getInstance(), Error.getInstance().toString(), input, inputIndex, inputIndex + 1);
+            inputIndex++;
+            return nextToken;
+        }
     }
 }

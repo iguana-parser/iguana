@@ -70,8 +70,8 @@ public class LayoutWeaver implements GrammarTransformation {
                 if (layout == null) {
                     builder.addRule(ruleBuilder.addSymbol(rule.symbolAt(0)).build());
                 } else {
-                    builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout)
-                        .build());
+                    builder.addRule(ruleBuilder.addSymbol(layout).addSymbol(rule.symbolAt(0)).addSymbol(layout).build()
+                    );
                 }
                 continue;
             }
@@ -81,18 +81,20 @@ public class LayoutWeaver implements GrammarTransformation {
 
                 Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(s);
 
-                if (i == rule.size() - 2 && rule.symbolAt(rule.size() - 1) instanceof Return
-                        && ignoreLayoutConditions.isEmpty()) {
+                if (i == rule.size() - 2
+                    && rule.symbolAt(rule.size() - 1) instanceof Return
+                    && ignoreLayoutConditions.isEmpty()) {
                     ruleBuilder.addSymbol(s);
                     continue;
                 }
 
-                if (ignoreLayoutConditions.isEmpty())
+                if (ignoreLayoutConditions.isEmpty()) {
                     ruleBuilder.addSymbol(s);
-                else
+                } else {
                     ruleBuilder.addSymbol(s.copy().removePostConditions(ignoreLayoutConditions).build());
+                }
 
-                // Do not insert layout after the layout symbol because we rely on the first set of the next
+                // Do not insert layout after the error symbol because we rely on the first set of the next
                 // non-layout symbol for synchronization.
                 if (!(s instanceof Error)) {
                     addLayout(layout, rule, ruleBuilder, s);
@@ -102,10 +104,11 @@ public class LayoutWeaver implements GrammarTransformation {
             Symbol last = rule.symbolAt(rule.size() - 1);
             Set<Condition> ignoreLayoutConditions = getIgnoreLayoutConditions(last);
 
-            if (ignoreLayoutConditions.isEmpty())
+            if (ignoreLayoutConditions.isEmpty()) {
                 ruleBuilder.addSymbol(last);
-            else
+            } else {
                 ruleBuilder.addSymbol(last.copy().removePostConditions(ignoreLayoutConditions).build());
+            }
 
             if (!ignoreLayoutConditions.isEmpty()) {
                 addLayout(layout, rule, ruleBuilder, last);
@@ -131,8 +134,9 @@ public class LayoutWeaver implements GrammarTransformation {
                 break;
 
             case INHERITED:
-                if (layout != null)
+                if (layout != null) {
                     ruleBuilder.addSymbol(layout.copy().addPostConditions(getIgnoreLayoutConditions(s)).build());
+                }
                 break;
 
             case FIXED:

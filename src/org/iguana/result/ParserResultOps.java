@@ -114,6 +114,11 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
+    public NonPackedNode error(BodyGrammarSlot slot, int start, int end, List<NonPackedNode> children) {
+        return new ErrorNode(slot, children);
+    }
+
+    @Override
     public NonPackedNode merge(
             NonPackedNode current,
             NonPackedNode result1,

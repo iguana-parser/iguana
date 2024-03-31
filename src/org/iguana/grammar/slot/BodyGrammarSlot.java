@@ -43,7 +43,7 @@ import org.iguana.utils.input.Input;
 import java.util.Map;
 import java.util.Set;
 
-public class BodyGrammarSlot implements GrammarSlot {
+public class BodyGrammarSlot implements GrammarSlot, FollowTest {
 
     protected final Position position;
 
@@ -265,5 +265,10 @@ public class BodyGrammarSlot implements GrammarSlot {
 
     public FollowTest getFollowTest() {
         return followTest;
+    }
+
+    @Override
+    public boolean test(int v) {
+        return followTest.test(v);
     }
 }

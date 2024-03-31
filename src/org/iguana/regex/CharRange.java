@@ -90,14 +90,9 @@ public class CharRange extends AbstractRegularExpression implements Range {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof CharRange))
-            return false;
-
+        if (this == obj) return true;
+        if (!(obj instanceof CharRange)) return false;
         CharRange other = (CharRange) obj;
-
         return start == other.start && end == other.end;
     }
 

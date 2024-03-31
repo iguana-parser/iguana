@@ -110,8 +110,9 @@ public class Terminal extends AbstractSymbol {
 
         @Override
         public Terminal build() {
-            if (name == null)
+            if (name == null) {
                 name = regex.toString();
+            }
             return new Terminal(this);
         }
     }

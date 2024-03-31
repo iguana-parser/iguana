@@ -45,7 +45,6 @@ import org.iguana.parsetree.DefaultParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeBuilder;
 import org.iguana.parsetree.ParseTreeNode;
 import org.iguana.result.ParserResultOps;
-import org.iguana.sppf.ErrorNode;
 import org.iguana.sppf.NonPackedNode;
 import org.iguana.sppf.NonterminalNode;
 import org.iguana.traversal.AmbiguousSPPFToParseTreeVisitor;
@@ -110,7 +109,7 @@ public class IguanaParser extends IguanaRecognizer {
     public void parse(Input input, Nonterminal start, ParseOptions parseOptions) {
         clear();
         this.input = input;
-        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps);
+        IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(config, parserResultOps, createIguanaTokenizer());
         long startTime = System.nanoTime();
         this.sppf = (NonterminalNode) runtime.run(input, start, grammarGraph, parseOptions.getMap(),
             parseOptions.isGlobal());
@@ -119,34 +118,42 @@ public class IguanaParser extends IguanaRecognizer {
 
         long parsingTime = (endTime - startTime) / 1000_000;
         if (sppf != null) {
-            System.out.printf("Parsing finished %s in %d ms.", "successfully", parsingTime);
+            logParsingFinished("successfully", parsingTime);
             return;
         }
         if (parseOptions.isErrorRecoveryEnabled()) {
-            sppf = recoverFromErrors(runtime, start);
+            sppf = recoverFromErrors(runtime);
             if (sppf != null) {
-                System.out.printf("Parsing finished %s in %d ms.", "with error recovery", parsingTime);
+                logParsingFinished("with error recovery", parsingTime);
                 return;
             }
         }
 
-        System.out.printf("Parsing finished %s in %d ms.", "with parse error", parsingTime);
+        logParsingFinished("with error recovery", parsingTime);
         throw new ParseErrorException(parseError);
     }
 
-    private NonterminalNode recoverFromErrors(IguanaRuntime<NonPackedNode> runtime,  Nonterminal start) {
+    private static void logParsingFinished(String status, long parsingTime) {
+        System.out.printf("Parsing finished %s in %d ms.%n", status, parsingTime);
+    }
+
+    private NonterminalNode recoverFromErrors(IguanaRuntime<NonPackedNode> runtime) {
         Queue<ParseError<NonPackedNode>> parseErrors = runtime.getParseErrors();
 
+        NonterminalNode result = null;
+        label:
         while (!parseErrors.isEmpty()) {
             ParseError<NonPackedNode> error = parseErrors.poll();
             GSSNode<NonPackedNode> gssNode = error.getGssNode();
             List<Tuple<GSSEdge<NonPackedNode>, ErrorTransition>> errorSlots = new ArrayList<>();
             ErrorTransition errorTransition = runtime.getErrorTransition(error.getGrammarSlot());
             if (errorTransition != null) {
+                System.out.println("Recovering from error: " + error);
                 runtime.recoverFromError(errorTransition, gssNode, error.getResult(), error.getEnv(), input);
                 NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
                 if (recoveryResult != null) {
-                    return (NonterminalNode) recoveryResult;
+                    result = (NonterminalNode) recoveryResult;
+                    break;
                 }
             } else {
                 runtime.collectErrorSlots(gssNode, errorSlots, new HashSet<>());
@@ -154,22 +161,13 @@ public class IguanaParser extends IguanaRecognizer {
                     runtime.recoverFromError(t.getFirst(), t.getSecond(), input);
                     NonPackedNode recoveryResult = runtime.runParserLoop(runtime.getStartGSSNode(), input);
                     if (recoveryResult != null) {
-                        return (NonterminalNode) recoveryResult;
+                        result = (NonterminalNode) recoveryResult;
+                        break label;
                     }
                 }
             }
         }
-
-        // When error recovery fails, create a single error node for the whole input.
-        NonterminalGrammarSlot startSlot = grammarGraph.getStartSlot(start);
-        if (!startSlot.getFirstSlots().isEmpty()) {
-            BodyGrammarSlot firstSlot = startSlot.getFirstSlots().get(0);
-            EndGrammarSlot endSlot = GrammarSlotUtil.getEndSlot(firstSlot);
-            int inputLength = input.length() - 1;
-            ErrorNode errorNode = new ErrorNode(endSlot, 0, inputLength);
-            sppf = new NonterminalNode(endSlot, errorNode, 0, inputLength);
-        }
-        return null;
+        return result;
     }
 
     @Override

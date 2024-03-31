@@ -4,6 +4,8 @@ import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.TerminalGrammarSlot;
 
+import java.util.List;
+
 public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     private static final RecognizerResult dummy = new RecognizerResult() {
@@ -45,6 +47,11 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
 
     @Override
     public RecognizerResult error(BodyGrammarSlot slot, int start, int end) {
+        return RecognizerResult.of(start, end);
+    }
+
+    @Override
+    public RecognizerResult error(BodyGrammarSlot slot, int start, int end, List<RecognizerResult> children) {
         return RecognizerResult.of(start, end);
     }
 

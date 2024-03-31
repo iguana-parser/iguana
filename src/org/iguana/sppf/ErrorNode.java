@@ -3,17 +3,35 @@ package org.iguana.sppf;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
 import org.iguana.traversal.SPPFVisitor;
+import org.iguana.utils.collections.CollectionsUtil;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ErrorNode extends NonPackedNode {
 
     private final BodyGrammarSlot slot;
     private final int leftExtent;
     private final int rightExtent;
+    private final List<NonPackedNode> children;
 
     public ErrorNode(BodyGrammarSlot slot, int leftExtent, int rightExtent) {
         this.slot = slot;
         this.leftExtent = leftExtent;
         this.rightExtent = rightExtent;
+        this.children = Collections.emptyList();
+    }
+
+    public ErrorNode(BodyGrammarSlot slot, List<NonPackedNode> children) {
+        if (children == null || children.isEmpty()) throw new RuntimeException("Children cannot be null or empty.");
+        this.slot = slot;
+        this.children = children;
+        this.leftExtent = CollectionsUtil.first(children).getLeftExtent();
+        this.rightExtent = CollectionsUtil.last(children).getRightExtent();
+    }
+
+    public List<NonPackedNode> getChildren() {
+        return children;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Epsilon extends AbstractRegularExpression {
         new RegexBuilder<>() {
             @Override
             public Epsilon build() {
-                return Epsilon.getInstance();
+                return instance;
             }
         };
 

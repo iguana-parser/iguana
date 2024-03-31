@@ -117,14 +117,12 @@ public class CollectionsUtil {
     }
 
     public static <T> T first(List<T> list) {
-        if (list == null || list.isEmpty())
-            throw new IllegalArgumentException("List is empty");
+        if (list == null || list.isEmpty()) throw new IllegalArgumentException("List is empty");
         return list.get(0);
     }
 
     public static <T> T last(List<T> list) {
-        if (list == null || list.isEmpty())
-            throw new IllegalArgumentException("List is empty");
+        if (list == null || list.isEmpty()) throw new IllegalArgumentException("List is empty");
         return list.get(list.size() - 1);
     }
 
