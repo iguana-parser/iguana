@@ -3,7 +3,6 @@ package org.iguana.result;
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.GrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
 import org.iguana.grammar.slot.TerminalNodeType;
 import org.iguana.grammar.symbol.Terminal;
 import org.iguana.sppf.DefaultTerminalNode;
@@ -93,16 +92,16 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
     }
 
     @Override
-    public TerminalNode base(TerminalGrammarSlot slot, int start, int end) {
+    public TerminalNode base(Terminal terminal, int start, int end) {
         TerminalNode node;
         if (start == end) {
-            node = new EmptyTerminalNode(slot, start);
-        } else if (slot.getTerminal().getNodeType() == TerminalNodeType.Literal) {
-            node = new KeywordTerminalNode(slot, start);
-        } else if (slot.getTerminal() == Terminal.epsilon())
+            node = new EmptyTerminalNode(terminal, start);
+        } else if (terminal.getNodeType() == TerminalNodeType.Literal) {
+            node = new KeywordTerminalNode(terminal, start);
+        } else if (terminal == Terminal.epsilon())
             return new EpsilonTerminalNode(start);
         else {
-            node = new DefaultTerminalNode(slot, start, end);
+            node = new DefaultTerminalNode(terminal, start, end);
         }
         logger.terminalNodeAdded(node);
         return node;

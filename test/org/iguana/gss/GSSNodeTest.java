@@ -19,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 
 import static org.iguana.iggy.IggyParserUtils.fromIggyGrammar;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class GSSNodeTest {
@@ -42,9 +44,9 @@ public class GSSNodeTest {
         NonterminalGrammarSlot nonterminalGrammarSlot = grammarGraph.getNonterminalGrammarSlots().get(0);// A
         EndGrammarSlot endGrammarSlot = (EndGrammarSlot) grammarGraph.getBodyGrammarSlots().get(1); // A ::= a.
 
-        TerminalNode terminalNode01 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 1);
-        TerminalNode terminalNode02 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 2);
-        TerminalNode terminalNode03 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1), 0, 3);
+        TerminalNode terminalNode01 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1).getTerminal(), 0, 1);
+        TerminalNode terminalNode02 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1).getTerminal(), 0, 2);
+        TerminalNode terminalNode03 = new DefaultTerminalNode(grammarGraph.getTerminalGrammarSlots().get(1).getTerminal(), 0, 3);
 
         ParserResultOps resultOps = new ParserResultOps();
         IguanaRuntime<NonPackedNode> runtime = new IguanaRuntime<>(Configuration.load(), resultOps, null);

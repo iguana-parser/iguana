@@ -109,16 +109,43 @@
             },
             "body" : [
               {
-                "kind" : "Nonterminal",
-                "name" : "expr",
+                "kind" : "Terminal",
+                "name" : "'{'",
                 "preConditions" : [ ],
                 "postConditions" : [ ],
-                "arguments" : [
-                  {
-                    "kind" : "Integer",
-                    "value" : 0
-                  }
-                ]
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 123
+                }
+              },
+              {
+                "kind" : "Terminal",
+                "name" : "l",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Layout",
+                "regex" : {
+                  "kind" : "regex.Star",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "regex" : {
+                    "kind" : "Char",
+                    "lookaheads" : [ ],
+                    "lookbehinds" : [ ],
+                    "val" : 32
+                  },
+                  "separators" : [ ]
+                }
+              },
+              {
+                "kind" : "Nonterminal",
+                "name" : "stmt+",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Plus"
               },
               {
                 "kind" : "Terminal",
@@ -144,7 +171,7 @@
               },
               {
                 "kind" : "Terminal",
-                "name" : "';'",
+                "name" : "'}'",
                 "preConditions" : [ ],
                 "postConditions" : [ ],
                 "nodeType" : "Literal",
@@ -152,7 +179,7 @@
                   "kind" : "Char",
                   "lookaheads" : [ ],
                   "lookbehinds" : [ ],
-                  "val" : 59
+                  "val" : 125
                 }
               }
             ],
@@ -201,93 +228,27 @@
           },
           "children" : [
             {
-              "kind" : "NonterminalNode",
-              "rule" : {
-                "head" : {
-                  "kind" : "Nonterminal",
-                  "name" : "expr",
-                  "preConditions" : [ ],
-                  "postConditions" : [ ],
-                  "parameters" : [
-                    "p"
-                  ]
-                },
-                "body" : [
-                  {
-                    "kind" : "Terminal",
-                    "name" : "(0-9)",
-                    "preConditions" : [ ],
-                    "postConditions" : [ ],
-                    "nodeType" : "Regex",
-                    "regex" : {
-                      "kind" : "regex.Alt",
-                      "lookaheads" : [ ],
-                      "lookbehinds" : [ ],
-                      "symbols" : [
-                        {
-                          "kind" : "CharRange",
-                          "lookaheads" : [ ],
-                          "lookbehinds" : [ ],
-                          "start" : 48,
-                          "end" : 57
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "kind" : "Return",
-                    "name" : "{0}",
-                    "preConditions" : [ ],
-                    "postConditions" : [ ],
-                    "expression" : {
-                      "kind" : "Integer",
-                      "value" : 0
-                    }
-                  }
-                ],
-                "layout" : {
-                  "kind" : "Terminal",
-                  "name" : "l",
-                  "preConditions" : [ ],
-                  "postConditions" : [ ],
-                  "nodeType" : "Layout",
-                  "regex" : {
-                    "kind" : "regex.Star",
-                    "lookaheads" : [ ],
-                    "lookbehinds" : [ ],
-                    "regex" : {
-                      "kind" : "Char",
-                      "lookaheads" : [ ],
-                      "lookbehinds" : [ ],
-                      "val" : 32
-                    },
-                    "separators" : [ ]
-                  }
-                },
-                "recursion" : "NON_REC",
-                "irecursion" : "NON_REC",
-                "leftEnd" : "",
-                "rightEnd" : "",
-                "leftEnds" : [ ],
-                "rightEnds" : [ ],
-                "associativity" : "UNDEFINED",
-                "precedence" : -1,
-                "precedenceLevel" : {
-                  "lhs" : 1,
-                  "rhs" : 1,
-                  "undefined" : 1,
-                  "hasPrefixUnary" : false,
-                  "hasPostfixUnary" : false,
-                  "hasPrefixUnaryBelow" : false,
-                  "prefixUnaryBelow" : [ ],
-                  "hasPostfixUnaryBelow" : false,
-                  "postfixUnaryBelow" : [ ],
-                  "index" : 2,
-                  "containsAssociativityGroup" : false,
-                  "assoc_lhs" : -1,
-                  "assoc_rhs" : -1
+              "kind" : "KeywordTerminalNode",
+              "terminal" : {
+                "kind" : "Terminal",
+                "name" : "'{'",
+                "preConditions" : [ ],
+                "postConditions" : [ ],
+                "nodeType" : "Literal",
+                "regex" : {
+                  "kind" : "Char",
+                  "lookaheads" : [ ],
+                  "lookbehinds" : [ ],
+                  "val" : 123
                 }
               },
+              "start" : 0,
+              "end" : 1
+            },
+            {
+              "kind" : "ErrorNode",
+              "start" : 1,
+              "end" : 7,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -296,7 +257,6 @@
                     "name" : "(0-9)",
                     "preConditions" : [ ],
                     "postConditions" : [ ],
-                    "nodeType" : "Regex",
                     "regex" : {
                       "kind" : "regex.Alt",
                       "lookaheads" : [ ],
@@ -312,18 +272,76 @@
                       ]
                     }
                   },
-                  "start" : 0,
-                  "end" : 1
-                }
-              ],
-              "start" : 0,
-              "end" : 1
-            },
-            {
-              "kind" : "ErrorNode",
-              "start" : 1,
-              "end" : 3,
-              "children" : [
+                  "start" : 1,
+                  "end" : 2
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "'+'",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "regex" : {
+                      "kind" : "Char",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
+                      "val" : 43
+                    }
+                  },
+                  "start" : 2,
+                  "end" : 3
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "(0-9)",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
+                      "symbols" : [
+                        {
+                          "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
+                          "start" : 48,
+                          "end" : 57
+                        }
+                      ]
+                    }
+                  },
+                  "start" : 3,
+                  "end" : 4
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "(0-9)",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "regex" : {
+                      "kind" : "regex.Alt",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ],
+                      "symbols" : [
+                        {
+                          "kind" : "CharRange",
+                          "lookaheads" : [ ],
+                          "lookbehinds" : [ ],
+                          "start" : 48,
+                          "end" : 57
+                        }
+                      ]
+                    }
+                  },
+                  "start" : 4,
+                  "end" : 5
+                },
                 {
                   "kind" : "TerminalNode",
                   "terminal" : {
@@ -337,8 +355,8 @@
                       "lookbehinds" : [ ]
                     }
                   },
-                  "start" : 1,
-                  "end" : 2
+                  "start" : 5,
+                  "end" : 6
                 },
                 {
                   "kind" : "TerminalNode",
@@ -362,8 +380,8 @@
                       ]
                     }
                   },
-                  "start" : 2,
-                  "end" : 3
+                  "start" : 6,
+                  "end" : 7
                 }
               ]
             },
@@ -371,7 +389,7 @@
               "kind" : "KeywordTerminalNode",
               "terminal" : {
                 "kind" : "Terminal",
-                "name" : "';'",
+                "name" : "'}'",
                 "preConditions" : [ ],
                 "postConditions" : [ ],
                 "nodeType" : "Literal",
@@ -379,21 +397,21 @@
                   "kind" : "Char",
                   "lookaheads" : [ ],
                   "lookbehinds" : [ ],
-                  "val" : 59
+                  "val" : 125
                 }
               },
-              "start" : 3,
-              "end" : 4
+              "start" : 7,
+              "end" : 8
             }
           ],
           "start" : 0,
-          "end" : 4
+          "end" : 8
         }
       ],
       "start" : 0,
-      "end" : 4
+      "end" : 8
     }
   ],
   "start" : 0,
-  "end" : 4
+  "end" : 8
 }

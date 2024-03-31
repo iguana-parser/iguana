@@ -28,14 +28,22 @@
 package org.iguana.sppf;
 
 import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.traversal.SPPFVisitor;
 
 public abstract class TerminalNode extends NonPackedNode {
 
     private final int leftExtent;
+    private final Terminal terminal;
 
-    public TerminalNode(int leftExtent) {
+    public TerminalNode(Terminal terminal, int leftExtent) {
         this.leftExtent = leftExtent;
+        this.terminal = terminal;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %d, %d)", terminal, getLeftExtent(), getRightExtent());
     }
 
     @Override
@@ -49,7 +57,9 @@ public abstract class TerminalNode extends NonPackedNode {
     }
 
     @Override
-    public abstract TerminalGrammarSlot getGrammarSlot();
+    public TerminalGrammarSlot getGrammarSlot() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public PackedNode getChildAt(int index) {
@@ -59,6 +69,10 @@ public abstract class TerminalNode extends NonPackedNode {
     @Override
     public int getLeftExtent() {
         return leftExtent;
+    }
+
+    public Terminal getTerminal() {
+        return terminal;
     }
 
     @Override

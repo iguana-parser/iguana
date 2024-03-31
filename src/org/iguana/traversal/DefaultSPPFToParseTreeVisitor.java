@@ -54,11 +54,14 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
 
     @Override
     public T visit(TerminalNode node) {
-        if (ignoreLayout && node.getGrammarSlot().getTerminal().getNodeType() == TerminalNodeType.Layout) {
+        if (ignoreLayout && node.getTerminal().getNodeType() == TerminalNodeType.Layout) {
             return null;
         }
-        return parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(), node.getLeftExtent(),
-                node.getRightExtent());
+        return parseTreeBuilder.terminalNode(
+            node.getTerminal(),
+            node.getLeftExtent(),
+            node.getRightExtent()
+        );
     }
 
     @Override
@@ -130,7 +133,11 @@ public class DefaultSPPFToParseTreeVisitor<T> implements SPPFVisitor<T> {
 
     @Override
     public T visit(ErrorNode node) {
-        return parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent());
+        List<T> children = new ArrayList<>();
+        for (NonPackedNode child : node.getChildren()) {
+            children.add(child.accept(this));
+        }
+        return parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent(), children);
     }
 
     private T convertBasicAndLayout(BodyGrammarSlot slot, NonPackedNode child, int leftExtent, int rightExtent) {

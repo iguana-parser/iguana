@@ -75,9 +75,10 @@ public class TerminalTransition extends AbstractTransition {
 
         runtime.setEnvironment(env);
 
-        if (dest.getLabel() != null)
+        if (dest.getLabel() != null) {
             runtime.getEvaluatorContext().declareVariable(
                 String.format(Expression.LeftExtent.format, dest.getLabel()), i);
+            }
 
         if (preConditions.execute(input, origin, u, i, result, runtime.getEvaluatorContext(), runtime)) {
             terminalSlot.recordFailure(i);

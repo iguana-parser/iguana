@@ -183,6 +183,7 @@ public class DesugarState implements GrammarTransformation {
                              .setEbnfRights(grammar.getEBNFRights())
                              .setGlobals(grammar.getGlobals())
                              .setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
+                             .setLiterals(grammar.getLiterals())
                              .build();
     }
 

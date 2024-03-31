@@ -321,8 +321,8 @@
             },
             {
               "kind" : "ErrorNode",
-              "start" : 1,
-              "end" : 3,
+              "start" : 2,
+              "end" : 6,
               "children" : [
                 {
                   "kind" : "TerminalNode",
@@ -337,8 +337,24 @@
                       "lookbehinds" : [ ]
                     }
                   },
-                  "start" : 1,
-                  "end" : 2
+                  "start" : 2,
+                  "end" : 3
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "error",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "regex" : {
+                      "kind" : "Error",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ]
+                    }
+                  },
+                  "start" : 3,
+                  "end" : 4
                 },
                 {
                   "kind" : "TerminalNode",
@@ -362,8 +378,24 @@
                       ]
                     }
                   },
-                  "start" : 2,
-                  "end" : 3
+                  "start" : 4,
+                  "end" : 5
+                },
+                {
+                  "kind" : "TerminalNode",
+                  "terminal" : {
+                    "kind" : "Terminal",
+                    "name" : "error",
+                    "preConditions" : [ ],
+                    "postConditions" : [ ],
+                    "regex" : {
+                      "kind" : "Error",
+                      "lookaheads" : [ ],
+                      "lookbehinds" : [ ]
+                    }
+                  },
+                  "start" : 5,
+                  "end" : 6
                 }
               ]
             },
@@ -382,18 +414,18 @@
                   "val" : 59
                 }
               },
-              "start" : 3,
-              "end" : 4
+              "start" : 6,
+              "end" : 7
             }
           ],
           "start" : 0,
-          "end" : 4
+          "end" : 7
         }
       ],
       "start" : 0,
-      "end" : 4
+      "end" : 7
     }
   ],
   "start" : 0,
-  "end" : 4
+  "end" : 7
 }

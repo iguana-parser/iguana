@@ -83,7 +83,7 @@ public class DefaultParseTreeBuilder implements ParseTreeBuilder<ParseTreeNode> 
     }
 
     @Override
-    public ParseTreeNode errorNode(int leftExtent, int rightExtent) {
-        return new ErrorNode(leftExtent, rightExtent, input);
+    public ParseTreeNode errorNode(int leftExtent, int rightExtent, List<ParseTreeNode> children) {
+        return new ErrorNode(leftExtent, rightExtent, input, children);
     }
 }

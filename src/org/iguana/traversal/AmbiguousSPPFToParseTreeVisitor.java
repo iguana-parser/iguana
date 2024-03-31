@@ -58,11 +58,12 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
             return empty();
         }
         return convertedNodes.computeIfAbsent(node, key -> {
-                    if (node.getLeftExtent() == node.getRightExtent()) return empty();
-                    Object terminalNode = parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(),
-                            node.getLeftExtent(), node.getRightExtent());
-                    return single(terminalNode);
-                }
+                                                  if (node.getLeftExtent() == node.getRightExtent()) return empty();
+                                                  Object terminalNode =
+                                                          parseTreeBuilder.terminalNode(node.getGrammarSlot().getTerminal(),
+                                                                                                      node.getLeftExtent(), node.getRightExtent());
+                                                  return single(terminalNode);
+                                              }
         );
     }
 
@@ -114,7 +115,8 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                         T child = children.get(0);
                         if (child instanceof MetaSymbolNode) { // Last Plus node propagated up
                             result = single(parseTreeBuilder.nonterminalNode(packedNode.getGrammarSlot().getRule(),
-                                    children, packedNode.getLeftExtent(), packedNode.getRightExtent()));
+                                                                             children, packedNode.getLeftExtent(),
+                                                                             packedNode.getRightExtent()));
                         } else {
                             result = single(children.get(0));
                         }
@@ -142,12 +144,13 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
                         && visitResult.getValues().get(0) instanceof VisitResult.EBNF) {
                         VisitResult.EBNF ebnfChild = (VisitResult.EBNF) visitResult.getValues().get(0);
                         T ebnfResult = parseTreeBuilder.metaSymbolNode(ebnfChild.getSymbol(),
-                                (List<T>) ebnfChild.getValues(), node.getLeftExtent(), node.getRightExtent());
+                                                                       (List<T>) ebnfChild.getValues(),
+                                                                       node.getLeftExtent(), node.getRightExtent());
                         result = single(parseTreeBuilder.metaSymbolNode(symbol, singletonList(ebnfResult),
-                                node.getLeftExtent(), node.getRightExtent()));
+                                                                        node.getLeftExtent(), node.getRightExtent()));
                     } else {
                         result = single(parseTreeBuilder.metaSymbolNode(symbol, (List<T>) visitResult.getValues(),
-                                node.getLeftExtent(), node.getRightExtent()));
+                                                                        node.getLeftExtent(), node.getRightExtent()));
                     }
 
                     break;
@@ -181,10 +184,11 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
     public VisitResult visit(PackedNode node) {
         VisitResult left = node.getLeftChild().accept(this);
         VisitResult right;
-        if (node.getRightChild() != null)
+        if (node.getRightChild() != null) {
             right = node.getRightChild().accept(this);
-        else
+        } else {
             right = empty();
+        }
 
         // It seems that we can simplify the SPPF to ParseTree creation by checking the packed node's node type
         // and may be able to get rid of VisitResult hierarchy
@@ -207,7 +211,12 @@ public class AmbiguousSPPFToParseTreeVisitor<T> implements SPPFVisitor<VisitResu
 
     @Override
     public VisitResult visit(ErrorNode node) {
-        return VisitResult.single(parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent()));
+        List<T> children = new ArrayList<>();
+        for (NonPackedNode child : node.getChildren()) {
+            VisitResult result = child.accept(this);
+            children.addAll((List<T>) result.getValues());
+        }
+        return VisitResult.single(parseTreeBuilder.errorNode(node.getLeftExtent(), node.getRightExtent(), children));
     }
 
 }

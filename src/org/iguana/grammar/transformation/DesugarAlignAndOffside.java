@@ -105,6 +105,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
                 .setEbnfRights(grammar.getEBNFRights())
                 .setGlobals(grammar.getGlobals())
                 .setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
+                .setLiterals(grammar.getLiterals())
                 .build();
         }
 
@@ -136,6 +137,7 @@ public class DesugarAlignAndOffside implements GrammarTransformation {
             .setEbnfLefts(grammar.getEBNFLefts())
             .setEbnfRights(grammar.getEBNFRights())
             .setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
+            .setLiterals(grammar.getLiterals())
             .build();
     }
 

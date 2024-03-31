@@ -64,7 +64,7 @@ public class TerminalGrammarSlot implements GrammarSlot {
             if (length < 0) {
                 terminalNodes.put(i, failure);
             } else {
-                terminalNode = runtime.getResultOps().base(this, i, i + length);
+                terminalNode = runtime.getResultOps().base(this.terminal, i, i + length);
                 terminalNodes.put(i, terminalNode);
             }
         }

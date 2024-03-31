@@ -2,8 +2,7 @@ package org.iguana.result;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
-import org.iguana.sppf.NonPackedNode;
+import org.iguana.grammar.symbol.Terminal;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface ResultOps<T extends Result> {
 
     T dummy();
 
-    T base(TerminalGrammarSlot slot, int start, int end);
+    T base(Terminal terminal, int start, int end);
 
     T error(BodyGrammarSlot slot, int start, int end);
 

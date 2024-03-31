@@ -444,6 +444,7 @@ public class IggyParseTreeToGrammarVisitor implements IggyParseTreeVisitor<Objec
     @Override
     public Terminal visitCharClassSymbol(IggyParseTree.CharClassSymbol node) {
         RegularExpression regex = (RegularExpression) node.charClass().accept(this);
+        literals.put(node.getText(), regex);
         return new Terminal.Builder(regex)
             .setNodeType(TerminalNodeType.Regex)
             .build();

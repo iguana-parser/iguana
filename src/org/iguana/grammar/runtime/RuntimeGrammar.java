@@ -240,6 +240,7 @@ public class RuntimeGrammar {
             ebnfRights = new HashMap<>(grammar.ebnfRights);
             startSymbols = new ArrayList<>(grammar.startSymbols);
             regularExpressionDefinitions = new HashMap<>(grammar.getRegularExpressionDefinitions());
+            literals = new HashMap<>(grammar.literals);
             globals = new HashMap<>(grammar.globals);
             name = grammar.name;
         }

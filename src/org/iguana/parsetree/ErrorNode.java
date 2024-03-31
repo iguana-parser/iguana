@@ -11,11 +11,17 @@ public class ErrorNode implements ParseTreeNode {
     private final Input input;
     private final int start;
     private final int end;
+    private final List<ParseTreeNode> children;
 
     public ErrorNode(int start, int end, Input input) {
+        this(start, end, input, Collections.emptyList());
+    }
+
+    public ErrorNode(int start, int end, Input input, List<ParseTreeNode> children) {
         this.start = start;
         this.end = end;
         this.input = input;
+        this.children = children;
     }
 
     @Override
@@ -50,12 +56,12 @@ public class ErrorNode implements ParseTreeNode {
 
     @Override
     public List<ParseTreeNode> children() {
-        return Collections.emptyList();
+        return children;
     }
 
     @Override
     public boolean hasChildren() {
-        return false;
+        return !children.isEmpty();
     }
 
     @Override

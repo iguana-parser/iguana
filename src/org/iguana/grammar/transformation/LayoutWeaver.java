@@ -124,6 +124,7 @@ public class LayoutWeaver implements GrammarTransformation {
         builder.setEbnfLefts(grammar.getEBNFLefts());
         builder.setEbnfRights(grammar.getEBNFRights());
         builder.setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions());
+        builder.setLiterals(grammar.getLiterals());
         return builder.build();
     }
 

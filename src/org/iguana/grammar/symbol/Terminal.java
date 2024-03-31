@@ -46,6 +46,7 @@ public class Terminal extends AbstractSymbol {
         this.nodeType = builder.nodeType;
     }
 
+    // TODO: why do we need an epsilon terminal?
     public static Terminal epsilon() {
         return epsilon;
     }

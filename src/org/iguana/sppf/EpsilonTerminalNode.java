@@ -1,17 +1,11 @@
 package org.iguana.sppf;
 
-import org.iguana.grammar.GrammarGraph;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.symbol.Terminal;
 
 public class EpsilonTerminalNode extends TerminalNode {
 
     public EpsilonTerminalNode(int leftExtent) {
-        super(leftExtent);
-    }
-
-    @Override
-    public TerminalGrammarSlot getGrammarSlot() {
-        return GrammarGraph.epsilonSlot;
+        super(Terminal.epsilon(), leftExtent);
     }
 
     @Override

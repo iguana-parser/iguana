@@ -118,6 +118,7 @@ public class ParseTreeToDot implements ParseTreeVisitor<Integer> {
         String label = String.format("(Error, %d, %d): \"%s\"", node.getStart(), node.getEnd(), text);
         int id = nextId();
         dotGraph.addNode(newNode(id, label).setShape(DotGraph.Shape.ROUNDED_RECTANGLE));
+        visitChildren(node, id);
         return id;
     }
 

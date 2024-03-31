@@ -92,6 +92,7 @@ public class EBNFToBNF implements GrammarTransformation {
                 .setLayout(grammar.getLayout())
                 .setGlobals(grammar.getGlobals())
                 .setRegularExpressionDefinitions(grammar.getRegularExpressionDefinitions())
+                .setLiterals(grammar.getLiterals())
                 .setStartSymbols(grammar.getStartSymbols()).build();
     }
 

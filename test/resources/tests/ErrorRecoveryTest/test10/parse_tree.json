@@ -392,8 +392,14 @@
       ],
       "start" : 0,
       "end" : 4
+    },
+    {
+      "kind" : "ErrorNode",
+      "start" : 4,
+      "end" : 5,
+      "children" : [ ]
     }
   ],
   "start" : 0,
-  "end" : 4
+  "end" : 5
 }

@@ -1,8 +1,10 @@
 package org.iguana.grammar.slot;
 
 import org.iguana.datadependent.env.Environment;
+import org.iguana.grammar.symbol.Terminal;
 import org.iguana.gss.GSSNode;
 import org.iguana.parser.IguanaRuntime;
+import org.iguana.regex.EOF;
 import org.iguana.regex.IguanaTokenizer;
 import org.iguana.regex.Token;
 import org.iguana.result.Result;
@@ -34,8 +36,8 @@ public class ErrorTransition extends AbstractTransition {
         tokenizer.prepare(input, rightExtent);
 
         List<Token> errorTokens = new ArrayList<>();
-        while (tokenizer.nextToken(dest.getFollowTest()) != null) {
-            errorTokens.add(tokenizer.nextToken());
+        for (Token token = tokenizer.nextToken(dest.getFollowTest()); token != null && token.getRegularExpression() != EOF.getInstance(); token = tokenizer.nextToken(dest.getFollowTest())) {
+            errorTokens.add(token);
         }
         if (errorTokens.isEmpty()) {
             System.out.println("Warning: could not recover from the parse error: " + origin);
@@ -48,7 +50,8 @@ public class ErrorTransition extends AbstractTransition {
         } else {
             List<T> children = new ArrayList<>();
             for (Token errorToken : errorTokens) {
-                children.add(runtime.getResultOps().base(null, errorToken.getStart(), errorToken.getEnd()));
+                Terminal terminal = Terminal.from(errorToken.getRegularExpression());
+                children.add(runtime.getResultOps().base(terminal, errorToken.getStart(), errorToken.getEnd()));
             }
             int start = CollectionsUtil.first(errorTokens).getStart();
             int end = CollectionsUtil.last(errorTokens).getEnd();
@@ -65,6 +68,13 @@ public class ErrorTransition extends AbstractTransition {
             T result,
             Environment env,
             IguanaRuntime<T> runtime) {
-        dest.execute(input, u, result, env, runtime);
+        int inputIndex = result.getRightExtent();
+        // Error transitions do not match any input, therefore, it is important to do a follow check
+        // before moving the destination slot to catch the error before the error slot.
+        if (dest.getFollowTest().test(input.charAt(inputIndex))) {
+            dest.execute(input, u, result, env, runtime);
+        } else {
+            runtime.recordParseError(inputIndex, input, origin, u, result, env, "Expected " + dest.getFollowTest().toString() + " but seen " + input.charAt(inputIndex));
+        }
     }
 }

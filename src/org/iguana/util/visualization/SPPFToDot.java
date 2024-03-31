@@ -82,7 +82,7 @@ public class SPPFToDot implements SPPFVisitor<Void>  {
         if (!visited.contains(node)) {
             visited.add(node);
             String matchedInput = input.subString(node.getLeftExtent(), node.getRightExtent());
-            String label = String.format("(%s, %d, %d): \"%s\"", node.getGrammarSlot(), node.getLeftExtent(),
+            String label = String.format("(%s, %d, %d): \"%s\"", node.getTerminal(), node.getLeftExtent(),
                 node.getRightExtent(), matchedInput);
             dotGraph.addNode(newNode(getId(node), label));
         }

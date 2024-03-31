@@ -10,10 +10,16 @@ import org.iguana.grammar.symbol.Symbol;
 import org.iguana.grammar.transformation.GrammarTransformer;
 import org.iguana.parser.options.RecognizerOptions;
 import org.iguana.regex.IguanaTokenizer;
+import org.iguana.regex.RegularExpression;
 import org.iguana.result.RecognizerResult;
 import org.iguana.result.RecognizerResultOps;
 import org.iguana.util.Configuration;
 import org.iguana.utils.input.Input;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class IguanaRecognizer {
 
@@ -74,7 +80,10 @@ public class IguanaRecognizer {
     }
 
     protected IguanaTokenizer createIguanaTokenizer() {
-        return new IguanaTokenizer(finalGrammar.getRegularExpressionDefinitions().values());
+        Set<RegularExpression> regularExpressions = new HashSet<>();
+        regularExpressions.addAll(finalGrammar.getRegularExpressionDefinitions().values());
+        regularExpressions.addAll(finalGrammar.getLiterals().values());
+        return new IguanaTokenizer(regularExpressions);
     }
 
     public RecognizerStatistics getStatistics() {

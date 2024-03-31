@@ -1,16 +1,14 @@
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.symbol.Terminal;
 
 public class KeywordTerminalNode extends TerminalNode {
 
     private final int rightExtent;
-    private final TerminalGrammarSlot slot;
 
-    public KeywordTerminalNode(TerminalGrammarSlot slot, int leftExtent) {
-        super(leftExtent);
-        this.slot = slot;
-        this.rightExtent = leftExtent + slot.getTerminal().getRegularExpression().length();
+    public KeywordTerminalNode(Terminal terminal, int leftExtent) {
+        super(terminal, leftExtent);
+        this.rightExtent = leftExtent + terminal.getRegularExpression().length();
     }
 
     @Override
@@ -18,8 +16,4 @@ public class KeywordTerminalNode extends TerminalNode {
         return rightExtent;
     }
 
-    @Override
-    public TerminalGrammarSlot getGrammarSlot() {
-        return slot;
-    }
 }

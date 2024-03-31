@@ -1,23 +1,15 @@
 package org.iguana.sppf;
 
-import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.symbol.Terminal;
 
 public class EmptyTerminalNode extends TerminalNode {
 
-    private final TerminalGrammarSlot slot;
-
-    public EmptyTerminalNode(TerminalGrammarSlot slot, int leftExtent) {
-        super(leftExtent);
-        this.slot = slot;
+    public EmptyTerminalNode(Terminal terminal, int leftExtent) {
+        super(terminal, leftExtent);
     }
 
     @Override
     public int getRightExtent() {
         return getLeftExtent();
-    }
-
-    @Override
-    public TerminalGrammarSlot getGrammarSlot() {
-        return slot;
     }
 }

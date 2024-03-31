@@ -2,7 +2,7 @@ package org.iguana.result;
 
 import org.iguana.grammar.slot.BodyGrammarSlot;
 import org.iguana.grammar.slot.EndGrammarSlot;
-import org.iguana.grammar.slot.TerminalGrammarSlot;
+import org.iguana.grammar.symbol.Terminal;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class RecognizerResultOps implements ResultOps<RecognizerResult> {
     }
 
     @Override
-    public RecognizerResult base(TerminalGrammarSlot slot, int start, int end) {
+    public RecognizerResult base(Terminal terminal, int start, int end) {
         return RecognizerResult.of(start, end);
     }
 

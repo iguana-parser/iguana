@@ -29,11 +29,7 @@ package org.iguana.parser;
 
 import org.iguana.grammar.Grammar;
 import org.iguana.grammar.runtime.RuntimeGrammar;
-import org.iguana.grammar.slot.BodyGrammarSlot;
-import org.iguana.grammar.slot.EndGrammarSlot;
 import org.iguana.grammar.slot.ErrorTransition;
-import org.iguana.grammar.slot.GrammarSlotUtil;
-import org.iguana.grammar.slot.NonterminalGrammarSlot;
 import org.iguana.grammar.symbol.Nonterminal;
 import org.iguana.grammar.symbol.Start;
 import org.iguana.grammar.symbol.Symbol;
