@@ -58,8 +58,7 @@ public class OpenAddressingHashMap<K, T> {
     }
 
     public T put(K key, T value) {
-        int j = 0;
-        int index = hash(key, j);
+        int index = hash(key);
 
         do {
             if (keys[index] == null) {
@@ -76,7 +75,7 @@ public class OpenAddressingHashMap<K, T> {
                 return oldValue;
             }
 
-            index = hash(key, ++j);
+            index = (index + 1) & bitMask;
 
         } while (true);
     }
@@ -89,28 +88,16 @@ public class OpenAddressingHashMap<K, T> {
         K[] newKeys = (K[]) new Object[capacity];
         T[] newValues = (T[]) new Object[capacity];
 
-        label:
         for (int i = 0; i < keys.length; i++) {
-            int j = 0;
             K key = keys[i];
+            if (key == null) continue;
 
-            T value = values[i];
-
-            if (key != null) {
-
-                int index = hash(key, j);
-
-                do {
-                    if (newKeys[index] == null) {
-                        newKeys[index] = key;
-                        newValues[index] = value;
-                        continue label;
-                    }
-
-                    index = hash(key, ++j);
-
-                } while (true);
+            int index = hash(key);
+            while (newKeys[index] != null) {
+                index = (index + 1) & bitMask;
             }
+            newKeys[index] = key;
+            newValues[index] = values[i];
         }
 
         keys = newKeys;
@@ -119,10 +106,9 @@ public class OpenAddressingHashMap<K, T> {
     }
 
     public T get(K key) {
-        int j = 0;
-        int index = hash(key, j);
+        int index = hash(key);
         while (keys[index] != null && !keys[index].equals(key)) {
-            index = hash(key, ++j);
+            index = (index + 1) & bitMask;
         }
         return values[index];
     }
@@ -156,8 +142,16 @@ public class OpenAddressingHashMap<K, T> {
         return sb.toString();
     }
 
-    private int hash(K key, int j) {
-        return (key.hashCode() + j) & bitMask;
+    private int hash(K key) {
+        // Same finalizer as OpenAddressingIntHashMap: keys' hashCodes may have poor low bits.
+        int h = key.hashCode();
+        h ^= 1;
+        h ^= h >>> 16;
+        h *= 0x85ebca6b;
+        h ^= h >>> 13;
+        h *= 0xc2b2ae35;
+        h ^= h >>> 16;
+        return h & bitMask;
     }
 
     public void forEachValue(Consumer<? super T> action) {

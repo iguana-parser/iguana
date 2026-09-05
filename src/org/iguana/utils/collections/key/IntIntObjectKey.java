@@ -23,9 +23,10 @@ public class IntIntObjectKey implements Key {
 
     @Override
     public int hashCode() {
+        // Combine fields using a large odd multiplier.
         int hash = i1;
-        hash *= 31 + i2;
-        hash *= 31 + object.hashCode();
+        hash = 0x9E3779B9 * hash + i2;
+        hash = 0x9E3779B9 * hash + object.hashCode();
         return hash;
     }
 }
