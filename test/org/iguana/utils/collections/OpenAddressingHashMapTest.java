@@ -3,6 +3,7 @@ package org.iguana.utils.collections;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -48,7 +49,7 @@ public class OpenAddressingHashMapTest {
         map.put(4, "e");
         map.put(4, "e");
 
-        assertEquals(set("a", "b", "d", "e"), map.values());
+        assertEquals(set("a", "b", "d", "e"), new HashSet<>(map.values()));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class OpenAddressingHashMapTest {
         map.put(3, "c");
         map.put(4, "d");
 
-        assertEquals(set("a", "b", "c", "d"), map.values());
+        assertEquals(set("a", "b", "c", "d"), new HashSet<>(map.values()));
     }
 
     @Test
