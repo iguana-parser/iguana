@@ -179,4 +179,8 @@ public class ParserResultOps implements ResultOps<NonPackedNode> {
         return packedNodesMap.get(node);
     }
 
+    public void clear() {
+        packedNodesMap.clear();
+    }
+
 }

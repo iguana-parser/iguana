@@ -58,7 +58,7 @@ import static org.iguana.parser.options.ParseOptions.defaultOptions;
 
 public class IguanaParser extends IguanaRecognizer {
 
-    private static final ParserResultOps parserResultOps = new ParserResultOps();
+    private final ParserResultOps parserResultOps = new ParserResultOps();
 
     private ParseTreeNode parseTree;
     private NonterminalNode sppf;
@@ -144,6 +144,9 @@ public class IguanaParser extends IguanaRecognizer {
         this.sppf = null;
         this.parseTree = null;
         this.input = null;
+        // The ops instance is shared across different parses and its packed-node lists belong
+        // to the previous parse. Clearing them here allows the GC to clean the nodes of the previous parse.
+        parserResultOps.clear();
     }
 
     public NonterminalNode getSPPF() {
