@@ -1,11 +1,10 @@
 package org.iguana.utils.collections;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-public class OpenAddressingHashMap<K, T> implements Map<K, T> {
+public class OpenAddressingHashMap<K, T> {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.7f;
@@ -58,7 +57,6 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
         size = 0;
     }
 
-    @Override
     public T put(K key, T value) {
         int j = 0;
         int index = hash(key, j);
@@ -81,16 +79,6 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
             index = hash(key, ++j);
 
         } while (true);
-    }
-
-    @Override
-    public T remove(Object key) {
-        return null;
-    }
-
-    @Override
-    public void putAll(Map<? extends K, ? extends T> m) {
-
     }
 
     @SuppressWarnings("unchecked")
@@ -130,7 +118,7 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
         threshold = (int) (loadFactor * capacity);
     }
 
-    public T get(Object key) {
+    public T get(K key) {
         int j = 0;
         int index = hash(key, j);
         while (keys[index] != null && !keys[index].equals(key)) {
@@ -151,16 +139,6 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
         return size == 0;
     }
 
-    @Override
-    public boolean containsKey(Object key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException();
-    }
-
     public void clear() {
         init();
     }
@@ -170,71 +148,32 @@ public class OpenAddressingHashMap<K, T> implements Map<K, T> {
 
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-
-
-        for (Entry<K, T> entry : entrySet()) {
-            if (entry.getKey() != null) {
-                sb.append("(" + entry.getKey() + ", " + entry.getValue() + ")");
-                sb.append(", ");
-            }
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != null) sb.append(keys[i]).append("=").append(values[i]).append(", ");
         }
-
         sb.delete(sb.length() - 2, sb.length());
         sb.append("}");
-
         return sb.toString();
     }
 
-    private int hash(Object key, int j) {
+    private int hash(K key, int j) {
         return (key.hashCode() + j) & bitMask;
     }
 
-    @Override
-    public Set<K> keySet() {
-        Set<K> keySet = new HashSet<>();
-        for (int i = 0; i < keys.length; i++) {
-            if (keys[i] != null) keySet.add(keys[i]);
+    public void forEachValue(Consumer<? super T> action) {
+        T[] values = this.values;
+        for (int i = 0; i < values.length; i++) {
+            T value = values[i];
+            if (value != null) action.accept(value);
         }
-        return keySet;
     }
 
-    @Override
-    public Collection<T> values() {
-        Set<T> values = new HashSet<>(size);
-
-        for (int i = 0; i < this.values.length; i++) {
-            if (this.values[i] != null) values.add(this.values[i]);
+    public List<T> values() {
+        List<T> result = new ArrayList<>(size);
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] != null) result.add(values[i]);
         }
-
-        return values;
+        return result;
     }
 
-    @Override
-    public Set<Entry<K, T>> entrySet() {
-        Set<Entry<K, T>> entrySet = new HashSet<>();
-
-        for (int i = 0; i < keys.length; i++) {
-            final K key = keys[i];
-            final T value = values[i];
-
-            entrySet.add(new Entry<K, T>() {
-                @Override
-                public K getKey() {
-                    return key;
-                }
-
-                @Override
-                public T getValue() {
-                    return value;
-                }
-
-                @Override
-                public T setValue(T value) {
-                    return null;
-                }
-            });
-        }
-
-        return entrySet;
-    }
 }

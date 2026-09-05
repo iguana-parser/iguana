@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -63,7 +62,7 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
 
     private T firstPoppedElement;
 
-    private Map<Key, T> restPoppedElements;
+    private OpenAddressingHashMap<Key, T> restPoppedElements;
 
     public DefaultGSSNode(GSSEdge<T> firstGSSEdge, int inputIndex) {
         this.firstGSSEdge = firstGSSEdge;
@@ -112,9 +111,8 @@ public class DefaultGSSNode<T extends Result> implements GSSNode<T> {
                 runtime);
 
         if (restPoppedElements != null) {
-            for (T poppedElement : restPoppedElements.values()) {
-                processPoppedElement(poppedElement, edge, returnSlot, destination, input, runtime);
-            }
+            restPoppedElements.forEachValue(poppedElement ->
+                processPoppedElement(poppedElement, edge, returnSlot, destination, input, runtime));
         }
     }
 

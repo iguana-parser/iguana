@@ -48,7 +48,6 @@ import org.iguana.utils.input.Input;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Collections.emptyList;
 
@@ -59,7 +58,7 @@ public class NonterminalGrammarSlot implements GrammarSlot {
 
     private final List<BodyGrammarSlot> firstSlots;
 
-    private Map<Key, GSSNode<?>> gssNodes;
+    private OpenAddressingHashMap<Key, GSSNode<?>> gssNodes;
 
     private IntHashMap<GSSNode<?>> intGSSNodes;
 

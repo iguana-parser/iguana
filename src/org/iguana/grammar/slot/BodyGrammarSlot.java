@@ -40,14 +40,13 @@ import org.iguana.utils.collections.OpenAddressingHashMap;
 import org.iguana.utils.collections.key.Key;
 import org.iguana.utils.input.Input;
 
-import java.util.Map;
 import java.util.Set;
 
 public class BodyGrammarSlot implements GrammarSlot {
 
     protected final Position position;
 
-    private Map<Key, Object> intermediateNodes;
+    private OpenAddressingHashMap<Key, Object> intermediateNodes;
 
     private final Conditions conditions;
 
